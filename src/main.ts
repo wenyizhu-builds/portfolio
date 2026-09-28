@@ -42,9 +42,25 @@ const inner = document.getElementById('panel-inner')!;
 /* The card's height follows its content with a CSS transition (see .panel). A
    ResizeObserver catches every change: a new card, an opened section, a language switch. */
 new ResizeObserver(() => {
-  panel.style.height = `${inner.offsetHeight}px`;
+  fitSide();
   placeAnchor();
 }).observe(inner);
+
+/* The column (INDEX bar, image strip, card) is centred, so any box that pops in or out
+   makes the whole column jump. Every box therefore gets an explicit height that CSS eases
+   (the reference does this for its card), and the card's height is capped at the room left,
+   so the animation never runs into a ceiling and stops dead. */
+function fitSide() {
+  const sideEl = document.querySelector<HTMLElement>('.side');
+  if (!sideEl || mq.matches) return;
+  const gap = cssPx('--side-gap');
+  const bar = ixnav.firstElementChild as HTMLElement | null;
+  const ixH = bar ? bar.offsetHeight + gap : 0;
+  const mdH = media.classList.contains('open') ? cssPx('--media-h') + gap : 0;
+  ixnav.style.height = `${ixH}px`;
+  media.style.height = `${mdH}px`;
+  panel.style.height = `${Math.min(inner.offsetHeight, sideEl.clientHeight - ixH - mdH)}px`;
+}
 /* The scrollbar only shows while the card is being scrolled (like an overlay scrollbar). */
 let scrollIdle = 0;
 panel.addEventListener('scroll', () => {
@@ -97,11 +113,6 @@ function renderPanel(keep = false) {
     : indexPanel();
   inner.innerHTML = html;
   panel.classList.add('open');
-  if (!keep) {
-    inner.classList.remove('swap');
-    void inner.offsetWidth; // restart the fade for the new content
-    inner.classList.add('swap');
-  }
   ixnav.innerHTML = route.kind === 'home' ? '' : indexBar();
   if (keep) {
     inner.querySelectorAll<HTMLDetailsElement>('details.sec').forEach((d, i) => (d.open = prevOpen[i] ?? d.open));
@@ -115,7 +126,7 @@ function renderPanel(keep = false) {
   const id = currentNodeId();
   const n = id ? byId.get(id) : undefined;
   const items = n?.media || [];
-  media.innerHTML = items
+  media.innerHTML = `<div class="media-row">${items
     .map((m) =>
       m.src
         ? `<button class="tile" data-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/>${
@@ -123,10 +134,11 @@ function renderPanel(keep = false) {
           }</button>`
         : `<div class="tile tile-empty"><span class="tile-k">${esc(t(m.alt))}</span><span>${esc(t(ui.visualsPrep))}</span></div>`,
     )
-    .join('');
+    .join('')}</div>`;
   media.classList.toggle('open', items.length > 0 && !!html);
   document.querySelector('.desk')!.classList.toggle('has-media', items.length > 0 && !!html);
   media.querySelectorAll<HTMLButtonElement>('.tile[data-src]').forEach((b) => (b.onclick = () => openLightbox(b.dataset.src!)));
+  fitSide();
   placeAnchor();
 }
 
@@ -215,7 +227,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('hashchange', applyRoute);
-window.addEventListener('resize', placeAnchor);
+window.addEventListener('resize', () => { fitSide(); placeAnchor(); });
 mq.addEventListener('change', () => {
   renderMobile(document.getElementById('mob')!);
   applyRoute();

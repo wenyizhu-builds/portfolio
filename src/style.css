@@ -43,7 +43,8 @@
   /* Motion — map.ts reads --fade-node so removed nodes finish fading before they go. */
   --fade-node: 900ms;
   --dur-card: 800ms; /* the card grows / shrinks to its content (reference: 800ms, same curve) */
-  --dur-swap: 260ms; /* new card content fades in */
+  --side-gap: 10px; /* space between the INDEX bar, the image strip and the card */
+  --media-h: 150px; /* height of the image strip above a card */
   --scrollbar-linger: 900ms; /* the card's scrollbar stays this long after scrolling stops */
   --spin: 24s; /* the ✳ rotation */
 
@@ -151,7 +152,7 @@ button { font: inherit; color: inherit; }
 .node.is-current .pulse { animation: none; fill: var(--ink); }
 
 /* reading column: media above the card, the pair centred vertically */
-.side { position: absolute; z-index: 4; top: var(--top-h); bottom: var(--bottom-h); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; gap: 10px; pointer-events: none; }
+.side { position: absolute; z-index: 4; top: var(--top-h); bottom: var(--bottom-h); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
 .panel {
   /* The card never pops: main.ts sets its height to the content's height and CSS
      eases between heights, so opening a point or a section grows / shrinks it smoothly. */
@@ -166,13 +167,13 @@ button { font: inherit; color: inherit; }
 .panel::-webkit-scrollbar { width: 6px; }
 .panel::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
 .panel.scrolling::-webkit-scrollbar-thumb { background: var(--line); }
-.panel-inner.swap { animation: swapIn var(--dur-swap) ease-out; }
-@keyframes swapIn { from { opacity: 0; } }
-.ixnav:not(:empty) { animation: swapIn var(--dur-swap) ease-out; pointer-events: auto; }
+/* v52, after the reference: nothing in the column ever appears or vanishes at once. The INDEX
+   bar and the image strip open and close by height too (main.ts fitSide), each carrying the gap
+   below it, and new card content swaps in place — no fade, which read as a flash. */
+.ixnav, .media { flex: 0 0 auto; height: 0; overflow: hidden; transition: height var(--dur-card) var(--ease); pointer-events: auto; }
 .panel:not(.open) { display: none; }
 
 /* INDEX: the bar above every card, and the index card itself */
-.ixnav:empty { display: none; }
 .ixbar {
   display: flex; align-items: center; gap: 10px; pointer-events: auto; text-decoration: none;
   background: var(--panel); border: 1px solid var(--line-soft); border-radius: 10px; padding: 12px 22px;
@@ -258,9 +259,7 @@ button { font: inherit; color: inherit; }
 .ct-k { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 
 /* media above the card */
-.media { flex: 0 0 150px; display: flex; flex-direction: row; gap: 10px; overflow-x: auto; pointer-events: auto; }
-.media:not(.open) { display: none; }
-.media.open { animation: cardIn var(--dur-card) var(--ease); }
+.media-row { height: var(--media-h); display: flex; flex-direction: row; gap: var(--side-gap); overflow-x: auto; }
 @keyframes cardIn { from { opacity: 0; transform: scale(0.94); } }
 .tile { display: block; flex: 0 0 auto; height: 100%; width: auto; min-width: 200px; border: 0; padding: 0; border-radius: 8px; overflow: hidden; background: var(--panel); cursor: zoom-in; position: relative; }
 .tile img { display: block; height: 100%; width: auto; }
