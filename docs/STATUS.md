@@ -1,11 +1,12 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-09-28 · 版本 v53
+> 最后更新：2026-09-28 · 版本 v54
 
 ## 现在的状态
 
 - 框架、交互、视觉已定稿（见 `SPEC.md`）。v32 按参考站重做了交互模型：INDEX 常驻，选中时不放大。**下一阶段只填内容**。
+- v54 将网站配色统一为 Winnie Lab 品牌色：paper 背景、电光钴蓝、酸性荧光绿、ink 与银灰派生线条；布局和交互没有变化。
 - 在线预览：claude.ai 私密 artifact「Wenyi Zhu Portfolio」。
 - 尚未发布到 GitHub Pages。
 - v31 完成了一轮全面审查和修 bug（见 `CHANGELOG.md`），并建立了防护机制：
@@ -16,11 +17,12 @@
   - 还有 13 处 `[Placeholder]` / `[Draft]`
   - `site.launched` 为 false
 
-## v48–v53 说明
+## v48–v54 说明
+- v54：从全屏柠檬黄 / 番茄红改为 Winnie Lab 的 paper / electric blue / acid lime 配色。
 - v53：末级作品之间可以直接切换，兄弟保留在地图上。
 - v52：右侧卡片列（INDEX 条、图片条、卡片）全部按高度缓动，去掉淡入；不再闪和抽。
 - v51：撤回形态保持（回到每次重新布局）；说明文字改黑色。
-- **版本管理**：项目文件夹已是 git 仓库，每次交付都提交一次，`git log` 看历史，回退用 `git checkout <提交号> -- <文件>`。尚未推到 GitHub（需要先在 claude.ai 设置里连接 GitHub）。
+- **版本管理**：GitHub `wenyizhu-builds/portfolio` 是唯一版本源；本地项目每次交付提交并推送，`git log` 看历史。
 - v50：字体换 Schibsted Grotesk，正文 14px / 小号大写 11.5px；形态保持改为弹簧，轻微抖动。
 - v49：同一大类里点击不再重排，形态保持；跨大类才重排。
 - 地图的点、线已不重叠（layout-check：38 个视图 0 处）。**布局调优到此为止**，除非看到具体的坏视图，不再继续调参（见 LESSONS L25）。

@@ -1,10 +1,10 @@
 :root {
-  --bg: #ffff84; /* bright lemon (v44) */
+  --bg: #f6f6f3; /* Winnie Lab paper */
   --panel: #ffffff;
-  --ink: #111111;
-  --on-ink: #ffffff; /* text on dark fills */
-  --cobalt: #2f4bff; /* the name ✳ and links */
-  --accent: #ff6242; /* tomato: the current point */
+  --ink: #121212;
+  --on-ink: #f6f6f3; /* text on dark fills */
+  --cobalt: #2c42f6; /* Winnie Lab electric blue: the name ✳ and links */
+  --accent: #d5fd52; /* Winnie Lab acid lime: the current point */
 
   /* Derived colours — never hard-code these; change the base token above instead. */
   --ink-2: color-mix(in srgb, var(--ink) 82%, var(--panel)); /* secondary body text */
