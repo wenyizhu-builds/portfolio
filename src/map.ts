@@ -19,7 +19,6 @@ interface SimNode extends SimulationNodeDatum {
   rad: number;
   bend: number; // which way this node's link elbows
   box: { w: number; top: number; bottom: number }; // shape + label, around the node's centre (world units)
-  hold?: [number, number]; // keep-the-shape: the place this point springs back to (v49b)
 }
 interface SimLink extends SimulationLinkDatum<SimNode> {
   kind: 'tree' | 'related';
@@ -85,7 +84,6 @@ const LAYOUT = {
   // keeping points and lines apart (v47)
   charW: 6.9, shapeHalf: 13, kickLine: 13, // label box estimate: width per character, shape half-size, date line
   boxGap: 10, boxPush: 0.5, // two points' boxes keep this gap; how hard they are pushed apart
-  holdPull: 3, keepAlpha: 0.25, // keep-the-shape: spring back to place; a gentler restart (smaller wiggle)
   leverMin: 0.3, // when a line's loose end moves to clear a point, it moves at most 1/leverMin times as far
   lineClear: 10, linePush: 0.35, // a point's box (shape + label) keeps this far from any line that isn't its own
   // keeping lines apart from each other (v48)
@@ -168,7 +166,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   let cam = { x: host.clientWidth / 2, y: host.clientHeight / 2, k: 1 };
   let focus: string | null = null;
   let near = new Set<string>();
-  let shownFocus: string | null = null; // the selection the map was last laid out for
 
   const simNodes = new Map<string, SimNode>();
   const els = new Map<string, SVGGElement>();
@@ -200,13 +197,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         if (!h || n.fx != null) return;
         n.vx! += (h[0] - n.x!) * LAYOUT.homePull * alpha;
         n.vy! += (h[1] - n.y!) * LAYOUT.homePull * alpha;
-      });
-    })
-    .force('hold', (alpha: number) => {
-      simNodes.forEach((n) => {
-        if (!n.hold || n.fx != null) return;
-        n.vx! += (n.hold[0] - n.x!) * LAYOUT.holdPull * alpha;
-        n.vy! += (n.hold[1] - n.y!) * LAYOUT.holdPull * alpha;
       });
     })
     .force('boxes', (alpha: number) => {
@@ -258,9 +248,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
           const k = need * LAYOUT.linePush * alpha;
           // the selection's chain holds its shape: when a line runs through one of its points,
           // the line's loose end steps aside instead (pushing the chain is what folded it)
-          const chain = n.fx != null || !!n.hold || (!!focus && (n.id === 'root' || isCtx(n))); // held points don't move either
+          const chain = n.fx != null || (!!focus && (n.id === 'root' || isCtx(n))); // held points don't move either
           const loose = chain ? [s, t].filter(movable) : [];
-          if (n.fx == null && (!chain || !loose.length || !!n.hold)) {
+          if (n.fx == null && (!chain || !loose.length)) {
             n.vx! += (side * nx / nl) * k;
             n.vy! += (side * ny / nl) * k;
           }
@@ -424,7 +414,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       the selection's own chain (root → … → selection), which stays put so the view doesn't flip. */
   function movable(n: SimNode): boolean {
     if (!focus && homeOf(n.id)) return false; // the home map is laid out by hand (HOME_LAYOUT)
-    return n.fx == null && !n.hold && n.id !== anchorId() && n.id !== 'root' && !isCtx(n);
+    return n.fx == null && n.id !== anchorId() && n.id !== 'root' && !isCtx(n);
   }
   function isCtx(n: SimNode): boolean {
     return !!focus && (n.id === focus || ancestors(focus).includes(n.id));
@@ -436,12 +426,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const u = ((c.x! - a.x!) * (d.y! - c.y!) - (c.y! - a.y!) * (d.x! - c.x!)) / den;
     const v = ((c.x! - a.x!) * (b.y! - a.y!) - (c.y! - a.y!) * (b.x! - a.x!)) / den;
     return u > 0 && u < 1 && v > 0 && v < 1;
-  }
-
-  /** The area a point belongs to: its ancestor just below the ✳. */
-  function branchOf(id: string): string {
-    const up = [id, ...ancestors(id)].filter((x) => x !== 'root');
-    return up[up.length - 1] || 'root';
   }
 
   function relatedOf(id: string): string[] {
@@ -494,16 +478,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const lp = layoutParent(n);
     const p = lp ? simNodes.get(lp) : undefined;
     const home = homeOf(n.id);
-    const f = focus ? simNodes.get(focus) : undefined;
-    const fp = focus ? simNodes.get(layoutParent(byId.get(focus)!) || '') : undefined;
-    const rel = focus ? relatedOf(focus) : [];
-    if (f && fp && rel.includes(n.id)) {
-      // a connection of the selection appears on its open side (away from where it hangs),
-      // fanned out, so its dotted line starts clear of everything already on screen
-      const ang = Math.atan2(f.y! - fp.y!, f.x! - fp.x!) + (rel.indexOf(n.id) - (rel.length - 1) / 2) * LAYOUT.relatedSpread;
-      x = f.x! + Math.cos(ang) * LAYOUT.relatedLink;
-      y = f.y! + Math.sin(ang) * LAYOUT.relatedLink;
-    } else if (home) {
+    if (home) {
       [x, y] = home;
     } else if (p) {
       const gp = lp ? layoutParent(byId.get(lp)!) : undefined;
@@ -615,15 +590,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const vis = visibleSet(focus);
     near = nearSet(vis);
 
-    /* Keep the shape (v49). Clicking a point that is already on screen doesn't re-lay the
-       map: every point that stays keeps its place, and only the newcomers settle around
-       them — held on a spring, so they wiggle a little but the shape stays. The map is laid out afresh when the selection moves
-       to another area (a dotted line across, a link, the INDEX, back to home). */
-    const keep = !!focus && simNodes.has(focus) && !!shownFocus && branchOf(focus) === branchOf(shownFocus);
-    shownFocus = focus;
-    simNodes.forEach((n) => {
-      n.hold = keep && vis.has(n.id) ? [n.x!, n.y!] : undefined; // a spring, not a pin: a small wiggle, same shape
-    });
 
     for (const id of [...simNodes.keys()]) {
       if (!vis.has(id)) {
@@ -705,7 +671,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       for (let i = 0; i < LAYOUT.reducedTicks; i++) sim.tick();
       wake();
     } else {
-      sim.alphaTarget(0).alpha(keep ? LAYOUT.keepAlpha : LAYOUT.alphaStart).restart(); // settle, then stay still
+      sim.alphaTarget(0).alpha(LAYOUT.alphaStart).restart(); // settle, then stay still
       wake();
     }
   }

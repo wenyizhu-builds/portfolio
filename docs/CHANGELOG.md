@@ -4,6 +4,7 @@
 
 ## 2026-09-28
 
+- **v51** 撤回形态保持，回到 v48 的每次点击重新布局；分组说明文字 `.p-def` 从灰色改为黑色；项目开始用 git 管理（你电脑上的 `portfolio-prototypes/claude/` 文件夹）。
 - **v50** 字体和抖动：
   - 字体从 Inter 换成 Schibsted Grotesk（最接近参考站的 Brunswick Grotesque，后者是商业字体）。正文 13.5→14px，小号大写 11→11.5px，字距统一 0.05em（参考站同值），地图标签 12.5→13px。
   - 字体名只在 `--sans` 写一次，网页字体链接由 `vite.config.ts` 生成；小号大写字距统一成 `--track-label`（原来写死 9 处）。
