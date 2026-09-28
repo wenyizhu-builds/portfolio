@@ -1,0 +1,803 @@
+import {
+  forceCollide,
+  forceLink,
+  forceManyBody,
+  forceSimulation,
+  forceX,
+  forceY,
+  type Simulation,
+  type SimulationLinkDatum,
+  type SimulationNodeDatum,
+} from 'd3-force';
+import { ancestors, byId, childrenOf, nodes, rolesOrder, ui, type SiteNode } from './content';
+import { esc, isDone, reducedMotion, state, t } from './state';
+import { shapeFor } from './shapes';
+
+interface SimNode extends SimulationNodeDatum {
+  id: string;
+  depth: number;
+  rad: number;
+  bend: number; // which way this node's link elbows
+  box: { w: number; top: number; bottom: number }; // shape + label, around the node's centre (world units)
+  hold?: [number, number]; // keep-the-shape: the place this point springs back to (v49b)
+}
+interface SimLink extends SimulationLinkDatum<SimNode> {
+  kind: 'tree' | 'related';
+  dist: number;
+  key: string;
+}
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+/* The home map, fixed (owner-approved layout, v40). World units, ✳ at 0,0.
+   On arrival the map starts exactly here, and whenever nothing is selected a gentle
+   pull brings every point back, so home always looks the same. Link lengths between
+   these points are derived from the same numbers, so the forces agree with the layout. */
+const HOME_LAYOUT: Record<string, [number, number]> = {
+  growth: [242, -123],
+  campaigns: [232, -247],
+  'account-growth': [351, -163],
+  'ugc-influencer': [410, -65],
+  'paid-social': [297, -9],
+  info: [-149, -90],
+  education: [-239, -158],
+  experience: [-310, -8],
+  ai: [-22, 203],
+  'ai-workbench': [-140, 290],
+  'ai-slot-1': [-17, 328],
+  'ai-slot-2': [86, 292],
+  creative: [181, 166],
+};
+const homeOf = (id: string): [number, number] | undefined => (id === 'root' ? [0, 0] : HOME_LAYOUT[id]);
+/** Link length from the home layout, when both ends have a home position. */
+function homeDist(parent: string, child: string): number | undefined {
+  const a = homeOf(parent), b = homeOf(child);
+  return a && b ? Math.hypot(b[0] - a[0], b[1] - a[1]) : undefined;
+}
+/* Areas that open on arrival vs. stay folded until clicked. */
+/* Camera tuning. Like the reference, the map does not zoom in on a selection: it
+   shows fewer points instead, so the scale stays steady and every link of the
+   selection — including dotted connections — stays on screen. The scale only
+   shrinks (down to `min`) when what must be shown doesn't fit. */
+const CAMERA = {
+  max: 1.1, // the normal, steady scale
+  min: 0.7, // never smaller than this, however much has to fit
+  pad: { x: 110, top: 40, bottom: 70 }, // room kept around the shown points for their labels
+  ease: 0.06, // camera easing per frame
+  still: 0.3, // px: closer than this counts as arrived, and drawing stops
+};
+
+/* Layout tuning — every other layout number lives here. */
+const LAYOUT = {
+  homePull: 0.12, // strength of the pull back to HOME_LAYOUT while nothing is selected
+  spawnDist: 50, // a new node appears this far from its parent
+  roleStep: 105, roleStepOdd: 20, roleSwing: [90, -100, 80, -110, 85], // career path zig-zag
+  roleLink: 95, roleLinkVar: 45, // link length between roles (+ up to var)
+  areaLink: 170, practiceLink: 100, leafLink: 86, relatedLink: 220, // default link lengths
+  linkJitter: [0.7, 0.8] as const, // leaf links: base + up to var, so children sit near and far
+  treeStrength: 0.5, relatedStrength: 0.02,
+  charge: [-1100, -700, -380] as const, chargeMax: 420, // root / area / everything else
+  centre: { root: 0.15, x: 0.01, y: 0.014 },
+  pathPull: 0.08,
+  radius: { root: 70, min: 34, max: 72, perChar: 3.6 }, // collision radius from label length
+  hit: { root: 30, other: 20 }, // click target radius
+  labelY: { root: 36, other: 25, line: 15 }, labelWrap: 20,
+  // keeping points and lines apart (v47)
+  charW: 6.9, shapeHalf: 13, kickLine: 13, // label box estimate: width per character, shape half-size, date line
+  boxGap: 10, boxPush: 0.5, // two points' boxes keep this gap; how hard they are pushed apart
+  holdPull: 3, keepAlpha: 0.25, // keep-the-shape: spring back to place; a gentler restart (smaller wiggle)
+  leverMin: 0.3, // when a line's loose end moves to clear a point, it moves at most 1/leverMin times as far
+  lineClear: 10, linePush: 0.35, // a point's box (shape + label) keeps this far from any line that isn't its own
+  // keeping lines apart from each other (v48)
+  fanMin: 0.62, fanPush: 0.5, // two lines leaving the same point keep at least this angle (radians, ≈35°)
+  crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
+  moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
+  relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
+  chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
+  velocityDecay: 0.5, alphaDecay: 0.05, alphaStart: 0.7, dragAlpha: 0.3, dragSlop: 4,
+  firstTicks: 120, reducedTicks: 300,
+  collide: { strength: 0.9, iterations: 2 },
+  spawnJitter: 1.4, // radians of randomness when a child first appears
+  elbow: { at: 0.42, max: 42, slope: 0.28, min: 16 }, // link shape: bend point, step size
+};
+
+const FOLDED_AT_HOME = new Set(['creative']);
+
+/** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
+function hash(id: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < id.length; i++) h = Math.imul(h ^ id.charCodeAt(i), 16777619);
+  return ((h >>> 0) % 1000) / 1000;
+}
+
+const depthOf = (id: string) => ancestors(id).length;
+
+/** Node fade length, read from CSS (--fade-node) so removal waits exactly as long as the fade. */
+const fadeMs = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fade-node')) || 0;
+
+/** Count of work items (leaves) under a node — shown inside hexagons. */
+function leafCount(id: string): number {
+  const kids = childrenOf(id);
+  if (!kids.length) return 1;
+  return kids.reduce((s, k) => s + (childrenOf(k.id).length ? leafCount(k.id) : 1), 0);
+}
+
+/** Link parent used for layout: roles form a chain (a timeline) instead of a star. */
+function layoutParent(n: SiteNode): string | undefined {
+  if (n.type === 'role') {
+    const i = rolesOrder.indexOf(n.id);
+    return i > 0 ? rolesOrder[i - 1] : n.parent;
+  }
+  return n.parent;
+}
+
+function wrap(label: string, max = LAYOUT.labelWrap): string[] {
+  const words = label.split(' ');
+  const lines: string[] = [];
+  let cur = '';
+  for (const w of words) {
+    if ((cur + ' ' + w).trim().length > max && cur) {
+      lines.push(cur);
+      cur = w;
+    } else cur = (cur + ' ' + w).trim();
+  }
+  if (cur) lines.push(cur);
+  return lines;
+}
+
+export interface MapApi {
+  setFocus(id: string | null): void;
+  setViewport(area: { x: number; y: number; w: number; h: number }): void;
+  rerenderLabels(): void;
+}
+
+export function createMap(host: HTMLElement, onSelect: (id: string) => void): MapApi {
+  const svg = document.createElementNS(SVGNS, 'svg');
+  svg.classList.add('map');
+  svg.setAttribute('role', 'group');
+  svg.setAttribute('aria-label', t(ui.mapLabel));
+  const world = document.createElementNS(SVGNS, 'g');
+  const gLinks = document.createElementNS(SVGNS, 'g');
+  const gNodes = document.createElementNS(SVGNS, 'g');
+  world.append(gLinks, gNodes);
+  svg.append(world);
+  host.append(svg);
+
+  // Area of the screen the map may use (excludes the reading panel).
+  let area = { x: 0, y: 0, w: host.clientWidth, h: host.clientHeight }; // replaced by setViewport() at once
+  let cam = { x: host.clientWidth / 2, y: host.clientHeight / 2, k: 1 };
+  let focus: string | null = null;
+  let near = new Set<string>();
+  let shownFocus: string | null = null; // the selection the map was last laid out for
+
+  const simNodes = new Map<string, SimNode>();
+  const els = new Map<string, SVGGElement>();
+  let links: SimLink[] = [];
+  const linkEls = new Map<string, SVGPathElement>();
+
+  /* The point held at the centre: the selection — except a single role, where holding
+     it would fold the career path onto itself; there the path's start (Experience) holds. */
+  const anchorId = () => (focus && byId.get(focus)?.type === 'role' ? 'experience' : focus || 'root');
+
+  const sim: Simulation<SimNode, SimLink> = forceSimulation<SimNode, SimLink>([])
+    .velocityDecay(LAYOUT.velocityDecay)
+    .force(
+      'link',
+      forceLink<SimNode, SimLink>([])
+        .id((d) => d.id)
+        .distance((l) => l.dist)
+        .strength((l) => (l.kind === 'tree' ? LAYOUT.treeStrength : LAYOUT.relatedStrength)),
+    )
+    .force('charge', forceManyBody<SimNode>().strength((d) => LAYOUT.charge[Math.min(d.depth, 2)]).distanceMax(LAYOUT.chargeMax))
+    .force('collide', forceCollide<SimNode>().radius((d) => d.rad).strength(LAYOUT.collide.strength).iterations(LAYOUT.collide.iterations))
+    .force('x', forceX<SimNode>(0).strength((d) => (d.id === anchorId() ? LAYOUT.centre.root : LAYOUT.centre.x)))
+    .force('y', forceY<SimNode>(0).strength((d) => (d.id === anchorId() ? LAYOUT.centre.root : LAYOUT.centre.y)))
+    .force('home', (alpha: number) => {
+      // nothing selected: every point drifts back to its place in HOME_LAYOUT
+      if (focus) return;
+      simNodes.forEach((n) => {
+        const h = homeOf(n.id);
+        if (!h || n.fx != null) return;
+        n.vx! += (h[0] - n.x!) * LAYOUT.homePull * alpha;
+        n.vy! += (h[1] - n.y!) * LAYOUT.homePull * alpha;
+      });
+    })
+    .force('hold', (alpha: number) => {
+      simNodes.forEach((n) => {
+        if (!n.hold || n.fx != null) return;
+        n.vx! += (n.hold[0] - n.x!) * LAYOUT.holdPull * alpha;
+        n.vy! += (n.hold[1] - n.y!) * LAYOUT.holdPull * alpha;
+      });
+    })
+    .force('boxes', (alpha: number) => {
+      // No two points (shape + label) overlap: overlapping boxes are pushed apart along
+      // the axis where they overlap least. Circles alone let wide labels collide.
+      const ns = [...simNodes.values()];
+      for (let i = 0; i < ns.length; i++)
+        for (let j = i + 1; j < ns.length; j++) {
+          const a = ns[i], b = ns[j];
+          const ox = (a.box.w + b.box.w) / 2 + LAYOUT.boxGap - Math.abs(a.x! - b.x!);
+          const ay0 = a.y! + a.box.top, ay1 = a.y! + a.box.bottom, by0 = b.y! + b.box.top, by1 = b.y! + b.box.bottom;
+          const oy = Math.min(ay1, by1) - Math.max(ay0, by0) + LAYOUT.boxGap;
+          if (ox <= 0 || oy <= 0) continue;
+          const k = LAYOUT.boxPush * alpha;
+          if (ox < oy) {
+            const s = Math.sign(a.x! - b.x!) || 1;
+            if (a.fx == null) a.vx! += s * ox * k;
+            if (b.fx == null) b.vx! -= s * ox * k;
+          } else {
+            const s = Math.sign(a.y! + (a.box.top + a.box.bottom) / 2 - (b.y! + (b.box.top + b.box.bottom) / 2)) || 1;
+            if (a.fx == null) a.vy! += s * oy * k;
+            if (b.fx == null) b.vy! -= s * oy * k;
+          }
+        }
+    })
+    .force('lines', (alpha: number) => {
+      // Lines don't run through points that aren't theirs: a point too close to another
+      // link is pushed off it, sideways. (The link is treated as a straight segment.)
+      for (const l of links) {
+        const s = l.source as unknown as SimNode, t = l.target as unknown as SimNode;
+        if (typeof s !== 'object' || typeof t !== 'object') continue;
+        const dx = t.x! - s.x!, dy = t.y! - s.y!, len2 = dx * dx + dy * dy || 1;
+        simNodes.forEach((n) => {
+          if (n === s || n === t) return;
+          // measure from the line to the point's whole box (shape + label), not just its centre
+          const cx = n.x!, cy = n.y! + (n.box.top + n.box.bottom) / 2;
+          const hw = n.box.w / 2, hh = (n.box.bottom - n.box.top) / 2;
+          const u = Math.max(0, Math.min(1, ((cx - s.x!) * dx + (cy - s.y!) * dy) / len2));
+          if (u <= 0 || u >= 1) return;
+          const px = s.x! + u * dx, py = s.y! + u * dy;
+          let ex = cx - px, ey = cy - py;
+          const gap = Math.hypot(Math.max(0, Math.abs(ex) - hw), Math.max(0, Math.abs(ey) - hh));
+          const inside = Math.abs(ex) < hw && Math.abs(ey) < hh;
+          if (!inside && gap >= LAYOUT.lineClear) return;
+          const need = inside ? LAYOUT.lineClear + Math.min(hw - Math.abs(ex), hh - Math.abs(ey)) : LAYOUT.lineClear - gap;
+          if (Math.hypot(ex, ey) < 1e-3) { ex = -dy; ey = dx; } // exactly on the line: step to one side
+          // step off sideways (perpendicular to the line)
+          const nx = -dy, ny = dx, side = Math.sign(ex * nx + ey * ny) || 1, nl = Math.hypot(nx, ny) || 1;
+          const k = need * LAYOUT.linePush * alpha;
+          // the selection's chain holds its shape: when a line runs through one of its points,
+          // the line's loose end steps aside instead (pushing the chain is what folded it)
+          const chain = n.fx != null || !!n.hold || (!!focus && (n.id === 'root' || isCtx(n))); // held points don't move either
+          const loose = chain ? [s, t].filter(movable) : [];
+          if (n.fx == null && (!chain || !loose.length || !!n.hold)) {
+            n.vx! += (side * nx / nl) * k;
+            n.vy! += (side * ny / nl) * k;
+          }
+          for (const e of loose) {
+            // lever: moving an end by x moves the line at this point by x × (share of the line on that end's side)
+            const lever = Math.max(LAYOUT.leverMin, e === t ? u : 1 - u);
+            e.vx! -= (side * nx / nl) * (k / lever);
+            e.vy! -= (side * ny / nl) * (k / lever);
+          }
+        });
+      }
+    })
+    .force('fan', (alpha: number) => {
+      // Lines that leave the same point spread out: no two run along each other.
+      const byEnd = new Map<SimNode, { o: SimNode; w: number }[]>();
+      for (const l of links) {
+        const s = l.source as unknown as SimNode, t = l.target as unknown as SimNode;
+        if (typeof s !== 'object' || typeof t !== 'object') continue;
+        const w = l.kind === 'related' ? LAYOUT.moveRelated : LAYOUT.moveTree;
+        (byEnd.get(s) || byEnd.set(s, []).get(s)!).push({ o: t, w: movable(t) ? w : 0 });
+        (byEnd.get(t) || byEnd.set(t, []).get(t)!).push({ o: s, w: movable(s) ? w : 0 });
+      }
+      byEnd.forEach((ends, c) => {
+        for (let i = 0; i < ends.length; i++)
+          for (let j = i + 1; j < ends.length; j++) {
+            const A = ends[i], B = ends[j];
+            if (!A.w && !B.w) continue;
+            const aa = Math.atan2(A.o.y! - c.y!, A.o.x! - c.x!), ab = Math.atan2(B.o.y! - c.y!, B.o.x! - c.x!);
+            let d = ab - aa;
+            d = Math.atan2(Math.sin(d), Math.cos(d)); // signed, in (-π, π]
+            const gap = LAYOUT.fanMin - Math.abs(d);
+            if (gap <= 0) continue;
+            const sgn = Math.sign(d) || 1;
+            const turn = (e: { o: SimNode; w: number }, dir: number, share: number) => {
+              const rx = e.o.x! - c.x!, ry = e.o.y! - c.y!;
+              const k = gap * share * LAYOUT.fanPush * alpha * dir;
+              e.o.vx! += -ry * k; // tangential: rotate about c
+              e.o.vy! += rx * k;
+            };
+            const sum = A.w + B.w;
+            turn(A, -sgn, A.w / sum);
+            turn(B, sgn, B.w / sum);
+          }
+      });
+    })
+    .force('uncross', (alpha: number) => {
+      // Two lines that cross (and share no point) are untangled: the end that moves
+      // most readily is pulled back to the other line's near side.
+      const segs = links
+        .map((l) => ({ s: l.source as unknown as SimNode, t: l.target as unknown as SimNode, kind: l.kind }))
+        .filter((g) => typeof g.s === 'object' && typeof g.t === 'object');
+      const free = (g: (typeof segs)[number]) => {
+        const w = g.kind === 'related' ? LAYOUT.moveRelated : LAYOUT.moveTree;
+        // a dotted line moves its far end (the one outside the selection's chain); a tree line moves the child
+        const [q, p] = g.kind === 'related' && isCtx(g.t) && !isCtx(g.s) ? [g.s, g.t] : [g.t, g.s];
+        if (movable(q)) return { q, p, w };
+        if (movable(p)) return { q: p, p: q, w: w * LAYOUT.moveTree };
+        return null;
+      };
+      for (let i = 0; i < segs.length; i++)
+        for (let j = i + 1; j < segs.length; j++) {
+          const A = segs[i], B = segs[j];
+          if (A.s === B.s || A.s === B.t || A.t === B.s || A.t === B.t) continue;
+          if (!crosses(A.s, A.t, B.s, B.t)) continue;
+          const fa = free(A), fb = free(B);
+          const pick = fa && (!fb || fa.w >= fb.w) ? { f: fa, other: B } : fb ? { f: fb, other: A } : null;
+          if (!pick) continue;
+          const { q, p } = pick.f, C = pick.other.s, D = pick.other.t;
+          const lx = D.x! - C.x!, ly = D.y! - C.y!, len = Math.hypot(lx, ly) || 1;
+          const nx = -ly / len, ny = lx / len; // unit normal of the other line
+          const side = (n: SimNode) => (n.x! - C.x!) * nx + (n.y! - C.y!) * ny;
+          const want = Math.sign(side(p)) || 1; // go to the side the line's fixed end is on
+          const need = want * side(q) >= 0 ? 0 : Math.abs(side(q)) + LAYOUT.crossGap;
+          const k = need * LAYOUT.crossPush * alpha * want;
+          q.vx! += nx * k;
+          q.vy! += ny * k;
+        }
+    })
+    .force('chain', (alpha: number) => {
+      // The chain from the root to the selection reads outward: where it folds back on
+      // itself (a parent sitting past its child), its two ends swing round the
+      // middle point, so the other lines don't have to cross it.
+      if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path force shapes it
+      const chain: SimNode[] = [];
+      for (let id: string | undefined = focus; id; id = layoutParent(byId.get(id)!)) {
+        const n = simNodes.get(id);
+        if (n) chain.unshift(n);
+      }
+      for (let i = 1; i < chain.length - 1; i++) {
+        const p = chain[i - 1], m = chain[i], c = chain[i + 1];
+        const a1 = Math.atan2(p.y! - m.y!, p.x! - m.x!), a2 = Math.atan2(c.y! - m.y!, c.x! - m.x!);
+        const bend = Math.abs(Math.atan2(Math.sin(a2 - a1), Math.cos(a2 - a1)));
+        if (bend >= LAYOUT.chainBend || m.fx != null) continue;
+        const k = ((LAYOUT.chainBend - bend) / LAYOUT.chainBend) * LAYOUT.chainPull * alpha;
+        // open the fold: both ends swing round the middle point towards a straight line
+        const open = (e: SimNode, other: SimNode) => {
+          if (e.fx != null) return;
+          const r = Math.hypot(e.x! - m.x!, e.y! - m.y!);
+          const ox = m.x! - other.x!, oy = m.y! - other.y!, ol = Math.hypot(ox, oy) || 1;
+          e.vx! += (m.x! + (ox / ol) * r - e.x!) * k;
+          e.vy! += (m.y! + (oy / ol) * r - e.y!) * k;
+        };
+        open(p, c);
+        open(c, p);
+      }
+    })
+    .force('related', (alpha: number) => {
+      // A selection's connections sit on its open side — away from the chain that leads
+      // back to the ✳ — fanned out, so their dotted lines never have to cross the chain.
+      if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path decides
+      const f = simNodes.get(focus);
+      if (!f) return;
+      const back = ['root', ...ancestors(focus)].map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n);
+      if (!back.length) return;
+      const bx = back.reduce((a, n) => a + n.x!, 0) / back.length, by = back.reduce((a, n) => a + n.y!, 0) / back.length;
+      const base = Math.atan2(f.y! - by, f.x! - bx);
+      const rel = relatedOf(focus).map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && movable(n));
+      // keep their current order round the selection, so points don't swap places
+      const ang = (n: SimNode) => Math.atan2(Math.sin(Math.atan2(n.y! - f.y!, n.x! - f.x!) - base), Math.cos(Math.atan2(n.y! - f.y!, n.x! - f.x!) - base));
+      rel.sort((a, b) => ang(a) - ang(b));
+      rel.forEach((n, i) => {
+        const want = base + (i - (rel.length - 1) / 2) * LAYOUT.relatedSpread;
+        // travel round the selection (along a circle), not straight across it: a point that
+        // was on the wrong side would otherwise be stopped by the selection's own box
+        const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
+        // angles measured from the open side, so the way round never passes behind the selection (the chain)
+        const off = (x: number) => Math.atan2(Math.sin(x - base), Math.cos(x - base));
+        const turn = off(want) - off(Math.atan2(ry, rx));
+        const k = LAYOUT.relatedPull * alpha;
+        n.vx! += ((-ry / r) * turn * r + (rx / r) * (LAYOUT.relatedLink - r)) * k;
+        n.vy! += ((rx / r) * turn * r + (ry / r) * (LAYOUT.relatedLink - r)) * k;
+      });
+    })
+    .force('path', (alpha: number) => {
+      // The career path zig-zags away from Experience instead of forming a straight line:
+      // each step goes further out and swings alternately to one side, by uneven amounts.
+      const ex = simNodes.get('experience');
+      const info = simNodes.get('info');
+      if (!ex || !info) return;
+      let dx = ex.x! - info.x!, dy = ex.y! - info.y!;
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len; dy /= len;
+      const px = -dy, py = dx;
+      const swing = LAYOUT.roleSwing;
+      rolesOrder.forEach((id, i) => {
+        const n = simNodes.get(id);
+        if (!n || n.fx != null) return;
+        const out = LAYOUT.roleStep * (i + 1) + (i % 2 ? LAYOUT.roleStepOdd : 0);
+        const tx = ex.x! + dx * out + px * swing[i % swing.length];
+        const ty = ex.y! + dy * out + py * swing[i % swing.length];
+        n.vx! += (tx - n.x!) * LAYOUT.pathPull * alpha;
+        n.vy! += (ty - n.y!) * LAYOUT.pathPull * alpha;
+      });
+    })
+    .alphaDecay(LAYOUT.alphaDecay)
+    .on('tick', wake)
+    .on('end', wake);
+
+
+  /** A point that may move to make room for a line: not held by a drag, not the centre, and not
+      the selection's own chain (root → … → selection), which stays put so the view doesn't flip. */
+  function movable(n: SimNode): boolean {
+    if (!focus && homeOf(n.id)) return false; // the home map is laid out by hand (HOME_LAYOUT)
+    return n.fx == null && !n.hold && n.id !== anchorId() && n.id !== 'root' && !isCtx(n);
+  }
+  function isCtx(n: SimNode): boolean {
+    return !!focus && (n.id === focus || ancestors(focus).includes(n.id));
+  }
+  /** Do segments ab and cd cross (strictly inside both)? */
+  function crosses(a: SimNode, b: SimNode, c: SimNode, d: SimNode): boolean {
+    const den = (b.x! - a.x!) * (d.y! - c.y!) - (b.y! - a.y!) * (d.x! - c.x!);
+    if (Math.abs(den) < 1e-9) return false;
+    const u = ((c.x! - a.x!) * (d.y! - c.y!) - (c.y! - a.y!) * (d.x! - c.x!)) / den;
+    const v = ((c.x! - a.x!) * (b.y! - a.y!) - (c.y! - a.y!) * (b.x! - a.x!)) / den;
+    return u > 0 && u < 1 && v > 0 && v < 1;
+  }
+
+  /** The area a point belongs to: its ancestor just below the ✳. */
+  function branchOf(id: string): string {
+    const up = [id, ...ancestors(id)].filter((x) => x !== 'root');
+    return up[up.length - 1] || 'root';
+  }
+
+  function relatedOf(id: string): string[] {
+    const out = new Set<string>(byId.get(id)?.related || []);
+    nodes.forEach((o) => o.related?.includes(id) && out.add(o.id));
+    return [...out];
+  }
+
+  /* ---------- what is visible ---------- */
+  function visibleSet(f: string | null): Set<string> {
+    const vis = new Set<string>(['root']);
+    for (const b of childrenOf('root')) {
+      vis.add(b.id);
+      if (!FOLDED_AT_HOME.has(b.id) || f === b.id || (f && ancestors(f).includes(b.id)))
+        childrenOf(b.id).forEach((c) => vis.add(c.id));
+    }
+    if (f && f !== 'root') {
+      // A selection shows only its own chain: the way back to the ✳, what's inside it,
+      // and what it connects to. Everything else steps away, so nothing needs zooming.
+      vis.clear();
+      vis.add('root');
+      vis.add(f);
+      ancestors(f).forEach((a) => vis.add(a));
+      childrenOf(f).forEach((c) => vis.add(c.id));
+      relatedOf(f).forEach((r) => vis.add(r));
+    }
+    // a visible role needs its whole chain back to Experience
+    if (f && (f === 'experience' || byId.get(f)?.type === 'role')) rolesOrder.forEach((r) => vis.add(r));
+    return vis;
+  }
+
+  /* Points drawn at full strength. Everything shown belongs to the current view, so all of them. */
+  function nearSet(vis: Set<string>): Set<string> {
+    return vis;
+  }
+
+  /** The box a point takes up — its shape plus its label lines — for keeping points apart. */
+  function boxOf(n: SiteNode): SimNode['box'] {
+    const lines = n.type === 'root' ? [t(n.label)] : wrap(t(n.label));
+    const kick = !n.status && (n.type === 'case' || n.type === 'role') ? LAYOUT.kickLine : 0;
+    const y0 = n.type === 'root' ? LAYOUT.labelY.root : LAYOUT.labelY.other;
+    const w = Math.max(LAYOUT.shapeHalf * 2, Math.max(...lines.map((l) => l.length)) * LAYOUT.charW);
+    return { w, top: -LAYOUT.shapeHalf, bottom: y0 + (lines.length - 1) * LAYOUT.labelY.line + kick + 4 };
+  }
+
+  function spawn(n: SiteNode): SimNode {
+    const d = depthOf(n.id);
+    let x = 0;
+    let y = 0;
+    const lp = layoutParent(n);
+    const p = lp ? simNodes.get(lp) : undefined;
+    const home = homeOf(n.id);
+    const f = focus ? simNodes.get(focus) : undefined;
+    const fp = focus ? simNodes.get(layoutParent(byId.get(focus)!) || '') : undefined;
+    const rel = focus ? relatedOf(focus) : [];
+    if (f && fp && rel.includes(n.id)) {
+      // a connection of the selection appears on its open side (away from where it hangs),
+      // fanned out, so its dotted line starts clear of everything already on screen
+      const ang = Math.atan2(f.y! - fp.y!, f.x! - fp.x!) + (rel.indexOf(n.id) - (rel.length - 1) / 2) * LAYOUT.relatedSpread;
+      x = f.x! + Math.cos(ang) * LAYOUT.relatedLink;
+      y = f.y! + Math.sin(ang) * LAYOUT.relatedLink;
+    } else if (home) {
+      [x, y] = home;
+    } else if (p) {
+      const gp = lp ? layoutParent(byId.get(lp)!) : undefined;
+      const g = gp ? simNodes.get(gp) : undefined;
+      const ang = g ? Math.atan2(p.y! - g.y!, p.x! - g.x!) : hash(n.id + ':a') * Math.PI * 2;
+      const jitter = (hash(n.id + ':j') - 0.5) * LAYOUT.spawnJitter; // repeatable: same id, same place
+      x = p.x! + Math.cos(ang + jitter) * LAYOUT.spawnDist;
+      y = p.y! + Math.sin(ang + jitter) * LAYOUT.spawnDist;
+    }
+    const longest = Math.max(...wrap(n.label.en).map((l) => l.length));
+    const Rr = LAYOUT.radius;
+    const rad = n.id === 'root' ? Rr.root : Math.max(Rr.min, Math.min(Rr.max, longest * Rr.perChar)) ;
+    return { id: n.id, x, y, vx: 0, vy: 0, depth: d, rad, bend: hash(n.id + ':b') < 0.5 ? -1 : 1, box: boxOf(n) };
+  }
+
+  function nodeEl(n: SiteNode): SVGGElement {
+    const g = document.createElementNS(SVGNS, 'g');
+    g.classList.add('node', `t-${n.type}`);
+    if (n.id === 'info') g.classList.add('is-info');
+    if (n.status) g.classList.add('is-prep');
+    if (n.featured) g.classList.add('is-featured');
+    if (n.id === 'growth') g.classList.add('is-key'); // the main area gets a cobalt outline
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.dataset.id = n.id;
+    const num = n.type === 'branch' || n.type === 'sub' ? leafCount(n.id) : undefined;
+    g.innerHTML = `<circle class="hit" r="${n.type === 'root' ? LAYOUT.hit.root : LAYOUT.hit.other}"/><g class="shape-wrap"><g class="shape"><g>${shapeFor(
+      n,
+      n.id === 'info' ? undefined : num,
+    )}</g></g></g><text class="lbl-halo" text-anchor="middle" aria-hidden="true"></text><text class="lbl" text-anchor="middle"></text>`;
+    fillLabel(g, n);
+    attachPointer(g, n.id);
+    g.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onSelect(n.id);
+      }
+    });
+    return g;
+  }
+
+  function fillLabel(g: SVGGElement, n: SiteNode) {
+    const text = g.querySelector('text.lbl') as SVGTextElement;
+    const label = t(n.label);
+    g.setAttribute('aria-label', label);
+    const lines = n.type === 'root' ? [label] : wrap(label);
+    const Y = LAYOUT.labelY;
+    const y0 = n.type === 'root' ? Y.root : Y.other; // every point is the same size, so every label sits the same distance below
+    let html = lines.map((l, i) => `<tspan x="0" y="${y0 + i * Y.line}">${esc(l)}</tspan>`).join('');
+    if (!n.status && n.kicker && (n.type === 'case' || n.type === 'role')) {
+      // items still in preparation show only their name; the dashed outline says the rest
+      const k = n.type === 'role' ? n.period || '' : n.headline ? n.headline.num : t(n.kicker).split(' · ')[0];
+      html += `<tspan class="kick" x="0" y="${y0 + lines.length * Y.line}">${esc(k)}</tspan>`;
+    }
+    text.innerHTML = html;
+    (g.querySelector('text.lbl-halo') as SVGTextElement).innerHTML = html;
+  }
+
+  /* ---------- pointer: click vs drag ---------- */
+  function toWorld(cx: number, cy: number) {
+    const r = svg.getBoundingClientRect();
+    return { x: (cx - r.left - cam.x) / cam.k, y: (cy - r.top - cam.y) / cam.k };
+  }
+
+  function attachPointer(g: SVGGElement, id: string) {
+    let start: { x: number; y: number } | null = null;
+    let dragging = false;
+    // Every way a gesture can end goes through here, so a node is never left pinned
+    // and the simulation never left running hot.
+    const end = (select: boolean) => {
+      if (!start) return;
+      const n = simNodes.get(id);
+      if (dragging) {
+        if (n) { n.fx = null; n.fy = null; }
+        g.classList.remove('dragging');
+        sim.alphaTarget(0);
+      } else if (select) onSelect(id);
+      start = null;
+      dragging = false;
+    };
+    g.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return; // right / middle click do nothing
+      start = { x: e.clientX, y: e.clientY };
+      dragging = false;
+      g.setPointerCapture(e.pointerId);
+    });
+    g.addEventListener('pointermove', (e) => {
+      if (!start) return;
+      const n = simNodes.get(id);
+      if (!n) return;
+      if (!dragging && Math.hypot(e.clientX - start.x, e.clientY - start.y) > LAYOUT.dragSlop) {
+        dragging = true;
+        g.classList.add('dragging');
+        sim.alphaTarget(LAYOUT.dragAlpha).restart();
+      }
+      if (dragging) {
+        const w = toWorld(e.clientX, e.clientY);
+        n.fx = w.x;
+        n.fy = w.y;
+      }
+    });
+    g.addEventListener('pointerup', () => end(true));
+    g.addEventListener('pointercancel', () => end(false));
+    g.addEventListener('lostpointercapture', () => end(false));
+  }
+
+  /* ---------- update graph for a focus ---------- */
+  function update() {
+    const vis = visibleSet(focus);
+    near = nearSet(vis);
+
+    /* Keep the shape (v49). Clicking a point that is already on screen doesn't re-lay the
+       map: every point that stays keeps its place, and only the newcomers settle around
+       them — held on a spring, so they wiggle a little but the shape stays. The map is laid out afresh when the selection moves
+       to another area (a dotted line across, a link, the INDEX, back to home). */
+    const keep = !!focus && simNodes.has(focus) && !!shownFocus && branchOf(focus) === branchOf(shownFocus);
+    shownFocus = focus;
+    simNodes.forEach((n) => {
+      n.hold = keep && vis.has(n.id) ? [n.x!, n.y!] : undefined; // a spring, not a pin: a small wiggle, same shape
+    });
+
+    for (const id of [...simNodes.keys()]) {
+      if (!vis.has(id)) {
+        simNodes.delete(id);
+        const el = els.get(id)!;
+        el.classList.add('leaving');
+        els.delete(id);
+        setTimeout(() => el.remove(), fadeMs()); // wait for the CSS fade to finish
+      }
+    }
+    // spawn parents before children
+    const ordered = nodes.filter((n) => vis.has(n.id)).sort((a, b) => depthOf(a.id) - depthOf(b.id));
+    const rolesFirst = ordered.filter((n) => n.type !== 'role').concat(rolesOrder.map((r) => byId.get(r)!).filter((n) => vis.has(n.id)));
+    for (const n of rolesFirst) {
+      if (!simNodes.has(n.id)) {
+        simNodes.set(n.id, spawn(n));
+        const el = nodeEl(n);
+        el.classList.add('entering');
+        gNodes.append(el);
+        els.set(n.id, el);
+        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('entering')));
+      }
+    }
+
+    const next: SimLink[] = [];
+    for (const n of ordered) {
+      const lp = layoutParent(n);
+      if (lp && vis.has(lp)) {
+        const d = depthOf(n.id);
+        const jitter = LAYOUT.linkJitter[0] + hash(n.id) * LAYOUT.linkJitter[1]; // some children sit close, some far
+        const dist = n.type === 'role'
+          ? LAYOUT.roleLink + hash(n.id) * LAYOUT.roleLinkVar
+          : homeDist(lp, n.id) ?? (d === 1 ? LAYOUT.areaLink : (d === 2 ? LAYOUT.practiceLink : LAYOUT.leafLink) * jitter);
+        next.push({ source: lp, target: n.id, kind: 'tree', dist, key: `t:${lp}>${n.id}` });
+      }
+      (n.related || []).forEach((r) => {
+        const key = `r:${[n.id, r].sort().join('~')}`;
+        // only the selection's own connections: an ancestor's dotted lines are its business, not this view's
+        if (vis.has(r) && (n.id === focus || r === focus) && !next.some((l) => l.key === key))
+          next.push({ source: n.id, target: r, kind: 'related', dist: LAYOUT.relatedLink, key });
+      });
+    }
+    links = next;
+    const keys = new Set(links.map((l) => l.key));
+    for (const l of links) {
+      if (!linkEls.has(l.key)) {
+        const path = document.createElementNS(SVGNS, 'path');
+        path.classList.add('lk', `lk-${l.kind}`, 'entering');
+        gLinks.append(path);
+        linkEls.set(l.key, path);
+        requestAnimationFrame(() => requestAnimationFrame(() => path.classList.remove('entering')));
+      }
+    }
+    for (const [k, el] of [...linkEls]) {
+      if (!keys.has(k)) {
+        el.remove();
+        linkEls.delete(k);
+      }
+    }
+
+    els.forEach((el, id) => {
+      el.classList.toggle('is-current', id === (focus || 'root'));
+      el.classList.toggle('is-far', !near.has(id));
+      el.classList.toggle('is-visited', id !== 'root' && isDone(id) && id !== focus);
+      const par = byId.get(id)?.parent;
+      el.classList.toggle('show-kick', !!focus && (id === focus || par === focus || par === byId.get(focus)?.parent));
+    });
+    for (const l of links) {
+      const el = linkEls.get(l.key)!;
+      const s = typeof l.source === 'object' ? (l.source as SimNode).id : (l.source as string);
+      const tg = typeof l.target === 'object' ? (l.target as SimNode).id : (l.target as string);
+      el.classList.toggle('is-far', !(near.has(s) && near.has(tg)));
+    }
+
+    sim.nodes([...simNodes.values()]);
+    (sim.force('link') as ReturnType<typeof forceLink<SimNode, SimLink>>).links(links);
+    if (reducedMotion.matches) {
+      sim.alpha(1).stop();
+      for (let i = 0; i < LAYOUT.reducedTicks; i++) sim.tick();
+      wake();
+    } else {
+      sim.alphaTarget(0).alpha(keep ? LAYOUT.keepAlpha : LAYOUT.alphaStart).restart(); // settle, then stay still
+      wake();
+    }
+  }
+
+  /* An elbowed link: a short straight run, a horizontal step, then on to the target. */
+  function linkPath(s: SimNode, tg: SimNode, id: string): string {
+    const f = (v: number) => v.toFixed(1);
+    // A line leaving a point downward starts under that point's label, and one arriving from
+    // below ends under it, so a line never runs through its own point's name.
+    const below = (n: SimNode, other: SimNode) => other.y! > n.y! + n.box.bottom;
+    const sx = s.x!, tx = tg.x!;
+    const sy = below(s, tg) ? s.y! + s.box.bottom : s.y!;
+    const ty = below(tg, s) ? tg.y! + tg.box.bottom : tg.y!;
+    const dx = tx - sx, dy = ty - sy;
+    void id;
+    const E = LAYOUT.elbow;
+    const ax = sx + dx * E.at, ay = sy + dy * E.at;
+    let st = Math.max(-E.max, Math.min(E.max, dx * E.slope));
+    if (Math.abs(st) < E.min) st = E.min * (Math.sign(st) || s.bend); // no tiny notches
+    const bx = ax + st;
+    return `M${f(sx)},${f(sy)}L${f(ax)},${f(ay)}L${f(bx)},${f(ay)}L${f(tx)},${f(ty)}`;
+  }
+
+  /* Camera: frame every point that is shown, at a steady scale. The focus pulls
+     itself to the middle through the centring force; the camera centres on the
+     whole shown chain so both ends of every link stay in view. */
+  function baseCamera() {
+    const pts = [...simNodes.values()];
+    if (!pts.length) return cam;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    pts.forEach((n) => {
+      x0 = Math.min(x0, n.x!); x1 = Math.max(x1, n.x!);
+      y0 = Math.min(y0, n.y!); y1 = Math.max(y1, n.y!);
+    });
+    const P = CAMERA.pad;
+    const w = x1 - x0 + P.x * 2, h = y1 - y0 + P.top + P.bottom;
+    const k = Math.max(CAMERA.min, Math.min(CAMERA.max, area.w / w, area.h / h));
+    const cx = (x0 + x1) / 2, cy = (y0 - P.top + y1 + P.bottom) / 2;
+    return { x: area.x + area.w / 2 - cx * k, y: area.y + area.h / 2 - cy * k, k };
+  }
+
+  function targetCamera() {
+    return baseCamera();
+  }
+
+  /* Drawing is on demand: a frame is requested only while something moves (the
+     simulation or the camera easing). Once both are still, nothing runs at all. */
+  let raf = 0;
+  function wake() {
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+  function frame() {
+    raf = 0;
+    const moving = render();
+    if (moving || sim.alpha() >= sim.alphaMin()) wake();
+  }
+
+  /** Draw one frame; returns true while the camera is still easing. */
+  function render(): boolean {
+    const tc = targetCamera();
+    const e = reducedMotion.matches ? 1 : CAMERA.ease;
+    const moving = Math.abs(tc.x - cam.x) > CAMERA.still || Math.abs(tc.y - cam.y) > CAMERA.still || Math.abs(tc.k - cam.k) > CAMERA.still / 1000;
+    cam = moving ? { x: cam.x + (tc.x - cam.x) * e, y: cam.y + (tc.y - cam.y) * e, k: cam.k + (tc.k - cam.k) * e } : tc;
+    world.setAttribute('transform', `translate(${cam.x.toFixed(1)},${cam.y.toFixed(1)}) scale(${cam.k.toFixed(3)})`);
+    simNodes.forEach((n, id) => els.get(id)?.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`));
+    for (const l of links) {
+      const s = l.source as unknown as SimNode;
+      const tg = l.target as unknown as SimNode;
+      if (typeof s !== 'object' || typeof tg !== 'object') continue;
+      linkEls.get(l.key)?.setAttribute('d', linkPath(s, tg, l.key));
+    }
+    return moving;
+  }
+
+  update();
+  // settle the first layout off-screen so the intro fades in on a calm map
+  for (let i = 0; i < LAYOUT.firstTicks; i++) sim.tick();
+  cam = targetCamera();
+  render();
+
+  return {
+    setFocus(id) {
+      focus = id && id !== 'root' ? id : null;
+      if (focus) state.visited.add(focus);
+      update();
+    },
+    setViewport(a) {
+      area = a;
+      wake();
+    },
+    rerenderLabels() {
+      els.forEach((el, id) => fillLabel(el, byId.get(id)!));
+    },
+  };
+}

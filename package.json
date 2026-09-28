@@ -1,0 +1,22 @@
+{
+  "name": "wenyi-zhu-portfolio",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run check && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "build:file": "npm run build && node scripts/single-file.mjs",
+    "check": "node --experimental-strip-types --no-warnings scripts/check.mjs"
+  },
+  "dependencies": {
+    "d3-force": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/d3-force": "^3.0.10",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  },
+  "private": true,
+  "type": "module"
+}

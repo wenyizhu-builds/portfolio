@@ -1,0 +1,133 @@
+/*
+ * Shared content blocks. The desktop panel (panel.ts) and the phone page (mobile.ts)
+ * both build from these, so a node reads the same on every screen and a change here
+ * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
+ */
+import { byId, childrenOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
+import { esc, missingZh, t } from './state';
+
+export const L = (k: keyof typeof ui) => esc(t(ui[k]));
+
+
+
+/** Localised, escaped text. English shown in Chinese mode is marked lang="en" for screen readers. */
+export function tx(v: T | undefined): string {
+  if (!v) return '';
+  return missingZh(v) ? `<span lang="en">${esc(v.en)}</span>` : esc(t(v));
+}
+
+export function zhNote(n: SiteNode): string {
+  return missingZh(n.summary || n.label) ? `<p class="zh-note">${L('zhPending')}</p>` : '';
+}
+
+/*
+ * Card typography (v42, after the reference): one typeface, two sizes — text and
+ * small capitals (.lab) — and two colours, ink and grey. Hierarchy comes from grey,
+ * capitals and a shared text column (the gutter), never from bigger or bolder type.
+ */
+
+/** Where this work was done, as a link: "HoYoverse". */
+function orgName(n: SiteNode): string {
+  const o = n.org ? byId.get(n.org) : undefined;
+  return o ? `<a class="p-org" href="#/${o.id}">${tx(o.label)}</a>` : '';
+}
+
+const isWork = (n: SiteNode) => n.type === 'case' || n.type === 'ai' || n.type === 'creative';
+
+/** Title, a grey line under it (job title / where + my role), and one small-capitals meta line. */
+function identity(n: SiteNode, title: string): string {
+  const leaf = !childrenOf(n.id).length;
+  const sub = [
+    orgName(n),
+    !isWork(n) && leaf && n.kicker && !n.status ? tx(n.kicker) : '', // a role's job title, a school's degree
+    n.role ? tx(n.role) : '',
+  ].filter(Boolean).join(' · ');
+  const meta = [
+    n.period ? esc(n.period) : '',
+    ...(n.markets || []).map(esc),
+    isWork(n) && n.kicker ? tx(n.kicker) : '', // a case's platforms, or "Showcase in preparation"
+  ].filter(Boolean).join(' · ');
+  return `<div class="p-id">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta">${meta}</span>` : ''}</div>`;
+}
+
+/** The one figure a recruiter should see first, as a sentence: "80M+ views across 9 accounts…". */
+function figure(n: SiteNode): string {
+  return n.headline ? `<p class="p-fig"><b>${esc(n.headline.num)}</b> ${tx(n.headline.label)}</p>` : '';
+}
+
+export function summary(n: SiteNode): string {
+  if (n.status) return `<p class="p-sum muted">${L('prepBody')}</p>`;
+  // A group's line only describes what is inside it: grey, like the INDEX (same class, one rule).
+  // A single piece of work's summary is the content itself: ink.
+  return n.summary ? `<p class="p-sum${childrenOf(n.id).length ? ' p-def' : ''}">${tx(n.summary)}</p>` : '';
+}
+
+/** Everything a reader sees before the details. `title` is the heading element the caller wants. */
+export function intro(n: SiteNode, title: string): string {
+  return identity(n, title) + figure(n) + zhNote(n) + summary(n);
+}
+
+/** The expandable detail lists of a case: its sections, then results. */
+export function detailLists(n: SiteNode): { title: string; body: string }[] {
+  const out = (n.sections || []).map((s) => ({
+    title: tx(s.title),
+    body: `<ul>${s.items.map((i) => `<li>${tx(i)}</li>`).join('')}</ul>`,
+  }));
+  if (n.results?.length)
+    out.push({ title: L('results'), body: `<ul class="results">${n.results.map((i) => `<li>${tx(i)}</li>`).join('')}</ul>` });
+  return out;
+}
+
+/* ---------- résumé ---------- */
+export function resumePdf(): string {
+  return site.resumePdf
+    ? `<a class="btn btn-primary" href="${esc(site.resumePdf)}" download>${L('downloadPdf')} ↓</a>`
+    : `<span class="btn btn-disabled" aria-disabled="true">${L('downloadPdf')} · ${L('pdfPending')}</span>`;
+}
+
+export function resumeLists(withMapLinks: boolean): string {
+  const roles = rolesOrder
+    .map((id) => byId.get(id)!)
+    .map((r) => {
+      const n = workOf(r.id).length;
+      const link = withMapLinks
+        ? `<a class="cv-map" href="#/${r.id}">${n ? `${L('viewWork')} (${n})` : L('viewOnMap')} →</a>`
+        : '';
+      return `<li class="cv-item"><div class="cv-when">${esc(r.period || '')}</div>
+        <div class="cv-what"><strong>${tx(r.label)}</strong><span>${tx(r.kicker)}</span><p>${tx(r.summary)}</p>${link}</div></li>`;
+    })
+    .join('');
+  const schools = schoolsOrder
+    .map((id) => byId.get(id)!)
+    .map(
+      (s) => `<li class="cv-item"><div class="cv-when">${esc(s.period || '')}</div>
+        <div class="cv-what"><strong>${tx(s.label)}</strong><span>${tx(s.kicker)}</span></div></li>`,
+    )
+    .join('');
+  return `<h3 class="cv-h">${L('experience')}</h3><ol class="cv">${roles}</ol>
+    <h3 class="cv-h">${L('education')}</h3><ol class="cv">${schools}</ol>`;
+}
+
+/* ---------- contact ---------- */
+const linkedinHandle = () => site.linkedin.replace(/\/+$/, '').split('/').pop() || site.linkedin;
+
+export function contactRows(): string {
+  const email = site.email
+    ? `<div class="ct-row"><span class="ct-k">${L('email')}</span><a href="mailto:${esc(site.email)}">${esc(site.email)}</a><button class="p-btn ct-copy" data-copy="${esc(site.email)}">${L('copy')}</button></div>`
+    : `<div class="ct-row"><span class="ct-k">${L('email')}</span><span class="muted">${L('emailPending')}</span></div>`;
+  return `${email}<div class="ct-row"><span class="ct-k">${L('linkedin')}</span><a href="${esc(site.linkedin)}" target="_blank" rel="noopener">${esc(linkedinHandle())} ↗</a></div>`;
+}
+
+/** Copy-to-clipboard buttons inside any freshly rendered block. */
+export function wireCopy(root: ParentNode) {
+  root.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    b.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copy || '');
+        b.textContent = t(ui.copied);
+      } catch {
+        /* clipboard unavailable: the address is still visible and selectable */
+      }
+    };
+  });
+}
