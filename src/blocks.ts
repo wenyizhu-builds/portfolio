@@ -47,6 +47,7 @@ function identity(n: SiteNode, title: string): string {
     ...(n.markets || []).map(esc),
     isWork(n) && n.kicker ? tx(n.kicker) : '', // a case's platforms, or "Showcase in preparation"
   ].filter(Boolean).join(' · ');
+  if (!title && !sub && !meta) return '';
   return `<div class="p-id">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta">${meta}</span>` : ''}</div>`;
 }
 

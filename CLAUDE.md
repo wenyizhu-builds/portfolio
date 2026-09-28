@@ -54,7 +54,10 @@
    - 中英文两种语言
    - 至少点开一个案例、一段经历、一个"准备中"的作品
 5. 上线前运行 `npm run check -- --launch`，必须通过。
-6. 同步到你电脑上的项目文件夹后，在那里 `git commit` 一次（提交信息写版本号和一句话）。（L27）
+6. 版本管理（L27）：GitHub `wenyizhu-builds/portfolio` 是唯一的版本源。
+   - 在云端工作副本里 `git commit`（写版本号和一句话），然后 `git push`。
+   - 同步到你电脑：用 `git bundle` 把新提交带过去，在电脑上的文件夹里 `git pull <bundle> main`，两边提交号保持一致。
+   - 部署配置放在根目录 `github-pages-deploy.yml`，上线时才移到 `.github/workflows/`。
 7. 更新文档：
    - 覆盖 `docs/STATUS.md`
    - 在 `docs/CHANGELOG.md` 追加一条
