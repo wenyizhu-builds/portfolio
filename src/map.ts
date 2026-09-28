@@ -90,6 +90,7 @@ const LAYOUT = {
   fanMin: 0.62, fanPush: 0.5, // two lines leaving the same point keep at least this angle (radians, ≈35°)
   crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
   moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
+  siblingRing: 110, // an end point's siblings sit about this far round their parent
   relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
   chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
   velocityDecay: 0.5, alphaDecay: 0.05, alphaStart: 0.7, dragAlpha: 0.3, dragSlop: 4,
@@ -173,8 +174,16 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   const linkEls = new Map<string, SVGPathElement>();
 
   /* The point held at the centre: the selection — except a single role, where holding
-     it would fold the career path onto itself; there the path's start (Experience) holds. */
-  const anchorId = () => (focus && byId.get(focus)?.type === 'role' ? 'experience' : focus || 'root');
+     it would fold the career path onto itself (there the path's start, Experience, holds),
+     and an end point, where its parent holds so its siblings stay put around it. */
+  const anchorId = () => {
+    if (!focus) return 'root';
+    const n = byId.get(focus);
+    if (n?.type === 'role') return 'experience';
+    // an end point holds its parent at the centre, so moving between siblings keeps the map steady
+    if (n && !childrenOf(focus).length && n.parent && n.parent !== 'root') return n.parent;
+    return focus;
+  };
 
   const sim: Simulation<SimNode, SimLink> = forceSimulation<SimNode, SimLink>([])
     .velocityDecay(LAYOUT.velocityDecay)
@@ -335,7 +344,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       // middle point, so the other lines don't have to cross it.
       if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path force shapes it
       const chain: SimNode[] = [];
-      for (let id: string | undefined = focus; id; id = layoutParent(byId.get(id)!)) {
+      // from the centred point back: for an end point that is its parent, so siblings aren't swung about
+      for (let id: string | undefined = anchorId(); id; id = layoutParent(byId.get(id)!)) {
         const n = simNodes.get(id);
         if (n) chain.unshift(n);
       }
@@ -361,28 +371,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       // A selection's connections sit on its open side — away from the chain that leads
       // back to the ✳ — fanned out, so their dotted lines never have to cross the chain.
       if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path decides
-      const f = simNodes.get(focus);
-      if (!f) return;
-      const back = ['root', ...ancestors(focus)].map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n);
-      if (!back.length) return;
-      const bx = back.reduce((a, n) => a + n.x!, 0) / back.length, by = back.reduce((a, n) => a + n.y!, 0) / back.length;
-      const base = Math.atan2(f.y! - by, f.x! - bx);
-      const rel = relatedOf(focus).map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && movable(n));
-      // keep their current order round the selection, so points don't swap places
-      const ang = (n: SimNode) => Math.atan2(Math.sin(Math.atan2(n.y! - f.y!, n.x! - f.x!) - base), Math.cos(Math.atan2(n.y! - f.y!, n.x! - f.x!) - base));
-      rel.sort((a, b) => ang(a) - ang(b));
-      rel.forEach((n, i) => {
-        const want = base + (i - (rel.length - 1) / 2) * LAYOUT.relatedSpread;
-        // travel round the selection (along a circle), not straight across it: a point that
-        // was on the wrong side would otherwise be stopped by the selection's own box
-        const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
-        // angles measured from the open side, so the way round never passes behind the selection (the chain)
-        const off = (x: number) => Math.atan2(Math.sin(x - base), Math.cos(x - base));
-        const turn = off(want) - off(Math.atan2(ry, rx));
-        const k = LAYOUT.relatedPull * alpha;
-        n.vx! += ((-ry / r) * turn * r + (rx / r) * (LAYOUT.relatedLink - r)) * k;
-        n.vy! += ((rx / r) * turn * r + (ry / r) * (LAYOUT.relatedLink - r)) * k;
-      });
+      fanOut(focus, relatedOf(focus), LAYOUT.relatedLink, LAYOUT.relatedSpread, alpha, movable);
+      // an end point: it and its siblings fan out on the parent's open side too (v53), so the
+      // line back to the ✳ never runs through one of them
+      const a = anchorId();
+      if (a !== focus && a !== 'experience')
+        fanOut(a, childrenOf(a).map((c) => c.id), LAYOUT.siblingRing, LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
     })
     .force('path', (alpha: number) => {
       // The career path zig-zags away from Experience instead of forming a straight line:
@@ -409,6 +403,28 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     .on('tick', wake)
     .on('end', wake);
 
+
+  /** Pull `ids` onto an arc round `centerId`, on the side facing away from the chain back to
+      the ✳, in their current order (so points don't swap), travelling round the centre. */
+  function fanOut(centerId: string, ids: string[], radius: number, spread: number, alpha: number, ok: (n: SimNode) => boolean) {
+    const f = simNodes.get(centerId);
+    if (!f) return;
+    const back = ['root', ...ancestors(centerId)].filter((id) => id !== centerId).map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n);
+    if (!back.length) return;
+    const bx = back.reduce((a, n) => a + n.x!, 0) / back.length, by = back.reduce((a, n) => a + n.y!, 0) / back.length;
+    const base = Math.atan2(f.y! - by, f.x! - bx);
+    const off = (x: number) => Math.atan2(Math.sin(x - base), Math.cos(x - base)); // angle from the open side
+    const at = (n: SimNode) => off(Math.atan2(n.y! - f.y!, n.x! - f.x!));
+    const pts = ids.map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && ok(n)).sort((a, b) => at(a) - at(b));
+    pts.forEach((n, i) => {
+      const want = (i - (pts.length - 1) / 2) * spread;
+      const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
+      const turn = want - at(n); // never passes behind the centre (the chain)
+      const k = LAYOUT.relatedPull * alpha;
+      n.vx! += ((-ry / r) * turn * r + (rx / r) * (radius - r)) * k;
+      n.vy! += ((rx / r) * turn * r + (ry / r) * (radius - r)) * k;
+    });
+  }
 
   /** A point that may move to make room for a line: not held by a drag, not the centre, and not
       the selection's own chain (root → … → selection), which stays put so the view doesn't flip. */
@@ -451,6 +467,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       ancestors(f).forEach((a) => vis.add(a));
       childrenOf(f).forEach((c) => vis.add(c.id));
       relatedOf(f).forEach((r) => vis.add(r));
+      // An end point (a single piece of work) keeps its siblings on the map, so the reader can
+      // go from one to the next directly instead of stepping up to the parent and back down (v53).
+      const par = byId.get(f)?.parent;
+      if (!childrenOf(f).length && par && par !== 'root') childrenOf(par).forEach((c) => vis.add(c.id));
     }
     // a visible role needs its whole chain back to Experience
     if (f && (f === 'experience' || byId.get(f)?.type === 'role')) rolesOrder.forEach((r) => vis.add(r));
