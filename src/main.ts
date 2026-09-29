@@ -59,7 +59,9 @@ function fitSide() {
   const mdH = media.classList.contains('open') ? cssPx('--media-h') + gap : 0;
   ixnav.style.height = `${ixH}px`;
   media.style.height = `${mdH}px`;
-  panel.style.height = `${Math.min(inner.offsetHeight, sideEl.clientHeight - ixH - mdH)}px`;
+  const panelStyle = getComputedStyle(panel);
+  const border = parseFloat(panelStyle.borderTopWidth) + parseFloat(panelStyle.borderBottomWidth);
+  panel.style.height = `${Math.max(0, Math.min(inner.offsetHeight + border, sideEl.clientHeight - ixH - mdH))}px`;
 }
 /* The scrollbar only shows while the card is being scrolled (like an overlay scrollbar). */
 let scrollIdle = 0;

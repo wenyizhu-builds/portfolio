@@ -32,7 +32,12 @@
   --fs-text: 14px;
   --fs-label: 11.5px;
   --track-label: 0.05em; /* letter-spacing of every small-capitals line (the reference uses 0.05em) */ /* small capitals: labels, meta lines, section titles */
-  --fs-figure: 22px; /* the one exception: the four key figures in the INDEX */
+  --fs-figure: 18px; /* restrained emphasis for INDEX and case figures */
+  --entrance-map: 3000ms;
+  --entrance-card: 800ms;
+  --entrance-step: 100;
+  --entrance-shift: 10vw;
+  --entrance-rise: 10px;
   --gutter: 24px; /* marks and shapes sit left of this; all card text starts here */
   --leaf-indent: 16px; /* a dashed item's text sits this far right of its group */
   --map-min-w: 260px; /* the map never gets narrower than this */
@@ -105,7 +110,7 @@ button { font: inherit; color: inherit; }
 .node .shape { transition: transform 160ms ease-out; transform-box: fill-box; transform-origin: center; }
 .node:hover .shape, .node:focus-visible .shape { transform: scale(1.12); }
 .node.dragging { cursor: grabbing; }
-.node .shp { fill: var(--bg); stroke: var(--ink); stroke-width: 1.2; vector-effect: non-scaling-stroke; transition: fill 300ms, stroke 300ms; }
+.node .shp { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; vector-effect: non-scaling-stroke; transition: fill 300ms, stroke 300ms; }
 .node .shp-solid { fill: var(--ink); }
 .node .shp-eye { fill: var(--bg); }
 .node .num { fill: var(--ink); pointer-events: none; }
@@ -124,6 +129,9 @@ button { font: inherit; color: inherit; }
 .node.is-far .num { fill: var(--muted); }
 .node.is-info.is-current .shp-eye { fill: var(--accent); }
 .node.is-info.is-current .shp-solid { fill: var(--ink); }
+.node:is(:hover, :focus-visible):not(.t-root) .shp { fill: var(--accent); stroke: var(--ink); }
+.node.is-info:is(:hover, :focus-visible) .shp-eye { fill: var(--accent); }
+.node.is-info:is(:hover, :focus-visible) .shp-solid { fill: var(--ink); }
 
 .node .lbl, .node .lbl-halo { font-size: 13px; pointer-events: none; }
 .node .lbl { fill: var(--ink); transition: fill 300ms; }
@@ -142,6 +150,7 @@ button { font: inherit; color: inherit; }
 
 /* the name: always the brightest point */
 .node.t-root .ast line { stroke: var(--cobalt); }
+.node.t-root:is(:hover, :focus-visible) .ast line { stroke: var(--accent); }
 .node.t-root .shape-wrap { animation: spin var(--spin) linear infinite; transform-box: fill-box; transform-origin: center; }
 .node.t-root .lbl, .node.t-root .lbl-halo { font-size: 17px; font-weight: 400; letter-spacing: -0.01em; }
 .node.t-root:hover .shape { transform: scale(1.15); }
@@ -159,6 +168,7 @@ button { font: inherit; color: inherit; }
   flex: 0 1 auto; min-height: 0; max-height: 100%;
   background: var(--panel); border: 1px solid var(--line-soft); border-radius: 10px;
   overflow-y: auto; overscroll-behavior: contain; pointer-events: auto;
+  scrollbar-gutter: stable; /* keep line wrapping fixed throughout height transitions */
   transition: height var(--dur-card) var(--ease);
   /* scrollbar hidden until the card is scrolled; the thin track keeps the width steady */
   scrollbar-width: thin; scrollbar-color: transparent transparent;
@@ -183,13 +193,13 @@ button { font: inherit; color: inherit; }
 .ix-ast line { stroke: var(--cobalt); }
 .ix-body { padding-top: 4px; }
 .ix-body > .sec:first-child { border-top: 0; }
-.ix-bio { margin: 0 0 14px; text-indent: var(--gutter); }
+.ix-bio { margin: 0 0 14px; }
 /* key figures: a clean 2×2 grid, spacing only — no rules */
-.sec-body .ix-stats { list-style: none; margin: 0 0 14px var(--gutter); padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.ix-stats li { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: var(--rule); border-radius: 8px; } /* each figure framed in its own tile */
+.sec-body .ix-stats { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ix-stats li { display: flex; flex-direction: column; gap: 4px; padding: 0; }
 .ix-stats strong { font-size: var(--fs-figure); font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; color: var(--cobalt); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ix-stats li > span { font-size: var(--fs-label); letter-spacing: 0.04em; line-height: 1.4; color: var(--muted); }
-.ix-more { display: inline-block; margin: 0 0 14px var(--gutter); text-underline-offset: 3px; }
+.ix-more { display: inline-block; margin: 0 0 14px; text-underline-offset: 3px; }
 /* ---- card: the whole system lives in these rules ---- */
 .panel .p-body, .ixbar, .m-card { font-size: var(--fs-text); line-height: 1.45; letter-spacing: -0.005em; }
 .lab { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; line-height: 1.45; }
@@ -201,18 +211,22 @@ button { font: inherit; color: inherit; }
 .p-btn:hover { background: var(--bg); }
 .p-body { padding: 14px 22px 10px; }
 .p-title, .m-card h3 { font-size: var(--fs-text); font-weight: 400; letter-spacing: inherit; line-height: 1.45; margin: 0; }
-.p-id { padding-left: var(--gutter); margin: 0 0 14px; }
+.p-id { margin: 0 0 14px; }
 .p-sub, .p-meta { display: block; color: var(--muted); }
-.p-fig { margin: 0 0 14px; padding-left: var(--gutter); }
+.p-fig { margin: 0 0 14px; }
 .p-fig b { font-weight: 400; color: var(--cobalt); font-variant-numeric: tabular-nums; }
+.p-fig b { font-size: var(--fs-figure); }
+.p-highlight { color: var(--ink); background: linear-gradient(transparent 30%, var(--accent) 30%, var(--accent) 92%, transparent 92%); }
+.p-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.p-tag { font-size: var(--fs-label); color: var(--ink-2); background: var(--bg); border-radius: 3px; padding: 2px 6px; }
 .p-kicker { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .p-org { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .p-org:hover { color: var(--ink); text-decoration-color: currentColor; }
 /* practice headings: dark small capitals, groups separated by space only (no rules) */
-.ngroup-h { display: block; padding-left: var(--gutter); font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--ink); text-decoration: none; margin: 10px 0 6px; }
+.ngroup-h { display: block; font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--ink); text-decoration: none; margin: 10px 0 6px; }
 .ngroup:first-child .ngroup-h { margin-top: 2px; }
 .ngroup-h:hover { text-decoration: underline; text-underline-offset: 3px; }
-.p-sum { margin: 0 0 14px; text-indent: var(--gutter); }
+.p-sum { margin: 0 0 14px; }
 .p-def { color: var(--ink); } /* a group's description, everywhere (INDEX and cards): same ink as all text (v51, was grey) */
 .zh-note { font-size: 12px; color: var(--muted); background: var(--bg); border-radius: 6px; padding: 6px 10px; margin: 10px 0; }
 
@@ -223,16 +237,19 @@ button { font: inherit; color: inherit; }
 .sec summary i::after { content: '+'; font-style: normal; font-size: var(--fs-text); }
 .sec[open] summary i::after { content: '–'; }
 .sec-body { padding: 0 0 12px; }
-.sec-body ul { margin: 0; padding-left: calc(var(--gutter) + 14px); }
+.sec-body ul { margin: 0; padding-left: var(--leaf-indent); list-style: disc; }
 .sec-body li { margin: 0 0 6px; }
-.results li::marker { color: var(--cobalt); }
+.sec-body li::marker, .m-more li::marker { color: var(--muted); }
+.sec-body .results:has(.result-row), .m-more .results:has(.result-row) { list-style: disc; padding-left: var(--leaf-indent); }
+.results .result-row { margin-bottom: 12px; }
+.result-num { color: var(--cobalt); font-size: var(--fs-figure); font-variant-numeric: tabular-nums; line-height: 1.3; }
 .nlist { display: flex; flex-direction: column; }
 .p-list { margin: 0 0 6px; padding-top: 12px; border-top: var(--rule-card); }
-.nlink { display: block; padding: 0 0 8px var(--gutter); text-decoration: none; color: var(--ink); }
+.nlink { display: block; padding: 0 0 8px; text-decoration: none; color: var(--ink); }
 .nlink .lab { display: block; color: var(--muted); }
 /* the last level — a single piece of work — carries a bullet, so a group and its items never read as one level */
-.nlink.is-leaf { padding-left: calc(var(--gutter) + var(--leaf-indent)); position: relative; }
-.nlink.is-leaf::before { content: '•'; position: absolute; left: var(--gutter); color: var(--muted); }
+.nlink.is-leaf { position: relative; padding-left: var(--leaf-indent); }
+.nlink.is-leaf::before { content: '•'; position: absolute; left: 0; color: var(--muted); }
 .nlink:hover .nlink-t { text-decoration: underline; text-underline-offset: 3px; }
 
 .ico { flex: none; overflow: visible; }
@@ -279,8 +296,10 @@ button { font: inherit; color: inherit; }
 .proto { position: absolute; z-index: 2; right: var(--map-inset); bottom: var(--edge-y); margin: 0; font-size: 10px; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 
 /* intro fade for the whole map */
-.stage { animation: mapIn 2.2s var(--ease) both; }
-@keyframes mapIn { from { opacity: 0; } }
+.stage { animation: mapIn var(--entrance-map) var(--ease) both; }
+@keyframes mapIn { from { transform: translateX(var(--entrance-shift)); } }
+.side { animation: sideIn var(--entrance-card) var(--ease) both; }
+@keyframes sideIn { from { opacity: 0; transform: translateY(var(--entrance-rise)); } }
 
 /* tablets / narrow desktops: panel takes more room, media tucks under */
 @media (max-width: 1180px) {
@@ -325,7 +344,7 @@ button { font: inherit; color: inherit; }
 .m-more summary::after { content: ' +'; }
 .m-more[open] summary::after { content: ' –'; }
 .m-more h4 { font-size: 10.5px; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); font-weight: 400; margin: 12px 0 4px; }
-.m-more ul { margin: 0; padding-left: 16px; font-size: 14px; line-height: 1.55; }
+.m-more ul { margin: 0; padding-left: var(--leaf-indent); list-style: disc; font-size: 14px; line-height: 1.55; }
 .m-more li { margin-bottom: 5px; }
 .m-foot { padding: 30px 0 10px; font-size: 10px; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 .m-fab { position: fixed; right: 16px; bottom: 18px; z-index: 6; background: var(--ink); color: var(--on-ink); text-decoration: none; font-size: 13px; padding: 10px 16px; border-radius: 999px; }

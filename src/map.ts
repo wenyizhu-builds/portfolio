@@ -606,7 +606,16 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   }
 
   /* ---------- update graph for a focus ---------- */
+  let firstEntrance = true;
   function update() {
+    const stagger = firstEntrance && !reducedMotion.matches
+      ? parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--entrance-step')) || 0 : 0;
+    const reveal = (el: SVGElement, order: number) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (stagger) setTimeout(() => el.classList.remove('entering'), order * stagger);
+        else el.classList.remove('entering');
+      }));
+    };
     const vis = visibleSet(focus);
     near = nearSet(vis);
 
@@ -630,7 +639,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         el.classList.add('entering');
         gNodes.append(el);
         els.set(n.id, el);
-        requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('entering')));
+        reveal(el, rolesFirst.indexOf(n));
       }
     }
 
@@ -660,7 +669,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         path.classList.add('lk', `lk-${l.kind}`, 'entering');
         gLinks.append(path);
         linkEls.set(l.key, path);
-        requestAnimationFrame(() => requestAnimationFrame(() => path.classList.remove('entering')));
+        reveal(path, ordered.findIndex((n) => n.id === l.target));
       }
     }
     for (const [k, el] of [...linkEls]) {
@@ -684,6 +693,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       el.classList.toggle('is-far', !(near.has(s) && near.has(tg)));
     }
 
+    firstEntrance = false;
     sim.nodes([...simNodes.values()]);
     (sim.force('link') as ReturnType<typeof forceLink<SimNode, SimLink>>).links(links);
     if (reducedMotion.matches) {

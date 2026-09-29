@@ -46,15 +46,17 @@ export interface SiteNode {
   kicker?: T; // small uppercase line under the title
   period?: string;
   markets?: string[];
+  tags?: T[];
+  context?: T;
   role?: T;
   summary?: T;
   sections?: Section[];
-  results?: T[];
+  results?: (T & { metric?: string; highlight?: string })[];
   media?: Media[];
   status?: Status;
   featured?: boolean;
   related?: string[]; // dotted connections
-  headline?: { num: string; label: T }; // the one result a recruiter should see first
+  headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
 }
 
@@ -68,6 +70,7 @@ export const site = {
     en: 'I turn audience insight into creative that converts — and build AI tools to do it faster.',
     zh: '我把用户洞察变成能带来转化的创意，并用自己搭建的 AI 工具让这件事更快。',
   } as T,
+  introHighlight: { en: 'converts', zh: '转化' } as T,
   linkedin: 'https://www.linkedin.com/in/wenyi-zhu-mktg/',
   email: '', // PLACEHOLDER: owner will provide a public email
   resumePdf: '', // PLACEHOLDER: put the file in public/ and use a relative path, e.g. 'wenyi-zhu-resume.pdf'
@@ -138,11 +141,12 @@ export const nodes: SiteNode[] = [
     id: 'ua-creative-strategy',
     type: 'case',
     parent: 'paid-social',
-    headline: { num: '1% → 15%', label: { en: 'Brand creative share of UA spend' } },
+    headline: { num: '1% → 15%', highlight: '15%', label: { en: 'Brand creative share of UA spend' } },
     label: { en: 'UA Creative Strategy' },
     kicker: { en: 'Genshin Impact · Google Ads' },
     markets: ['JP', 'NA', 'EU'],
-    role: { en: 'Led — UGC creative strategy' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'Google Ads' }],
     summary: {
       en: 'Built a Brand-to-UA testing pipeline that turned creator videos into measurable user-acquisition performance for Genshin Impact.',
     },
@@ -157,9 +161,10 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { en: '99 creator videos delivered across UA tests' },
-      { en: 'Brand creative spend share: 1% → 15%' },
-      { en: '13% higher 365-day ROI and ~3.3x LTV vs non-Brand creatives' },
+      { metric: '99', en: 'creator videos delivered across UA tests' },
+      { metric: '1% → 15%', highlight: '15%', en: 'Brand creative share of UA spend' },
+      { metric: '+13%', en: '365-day ROI vs non-Brand creatives' },
+      { metric: '~3.3x', en: 'LTV vs non-Brand creatives' },
     ],
     media: [{ alt: { en: 'Creative examples' } }],
     related: ['ai-workbench'],
@@ -171,8 +176,9 @@ export const nodes: SiteNode[] = [
     headline: { num: '+338%', label: { en: 'CTR vs the earlier benchmark' } },
     label: { en: 'Xbox Launch Paid Campaign' },
     kicker: { en: 'Genshin Impact · Meta, YouTube, TikTok, X' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'Meta' }, { en: 'YouTube' }, { en: 'TikTok' }, { en: 'X' }],
     markets: ['US', 'DE', 'FR'],
-    role: { en: 'Led — creative strategy' },
     summary: {
       en: 'Structured a localized creative test around four value propositions to move console players from interest to landing-page action.',
     },
@@ -187,8 +193,8 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { en: '120M+ impressions, 52M+ video views, ~700K landing-page clicks' },
-      { en: 'CTR +338% and click cost −66% vs the earlier benchmark' },
+      { metric: '120M+', en: 'impressions, 52M+ video views, ~700K landing-page clicks' },
+      { metric: '+338%', en: 'CTR and click cost −66% vs the earlier benchmark' },
     ],
     media: [{ alt: { en: 'Localized creative set' } }],
   },
@@ -199,8 +205,9 @@ export const nodes: SiteNode[] = [
     headline: { num: '~3x', label: { en: 'engagement vs the prior paid benchmark, at ~40% lower cost' } },
     label: { en: 'Influencer Activation Campaign' },
     kicker: { en: 'Genshin Impact · X' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'X' }],
     markets: ['EN', 'JP', 'KR'],
-    role: { en: 'Led — influencer strategy and execution' },
     summary: {
       en: 'Redesigned creator targeting for a flagship character campaign, shifting from broad amplification to creator-native content for core players.',
     },
@@ -215,8 +222,8 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { en: '56 creators, 78 UGC pieces, 13M+ creator-led exposure, 8%+ engagement' },
-      { en: '~3x benchmark engagement at ~40% lower exposure cost' },
+      { metric: '56', en: 'creators, 78 UGC pieces, 13M+ creator-led exposure, 8%+ engagement' },
+      { metric: '~3x', en: 'benchmark engagement at ~40% lower exposure cost' },
     ],
     media: [{ alt: { en: 'Creator content examples' } }],
   },
@@ -227,8 +234,9 @@ export const nodes: SiteNode[] = [
     headline: { num: '80M+', label: { en: 'views in three test rounds — then a data-led stop decision' } },
     label: { en: 'Organic UA Testing: TikTok GIP' },
     kicker: { en: 'Genshin Impact · TikTok' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'TikTok' }],
     markets: ['US', 'JP'],
-    role: { en: 'Led — testing strategy, project owner' },
     summary: {
       en: 'Three structured test rounds to decide whether TikTok’s Gaming Incentive Program could scale as an acquisition channel.',
     },
@@ -243,8 +251,8 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { en: '80M+ views, 500K+ submissions, ~2K attributed acquisitions' },
-      { en: 'Later rounds: CPM −60%, submissions +200%' },
+      { metric: '80M+', en: 'views, 500K+ submissions, ~2K attributed acquisitions' },
+      { metric: '−60%', en: 'CPM in later rounds; submissions +200%' },
       { en: 'Decision: stopped GIP as a standalone channel; moved budget to higher-quality creator videos' },
     ],
   },
@@ -255,9 +263,10 @@ export const nodes: SiteNode[] = [
     headline: { num: '80M+', label: { en: 'views across 9 accounts, CPM −50%+ without paid boosting' } },
     label: { en: 'Zenless Zone Zero: JP Account Growth' },
     kicker: { en: 'YouTube, X' },
+    context: { en: 'Zenless Zone Zero' },
+    tags: [{ en: 'YouTube' }, { en: 'X' }],
     period: '2024 Q3 – mid-2025',
     markets: ['JP'],
-    role: { en: 'Led — scale-up of an early-stage account matrix' },
     summary: {
       en: 'Took over an early-stage Japanese creator-account matrix and scaled it into a repeatable growth system before handover.',
     },
@@ -272,8 +281,8 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { en: '9 active accounts, 80M+ cumulative views' },
-      { en: '50K+ followers (+50%+), CPM −50%+ without paid boosting' },
+      { metric: '9', en: 'active accounts, 80M+ cumulative views' },
+      { metric: '50K+', en: 'followers (+50%+), CPM −50%+ without paid boosting' },
     ],
     media: [{ alt: { en: 'Account content examples' } }],
   },
@@ -284,15 +293,16 @@ export const nodes: SiteNode[] = [
     headline: { num: '136%', label: { en: 'of view KPI on established accounts' } },
     label: { en: 'Genshin Impact: EN Social Growth' },
     kicker: { en: 'TikTok, YouTube' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'TikTok' }, { en: 'YouTube' }],
     period: 'Q4 2023',
     markets: ['NA'],
-    role: { en: 'Supported — growth strategy and content review' },
     summary: {
       en: 'Helped refresh content direction for plateauing EN creator-style accounts and set lanes for three new ones.',
     },
     results: [
-      { en: '5 established accounts: +45K followers, 21M new views, 136% of view KPI' },
-      { en: '3 new accounts: 19K followers, 14M views' },
+      { metric: '5', en: 'established accounts: +45K followers, 21M new views, 136% of view KPI' },
+      { metric: '3', en: 'new accounts: 19K followers, 14M views' },
     ],
   },
   {
@@ -302,13 +312,14 @@ export const nodes: SiteNode[] = [
     headline: { num: '~900K', label: { en: 'in-game code redemptions, ~4x the goal' } },
     label: { en: 'Giveaway & Cross-Platform Influencer Campaign' },
     kicker: { en: 'Genshin Impact 5.0 · X, TikTok, Instagram' },
+    context: { en: 'Genshin Impact 5.0' },
+    tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }],
     markets: ['NA', 'JP'],
-    role: { en: 'Led — campaign strategy' },
     summary: {
       en: 'Tested a third-party, reward-based giveaway with in-game codes as a measurable conversion layer.',
     },
     results: [
-      { en: '33M+ impressions (56% above target); ~900K code redemptions (~4x goal)' },
+      { metric: '33M+', en: 'impressions (56% above target); ~900K code redemptions (~4x goal)' },
       { en: 'Learning: quote participation underperformed — platform-native, simple actions matter' },
     ],
   },
@@ -319,14 +330,15 @@ export const nodes: SiteNode[] = [
     headline: { num: '600M+', label: { en: 'global views, 600K+ submissions' } },
     label: { en: 'Interactive Filter Campaign' },
     kicker: { en: 'Genshin Impact 4.4 · TikTok, Snapchat' },
+    context: { en: 'Genshin Impact 4.4' },
+    tags: [{ en: 'TikTok' }, { en: 'Snapchat' }],
     markets: ['JP', 'SEA', 'US'],
-    role: { en: 'Supported — filter creative and creator activation' },
     summary: {
       en: 'Helped shape two gesture-based filters and brief 70+ creators for the first Snapchat Lens expansion.',
     },
     results: [
-      { en: '600M+ global views, 600K+ submissions' },
-      { en: '#1 in Snapchat’s commercial Lens ranking' },
+      { metric: '600M+', en: 'global views, 600K+ submissions' },
+      { metric: '#1', en: 'in Snapchat’s commercial Lens ranking' },
     ],
     media: [{ alt: { en: 'Filter previews' } }],
   },
@@ -337,14 +349,15 @@ export const nodes: SiteNode[] = [
     headline: { num: '9.5M+', label: { en: 'UV and 1.8M+ lottery participants' } },
     label: { en: 'Landing Page Gamification' },
     kicker: { en: 'Genshin Impact 5.0 · Web' },
+    context: { en: 'Genshin Impact 5.0' },
+    tags: [{ en: 'Web' }],
     markets: ['Global'],
-    role: { en: 'Supported — creative development' },
     summary: {
       en: 'Helped design the first gamified launch page: a three-question quiz with shareable results and a reward loop.',
     },
     results: [
-      { en: '9.5M+ UV, 1.8M+ lottery participants' },
-      { en: 'Sharing drove 1.4M+ UV (4.1 visits per share)' },
+      { metric: '9.5M+', en: 'UV, 1.8M+ lottery participants' },
+      { metric: '1.4M+', en: 'UV driven by sharing (4.1 visits per share)' },
     ],
     media: [{ alt: { en: 'Landing page screens' } }],
   },

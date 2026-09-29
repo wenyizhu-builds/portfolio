@@ -16,6 +16,12 @@ export function tx(v: T | undefined): string {
   return missingZh(v) ? `<span lang="en">${esc(v.en)}</span>` : esc(t(v));
 }
 
+/** Emphasis is explicitly authored in content, never inferred from copy. */
+export function highlight(text: string, phrase: string): string {
+  const at = phrase ? text.indexOf(phrase) : -1;
+  return at < 0 ? esc(text) : `${esc(text.slice(0, at))}<mark class="p-highlight">${esc(phrase)}</mark>${esc(text.slice(at + phrase.length))}`;
+}
+
 export function zhNote(n: SiteNode): string {
   return missingZh(n.summary || n.label) ? `<p class="zh-note">${L('zhPending')}</p>` : '';
 }
@@ -39,21 +45,22 @@ function identity(n: SiteNode, title: string): string {
   const leaf = !childrenOf(n.id).length;
   const sub = [
     orgName(n),
+    n.context ? tx(n.context) : '',
     !isWork(n) && leaf && n.kicker && !n.status ? tx(n.kicker) : '', // a role's job title, a school's degree
-    n.role ? tx(n.role) : '',
   ].filter(Boolean).join(' · ');
   const meta = [
     n.period ? esc(n.period) : '',
-    ...(n.markets || []).map(esc),
-    isWork(n) && n.kicker ? tx(n.kicker) : '', // a case's platforms, or "Showcase in preparation"
+    ...(!isWork(n) ? (n.markets || []).map(esc) : []),
+    isWork(n) && n.kicker && !n.tags ? tx(n.kicker) : '', // explicit tags replace the combined platform line
   ].filter(Boolean).join(' · ');
+  const tags = isWork(n) ? [...(n.markets || []).map((en) => ({ en })), ...(n.tags || [])] : [];
   if (!title && !sub && !meta) return '';
-  return `<div class="p-id">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta">${meta}</span>` : ''}</div>`;
+  return `<div class="p-id">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta">${meta}</span>` : ''}${tags.length ? `<div class="p-tags">${tags.map((tag) => `<span class="p-tag">${tx(tag)}</span>`).join('')}</div>` : ''}</div>`;
 }
 
 /** The one figure a recruiter should see first, as a sentence: "80M+ views across 9 accounts…". */
 function figure(n: SiteNode): string {
-  return n.headline ? `<p class="p-fig"><b>${esc(n.headline.num)}</b> ${tx(n.headline.label)}</p>` : '';
+  return n.headline ? `<p class="p-fig"><b>${highlight(n.headline.num, n.headline.highlight || '')}</b> <span>${tx(n.headline.label)}</span></p>` : '';
 }
 
 export function summary(n: SiteNode): string {
@@ -65,7 +72,7 @@ export function summary(n: SiteNode): string {
 
 /** Everything a reader sees before the details. `title` is the heading element the caller wants. */
 export function intro(n: SiteNode, title: string): string {
-  return identity(n, title) + figure(n) + zhNote(n) + summary(n);
+  return identity(n, title) + (n.results?.length ? '' : figure(n)) + zhNote(n) + summary(n);
 }
 
 /** The expandable detail lists of a case: its sections, then results. */
@@ -75,7 +82,7 @@ export function detailLists(n: SiteNode): { title: string; body: string }[] {
     body: `<ul>${s.items.map((i) => `<li>${tx(i)}</li>`).join('')}</ul>`,
   }));
   if (n.results?.length)
-    out.push({ title: L('results'), body: `<ul class="results">${n.results.map((i) => `<li>${tx(i)}</li>`).join('')}</ul>` });
+    out.push({ title: L('results'), body: `<ul class="results">${n.results.map((i) => `<li class="result-row">${i.metric ? `<span class="result-num">${highlight(i.metric, i.highlight || '')}</span> ` : ''}${tx(i)}</li>`).join('')}</ul>` });
   return out;
 }
 

@@ -1,7 +1,7 @@
 import { ancestors, byId, childrenOf, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
 import { esc, isDone, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
-import { L, contactRows, detailLists, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
+import { L, contactRows, detailLists, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
 /* Section marks sit in the gutter, left of the text column (as in the reference). */
@@ -62,7 +62,7 @@ export function indexPanel(): string {
     astSvg(AST.index, 'ix-ast'),
     L('index'),
     `<h2 class="sr-only p-title" tabindex="-1">${esc(site.name)}</h2>
-     <p class="ix-bio">${tx(site.intro)}</p>${stats}<a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
+     <p class="ix-bio">${highlight(t(site.intro), t(site.introHighlight))}</p>${stats}<a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
     true,
     'ix',
   );
@@ -109,7 +109,7 @@ export function nodePanel(n: SiteNode): string {
     return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
   }
 
-  const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body));
+  const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, true));
 
   // work done in this role: one flat list, each title with its practice underneath; closed until asked for
   const work = workOf(n.id);
@@ -151,8 +151,8 @@ export function contactPanel(): string {
 /** Wire behaviour inside a freshly rendered panel. */
 export function wirePanel(root: HTMLElement, onClose: () => void) {
   root.querySelectorAll<HTMLButtonElement>('[data-act="close"]').forEach((b) => (b.onclick = onClose));
-  // One open section at a time, like the reference.
-  const secs = [...root.querySelectorAll<HTMLDetailsElement>('details.sec')];
+  // Only the INDEX is an exclusive accordion; detail sections stay independently open.
+  const secs = [...root.querySelectorAll<HTMLDetailsElement>('details.sec.ix')];
   secs.forEach((d) =>
     d.addEventListener('toggle', () => {
       if (d.open) secs.forEach((o) => o !== d && (o.open = false));
