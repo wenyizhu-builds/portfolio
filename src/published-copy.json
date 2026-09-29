@@ -1,0 +1,136 @@
+{
+  "edits": {
+    "nodes.growth.summary.en": {
+      "text": "Three years of global marketing at HoYoverse, across paid social, creators and campaigns — always measured against acquisition and cost efficiency. [Placeholder copy]",
+      "ranges": []
+    },
+    "nodes.ua-creative-strategy.summary.en": {
+      "text": "Led Brand-side UA creative strategy for Genshin Impact through structured testing and AI-assisted iteration, with Brand creatives achieving 26% higher 365-day ROI and ~3.7× LTV versus non-Brand creatives.\n",
+      "ranges": [],
+      "blueRanges": [
+        [
+          140,
+          163
+        ],
+        [
+          166,
+          176
+        ]
+      ],
+      "boldRanges": []
+    },
+    "nodes.ua-creative-strategy.results.0.metric": {
+      "text": "400+",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.2.metric": {
+      "text": "+26%",
+      "ranges": []
+    },
+    "nodes.ua-creative-strategy.results.0.en": {
+      "text": "Testable creator videos delivered",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.2.en": {
+      "text": "Projected ROI 365 vs non-Brand",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.3.metric": {
+      "text": "~3.7x",
+      "ranges": []
+    },
+    "site.intro.en": {
+      "text": "I turn audience insight into creative that converts — and build AI tools to do it faster.\ntranslate performance data into creative insights that inform iterations and new concepts",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.3.en": {
+      "text": "LTV vs non-Brand creatives",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.1.en": {
+      "text": "Brand creative share of UA spend",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.1.metric": {
+      "text": "0% → 15%",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.sections.0.items.0.en": {
+      "text": "Previous tests showed that creator videos could be a competitive acquisition format, so the team wanted to establish a Brand-to-UA pipeline supplying creator videos for user acquisition. \nMy challenge was to build this pipeline from scratch on the Brand side—owning the testing roadmap and building repeatable systems for briefing, production and iteration.",
+      "ranges": [
+        [
+          208,
+          241
+        ]
+      ],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.sections.1.items.0.en": {
+      "text": "Builded and evolved testing framework and cadence: Translated acquisition goals into market-specific creative hypotheses, using performance data to guide tests across hooks, messaging and formats.",
+      "ranges": [
+        [
+          20,
+          37
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.ua-creative-strategy.sections.1.items.2.en": {
+      "text": "Strengthened creator sourcing: Expanded regional talent pools through agency rotation and streamlined briefing, screening, and reviews to improve creative quality and delivery.",
+      "ranges": [
+        [
+          13,
+          29
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.ua-creative-strategy.sections.1.items.1.en": {
+      "text": "Built an AI-assisted creative iteration system: Vibed coded a dashboard that automates performance reporting and analysis, identifies winning creative patterns, and turns them into reusable scripts and creative playbooks.",
+      "ranges": [
+        [
+          9,
+          46
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.ua-creative-strategy.results.added-31b71841-9134-46d2-bd4a-462fbed8005d.en": {
+      "text": "Time saved using AI creative system ",
+      "ranges": [],
+      "blueRanges": []
+    },
+    "nodes.ua-creative-strategy.results.added-31b71841-9134-46d2-bd4a-462fbed8005d.metric": {
+      "text": "40%",
+      "ranges": [],
+      "blueRanges": []
+    }
+  },
+  "lists": {
+    "nodes.ua-creative-strategy.sections.0.items": [
+      "0"
+    ],
+    "nodes.ua-creative-strategy.sections.1.items": [
+      "0",
+      "1",
+      "2"
+    ],
+    "nodes.ua-creative-strategy.results": [
+      "2",
+      "3",
+      "added-31b71841-9134-46d2-bd4a-462fbed8005d",
+      "0",
+      "1"
+    ]
+  }
+}

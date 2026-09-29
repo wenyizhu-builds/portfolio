@@ -1,10 +1,12 @@
+import { publishedMarkup } from './published-copy';
 /*
  * Shared content blocks. The desktop panel (panel.ts) and the phone page (mobile.ts)
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
 import { byId, childrenOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
-import { esc, missingZh, t } from './state';
+import { copyFieldKey } from './copy-binding';
+import { esc, missingZh, state, t } from './state';
 
 export const L = (k: keyof typeof ui) => esc(t(ui[k]));
 
@@ -13,7 +15,15 @@ export const L = (k: keyof typeof ui) => esc(t(ui[k]));
 /** Localised, escaped text. English shown in Chinese mode is marked lang="en" for screen readers. */
 export function tx(v: T | undefined): string {
   if (!v) return '';
-  return missingZh(v) ? `<span lang="en">${esc(v.en)}</span>` : esc(t(v));
+  const language = state.lang === 'zh' && v.zh ? 'zh' : 'en';
+  const body = publishedMarkup(v, language, esc) ?? esc(t(v));
+  const html = missingZh(v) ? `<span lang="en">${body}</span>` : body;
+  if (import.meta.env.DEV) {
+    const language = state.lang === 'zh' && v.zh ? 'zh' : 'en';
+    const key = copyFieldKey(v, language);
+    return `<span${key ? ` data-copy-field="${esc(key)}"` : ''}>${html}</span>`;
+  }
+  return html;
 }
 
 /** Emphasis is explicitly authored in content, never inferred from copy. */
@@ -35,7 +45,9 @@ export function zhNote(n: SiteNode): string {
 /** Where this work was done, as a link: "HoYoverse". */
 function orgName(n: SiteNode): string {
   const o = n.org ? byId.get(n.org) : undefined;
-  return o ? `<a class="p-org" href="#/${o.id}">${tx(o.label)}</a>` : '';
+  if (!o) return '';
+  const company = `<a class="p-org" href="#/${o.id}">${tx(o.label)}</a>`;
+  return o.role ? `<span class="p-org-role">${company}<span aria-hidden="true"> · </span>${tx(o.role)}</span>` : company;
 }
 
 const isWork = (n: SiteNode) => n.type === 'case' || n.type === 'ai' || n.type === 'creative';
@@ -43,19 +55,24 @@ const isWork = (n: SiteNode) => n.type === 'case' || n.type === 'ai' || n.type =
 /** Title, a grey line under it (job title / where + my role), and one small-capitals meta line. */
 function identity(n: SiteNode, title: string): string {
   const leaf = !childrenOf(n.id).length;
+  // The organization label already names Genshin Impact. Keep other projects distinct.
+  const repeatedGame = n.org === 'hoyoverse' && /^Genshin Impact(?: \d+\.\d+)?$/.test(n.context?.en || '')
+    && (byId.get(n.org)?.label.en.includes('Genshin Impact') ?? false);
   const sub = [
     orgName(n),
-    n.context ? tx(n.context) : '',
+    n.context && !repeatedGame ? tx(n.context) : '',
     !isWork(n) && leaf && n.kicker && !n.status ? tx(n.kicker) : '', // a role's job title, a school's degree
   ].filter(Boolean).join(' · ');
   const meta = [
-    n.period ? esc(n.period) : '',
+    n.period ? (import.meta.env.DEV && copyFieldKey(n, 'period')
+      ? `<span data-copy-field="${esc(copyFieldKey(n, 'period')!)}">${esc(n.period)}</span>`
+      : esc(n.period)) : '',
     ...(!isWork(n) ? (n.markets || []).map(esc) : []),
     isWork(n) && n.kicker && !n.tags ? tx(n.kicker) : '', // explicit tags replace the combined platform line
   ].filter(Boolean).join(' · ');
   const tags = isWork(n) ? [...(n.markets || []).map((en) => ({ en })), ...(n.tags || [])] : [];
   if (!title && !sub && !meta) return '';
-  return `<div class="p-id">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta">${meta}</span>` : ''}${tags.length ? `<div class="p-tags">${tags.map((tag) => `<span class="p-tag">${tx(tag)}</span>`).join('')}</div>` : ''}</div>`;
+  return `<div class="p-id${n.type === 'case' ? ' p-case-id' : ''}">${title}${sub ? `<span class="p-sub">${sub}</span>` : ''}${meta ? `<span class="lab p-meta${n.type === 'case' ? ' p-case-meta' : ''}">${meta}</span>` : ''}${tags.length ? `<div class="p-tags">${tags.map((tag) => `<span class="p-tag">${tx(tag)}</span>`).join('')}</div>` : ''}</div>`;
 }
 
 /** The one figure a recruiter should see first, as a sentence: "80M+ views across 9 accounts…". */
@@ -77,12 +94,17 @@ export function intro(n: SiteNode, title: string): string {
 
 /** The expandable detail lists of a case: its sections, then results. */
 export function detailLists(n: SiteNode): { title: string; body: string }[] {
-  const out = (n.sections || []).map((s) => ({
-    title: tx(s.title),
-    body: `<ul>${s.items.map((i) => `<li>${tx(i)}</li>`).join('')}</ul>`,
-  }));
-  if (n.results?.length)
-    out.push({ title: L('results'), body: `<ul class="results">${n.results.map((i) => `<li class="result-row">${i.metric ? `<span class="result-num">${highlight(i.metric, i.highlight || '')}</span> ` : ''}${tx(i)}</li>`).join('')}</ul>` });
+  const out = (n.sections || []).map((s, index) => {
+    const paragraph = /^(the\s+)?challenge$/i.test(s.title.en.trim()) && s.items.length === 1;
+    const container = paragraph ? 'div' : 'ul';
+    const item = paragraph ? 'p' : 'li';
+    return {
+      title: tx(s.title),
+      body: `<${container}${paragraph ? ' class="challenge-paragraph"' : ''}${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.sections.${index}.items"` : ''}>${s.items.map(i => `<${item}>${tx(i)}</${item}>`).join('')}</${container}>`,
+    };
+  });
+  if (n.results && (n.results.length || import.meta.env.DEV))
+    out.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
   return out;
 }
 

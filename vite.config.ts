@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
+import { copyStore } from './dev/copy-store';
 import { site } from './src/content';
 import { astIcon } from './src/shapes';
 
@@ -50,5 +51,5 @@ function headFromContent(): Plugin {
 // Relative base so the built site works on GitHub Pages under any repo name.
 export default defineConfig({
   base: './',
-  plugins: [headFromContent()],
+  plugins: [headFromContent(), copyStore()],
 });

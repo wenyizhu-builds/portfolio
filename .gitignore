@@ -1,3 +1,6 @@
 node_modules
 dist
 .DS_Store
+
+# Private, local editorial archive
+.copy-editor/

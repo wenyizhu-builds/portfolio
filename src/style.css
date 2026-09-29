@@ -32,6 +32,7 @@
   --fs-text: 14px;
   --fs-label: 11.5px;
   --track-label: 0.05em; /* letter-spacing of every small-capitals line (the reference uses 0.05em) */ /* small capitals: labels, meta lines, section titles */
+  --fs-case-title: 20px; /* leaf-case titles only */
   --fs-figure: 18px; /* restrained emphasis for INDEX and case figures */
   --entrance-map: 3000ms;
   --entrance-card: 800ms;
@@ -141,7 +142,10 @@ button { font: inherit; color: inherit; }
 .node:not(.show-kick):not(:hover) .kick { display: none; }
 .node .kick { font-size: 9.5px; letter-spacing: var(--track-label); text-transform: uppercase; }
 .node .lbl .kick { fill: var(--muted); }
-.node.t-case .lbl .kick { fill: var(--cobalt); }
+.node.t-case .lbl .kick { fill: var(--muted); }
+.node.t-case .case-date { display: none; text-transform: none; letter-spacing: normal; font-weight: 400; }
+.node.t-case:is(:hover, :focus-visible) .case-date { display: inline; }
+.panel .p-case-meta { display: none; }
 .node.is-far .lbl { fill: var(--muted); }
 .node.is-visited .lbl tspan:not(.kick) { text-decoration: line-through; text-decoration-thickness: 1px; }
 /* the same "seen" line in the card (isDone() decides both) */
@@ -217,8 +221,8 @@ button { font: inherit; color: inherit; }
 .p-fig b { font-weight: 400; color: var(--cobalt); font-variant-numeric: tabular-nums; }
 .p-fig b { font-size: var(--fs-figure); }
 .p-highlight { color: var(--ink); background: linear-gradient(transparent 30%, var(--accent) 30%, var(--accent) 92%, transparent 92%); }
-.p-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-.p-tag { font-size: var(--fs-label); color: var(--ink-2); background: var(--bg); border-radius: 3px; padding: 2px 6px; }
+.p-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.p-tag { font-size: var(--fs-label); font-weight: 400; color: var(--cobalt); background: var(--panel); border: 1px solid var(--cobalt); border-radius: 6px; padding: 1px 5px; }
 .p-kicker { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
 .p-org { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
 .p-org:hover { color: var(--ink); text-decoration-color: currentColor; }
@@ -242,7 +246,7 @@ button { font: inherit; color: inherit; }
 .sec-body li::marker, .m-more li::marker { color: var(--muted); }
 .sec-body .results:has(.result-row), .m-more .results:has(.result-row) { list-style: disc; padding-left: var(--leaf-indent); }
 .results .result-row { margin-bottom: 12px; }
-.result-num { color: var(--cobalt); font-size: var(--fs-figure); font-variant-numeric: tabular-nums; line-height: 1.3; }
+.result-num { color: var(--cobalt); font-size: inherit; font-weight: 400; font-variant-numeric: normal; line-height: inherit; }
 .nlist { display: flex; flex-direction: column; }
 .p-list { margin: 0 0 6px; padding-top: 12px; border-top: var(--rule-card); }
 .nlink { display: block; padding: 0 0 8px; text-decoration: none; color: var(--ink); }
@@ -355,3 +359,17 @@ button { font: inherit; color: inherit; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .pulse { opacity: 1; }
 }
+
+.challenge-paragraph > p { margin: 0 0 6px; }
+.m-more .challenge-paragraph { font-size: 14px; line-height: 1.55; }
+
+.p-org-role { white-space: nowrap; }
+
+.result-line.has-metric { display: inline-flex; align-items: baseline; column-gap: 6px; white-space: nowrap; }
+
+.p-case-id > .p-title, .m-card .p-case-id > h3 { font-size: var(--fs-case-title); font-weight: 400; line-height: 1.3; margin: 0 0 6px; }
+
+/* Owner-approved inline emphasis, also available without the local editor. */
+.published-highlight { background: var(--accent); color: inherit; }
+.published-blue { color: var(--cobalt); }
+.published-bold { font-weight: 700; }

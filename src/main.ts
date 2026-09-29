@@ -1,3 +1,4 @@
+import { applyPublishedCopy } from './published-copy';
 import './style.css';
 import { ancestors, byId, site, ui } from './content';
 import { createMap, type MapApi } from './map';
@@ -5,6 +6,11 @@ import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
 import { esc, go, onChange, parseRoute, setLang, state, t, type Route } from './state';
+
+if (import.meta.env.PROD) applyPublishedCopy();
+
+// The editor and local drafts are excluded from production builds.
+if (import.meta.env.DEV) await (await import('./copy-editor')).initCopyEditor();
 
 const app = document.getElementById('app')!;
 document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
@@ -245,3 +251,9 @@ onChange(() => {
 paintChrome();
 renderMobile(document.getElementById('mob')!);
 applyRoute();
+
+if (import.meta.env.DEV) window.addEventListener('copy-preview', () => {
+  paintChrome(); map?.rerenderLabels();
+  renderMobile(document.getElementById('mob')!);
+  if (!mq.matches) renderPanel(true);
+});

@@ -29,6 +29,10 @@
 - 地图 hover / keyboard focus 与选中态使用同一荧光绿；离开后恢复原状态。中心名字星号 hover 变绿，默认仍为钴蓝。
 - 不改地图布局、字体家族、其他字号、形状、标题层级、分隔线、媒体布局、路由或折叠逻辑。
 
+### 全站案例 Challenge 栏（用户本轮授权）
+
+- Growth Marketing 的全部 9 个案例在正文首位增加 `The Challenge`（中文标题：项目挑战），位于已有 `What I did` 之前，默认展开。内容取各 canonical case 的 Current Working Case 原文；桌面与手机复用 sections。尚无 What I did 的案例不自动补写该段。
+
 ## 1. 技术与文件分工
 
 - Vite + TypeScript + d3-force，纯静态，hash 路由（`#/节点id`、`#/resume`、`#/contact`）。
@@ -197,3 +201,9 @@
 - 邮箱和简历 PDF 目前是空的，`site.email` 和 `site.resumePdf` 要等你提供。
 - 写入范围只限 `portfolio-prototypes/claude/`，不要改 `portfolio/`、`codex/`、career 原文件、AGENTS.md、CLAUDE.md，也不要删文件。
 - 浏览器只用标准版 Google Chrome，不要用 Chrome Beta。
+
+### 临时本地文案编辑（2026-09-29）
+
+开发服务器提供页面原位编辑和保存后预览两种模式，编辑器不改变正式发布构建。编辑记录存 `.copy-editor/archive.json`；原文不可被恢复操作覆盖，恢复本身成为新版本。正文输入为纯文本，高亮以字符区间存档。提交正式稿前读取并核对该存档，避免覆盖 owner 改稿。进入预览才能正常使用文字链接导航。
+
+发布时将已确认的当前 edits 与 lists 提取到 `src/published-copy.json`，过滤已删除列表项的 edits；生产构建通过 `published-copy.ts` 应用文案与格式。不要把完整私有存档提交到 Git。开发模式保持原始字段 ID，不重复应用生产快照，避免列表排序冲突。

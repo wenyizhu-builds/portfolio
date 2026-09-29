@@ -140,6 +140,7 @@ export const nodes: SiteNode[] = [
   {
     id: 'ua-creative-strategy',
     type: 'case',
+    period: 'Jun 2025 – Jun 2026',
     parent: 'paid-social',
     headline: { num: '1% → 15%', highlight: '15%', label: { en: 'Brand creative share of UA spend' } },
     label: { en: 'UA Creative Strategy' },
@@ -151,6 +152,13 @@ export const nodes: SiteNode[] = [
       en: 'Built a Brand-to-UA testing pipeline that turned creator videos into measurable user-acquisition performance for Genshin Impact.',
     },
     sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "UA needed more high-performing UGC creatives for new-user acquisition. Previous tests showed creator-style ads could be a competitive acquisition format, but Brand and UA did not yet have a mature workflow to turn Brand's creator resources and production budget into measurable UA impact." },
+          { en: "The challenge was to build that pipeline from scratch: align both teams on performance metrics, learn what high-converting UGC looked like across target markets, and prove that Brand-side creative could drive not just more volume, but stronger acquisition efficiency and user quality." },
+        ],
+      },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
@@ -184,6 +192,13 @@ export const nodes: SiteNode[] = [
     },
     sections: [
       {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "For the Xbox launch, paid media needed to drive landing-page traffic, not just awareness. The goal was to improve CTR and identify which creative messages could move console players from interest to action across YouTube, X, Meta, and TikTok." },
+          { en: "The challenge was execution-heavy: our team had to turn existing brand materials into a large localized creative test while keeping platform specs, language needs, and approval requirements aligned." },
+        ],
+      },
+      {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
           { en: 'Built the test around four messages: open world, global community, cloud gaming across devices, free content.' },
@@ -213,6 +228,13 @@ export const nodes: SiteNode[] = [
     },
     sections: [
       {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "As Genshin became a more mature live-service title, recurring character campaigns on X were becoming harder to energize, especially in EN." },
+          { en: "An earlier activation showed that paid creator campaigns could help revive momentum, but its creator and content mix was too broad to consistently re-engage core players. Ahead of a major character launch, the challenge was to refresh the strategy: redesign creator targeting and content direction so the campaign felt native to X, useful to players, and connected to the hashtag activity and in-game reward-code flow." },
+        ],
+      },
+      {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
           { en: 'Prioritized mid-tier creators with clear content roles: fan art, gameplay, cosplay, comics, guides.' },
@@ -241,6 +263,13 @@ export const nodes: SiteNode[] = [
       en: 'Three structured test rounds to decide whether TikTok’s Gaming Incentive Program could scale as an acquisition channel.',
     },
     sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Genshin Impact had historically relied heavily on brand-style creatives and official assets. We wanted to test whether a more UGC-driven TikTok product could reach incremental audiences and create content that converted beyond existing UA approaches." },
+          { en: "GIP showed strong organic UA potential, but its ability to consistently generate relevant creator submissions and efficient acquisition was unproven. The challenge was to test whether GIP's large creator pool could deliver content that converts, not just views and submission volume." },
+        ],
+      },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
@@ -272,6 +301,13 @@ export const nodes: SiteNode[] = [
     },
     sections: [
       {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Zenless Zone Zero was still in an early JP growth stage, and official brand channels alone were not enough to drive always-on discovery. The goal of the creator-account matrix was to build non-official discovery channels that felt native to YouTube and X, helped players understand the game, and kept player discussion active beyond campaign moments." },
+          { en: "The team had limited precedent for operating brand-managed, third-party-style creator accounts as growth channels in JP. When I took over the early-stage matrix, the challenge was to identify which account positions and content formats could grow, then turn scattered experiments into a repeatable growth system before handover." },
+        ],
+      },
+      {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
           { en: 'Set account positioning across guide, entertainment and lore lanes; closed weak directions.' },
@@ -300,6 +336,15 @@ export const nodes: SiteNode[] = [
     summary: {
       en: 'Helped refresh content direction for plateauing EN creator-style accounts and set lanes for three new ones.',
     },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Genshin Impact used creator-style matrix accounts to keep players engaged outside official brand channels. These accounts distributed useful game content, maintained platform buzz between major campaigns, and created low-cost social reach for active players." },
+          { en: "The 5 established EN accounts I supported had already built audiences, but growth was slowing: formats were becoming repetitive, follower interest was weakening, and traffic rose around major game updates but softened in quieter periods. The goal was to refresh established account direction while helping 3 new accounts find clearer verticals and content directions, all while keeping CPM efficient." },
+        ],
+      },
+    ],
     results: [
       { metric: '5', en: 'established accounts: +45K followers, 21M new views, 136% of view KPI' },
       { metric: '3', en: 'new accounts: 19K followers, 14M views' },
@@ -318,6 +363,15 @@ export const nodes: SiteNode[] = [
     summary: {
       en: 'Tested a third-party, reward-based giveaway with in-game codes as a measurable conversion layer.',
     },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Regular community activations on official channels were repeatedly reaching the same core audience. For a major version launch, the team needed to explore new activation formats that could expand topic exposure, reach semi-active and lapsed players, and create measurable engagement beyond standard official-account posting." },
+          { en: "We wanted to test whether a more entertainment-oriented, lower-funnel social format could activate player participation and distribute in-game redemption codes through third-party communities. Even if the format did not fully work, the test would clarify what kind of incentive and participation mechanic could move players outside the official-channel loop." },
+        ],
+      },
+    ],
     results: [
       { metric: '33M+', en: 'impressions (56% above target); ~900K code redemptions (~4x goal)' },
       { en: 'Learning: quote participation underperformed — platform-native, simple actions matter' },
@@ -336,6 +390,15 @@ export const nodes: SiteNode[] = [
     summary: {
       en: 'Helped shape two gesture-based filters and brief 70+ creators for the first Snapchat Lens expansion.',
     },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "To promote Lantern Rite and drive version buzz, Genshin needed interactive filters that could feel festive, engaging, and easy for users to recreate across TikTok and Snapchat. Because this was also the first Snapchat Lens expansion, the creative had to work across different platform behaviors while still feeling native to the event." },
+          { en: "My support challenge was to help turn the theme into two playable filter ideas, coordinate with platform liaisons and designers to bring them to life, and support creator activation within a tight seed-content window so users could quickly understand how to join the trend." },
+        ],
+      },
+    ],
     results: [
       { metric: '600M+', en: 'global views, 600K+ submissions' },
       { metric: '#1', en: 'in Snapchat’s commercial Lens ranking' },
@@ -355,6 +418,15 @@ export const nodes: SiteNode[] = [
     summary: {
       en: 'Helped design the first gamified launch page: a three-question quiz with shareable results and a reward loop.',
     },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "The launch landing page was expected to receive 1B+ impressions, but previous version pages were mostly informational. The traffic opportunity could have stopped at passive awareness instead of driving engagement or downloads." },
+          { en: "As the team's first interactive landing page attempt, the challenge was to create a mechanic that felt native to Genshin Impact while supporting rewards, sharing, and the download CTA." },
+        ],
+      },
+    ],
     results: [
       { metric: '9.5M+', en: 'UV, 1.8M+ lottery participants' },
       { metric: '1.4M+', en: 'UV driven by sharing (4.1 visits per share)' },
@@ -440,7 +512,7 @@ export const nodes: SiteNode[] = [
   },
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
-  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, kicker: { en: 'Global Marketing — Genshin Impact' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
+  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'Hoyoverse (Genshin Impact)' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing — Genshin Impact' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
   { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
   { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
   { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },

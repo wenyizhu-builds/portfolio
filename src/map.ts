@@ -131,7 +131,8 @@ function layoutParent(n: SiteNode): string | undefined {
 }
 
 function wrap(label: string, max = LAYOUT.labelWrap): string[] {
-  const words = label.split(' ');
+  // Keep parenthesized names together: Hoyoverse / (Genshin Impact).
+  const words = label.match(/\([^)]*\)|\S+/g) || [];
   const lines: string[] = [];
   let cur = '';
   for (const w of words) {
@@ -543,15 +544,15 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   function fillLabel(g: SVGGElement, n: SiteNode) {
     const text = g.querySelector('text.lbl') as SVGTextElement;
     const label = t(n.label);
-    g.setAttribute('aria-label', label);
+    g.setAttribute('aria-label', n.type === 'case' && n.period ? `${label}, ${n.period}` : label);
     const lines = n.type === 'root' ? [label] : wrap(label);
     const Y = LAYOUT.labelY;
     const y0 = n.type === 'root' ? Y.root : Y.other; // every point is the same size, so every label sits the same distance below
     let html = lines.map((l, i) => `<tspan x="0" y="${y0 + i * Y.line}">${esc(l)}</tspan>`).join('');
-    if (!n.status && n.kicker && (n.type === 'case' || n.type === 'role')) {
+    if (!n.status && n.period && (n.type === 'case' || n.type === 'role')) {
       // items still in preparation show only their name; the dashed outline says the rest
-      const k = n.type === 'role' ? n.period || '' : n.headline ? n.headline.num : t(n.kicker).split(' · ')[0];
-      html += `<tspan class="kick" x="0" y="${y0 + lines.length * Y.line}">${esc(k)}</tspan>`;
+      const k = n.period;
+      html += `<tspan class="kick${n.type === 'case' ? ' case-date' : ''}" x="0" y="${y0 + lines.length * Y.line}">${esc(k)}</tspan>`;
     }
     text.innerHTML = html;
     (g.querySelector('text.lbl-halo') as SVGTextElement).innerHTML = html;

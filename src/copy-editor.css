@@ -1,0 +1,25 @@
+#copy-tools { position: fixed; z-index: 1000; left: 12px; bottom: 10px; max-width: calc(100vw - 24px); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px; background: #fff; border: 1px solid #bbb; box-shadow: 0 2px 12px #0002; border-radius: 8px; font: 12px/1.5 system-ui; color: #222; }
+#copy-tools button, .copy-history button { font: inherit; cursor: pointer; border: 1px solid #aaa; border-radius: 4px; padding: 5px 8px; background: #f7f7f7; color: #222; }
+.copy-controls:not([hidden]) { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+#copy-status { max-width: 240px; }
+[data-copy-active] { outline: 2px dashed #2449ff !important; outline-offset: 4px; white-space: pre-wrap; min-width: 12px; min-height: 1em; cursor: text !important; }
+.copy-highlight { background: #d2ff00 !important; color: inherit; padding: 0; }
+.copy-map-text { text-align: center; background: var(--bg, white); color: var(--ink, #111); font: 16px/1.3 var(--sans, sans-serif); white-space: pre-wrap; }
+.copy-history { max-width: 660px; width: 90vw; max-height: 75vh; overflow: auto; padding: 24px; color: #222; background: #fff; border: 1px solid #999; font: 14px/1.5 system-ui; }
+.copy-history section { border-bottom: 1px solid #ddd; padding: 12px 0; }
+.copy-history p { white-space: pre-wrap; }
+
+.copy-blue { color: var(--cobalt, #2c42f6) !important; }
+#copy-tools [data-action="blue"] { color: var(--cobalt, #2c42f6); }
+
+.copy-list-controls { display: flex; gap: 8px; margin: 8px 0 12px; }
+.copy-list-controls button, .copy-bullet-delete { font: 11px/1.4 system-ui; border: 1px solid #ccc; border-radius: 4px; padding: 3px 6px; color: #555; background: white; cursor: pointer; }
+.copy-bullet-delete { margin-left: 8px; vertical-align: middle; }
+.copy-editing [data-copy-field]:empty { display: inline-block; min-width: 8em; min-height: 1.4em; border-bottom: 1px dashed #aaa; }
+
+body:not(.copy-editing) .result-num:empty { display: none; }
+.copy-editing .result-num:empty::before { content: '填写数字'; font: 11px/1.4 system-ui; color: #888; }
+.copy-bullet-delete:disabled { opacity: .35; cursor: default; }
+
+.copy-bold { font-weight: 700 !important; }
+#copy-tools [data-action="bold"] { font-weight: 700; }
