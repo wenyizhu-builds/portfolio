@@ -465,7 +465,7 @@ export const nodes: SiteNode[] = [
     type: 'ai',
     parent: 'ai',
     headline: { num: 'Shipped', label: { en: 'built with AI-assisted coding, handed over to the UA content team' } },
-    label: { en: 'AI Marketing Workbench' },
+    label: { en: 'AI Creative Intelligence Dashboard' },
     kicker: { en: 'AI-assisted internal tool' },
     role: { en: 'Built with AI-assisted coding; primary user' },
     summary: {
