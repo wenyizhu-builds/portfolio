@@ -392,16 +392,3 @@ dialog.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; bo
 dialog.lightbox::backdrop { background: var(--ink); }
 .m-visual { display: block; width: 100%; padding: 0; border: 0; background: none; margin: 20px 0; cursor: zoom-in; }
 .m-visual img { display: block; width: 100%; height: auto; }
-
-/* Case system diagrams (diagrams.ts): drawn in the card's own type and palette. */
-.dg { margin: 6px 0 4px; }
-.dg svg { display: block; width: 100%; height: auto; overflow: visible; }
-.dg-box { fill: var(--panel); stroke: var(--ink); stroke-width: 1; }
-.dg-box.dg-ai { fill: var(--accent); }
-.dg-t { fill: var(--ink); font-size: var(--fs-text); }
-.dg-n { fill: var(--cobalt); font-size: var(--fs-label); letter-spacing: var(--track-label); }
-.dg-lt { fill: var(--cobalt); font-size: var(--fs-label); }
-.dg-line { stroke: var(--ink); stroke-width: 1; }
-.dg-line-head { fill: var(--ink); }
-.dg-loop { stroke: var(--cobalt); stroke-width: 1.2; stroke-dasharray: 4 3; }
-.dg-loop-head { fill: var(--cobalt); }

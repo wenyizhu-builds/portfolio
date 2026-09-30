@@ -58,7 +58,6 @@ export interface SiteNode {
   media?: Media[];
   status?: Status;
   featured?: boolean;
-  diagram?: string; // key of a system diagram in diagrams.ts, shown before Results
   related?: string[]; // dotted connections
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
@@ -124,7 +123,6 @@ export const nodes: SiteNode[] = [
     period: 'Jun 2025 – Jun 2026',
     parent: 'growth',
     featured: true,
-    diagram: 'ua-loop',
     headline: { num: '1% → 15%', highlight: '15%', label: { en: 'Brand creative share of UA spend' } },
     label: { en: 'UA Creative Strategy' },
     kicker: { en: 'Genshin Impact · Google Ads' },
@@ -162,6 +160,9 @@ export const nodes: SiteNode[] = [
       thumbnail: 'media/ua-creative-strategy/genshin-creative-thumb.jpg',
       floating: true,
       alt: { en: 'Genshin Impact gameplay creative screenshot' },
+    }, {
+      src: 'media/ua-creative-strategy/ua-system-diagram.png',
+      alt: { en: 'How the system worked: the creative testing loop and the AI dashboard steps' },
     }],
     related: ['ai-workbench'],
   },

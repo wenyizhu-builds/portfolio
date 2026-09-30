@@ -479,8 +479,14 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   }
 
   /* Points drawn at full strength. Everything shown belongs to the current view, so all of them. */
-  function nearSet(vis: Set<string>): Set<string> {
-    return vis;
+  /** What stays at full strength. An open end point keeps its siblings on the map (v53), but greyed,
+      so the chosen piece of work stands out and the next one is still one click away. */
+  function nearSet(vis: Set<string>, f: string | null): Set<string> {
+    if (!f || childrenOf(f).length) return vis;
+    const par = byId.get(f)?.parent;
+    if (!par || par === 'root') return vis;
+    const sibs = new Set(childrenOf(par).map((c) => c.id).filter((id) => id !== f));
+    return new Set([...vis].filter((id) => !sibs.has(id)));
   }
 
   /** The box a point takes up — its shape plus its label lines — for keeping points apart. */
@@ -618,7 +624,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }));
     };
     const vis = visibleSet(focus);
-    near = nearSet(vis);
+    near = nearSet(vis, focus);
 
 
     for (const id of [...simNodes.keys()]) {
