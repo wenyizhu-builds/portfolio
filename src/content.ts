@@ -52,6 +52,7 @@ export interface SiteNode {
   context?: T;
   role?: T;
   summary?: T;
+  team?: T;
   sections?: Section[];
   results?: (T & { metric?: string; highlight?: string })[];
   media?: Media[];
@@ -141,6 +142,7 @@ export const nodes: SiteNode[] = [
 
   {
     id: 'ua-creative-strategy',
+    team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
     type: 'case',
     period: 'Jun 2025 – Jun 2026',
     parent: 'paid-social',
@@ -176,10 +178,17 @@ export const nodes: SiteNode[] = [
       { metric: '+13%', en: '365-day ROI vs non-Brand creatives' },
       { metric: '~3.3x', en: 'LTV vs non-Brand creatives' },
     ],
+    media: [{
+      src: 'media/ua-creative-strategy/genshin-creative.jpg',
+      thumbnail: 'media/ua-creative-strategy/genshin-creative-thumb.jpg',
+      floating: true,
+      alt: { en: 'Genshin Impact gameplay creative screenshot' },
+    }],
     related: ['ai-workbench'],
   },
   {
     id: 'xbox-launch',
+    team: { en: "Creative Strategy (my role), Media Strategy x1, Creative Producers x2, Agency Partner x1" },
     type: 'case',
     period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
     parent: 'paid-social',
@@ -220,6 +229,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'influencer-activation',
+    team: { en: "Influencer Strategy & Execution (my role), Execution Support x2, Agency Partners x2" },
     type: 'case',
     parent: 'ugc-influencer',
     headline: { num: '~3x', label: { en: 'engagement vs the prior paid benchmark, at ~40% lower cost' } },
@@ -256,6 +266,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
+    team: { en: "Testing Strategy / Project Owner (my role), TikTok Platform Liaison x2, Data Ops x1" },
     type: 'case',
     parent: 'ugc-influencer',
     headline: { num: '80M+', label: { en: 'views in three test rounds — then a data-led stop decision' } },
@@ -292,6 +303,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'zzz-jp-accounts',
+    team: { en: "Social Growth Strategy (my role), Japanese Content Review x2, Agency Partners x3" },
     type: 'case',
     parent: 'account-growth',
     headline: { num: '80M+', label: { en: 'views across 9 accounts, CPM −50%+ without paid boosting' } },
@@ -299,7 +311,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'YouTube, X' },
     context: { en: 'Zenless Zone Zero' },
     tags: [{ en: 'YouTube' }, { en: 'X' }],
-    period: '2024 Q3 – mid-2025',
+    period: '2024 Q3 – 2025 Q2',
     markets: ['JP'],
     summary: {
       en: 'Took over an early-stage Japanese creator-account matrix and scaled it into a repeatable growth system before handover.',
@@ -322,13 +334,20 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { metric: '9', en: 'active accounts, 80M+ cumulative views' },
-      { metric: '50K+', en: 'followers (+50%+), CPM −50%+ without paid boosting' },
+      { metric: '80M+', en: 'organic views' },
+      { metric: '50K+', en: 'followers' },
+      { metric: '50%', en: 'lower CPM' },
     ],
-    media: [{ alt: { en: 'Account content examples' } }],
+    media: [{
+      src: 'media/zzz-jp-accounts/gentle-house.jpg',
+      thumbnail: 'media/zzz-jp-accounts/gentle-house-thumb.jpg',
+      floating: true,
+      alt: { en: 'Zenless Zone Zero — Gentle House character artwork' },
+    }],
   },
   {
     id: 'genshin-en-accounts',
+    team: { en: "Growth Strategy Support & Content Review (my role), Growth Strategy Lead x1, Agency Partner x1" },
     type: 'case',
     parent: 'account-growth',
     headline: { num: '136%', label: { en: 'of view KPI on established accounts' } },
@@ -354,9 +373,16 @@ export const nodes: SiteNode[] = [
       { metric: '5', en: 'established accounts: +45K followers, 21M new views, 136% of view KPI' },
       { metric: '3', en: 'new accounts: 19K followers, 14M views' },
     ],
+    media: [{
+      src: 'media/genshin-en-accounts/genshin-social-growth.jpg',
+      thumbnail: 'media/genshin-en-accounts/genshin-social-growth-thumb.jpg',
+      floating: true,
+      alt: { en: 'Genshin Impact artwork featuring Aether and Lumine' },
+    }],
   },
   {
     id: 'giveaway-campaign',
+    team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
     type: 'case',
     parent: 'campaigns',
     headline: { num: '~900K', label: { en: 'in-game code redemptions, ~4x the goal' } },
@@ -384,6 +410,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
+    team: { en: "Filter Creative Development & Influencer Activation Support (my role), Campaign Lead x1, TikTok/Snapchat Platform Liaisons x2, Agency Partners x3" },
     type: 'case',
     parent: 'campaigns',
     headline: { num: '600M+', label: { en: 'global views, 600K+ submissions' } },
@@ -412,6 +439,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'landing-page',
+    team: { en: "Creative Development Support (role), Landing Page Strategy Lead x1, Web Production x2" },
     type: 'case',
     parent: 'campaigns',
     headline: { num: '9.5M+', label: { en: 'UV and 1.8M+ lottery participants' } },
@@ -450,6 +478,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
+    team: { en: 'AI-assisted tool development (my role); handover to the UA content team.' },
     type: 'ai',
     parent: 'ai',
     headline: { num: 'Shipped', label: { en: 'built with AI-assisted coding, handed over to the UA content team' } },
@@ -517,7 +546,7 @@ export const nodes: SiteNode[] = [
   },
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
-  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'Hoyoverse (Genshin Impact)' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing — Genshin Impact' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
+  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
   { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
   { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
   { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
@@ -555,6 +584,7 @@ export const byId = new Map(nodes.map((n) => [n.id, n]));
 
 /* All Growth Marketing cases and the AI Workbench were done at HoYoverse. */
 nodes.forEach((n) => {
+  if (['case', 'ai', 'creative'].includes(n.type)) n.team ??= { en: '' };
   if ((n.type === 'case' || n.id === 'ai-workbench') && !n.org) n.org = 'hoyoverse';
 });
 /** Work done in a role, grouped by practice. */

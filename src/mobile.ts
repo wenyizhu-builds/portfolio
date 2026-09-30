@@ -13,7 +13,9 @@ import { L, contactRows, detailLists, intro, resumeLists, resumePdf, summary, tx
 const scrollBehavior = (): ScrollBehavior => (reducedMotion.matches ? 'auto' : 'smooth');
 
 function card(n: SiteNode): string {
-  const more = detailLists(n).map((d) => `<h4>${d.title}</h4>${d.body}`);
+  const more = detailLists(n).map((d) => d.defaultOpen === false
+    ? `<details class="m-more"><summary>${d.title}</summary>${d.body}</details>`
+    : `<h4>${d.title}</h4>${d.body}`);
   const media = (n.media || []).map(m => m.src
     ? `<button class="m-visual" data-visual-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/></button>`
     : `<div class="m-media">${L('visualsPrep')}</div>`).join('');

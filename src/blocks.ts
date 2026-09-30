@@ -46,8 +46,7 @@ export function zhNote(n: SiteNode): string {
 function orgName(n: SiteNode): string {
   const o = n.org ? byId.get(n.org) : undefined;
   if (!o) return '';
-  const company = `<a class="p-org" href="#/${o.id}">${tx(o.label)}</a>`;
-  return o.role ? `<span class="p-org-role">${company}<span aria-hidden="true"> · </span>${tx(o.role)}</span>` : company;
+  return `<a class="p-org" href="#/${o.id}">${tx(o.label)}</a>`;
 }
 
 const isWork = (n: SiteNode) => n.type === 'case' || n.type === 'ai' || n.type === 'creative';
@@ -55,12 +54,11 @@ const isWork = (n: SiteNode) => n.type === 'case' || n.type === 'ai' || n.type =
 /** Title, a grey line under it (job title / where + my role), and one small-capitals meta line. */
 function identity(n: SiteNode, title: string): string {
   const leaf = !childrenOf(n.id).length;
-  // The organization label already names Genshin Impact. Keep other projects distinct.
-  const repeatedGame = n.org === 'hoyoverse' && /^Genshin Impact(?: \d+\.\d+)?$/.test(n.context?.en || '')
-    && (byId.get(n.org)?.label.en.includes('Genshin Impact') ?? false);
+  const org = n.org ? byId.get(n.org) : undefined;
   const sub = [
     orgName(n),
-    n.context && !repeatedGame ? tx(n.context) : '',
+    n.context ? tx(n.context) : '',
+    org?.role ? tx(org.role) : '',
     !isWork(n) && leaf && n.kicker && !n.status ? tx(n.kicker) : '', // a role's job title, a school's degree
   ].filter(Boolean).join(' · ');
   const meta = [
@@ -103,6 +101,11 @@ export function detailLists(n: SiteNode): { title: string; body: string; default
       defaultOpen: !/^(the\s+)?challenge$/i.test(s.title.en.trim()),
       body: `<${container}${paragraph ? ' class="challenge-paragraph"' : ''}${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.sections.${index}.items"` : ''}>${s.items.map(i => `<${item}>${tx(i)}</${item}>`).join('')}</${container}>`,
     };
+  });
+  if (isWork(n) && n.team) out.unshift({
+    title: state.lang === 'zh' ? '项目团队' : 'The Team',
+    body: `<div class="challenge-paragraph"><p>${tx(n.team)}</p></div>`,
+    defaultOpen: false,
   });
   if (n.results && (n.results.length || import.meta.env.DEV))
     out.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });

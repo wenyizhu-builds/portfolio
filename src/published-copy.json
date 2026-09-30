@@ -209,6 +209,94 @@
       "ranges": [],
       "blueRanges": [],
       "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.label.en": {
+      "text": "Zenless Zone Zero: JP Account Growth",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.summary.en": {
+      "text": "Scaled a Japanese UGC-style account network for Zenless Zone Zero to 80M+ organic views across 9 accounts, through targeted content strategies and repeatable growth system.",
+      "ranges": [],
+      "blueRanges": [
+        [
+          69,
+          73
+        ]
+      ],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.sections.0.items.0.en": {
+      "text": "Following its launch, Zenless Zone Zero needed to build awareness and sustain player engagement in Japan through UGC-style accounts. Our team had little experience scaling these accounts in Japan, so I had to learn the market from scratch while testing what worked. Within a limited timeframe, I also needed to grow the network and establish a repeatable system that ZZZ team could take over.",
+      "ranges": [
+        [
+          209,
+          238
+        ],
+        [
+          311,
+          361
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.ua-creative-strategy.team.en": {
+      "text": "Brand Creative Strategy (my role), UA Strategy x1, UA Execution x1, Agency Partners x4",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.team.en": {
+      "text": "Social Strategy (my role), Japanese Content Review x2, Agency Partners x3",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.sections.1.items.0.en": {
+      "text": "Defined the social strategy: Researched Japanese player behavior, competitor accounts, and platform content gaps to shape account positioning and content pillars across YouTube and X.",
+      "ranges": [
+        [
+          12,
+          27
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.sections.1.items.1.en": {
+      "text": "Built testing framework: Used biweekly performance reviews to diagnose growth bottlenecks, test hypotheses, and refine hooks, angles, and formats. Turned winning approaches into repeatable content strategies.",
+      "ranges": [
+        [
+          6,
+          23
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.sections.1.items.2.en": {
+      "text": "Managed agency partnerships: Coordinated three agencies and local creators, aligning content briefs, reviews, and performance targets to improve content quality and cost efficiency.",
+      "ranges": [
+        [
+          8,
+          27
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.zzz-jp-accounts.sections.1.items.added-c77fcd17-843b-4baa-bba3-276856c83535.en": {
+      "text": "Enabled team handover: Codified content learnings, KPIs, and operating routines into playbooks and SOPs, then supported the ZZZ brand team in taking over all nine accounts.",
+      "ranges": [
+        [
+          85,
+          103
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
     }
   },
   "lists": {
@@ -234,6 +322,15 @@
       "0",
       "2",
       "1"
+    ],
+    "nodes.zzz-jp-accounts.sections.0.items": [
+      "0"
+    ],
+    "nodes.zzz-jp-accounts.sections.1.items": [
+      "0",
+      "1",
+      "2",
+      "added-c77fcd17-843b-4baa-bba3-276856c83535"
     ]
   }
 }
