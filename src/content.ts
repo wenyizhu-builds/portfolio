@@ -124,7 +124,7 @@ export const nodes: SiteNode[] = [
     period: 'Jun 2025 – Jun 2026',
     parent: 'growth',
     featured: true,
-    headline: { num: '~3.7×', label: { en: 'projected LTV vs non-Brand creatives' } },
+    headline: { num: '~3.7×', label: { en: 'projected LTV vs UA-team creatives' } },
     label: { en: 'UA Creative Strategy' },
     kicker: { en: 'Genshin Impact · Google Ads' },
     markets: ['JP', 'NA', 'EU'],
