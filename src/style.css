@@ -294,6 +294,8 @@ button { font: inherit; color: inherit; }
 .lightbox { position: fixed; inset: 0; z-index: 50; background: var(--scrim); display: flex; align-items: center; justify-content: center; cursor: zoom-out; animation: fade 300ms ease; }
 .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 6px; }
 .lightbox .p-btn { position: absolute; top: 16px; right: 20px; color: var(--on-ink); font-size: 22px; }
+.lightbox .p-btn:hover { background: none; opacity: 0.75; }
+.lightbox .p-btn:focus-visible { outline: 1px solid var(--on-ink); outline-offset: 3px; }
 @keyframes fade { from { opacity: 0; } }
 
 .legend { position: absolute; z-index: 2; left: var(--map-inset); bottom: var(--edge-y); display: flex; gap: 14px; font-size: 10.5px; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
@@ -377,3 +379,14 @@ button { font: inherit; color: inherit; }
 .published-highlight { background: var(--accent); color: inherit; }
 .published-blue { color: var(--cobalt); }
 .published-bold { font-weight: 700; }
+
+/* Experimental case visual: clean image in map whitespace, never in the card column. */
+.floating-visual { position: fixed; z-index: 3; display: block; padding: 0; border: 0; border-radius: 0; background: none; cursor: zoom-in; }
+.floating-visual[hidden] { display: none; }
+.floating-visual img { display: block; width: 100%; height: auto; }
+.floating-visual:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
+dialog.lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 40px; border: 0; box-sizing: border-box; background: var(--ink); }
+dialog.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 0; cursor: default; }
+dialog.lightbox::backdrop { background: var(--ink); }
+.m-visual { display: block; width: 100%; padding: 0; border: 0; background: none; margin: 20px 0; cursor: zoom-in; }
+.m-visual img { display: block; width: 100%; height: auto; }

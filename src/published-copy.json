@@ -80,7 +80,7 @@
       "blueRanges": []
     },
     "nodes.ua-creative-strategy.sections.1.items.0.en": {
-      "text": "Builded and evolved testing framework and cadence: Translated acquisition goals into market-specific creative hypotheses, using performance data to guide tests across hooks, messaging and formats.",
+      "text": "Builded and evolved testing framework: Translated acquisition goals into market-specific creative hypotheses, using performance data to guide tests across hooks, messaging and formats.",
       "ranges": [
         [
           20,
@@ -124,7 +124,7 @@
       "boldRanges": []
     },
     "nodes.xbox-launch.summary.en": {
-      "text": "Structured a creative test for Genshin Impact's Xbox launch paid campaign to move console players from interest to landing-page action. Delivered 120M+ impressions, 52M+ video views, a 338% CTR lift versus the earlier benchmark",
+      "text": "Structured a creative test for Genshin Impact's Xbox launch paid campaign to move console players from interest to landing-page action. Delivered 120M+ impressions, 52M+ video views, a 338% CTR lift versus the earlier benchmark.",
       "ranges": [],
       "blueRanges": [
         [
@@ -140,6 +140,74 @@
           189
         ]
       ],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.sections.0.items.0.en": {
+      "text": "The goal was to improve CTR and identify high-performing creatives. We had to turn existing brand materials into 100+ localized assets, our team’s largest creative test batch for a paid brand campaign. This required clear briefing and close coordination across languages, platform specs, and approvals.",
+      "ranges": [
+        [
+          147,
+          174
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.sections.1.items.0.en": {
+      "text": "Set the creative thesis: Used past campaign learnings and regional player insights to develop four testable creative concepts, adapting messaging for NA, FR, and DE audiences.",
+      "ranges": [
+        [
+          8,
+          23
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.sections.1.items.1.en": {
+      "text": "Coordinated creative production: Wrote detailed briefs covering copy, landing-page links, and platform specs for 144 localized assets, coordinating production timelines, reviews, and approvals.",
+      "ranges": [
+        [
+          12,
+          31
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.sections.1.items.2.en": {
+      "text": "Supported media planning and optimization: Helped shape budget allocation, regional priorities, and targeting across YouTube, Meta, X, and TikTok. Reviewed live performance with the media team to scale winning ads and pause underperformers.",
+      "ranges": [
+        [
+          10,
+          41
+        ]
+      ],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.results.3.en": {
+      "text": "landing-page clicks",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.results.0.en": {
+      "text": "CTR versus the earlier benchmark",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.results.1.en": {
+      "text": "lower CPC versus the earlier benchmark",
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.results.2.en": {
+      "text": "impressions across the campaign",
+      "ranges": [],
+      "blueRanges": [],
       "boldRanges": []
     }
   },
@@ -157,6 +225,14 @@
       "3",
       "added-31b71841-9134-46d2-bd4a-462fbed8005d",
       "0",
+      "1"
+    ],
+    "nodes.xbox-launch.sections.0.items": [
+      "0"
+    ],
+    "nodes.xbox-launch.sections.1.items": [
+      "0",
+      "2",
       "1"
     ]
   }

@@ -33,6 +33,8 @@ export interface Section {
 }
 
 export interface Media {
+  floating?: boolean;
+  thumbnail?: string;
   src?: string; // leave empty for a placeholder tile
   alt: T;
   caption?: T;
@@ -208,10 +210,13 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { metric: '120M+', en: 'impressions, 52M+ video views, ~700K landing-page clicks' },
-      { metric: '+338%', en: 'CTR and click cost −66% vs the earlier benchmark' },
+      { metric: '+338%', en: 'CTR versus the earlier benchmark.' },
+      { metric: '66%', en: 'lower CPC versus the earlier benchmark.' },
+      { metric: '120M+', en: 'impressions across the campaign.' },
+      { metric: '~700K', en: 'landing-page clicks across the campaign.' },
     ],
-    media: [{ alt: { en: 'Localized creative set' } }],
+    media: [{ src: 'media/xbox-launch/genshin-xbox-banner-en-qr-blurred.jpg',
+      thumbnail: 'media/xbox-launch/genshin-xbox-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Xbox launch promotional visual — QR code blurred' } }],
   },
   {
     id: 'influencer-activation',

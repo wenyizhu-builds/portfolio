@@ -13,3 +13,11 @@
 
 - QR-blurred candidate: `.local-assets/xbox-launch/genshin-xbox-banner-en-qr-blurred.png` (imagegen edit; original preserved).
 - Owner decision 2026-09-30: keep both image candidates local, defer gallery layout and website integration. `.local-assets/` is ignored by Git and excluded from the public build.
+
+## 2026-09-30 — floating visual experiment
+
+Owner supplied a clean, borderless, already QR-blurred PNG (2246 × 1248). Preserved as `.local-assets/xbox-launch/genshin-xbox-owner-clean-qr-blurred.png`. The public assets are JPEG encodings of that supplied image: `public/media/xbox-launch/genshin-xbox-banner-en-qr-blurred.jpg` (full size) and `genshin-xbox-thumb.jpg` (640 px wide). No additional generative edits were made.
+
+Xbox now uses one floating thumbnail, sampled only in the upper half of the map area. The entire right column, including the gap between INDEX and the case card, is excluded. DOM bounds of nodes and connectors are checked with clearance; when no safe position exists, the thumbnail stays hidden. Click opens a modal full-image viewer; close button / Escape return to the case. No Map/Visual toggle. Fixed startup delay removed; thumbnail is about 87 KB rather than loading the 4.3 MB PNG.
+
+Validation: build:file passed; desktop browser confirmed visible upper-half placement, zero map overlaps, outside the card column, and successful modal open/close. Mobile uses a dedicated image block. Not pushed in this iteration.

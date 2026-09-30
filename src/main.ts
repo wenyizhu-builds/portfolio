@@ -1,5 +1,6 @@
 import { applyPublishedCopy } from './published-copy';
 import './style.css';
+import { createFloatingVisual } from './floating-visual';
 import { ancestors, byId, site, ui } from './content';
 import { createMap, type MapApi } from './map';
 import { mobileScrollTo, renderMobile } from './mobile';
@@ -82,6 +83,7 @@ const cssPx = (name: string) => parseFloat(cssVar(name)) || 0;
 const cssMs = (name: string) => parseFloat(cssVar(name)) || 0;
 const mq = window.matchMedia(cssVar('--mq-phone'));
 
+const floatingVisual = createFloatingVisual(stage, document.querySelector<HTMLElement>('.side')!, openLightbox);
 let map: MapApi | null = null;
 let route: Route = parseRoute();
 
@@ -133,7 +135,9 @@ function renderPanel(keep = false) {
   // media tiles beside the panel
   const id = currentNodeId();
   const n = id ? byId.get(id) : undefined;
-  const items = n?.media || [];
+  const visual = n?.media?.find(m => m.floating && m.src);
+  floatingVisual.set(visual?.src, visual ? t(visual.alt) : '', visual?.thumbnail);
+  const items = (n?.media || []).filter(m => !m.floating);
   media.innerHTML = `<div class="media-row">${items
     .map((m) =>
       m.src
@@ -165,19 +169,25 @@ function placeAnchor() {
 }
 
 /* ---------- lightbox (the only overlay) ---------- */
-function openLightbox(src: string) {
-  const lb = document.createElement('div');
+function openLightbox(src: string, alt = '') {
+  if (document.querySelector('.lightbox')) return;
+  const previous = document.activeElement as HTMLElement | null;
+  const lb = document.createElement('dialog');
   lb.className = 'lightbox';
-  lb.innerHTML = `<img src="${esc(src)}" alt=""/><button class="p-btn" aria-label="${esc(t(ui.close))}">×</button>`;
-  const close = () => {
-    lb.remove();
-    document.removeEventListener('keydown', onKey);
-  };
-  const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close();
-  lb.onclick = close;
-  document.addEventListener('keydown', onKey);
+  lb.setAttribute('aria-label', alt || 'Project visual');
+  lb.innerHTML = `<img src="${esc(src)}" alt="${esc(alt)}"/><button class="p-btn" aria-label="${esc(t(ui.close))}">×</button>`;
+  const close = () => { lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); };
+  lb.querySelector('button')!.onclick = close;
+  lb.addEventListener('cancel', e => { e.preventDefault(); close(); });
+  lb.onclick = e => { if (e.target === lb) close(); };
   document.body.append(lb);
+  lb.showModal();
 }
+
+document.addEventListener('click', e => {
+  const tile = (e.target as Element).closest<HTMLButtonElement>('[data-visual-src]');
+  if (tile) openLightbox(tile.dataset.visualSrc!, tile.querySelector('img')?.alt);
+});
 
 /* ---------- routing ---------- */
 /* Keyboard users land on the panel title after choosing a node; mouse users keep their place. */

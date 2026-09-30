@@ -14,7 +14,9 @@ const scrollBehavior = (): ScrollBehavior => (reducedMotion.matches ? 'auto' : '
 
 function card(n: SiteNode): string {
   const more = detailLists(n).map((d) => `<h4>${d.title}</h4>${d.body}`);
-  const media = n.media?.length ? `<div class="m-media">${L('visualsPrep')}</div>` : '';
+  const media = (n.media || []).map(m => m.src
+    ? `<button class="m-visual" data-visual-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/></button>`
+    : `<div class="m-media">${L('visualsPrep')}</div>`).join('');
   return `<article class="m-card ${n.status ? 'is-prep' : ''}" id="m-${n.id}">
     <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}

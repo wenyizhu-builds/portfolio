@@ -186,3 +186,9 @@
 - 2026-09-29：Results 全局取消强制单行，长说明自然换行，卡片禁止横向滚动。Xbox 地图日期标记 Nov 2024（已确认上线月份，非完整制作周期）：KM 素材需求为 11/15 前交稿，卖点文案明确 2024/11/20 上线，首周数据至 11/27。来源：career/data-capture/KM raw/cases/xbox-launch-paid-campaign 下 art-requirements/01-requirements-overview 与 media-buy-plan/02-selling-points-copy、03-launch-data。
 
 - 2026-09-30：用户暂缓图片展示开发；两版 Xbox 图片移至 gitignored `.local-assets/xbox-launch/`。更新当前发布文案快照并同步网站全部现有代码修改。
+
+## 2026-09-30 — Xbox case completed
+
+- Saved the owner's latest Xbox summary, challenge, three action bullets, ordering and text highlights into the production copy snapshot. Results now show CTR +338%, CPC 66% lower, 120M+ impressions and ~700K landing-page clicks, with the owner's final punctuation.
+- Replaced Xbox's visual placeholder with the owner-supplied clean QR-blurred artwork. A small thumbnail chooses safe whitespace in the upper half of the map area, excludes the entire INDEX/card column, and opens a full-screen image dialog.
+- Removed the fixed image delay; use an 87 KB thumbnail and load the larger image on click. Fixed the close button's white hover background. The local copy editor remains in source control and stays development-only.
