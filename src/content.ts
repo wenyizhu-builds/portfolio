@@ -156,12 +156,8 @@ export const nodes: SiteNode[] = [
       { metric: '~3.3x', en: 'LTV vs non-Brand creatives' },
     ],
     media: [{
-      src: 'media/ua-creative-strategy/genshin-creative.jpg',
-      thumbnail: 'media/ua-creative-strategy/genshin-creative-thumb.jpg',
-      floating: true,
-      alt: { en: 'Genshin Impact gameplay creative screenshot' },
-    }, {
       src: 'media/ua-creative-strategy/ua-system-diagram.png',
+      floating: true,
       alt: { en: 'How the system worked: the creative testing loop and the AI dashboard steps' },
     }],
     related: ['ai-workbench'],
