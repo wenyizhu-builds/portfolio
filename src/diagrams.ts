@@ -1,29 +1,31 @@
 /*
  * Case diagrams: how a system worked, drawn instead of showing internal screenshots.
- * Colours come from CSS classes (.dg-*), never from here. Coordinates are a fixed
- * viewBox that scales to the card's text column.
+ * Colours and type sizes come from CSS classes (.dg-*), never from here. Coordinates are a
+ * fixed viewBox about as wide as the card's text column, so 1 unit ≈ 1 px.
  */
 import type { T } from './content';
 
-type Box = { x: number; y: number; t: T; ai?: boolean };
-type Diagram = { vb: [number, number]; boxes: Box[]; arrows: [number, number, number, number][]; loop: [number, number, number, number]; loopLabel: T; note: T };
+type Box = { col: number; row: number; t: T; ai?: boolean }; // label lines split on "\n"
+type Diagram = { boxes: Box[]; loopLabel: T; aria: T };
 
-const W = 104, H = 38;
+const COLS = 3, W = 96, H = 60, GAP_X = 24, GAP_Y = 44, LINE = 17;
+const X = (c: number) => c * (W + GAP_X);
+const Y = (r: number) => r * (H + GAP_Y);
+const VB_W = COLS * W + (COLS - 1) * GAP_X, VB_H = 2 * H + GAP_Y;
+
+/* A two-row loop: steps 1–3 left to right on top, 4–6 right to left below, then back to 1. */
 const diagrams: Record<string, Diagram> = {
   'ua-loop': {
-    vb: [336, 150],
     boxes: [
-      { x: 0, y: 4, t: { en: 'Brand creative', zh: '品牌素材' } },
-      { x: 116, y: 4, t: { en: 'UA test', zh: '买量测试' } },
-      { x: 232, y: 4, t: { en: 'AI tagging', zh: 'AI 打标' }, ai: true },
-      { x: 232, y: 96, t: { en: 'Winning patterns', zh: '跑赢规律' }, ai: true },
-      { x: 116, y: 96, t: { en: 'Briefs + scripts', zh: 'Brief 与脚本' } },
-      { x: 0, y: 96, t: { en: 'Scale / stop', zh: '放量 / 停投' } },
+      { col: 0, row: 0, t: { en: 'Brand\ncreative', zh: '品牌\n素材' } },
+      { col: 1, row: 0, t: { en: 'UA\ntest', zh: '买量\n测试' } },
+      { col: 2, row: 0, t: { en: 'AI\ntagging', zh: 'AI\n打标' }, ai: true },
+      { col: 2, row: 1, t: { en: 'Winning\npatterns', zh: '跑赢\n规律' }, ai: true },
+      { col: 1, row: 1, t: { en: 'Briefs +\nscripts', zh: 'Brief\n与脚本' } },
+      { col: 0, row: 1, t: { en: 'Scale\nor stop', zh: '放量\n或停投' } },
     ],
-    arrows: [[104, 23, 114, 23], [220, 23, 230, 23], [284, 42, 284, 94], [232, 115, 222, 115], [116, 115, 106, 115]],
-    loop: [52, 96, 52, 44],
     loopLabel: { en: 'next round', zh: '下一轮' },
-    note: { en: 'Highlighted: where the AI dashboard does the work', zh: '高亮：AI 工具负责的环节' },
+    aria: { en: 'The creative testing loop, with AI tagging and pattern finding', zh: '创意测试循环，含 AI 打标与规律识别' },
   },
 };
 
@@ -33,14 +35,25 @@ export function hasDiagram(key?: string): boolean {
 
 export function diagramSvg(key: string, tx: (t: T) => string): string {
   const d = diagrams[key];
-  const box = (b: Box) =>
-    `<rect class="dg-box${b.ai ? ' dg-ai' : ''}" x="${b.x + 0.5}" y="${b.y + 0.5}" width="${W - 1}" height="${H - 1}" rx="3"/>` +
-    `<text class="dg-t" x="${b.x + W / 2}" y="${b.y + H / 2 + 4}" text-anchor="middle">${tx(b.t)}</text>`;
-  const arrow = ([x1, y1, x2, y2]: number[], cls = 'dg-line') => `<line class="${cls}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-end="url(#dg-a-${cls})"/>`;
-  const marker = (cls: string) => `<marker id="dg-a-${cls}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="${cls}-head" d="M0 0 L6 3 L0 6z"/></marker>`;
-  const [lx1, ly1, , ly2] = d.loop;
-  return `<figure class="dg"><svg viewBox="0 0 ${d.vb[0]} ${d.vb[1]}" role="img" aria-label="${tx(d.note)}"><defs>${marker('dg-line')}${marker('dg-loop')}</defs>` +
-    d.arrows.map((a) => arrow(a)).join('') + arrow(d.loop, 'dg-loop') +
-    `<text class="dg-lt" x="${lx1 + 8}" y="${(ly1 + ly2) / 2 + 4}">${tx(d.loopLabel)}</text>` +
-    d.boxes.map(box).join('') + `</svg><figcaption class="lab">${tx(d.note)}</figcaption></figure>`;
+  const box = (b: Box, i: number) => {
+    const x = X(b.col), y = Y(b.row), lines = tx(b.t).split('\n');
+    const y0 = y + H / 2 + 5 - ((lines.length - 1) * LINE) / 2 + 5;
+    return `<rect class="dg-box${b.ai ? ' dg-ai' : ''}" x="${x + 0.5}" y="${y + 0.5}" width="${W - 1}" height="${H - 1}" rx="4"/>` +
+      `<text class="dg-n" x="${x + 8}" y="${y + 15}">${String(i + 1).padStart(2, '0')}</text>` +
+      lines.map((l, k) => `<text class="dg-t" x="${x + 8}" y="${y0 + k * LINE}">${l}</text>`).join('');
+  };
+  const arrow = (x1: number, y1: number, x2: number, y2: number, cls = 'dg-line') =>
+    `<line class="${cls}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" marker-end="url(#dg-a-${cls})"/>`;
+  const marker = (cls: string) => `<marker id="dg-a-${cls}" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path class="${cls}-head" d="M0 0 L7 3.5 L0 7z"/></marker>`;
+  const midY0 = Y(0) + H / 2, midY1 = Y(1) + H / 2, pad = 3;
+  const arrows = [
+    arrow(X(0) + W + pad, midY0, X(1) - pad, midY0),
+    arrow(X(1) + W + pad, midY0, X(2) - pad, midY0),
+    arrow(X(2) + W / 2, Y(0) + H + pad, X(2) + W / 2, Y(1) - pad),
+    arrow(X(2) - pad, midY1, X(1) + W + pad, midY1),
+    arrow(X(1) - pad, midY1, X(0) + W + pad, midY1),
+    arrow(X(0) + W / 2, Y(1) - pad, X(0) + W / 2, Y(0) + H + pad, 'dg-loop'),
+  ].join('');
+  const loopText = `<text class="dg-lt" x="${X(0) + W / 2 + 8}" y="${Y(0) + H + GAP_Y / 2 + 4}">${tx(d.loopLabel)}</text>`;
+  return `<figure class="dg"><svg viewBox="0 0 ${VB_W} ${VB_H}" role="img" aria-label="${tx(d.aria)}"><defs>${marker('dg-line')}${marker('dg-loop')}</defs>${arrows}${loopText}${d.boxes.map(box).join('')}</svg></figure>`;
 }

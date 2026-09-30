@@ -123,8 +123,8 @@ button { font: inherit; color: inherit; }
 /* Growth Marketing, the main area: cobalt outline */
 .node.is-key .shp { stroke: var(--cobalt); stroke-width: 1.8; }
 .node.is-key.is-far .shp { stroke: var(--cobalt-faded); }
-.node.is-featured .shp { stroke: var(--cobalt); stroke-width: 1.8; } /* the three flagship cases */
-.node.is-featured.is-far .shp { stroke: var(--cobalt-faded); }
+.node.is-featured .shp { fill: var(--cobalt); stroke: var(--cobalt); } /* the three flagship cases: solid cobalt */
+.node.is-featured.is-far .shp { fill: var(--cobalt-faded); stroke: var(--cobalt-faded); }
 .lg-num { font-weight: 400; font-size: 9px; border: 1px solid var(--muted); border-radius: 2px; padding: 0 3px; }
 .node.t-branch .shp { stroke-width: 1.3; }
 .node.is-prep .shp { stroke-dasharray: 2.5 2; }
@@ -394,15 +394,14 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .m-visual img { display: block; width: 100%; height: auto; }
 
 /* Case system diagrams (diagrams.ts): drawn in the card's own type and palette. */
-.dg { margin: 4px 0 0; }
+.dg { margin: 6px 0 4px; }
 .dg svg { display: block; width: 100%; height: auto; overflow: visible; }
 .dg-box { fill: var(--panel); stroke: var(--ink); stroke-width: 1; }
 .dg-box.dg-ai { fill: var(--accent); }
-.dg-t { fill: var(--ink); font-size: var(--fs-label); }
+.dg-t { fill: var(--ink); font-size: var(--fs-text); }
+.dg-n { fill: var(--cobalt); font-size: var(--fs-label); letter-spacing: var(--track-label); }
 .dg-lt { fill: var(--cobalt); font-size: var(--fs-label); }
 .dg-line { stroke: var(--ink); stroke-width: 1; }
 .dg-line-head { fill: var(--ink); }
-.dg-loop { stroke: var(--cobalt); stroke-width: 1; stroke-dasharray: 3 3; }
+.dg-loop { stroke: var(--cobalt); stroke-width: 1.2; stroke-dasharray: 4 3; }
 .dg-loop-head { fill: var(--cobalt); }
-.dg figcaption { color: var(--muted); margin-top: 8px; }
-.ix-flags { margin-bottom: 10px; }
