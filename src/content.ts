@@ -242,7 +242,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
-    team: { en: "Me (testing strategy and project lead), 1 data operations specialist, and 2 platform liaisons from TikTok" },
+    team: { en: "Me (testing strategy and project lead) and 1 data operations specialist, working with 2 platform liaisons from TikTok" },
     type: 'case',
     period: 'Dec 2024 – Nov 2025',
     parent: 'growth',
@@ -254,7 +254,7 @@ export const nodes: SiteNode[] = [
     tags: [{ en: 'TikTok' }, { en: 'UGC' }],
     markets: ['US', 'JP', 'KR', 'TW'],
     summary: {
-      en: "I ran three rounds of tests to see whether TikTok’s UGC incentive program could boost installs efficiently and supply videos good enough for UA. It delivered wide reach at a low cost, but the videos didn’t meet our quality bar for UA creative, so I recommended shifting budget to curated creator ads.",
+      en: "I designed and ran a three-round testing framework to see whether TikTok’s UGC incentive program could boost installs efficiently and supply videos that meet our standard for UA creative.",
     },
     sections: [
       {
@@ -267,11 +267,10 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Designed the test framework: Set each round’s payout model (per 1,000 views or per install), markets, themes, budgets and success metrics." },
-          { en: "Led campaign execution: Owned all three rounds end to end, from task setup and creator briefs to launch, working closely with TikTok’s platform team." },
-          { en: "Raised content quality: Refined briefs and themes between rounds and reviewed submissions to steer creators toward on-brand, ad-ready videos." },
-          { en: "Evaluated performance: Analyzed reach, cost, install efficiency, user quality and content relevance against our UA benchmarks." },
-          { en: "Drove the go/no-go decision: Turned the findings into a clear recommendation, and budget moved from the program to curated creator ads for UA." },
+          { en: "Designed the test framework: Built a three-round roadmap, setting each round’s payout model (per 1,000 views or per install), markets, themes, budgets and success metrics against our UA benchmarks." },
+          { en: "Led campaign execution: Owned all three rounds end to end, from task setup and creator briefs to progress tracking, submission reviews and recaps." },
+          { en: "Raised content quality: Rewrote task pages with clearer requirements and official reference videos, and flagged off-brief videos to free up the prize pool for better ones." },
+          { en: "Evaluated performance and drove the decision: Measured reach, cost per install, user quality and content relevance against our UA benchmarks, then recommended moving budget to curated creator ads for UA." },
         ],
       },
     ],
@@ -283,7 +282,7 @@ export const nodes: SiteNode[] = [
     ],
     diagram: {
       src: 'media/gip-testing/gip-rounds-diagram.png',
-      alt: { en: 'Three test rounds: pay per 1,000 views, pay per install, an awareness round, then a recommendation to shift to curated creator ads' },
+      alt: { en: 'How I ran the tests: set goals and benchmarks, design each round, run and steer, evaluate the full funnel; then how the roadmap evolved over three rounds' },
     },
   },
   {

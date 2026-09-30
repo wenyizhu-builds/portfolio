@@ -198,3 +198,8 @@
 - Rewrote the GIP flagship: new title, summary, challenge, five blue-labelled "What I did" bullets, results (80M+ views, 500K+ UGC submissions, ~60% lower CPM in Round 3, budget moved to curated creator ads), team wording, period Dec 2024 – Nov 2025, markets US/JP/KR/TW.
 - Added a 2×2 rounds diagram (Round 1 → Round 2 → Round 3 awareness → recommendation) in "How it worked".
 - UA flagship renamed to "Creator Ad Pipeline". Editor archive and published snapshot reconciled.
+
+## 2026-10-01 — TikTok case: framework diagram, open-ended summary
+
+- Replaced the round-results diagram with the testing framework (set goals and benchmarks → design the round → run and steer → evaluate the full funnel) plus how the roadmap evolved.
+- Summary no longer states a conclusion. Merged the last two "What I did" bullets into one. Team line now shows the data operations specialist is on our side and the liaisons are from TikTok.
