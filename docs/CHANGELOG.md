@@ -192,3 +192,9 @@
 - Saved the owner's latest Xbox summary, challenge, three action bullets, ordering and text highlights into the production copy snapshot. Results now show CTR +338%, CPC 66% lower, 120M+ impressions and ~700K landing-page clicks, with the owner's final punctuation.
 - Replaced Xbox's visual placeholder with the owner-supplied clean QR-blurred artwork. A small thumbnail chooses safe whitespace in the upper half of the map area, excludes the entire INDEX/card column, and opens a full-screen image dialog.
 - Removed the fixed image delay; use an 87 KB thumbnail and load the larger image on click. Fixed the close button's white hover background. The local copy editor remains in source control and stays development-only.
+
+## 2026-09-30 — TikTok UGC Incentive Program case rewritten
+
+- Rewrote the GIP flagship: new title, summary, challenge, five blue-labelled "What I did" bullets, results (80M+ views, 500K+ UGC submissions, ~60% lower CPM in Round 3, budget moved to curated creator ads), team wording, period Dec 2024 – Nov 2025, markets US/JP/KR/TW.
+- Added a 2×2 rounds diagram (Round 1 → Round 2 → Round 3 awareness → recommendation) in "How it worked".
+- UA flagship renamed to "Creator Ad Pipeline". Editor archive and published snapshot reconciled.
