@@ -1,4 +1,4 @@
-import { ancestors, byId, childrenOf, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
+import { ancestors, byId, childrenOf, featuredOrder, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
 import { esc, isDone, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
 import { L, contactRows, detailLists, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
@@ -40,10 +40,14 @@ function insideList(n: SiteNode): string {
     return `<div class="nlist">${order.map((id) => nodeLink(id)).join('')}</div>`;
   }
   if (n.type === 'branch' && kids.some((k) => childrenOf(k.id).length)) {
+    // flagship cases first, as single items with their headline figure; then groups with their items
+    const flags = kids.filter((k) => k.featured && !childrenOf(k.id).length).sort((a, b) => featuredOrder.indexOf(a.id) - featuredOrder.indexOf(b.id));
+    const flagList = flags.length ? `<div class="nlist"><div class="ngroup"><span class="ngroup-h">${tx({ en: 'Flagship cases', zh: '重点案例' })}</span><div class="nlist">${flags.map((k) => nodeLink(k.id)).join('')}</div></div></div>` : '';
     const groups = kids
+      .filter((k) => childrenOf(k.id).length)
       .map((k) => `<div class="ngroup">${groupLink(k.id)}<div class="nlist">${childrenOf(k.id).map((c) => nodeLink(c.id)).join('')}</div></div>`)
       .join('');
-    return `<div class="nlist">${groups}</div>`;
+    return `${flagList}<div class="nlist">${groups}</div>`;
   }
   return kids.length ? `<div class="nlist">${kids.map((k) => nodeLink(k.id)).join('')}</div>` : '';
 }

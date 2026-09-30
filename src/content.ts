@@ -58,6 +58,7 @@ export interface SiteNode {
   media?: Media[];
   status?: Status;
   featured?: boolean;
+  diagram?: string; // key of a system diagram in diagrams.ts, shown before Results
   related?: string[]; // dotted connections
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
@@ -108,36 +109,12 @@ export const nodes: SiteNode[] = [
     },
   },
   {
-    id: 'paid-social',
+    id: 'more-growth',
     type: 'sub',
     parent: 'growth',
-    label: { en: 'Paid Social & Creative Strategy', zh: '付费社媒与创意策略' },
+    label: { en: 'More cases', zh: '更多案例' },
     kicker: { en: 'Practice', zh: '方向' },
-    summary: { en: 'Turning performance data into the next creative brief. [Placeholder copy]' },
-  },
-  {
-    id: 'ugc-influencer',
-    type: 'sub',
-    parent: 'growth',
-    label: { en: 'UGC & Influencer', zh: 'UGC 与达人营销' },
-    kicker: { en: 'Practice', zh: '方向' },
-    summary: { en: 'Creator-led content built for platforms and for conversion. [Placeholder copy]' },
-  },
-  {
-    id: 'account-growth',
-    type: 'sub',
-    parent: 'growth',
-    label: { en: 'Account Growth', zh: '账号增长' },
-    kicker: { en: 'Practice', zh: '方向' },
-    summary: { en: 'Growing creator-style account matrices into repeatable systems. [Placeholder copy]' },
-  },
-  {
-    id: 'campaigns',
-    type: 'sub',
-    parent: 'growth',
-    label: { en: 'Campaigns', zh: '整合活动' },
-    kicker: { en: 'Practice', zh: '方向' },
-    summary: { en: 'Launch campaigns with a measurable action at the end. [Placeholder copy]' },
+    summary: { en: 'Launches, creator campaigns and account growth work. [Placeholder copy]' },
   },
 
   {
@@ -145,7 +122,9 @@ export const nodes: SiteNode[] = [
     team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
     type: 'case',
     period: 'Jun 2025 – Jun 2026',
-    parent: 'paid-social',
+    parent: 'growth',
+    featured: true,
+    diagram: 'ua-loop',
     headline: { num: '1% → 15%', highlight: '15%', label: { en: 'Brand creative share of UA spend' } },
     label: { en: 'UA Creative Strategy' },
     kicker: { en: 'Genshin Impact · Google Ads' },
@@ -191,7 +170,7 @@ export const nodes: SiteNode[] = [
     team: { en: "Creative Strategy (my role), Media Strategy x1, Creative Producers x2, Agency Partner x1" },
     type: 'case',
     period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
-    parent: 'paid-social',
+    parent: 'more-growth',
     headline: { num: '+338%', label: { en: 'CTR vs the earlier benchmark' } },
     label: { en: 'Xbox Launch Paid Campaign' },
     kicker: { en: 'Genshin Impact · Meta, YouTube, TikTok, X' },
@@ -231,7 +210,7 @@ export const nodes: SiteNode[] = [
     id: 'influencer-activation',
     team: { en: "Influencer Strategy & Execution (my role), Execution Support x2, Agency Partners x2" },
     type: 'case',
-    parent: 'ugc-influencer',
+    parent: 'more-growth',
     headline: { num: '~3x', label: { en: 'engagement vs the prior paid benchmark, at ~40% lower cost' } },
     label: { en: 'Influencer Activation Campaign' },
     kicker: { en: 'Genshin Impact · X' },
@@ -268,7 +247,8 @@ export const nodes: SiteNode[] = [
     id: 'gip-testing',
     team: { en: "Testing Strategy / Project Owner (my role), TikTok Platform Liaison x2, Data Ops x1" },
     type: 'case',
-    parent: 'ugc-influencer',
+    parent: 'growth',
+    featured: true,
     headline: { num: '80M+', label: { en: 'views in three test rounds — then a data-led stop decision' } },
     label: { en: 'Organic UA Testing: TikTok GIP' },
     kicker: { en: 'Genshin Impact · TikTok' },
@@ -305,7 +285,8 @@ export const nodes: SiteNode[] = [
     id: 'zzz-jp-accounts',
     team: { en: "Social Growth Strategy (my role), Japanese Content Review x2, Agency Partners x3" },
     type: 'case',
-    parent: 'account-growth',
+    parent: 'growth',
+    featured: true,
     headline: { num: '80M+', label: { en: 'views across 9 accounts, CPM −50%+ without paid boosting' } },
     label: { en: 'Zenless Zone Zero: JP Account Growth' },
     kicker: { en: 'YouTube, X' },
@@ -349,7 +330,7 @@ export const nodes: SiteNode[] = [
     id: 'genshin-en-accounts',
     team: { en: "Growth Strategy Support & Content Review (my role), Growth Strategy Lead x1, Agency Partner x1" },
     type: 'case',
-    parent: 'account-growth',
+    parent: 'more-growth',
     headline: { num: '136%', label: { en: 'of view KPI on established accounts' } },
     label: { en: 'Genshin Impact: EN Social Growth' },
     kicker: { en: 'TikTok, YouTube' },
@@ -384,7 +365,7 @@ export const nodes: SiteNode[] = [
     id: 'giveaway-campaign',
     team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
     type: 'case',
-    parent: 'campaigns',
+    parent: 'more-growth',
     headline: { num: '~900K', label: { en: 'in-game code redemptions, ~4x the goal' } },
     label: { en: 'Giveaway & Cross-Platform Influencer Campaign' },
     kicker: { en: 'Genshin Impact 5.0 · X, TikTok, Instagram' },
@@ -412,7 +393,7 @@ export const nodes: SiteNode[] = [
     id: 'interactive-filter',
     team: { en: "Filter Creative Development & Influencer Activation Support (my role), Campaign Lead x1, TikTok/Snapchat Platform Liaisons x2, Agency Partners x3" },
     type: 'case',
-    parent: 'campaigns',
+    parent: 'more-growth',
     headline: { num: '600M+', label: { en: 'global views, 600K+ submissions' } },
     label: { en: 'Interactive Filter Campaign' },
     kicker: { en: 'Genshin Impact 4.4 · TikTok, Snapchat' },
@@ -441,7 +422,7 @@ export const nodes: SiteNode[] = [
     id: 'landing-page',
     team: { en: "Creative Development Support (role), Landing Page Strategy Lead x1, Web Production x2" },
     type: 'case',
-    parent: 'campaigns',
+    parent: 'more-growth',
     headline: { num: '9.5M+', label: { en: 'UV and 1.8M+ lottery participants' } },
     label: { en: 'Landing Page Gamification' },
     kicker: { en: 'Genshin Impact 5.0 · Web' },
@@ -499,7 +480,7 @@ export const nodes: SiteNode[] = [
       },
     ],
     media: [{ alt: { en: 'Workbench demo (synthetic data)' } }],
-    related: ['paid-social', 'ua-creative-strategy'],
+    related: ['ua-creative-strategy'],
   },
   { id: 'ai-slot-1', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
   { id: 'ai-slot-2', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
@@ -576,6 +557,9 @@ export function kindOf(id: string): NodeType {
 
 /* The INDEX card lists these sections, in this order, below the bio. */
 export const indexSections = ['growth', 'ai', 'creative', 'experience', 'education'];
+
+/* The three flagship Growth Marketing cases, in reading order (01, 02, 03). */
+export const featuredOrder = ['ua-creative-strategy', 'zzz-jp-accounts', 'gip-testing'];
 
 export const rolesOrder = ['hoyoverse', 'seminary-coop', 'nike', 'weber-shandwick', 'nowness'];
 export const schoolsOrder = ['uchicago', 'xjtlu'];

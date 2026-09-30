@@ -6,6 +6,7 @@ import { publishedMarkup } from './published-copy';
  */
 import { byId, childrenOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
 import { copyFieldKey } from './copy-binding';
+import { diagramSvg, hasDiagram } from './diagrams';
 import { esc, missingZh, state, t } from './state';
 
 export const L = (k: keyof typeof ui) => esc(t(ui[k]));
@@ -102,14 +103,18 @@ export function detailLists(n: SiteNode): { title: string; body: string; default
       body: `<${container}${paragraph ? ' class="challenge-paragraph"' : ''}${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.sections.${index}.items"` : ''}>${s.items.map(i => `<${item}>${tx(i)}</${item}>`).join('')}</${container}>`,
     };
   });
-  if (isWork(n) && n.team) out.unshift({
+  // Case order (flagship review): the system diagram and Results first, open; then the story, folded.
+  out.forEach((d) => (d.defaultOpen = false));
+  const head: { title: string; body: string; defaultOpen?: boolean }[] = [];
+  if (hasDiagram(n.diagram)) head.push({ title: tx({ en: 'How it worked', zh: '运作方式' }), body: diagramSvg(n.diagram!, tx), defaultOpen: true });
+  if (n.results && (n.results.length || import.meta.env.DEV))
+    head.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
+  if (isWork(n) && n.team) out.push({
     title: state.lang === 'zh' ? '项目团队' : 'The Team',
     body: `<div class="challenge-paragraph"><p>${tx(n.team)}</p></div>`,
     defaultOpen: false,
   });
-  if (n.results && (n.results.length || import.meta.env.DEV))
-    out.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
-  return out;
+  return [...head, ...out];
 }
 
 /* ---------- résumé ---------- */

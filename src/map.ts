@@ -34,10 +34,10 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    these points are derived from the same numbers, so the forces agree with the layout. */
 const HOME_LAYOUT: Record<string, [number, number]> = {
   growth: [242, -123],
-  campaigns: [232, -247],
-  'account-growth': [351, -163],
-  'ugc-influencer': [410, -65],
-  'paid-social': [297, -9],
+  'ua-creative-strategy': [205, -262],
+  'zzz-jp-accounts': [400, -205],
+  'gip-testing': [430, -70],
+  'more-growth': [300, 15],
   info: [-149, -90],
   education: [-239, -158],
   experience: [-310, -8],
