@@ -242,7 +242,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
-    team: { en: "Testing Strategy / Project Owner (my role), TikTok Platform Liaison x2, Data Ops x1" },
+    team: { en: "Me (testing strategy and project lead), 2 TikTok platform liaisons and 1 data operations specialist" },
     type: 'case',
     parent: 'growth',
     featured: true,
@@ -273,14 +273,15 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { metric: '80M+', en: 'views, 500K+ submissions, ~2K attributed acquisitions' },
-      { metric: '−60%', en: 'CPM in later rounds; submissions +200%' },
-      { en: 'Decision: stopped GIP as a standalone channel; moved budget to higher-quality creator videos' },
+      { metric: '80M+', en: 'views across three testing rounds' },
+      { metric: '500K+', en: 'creator submissions across the program' },
+      { metric: '66%', en: 'lower CPM versus the earlier benchmark' },
+      { metric: '', en: 'Decided to stop the initiative' },
     ],
   },
   {
     id: 'zzz-jp-accounts',
-    team: { en: "Social Growth Strategy (my role), Japanese Content Review x2, Agency Partners x3" },
+    team: { en: "Me (social strategy), 2 Japanese content reviewers and 3 agency partners" },
     type: 'case',
     parent: 'growth',
     featured: true,
