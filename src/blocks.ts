@@ -93,13 +93,14 @@ export function intro(n: SiteNode, title: string): string {
 }
 
 /** The expandable detail lists of a case: its sections, then results. */
-export function detailLists(n: SiteNode): { title: string; body: string }[] {
-  const out = (n.sections || []).map((s, index) => {
+export function detailLists(n: SiteNode): { title: string; body: string; defaultOpen?: boolean }[] {
+  const out: { title: string; body: string; defaultOpen?: boolean }[] = (n.sections || []).map((s, index) => {
     const paragraph = /^(the\s+)?challenge$/i.test(s.title.en.trim()) && s.items.length === 1;
     const container = paragraph ? 'div' : 'ul';
     const item = paragraph ? 'p' : 'li';
     return {
       title: tx(s.title),
+      defaultOpen: !/^(the\s+)?challenge$/i.test(s.title.en.trim()),
       body: `<${container}${paragraph ? ' class="challenge-paragraph"' : ''}${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.sections.${index}.items"` : ''}>${s.items.map(i => `<${item}>${tx(i)}</${item}>`).join('')}</${container}>`,
     };
   });

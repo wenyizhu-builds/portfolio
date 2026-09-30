@@ -109,7 +109,7 @@ export function nodePanel(n: SiteNode): string {
     return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
   }
 
-  const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, true));
+  const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, d.defaultOpen ?? true));
 
   // work done in this role: one flat list, each title with its practice underneath; closed until asked for
   const work = workOf(n.id);

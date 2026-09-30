@@ -174,12 +174,12 @@ export const nodes: SiteNode[] = [
       { metric: '+13%', en: '365-day ROI vs non-Brand creatives' },
       { metric: '~3.3x', en: 'LTV vs non-Brand creatives' },
     ],
-    media: [{ alt: { en: 'Creative examples' } }],
     related: ['ai-workbench'],
   },
   {
     id: 'xbox-launch',
     type: 'case',
+    period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
     parent: 'paid-social',
     headline: { num: '+338%', label: { en: 'CTR vs the earlier benchmark' } },
     label: { en: 'Xbox Launch Paid Campaign' },

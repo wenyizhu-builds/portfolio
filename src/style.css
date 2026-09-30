@@ -23,6 +23,8 @@
   /* Layout — main.ts reads these, so the map's free area always matches the CSS. */
   --top-h: 72px; /* header band */
   --bottom-h: 56px; /* legend band */
+  --side-max-h: 1080px; /* cap the complete desktop reading column */
+  --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
   --side-right: 20px; /* minimum gap to the window edge */
   --side-at: 75vw; /* the panel column is centred on this line (as in the reference), never closer to the edge than --side-right */
@@ -165,13 +167,13 @@ button { font: inherit; color: inherit; }
 .node.is-current .pulse { animation: none; fill: var(--ink); }
 
 /* reading column: media above the card, the pair centred vertically */
-.side { position: absolute; z-index: 4; top: var(--top-h); bottom: var(--bottom-h); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
+.side { position: absolute; z-index: 4; top: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); bottom: max(var(--bottom-h), calc((100dvh - var(--side-max-h)) / 2)); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
 .panel {
   /* The card never pops: main.ts sets its height to the content's height and CSS
      eases between heights, so opening a point or a section grows / shrinks it smoothly. */
   flex: 0 1 auto; min-height: 0; max-height: 100%;
   background: var(--panel); border: 1px solid var(--line-soft); border-radius: 10px;
-  overflow-y: auto; overscroll-behavior: contain; pointer-events: auto;
+  overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; pointer-events: auto;
   scrollbar-gutter: stable; /* keep line wrapping fixed throughout height transitions */
   transition: height var(--dur-card) var(--ease);
   /* scrollbar hidden until the card is scrolled; the thin track keeps the width steady */
@@ -365,7 +367,9 @@ button { font: inherit; color: inherit; }
 
 .p-org-role { white-space: nowrap; }
 
-.result-line.has-metric { display: inline-flex; align-items: baseline; column-gap: 6px; white-space: nowrap; }
+.result-line { white-space: normal; overflow-wrap: anywhere; }
+.result-line.has-metric { display: inline; }
+.result-line.has-metric > .result-num { margin-right: 6px; white-space: nowrap; }
 
 .p-case-id > .p-title, .m-card .p-case-id > h3 { font-size: var(--fs-case-title); font-weight: 400; line-height: 1.3; margin: 0 0 6px; }
 

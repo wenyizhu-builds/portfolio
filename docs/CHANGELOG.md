@@ -178,3 +178,11 @@
 - 2026-09-29：修复 Results 数字后说明文字不能编辑；共享 tx 文本与指标分别绑定稳定字段，覆盖所有共用案例，支持清空后继续编辑；浏览器原位输入和保存读回通过，保留 owner 改稿。
 
 - 2026-09-29：用户授权提交当前版本；新增生产文案快照，保留当前编辑稿、列表增删排序及荧光/蓝色/加粗格式。临时编辑器仍仅本地可用，原文与历史不进入 Git。同步案例标题、身份行间距、紧凑蓝边标签、Results 对齐项目符号及地图灰色悬停日期。
+
+- 2026-09-29：按用户要求移除 UA Creative Strategy 的媒体配置，不展示第三方授权广告素材或 Visuals 占位；该案例仅保留地图与文字。其他案例媒体配置不变。
+
+- 2026-09-29：桌面案例 The Challenge 默认折叠；右侧阅读列全局最高 1080px，并在顶部导航带下保留至少 32px 间距，长内容继续在卡片内部滚动。
+
+- 2026-09-29：Results 全局取消强制单行，长说明自然换行，卡片禁止横向滚动。Xbox 地图日期标记 Nov 2024（已确认上线月份，非完整制作周期）：KM 素材需求为 11/15 前交稿，卖点文案明确 2024/11/20 上线，首周数据至 11/27。来源：career/data-capture/KM raw/cases/xbox-launch-paid-campaign 下 art-requirements/01-requirements-overview 与 media-buy-plan/02-selling-points-copy、03-launch-data。
+
+- 2026-09-30：用户暂缓图片展示开发；两版 Xbox 图片移至 gitignored `.local-assets/xbox-launch/`。更新当前发布文案快照并同步网站全部现有代码修改。

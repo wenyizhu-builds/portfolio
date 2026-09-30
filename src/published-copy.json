@@ -10,11 +10,11 @@
       "blueRanges": [
         [
           140,
-          163
+          143
         ],
         [
-          166,
-          176
+          167,
+          173
         ]
       ],
       "boldRanges": []
@@ -22,11 +22,14 @@
     "nodes.ua-creative-strategy.results.0.metric": {
       "text": "400+",
       "ranges": [],
-      "blueRanges": []
+      "blueRanges": [],
+      "boldRanges": []
     },
     "nodes.ua-creative-strategy.results.2.metric": {
       "text": "+26%",
-      "ranges": []
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
     },
     "nodes.ua-creative-strategy.results.0.en": {
       "text": "Testable creator videos delivered",
@@ -34,13 +37,16 @@
       "blueRanges": []
     },
     "nodes.ua-creative-strategy.results.2.en": {
-      "text": "Projected ROI 365 vs non-Brand",
+      "text": "Projected 365-day ROI vs non-Brand",
       "ranges": [],
-      "blueRanges": []
+      "blueRanges": [],
+      "boldRanges": []
     },
     "nodes.ua-creative-strategy.results.3.metric": {
       "text": "~3.7x",
-      "ranges": []
+      "ranges": [],
+      "blueRanges": [],
+      "boldRanges": []
     },
     "site.intro.en": {
       "text": "I turn audience insight into creative that converts — and build AI tools to do it faster.\ntranslate performance data into creative insights that inform iterations and new concepts",
@@ -60,7 +66,8 @@
     "nodes.ua-creative-strategy.results.1.metric": {
       "text": "0% → 15%",
       "ranges": [],
-      "blueRanges": []
+      "blueRanges": [],
+      "boldRanges": []
     },
     "nodes.ua-creative-strategy.sections.0.items.0.en": {
       "text": "Previous tests showed that creator videos could be a competitive acquisition format, so the team wanted to establish a Brand-to-UA pipeline supplying creator videos for user acquisition. \nMy challenge was to build this pipeline from scratch on the Brand side—owning the testing roadmap and building repeatable systems for briefing, production and iteration.",
@@ -113,7 +120,27 @@
     "nodes.ua-creative-strategy.results.added-31b71841-9134-46d2-bd4a-462fbed8005d.metric": {
       "text": "40%",
       "ranges": [],
-      "blueRanges": []
+      "blueRanges": [],
+      "boldRanges": []
+    },
+    "nodes.xbox-launch.summary.en": {
+      "text": "Structured a creative test for Genshin Impact's Xbox launch paid campaign to move console players from interest to landing-page action. Delivered 120M+ impressions, 52M+ video views, a 338% CTR lift versus the earlier benchmark",
+      "ranges": [],
+      "blueRanges": [
+        [
+          146,
+          151
+        ],
+        [
+          164,
+          169
+        ],
+        [
+          185,
+          189
+        ]
+      ],
+      "boldRanges": []
     }
   },
   "lists": {
