@@ -5,7 +5,7 @@
 
 - 2026-09-30 草稿（local/flagship-restructure，待批准）：Growth Marketing 下直接挂 3 个重点案例（UA Creative Strategy、ZZZ JP Account Growth、TikTok GIP，顺序见 `featuredOrder`）+「More cases」组（其余 6 个）。重点案例在地图上是实心黑色方块（选中时为荧光绿），尺寸与其他点相同；悬停只放大，不变色（含 ✳）；INDEX 与手机版同步为「Flagship cases / More cases」，列表不显示数量。打开一个末级作品时，兄弟节点保留但变灰。
 - 案例卡片顺序：How it worked（重点案例的系统图，卡片内可点击放大）→ Results（默认展开）→ The Challenge / What I did / The Team（默认收起）。
-- 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
+- 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；手机版每张卡片只放一张图：有系统图的案例只显示系统图，不显示浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
 
 - v61：卡片滚动条固定占位（scrollbar-gutter: stable），高度测量计入边框，避免高度过渡中出现/消失滚动条引发二次换行；保留原高度缓动。
 

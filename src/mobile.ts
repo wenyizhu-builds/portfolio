@@ -19,7 +19,8 @@ function card(n: SiteNode): string {
   const more = lists.filter((d) => d.kind !== 'diagram').map((d) => d.defaultOpen === false
     ? `<details class="m-more"><summary>${d.title}</summary>${d.body}</details>`
     : `<h4>${d.title}</h4>${d.body}`);
-  const media = (n.media || []).map(m => m.src
+  // one visual per phone card: a case with a diagram shows only the diagram
+  const media = (n.diagram ? [] : n.media || []).map(m => m.src
     ? `<button class="m-visual" data-visual-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/></button>`
     : `<div class="m-media">${L('visualsPrep')}</div>`).join('');
   return `<article class="m-card ${n.status ? 'is-prep' : ''}" id="m-${n.id}">

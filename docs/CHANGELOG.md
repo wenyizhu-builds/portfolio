@@ -209,3 +209,7 @@
 - Diagram cut to short phrases with CPM / CPA / CPI; decision reads "Stop the program; shift budget to creator ads for UA". UA diagram subtitle "Repeated every test cycle" → "Refined every test cycle".
 - Challenge cut to one paragraph. Bullets and fourth result use CPM / CPA / CPI and the stop decision.
 - Added L30 and a `copy-shorthand` check.
+
+## 2026-10-01 — Phone: one visual per card
+
+- On the phone, a case with a diagram shows only the diagram (ZZZ no longer shows the Gentle House image there). Cases without a diagram keep their image. Desktop unchanged.
