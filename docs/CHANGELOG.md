@@ -203,3 +203,9 @@
 
 - Replaced the round-results diagram with the testing framework (set goals and benchmarks → design the round → run and steer → evaluate the full funnel) plus how the roadmap evolved.
 - Summary no longer states a conclusion. Merged the last two "What I did" bullets into one. Team line now shows the data operations specialist is on our side and the liaisons are from TikTok.
+
+## 2026-10-01 — TikTok case: shorthand and shorter copy
+
+- Diagram cut to short phrases with CPM / CPA / CPI; decision reads "Stop the program; shift budget to creator ads for UA". UA diagram subtitle "Repeated every test cycle" → "Refined every test cycle".
+- Challenge cut to one paragraph. Bullets and fourth result use CPM / CPA / CPI and the stop decision.
+- Added L30 and a `copy-shorthand` check.

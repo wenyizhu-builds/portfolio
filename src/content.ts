@@ -260,17 +260,16 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact’s UA relied mainly on polished brand creatives. TikTok’s UGC incentive program pays creators to post videos about a game, which raised two questions: could it boost installs efficiently as a UA channel, and could its videos work as UA creatives?" },
-          { en: "The program offered a large creator pool and huge reach, but it was unproven whether that would turn into efficient installs or content good enough for our ads. I needed to find out through structured tests and make a clear recommendation." },
+          { en: "Genshin Impact’s UA relied mainly on brand creatives. TikTok’s UGC incentive program opened up a new possibility: could it boost installs efficiently as a UA channel, and could its videos work as UA creatives? I needed to design a testing framework to find out." },
         ],
       },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Designed the test framework: Built a three-round roadmap, setting each round’s payout model (per 1,000 views or per install), markets, themes, budgets and success metrics against our UA benchmarks." },
+          { en: "Designed the test framework: Built a three-round roadmap, setting each round’s payout model (CPM or CPA), markets, themes, budgets and success metrics against our UA benchmarks." },
           { en: "Led campaign execution: Owned all three rounds end to end, from task setup and creator briefs to progress tracking, submission reviews and recaps." },
           { en: "Raised content quality: Rewrote task pages with clearer requirements and official reference videos, and flagged off-brief videos to free up the prize pool for better ones." },
-          { en: "Evaluated performance and drove the decision: Measured reach, cost per install, user quality and content relevance against our UA benchmarks, then recommended moving budget to curated creator ads for UA." },
+          { en: "Evaluated performance and drove the decision: Measured reach, CPI, user quality and content relevance against our UA benchmarks, then recommended stopping the program and shifting budget to creator ads for UA." },
         ],
       },
     ],
@@ -278,11 +277,11 @@ export const nodes: SiteNode[] = [
       { metric: "80M+", en: "views across three test rounds" },
       { metric: "500K+", en: "UGC submissions" },
       { metric: "~60%", en: "lower CPM in Round 3 than Round 1" },
-      { metric: "", en: "Budget moved to curated creator ads for UA" },
+      { metric: "", en: "Program stopped; budget shifted to creator ads for UA" },
     ],
     diagram: {
       src: 'media/gip-testing/gip-rounds-diagram.png',
-      alt: { en: 'How I ran the tests: set goals and benchmarks, design each round, run and steer, evaluate the full funnel; then how the roadmap evolved over three rounds' },
+      alt: { en: 'How I ran the tests: set goals, design, run, evaluate; then the roadmap across three rounds (CPM, CPA, CPM) and the decision to stop the program' },
     },
   },
   {

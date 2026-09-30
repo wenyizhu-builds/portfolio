@@ -80,6 +80,13 @@ else for (const m of homeBlock[1].matchAll(/^\s*'?([\w-]+)'?\s*:/gm)) if (!byId.
 const ids = nodes.map((n) => n.id);
 ids.filter((id, i) => ids.indexOf(id) !== i).forEach((id) => fail('content', `duplicate id "${id}"`));
 
+/* L30: professional shorthand — CPM / CPA / CPI, and no "repeated every/each" for a process. */
+const copyText = readFileSync(join(src, 'content.ts'), 'utf8') + readFileSync(join(src, 'published-copy.json'), 'utf8');
+for (const re of [/cost per install/i, /per 1,000 views/i, /repeated (each|every)/i]) {
+  const m = copyText.match(re);
+  if (m) fail('copy-shorthand', `found "${m[0]}" — use CPM / CPA / CPI, or "refined" instead of "repeated"`);
+}
+
 /* 5. Go-live gate: nothing unfinished reaches the public site. */
 if (launch) {
   if (!site.launched) fail('launch', 'site.launched is false (PROTOTYPE label still shown)');
