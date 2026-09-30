@@ -3,6 +3,10 @@
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
 > 最后更新：2026-09-29 · 对应版本 v61（本地待视觉验收）
 
+- 2026-09-30 草稿（local/flagship-restructure，待批准）：Growth Marketing 下直接挂 3 个重点案例（UA Creative Strategy、ZZZ JP Account Growth、TikTok GIP，顺序见 `featuredOrder`）+「More cases」组（其余 6 个）。重点案例在地图上是实心钴蓝方块，尺寸与其他点相同；INDEX 与手机版同步为「Flagship cases / More cases」，列表不显示数量。打开一个末级作品时，兄弟节点保留但变灰。
+- 案例卡片顺序：How it worked（重点案例的系统图，卡片内可点击放大）→ Results（默认展开）→ The Challenge / What I did / The Team（默认收起）。
+- 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
+
 - v61：卡片滚动条固定占位（scrollbar-gutter: stable），高度测量计入边框，避免高度过渡中出现/消失滚动条引发二次换行；保留原高度缓动。
 
 - v60：有 Results 的详情不再渲染顶部 headline，保留项目简介；数字集中于 Results，UA 的 15% 高亮移入对应结果并保留 UA spend 口径。无 Results 的 AI 项目及首页概览不变。headline 字段保留供地图使用。

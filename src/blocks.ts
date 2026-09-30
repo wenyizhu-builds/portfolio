@@ -91,8 +91,9 @@ export function intro(n: SiteNode, title: string): string {
 }
 
 /** The expandable detail lists of a case: its sections, then results. */
-export function detailLists(n: SiteNode): { title: string; body: string; defaultOpen?: boolean }[] {
-  const out: { title: string; body: string; defaultOpen?: boolean }[] = (n.sections || []).map((s, index) => {
+export type DetailList = { title: string; body: string; defaultOpen?: boolean; kind?: 'diagram' };
+export function detailLists(n: SiteNode): DetailList[] {
+  const out: DetailList[] = (n.sections || []).map((s, index) => {
     const paragraph = /^(the\s+)?challenge$/i.test(s.title.en.trim()) && s.items.length === 1;
     const container = paragraph ? 'div' : 'ul';
     const item = paragraph ? 'p' : 'li';
@@ -104,11 +105,12 @@ export function detailLists(n: SiteNode): { title: string; body: string; default
   });
   // Case order (flagship review): How it worked (diagram) and Results first, open; then the story, folded.
   out.forEach((d) => (d.defaultOpen = false));
-  const head: { title: string; body: string; defaultOpen?: boolean }[] = [];
+  const head: DetailList[] = [];
   if (n.diagram) head.push({
     title: tx({ en: 'How it worked', zh: '运作方式' }),
     body: `<button class="p-visual" data-visual-src="${esc(n.diagram.src)}" aria-label="${esc(t(n.diagram.alt))}"><img src="${esc(n.diagram.src)}" alt="${esc(t(n.diagram.alt))}" loading="lazy"/></button>`,
     defaultOpen: true,
+    kind: 'diagram',
   });
   if (n.results && (n.results.length || import.meta.env.DEV))
     head.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });

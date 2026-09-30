@@ -1,4 +1,4 @@
-import { byId, childrenOf, kindLabel, kindOf, site, type SiteNode } from './content';
+import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
 import { esc, reducedMotion, setLang, state, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
 import { L, contactRows, detailLists, intro, resumeLists, resumePdf, summary, tx, wireCopy } from './blocks';
@@ -13,7 +13,10 @@ import { L, contactRows, detailLists, intro, resumeLists, resumePdf, summary, tx
 const scrollBehavior = (): ScrollBehavior => (reducedMotion.matches ? 'auto' : 'smooth');
 
 function card(n: SiteNode): string {
-  const more = detailLists(n).map((d) => d.defaultOpen === false
+  const lists = detailLists(n);
+  // a case's diagram stays visible on the card, like its image; everything else sits under "More"
+  const diagram = lists.filter((d) => d.kind === 'diagram').map((d) => `<h4>${d.title}</h4>${d.body}`).join('');
+  const more = lists.filter((d) => d.kind !== 'diagram').map((d) => d.defaultOpen === false
     ? `<details class="m-more"><summary>${d.title}</summary>${d.body}</details>`
     : `<h4>${d.title}</h4>${d.body}`);
   const media = (n.media || []).map(m => m.src
@@ -22,6 +25,7 @@ function card(n: SiteNode): string {
   return `<article class="m-card ${n.status ? 'is-prep' : ''}" id="m-${n.id}">
     <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}
+    ${diagram}
     ${media}
     ${more.length ? `<details class="m-more"><summary><span class="o">${L('more')}</span><span class="c">${L('less')}</span></summary>${more.join('')}</details>` : ''}
   </article>`;
@@ -33,7 +37,14 @@ function section(branchId: string): string {
   const hasSubs = kids.some((k) => k.type === 'sub');
   let inner = '';
   if (hasSubs) {
-    inner = kids
+    // flagship cases first (as on the map and in the INDEX), then each group with its cases
+    const flags = featuredOrder.map((id) => byId.get(id)!).filter((k) => k.parent === branchId);
+    const flagHtml = flags.length ? `<div class="m-sub" id="m-flagships">
+          <h3 class="m-sub-h">${icon('case', 10)}<span>${tx({ en: 'Flagship cases', zh: '重点案例' })}</span></h3>
+          ${flags.map(card).join('')}
+        </div>` : '';
+    inner = flagHtml + kids
+      .filter((k) => k.type === 'sub')
       .map(
         (s) => `<div class="m-sub" id="m-${s.id}">
           <h3 class="m-sub-h">${icon('sub', 10)}<span>${tx(s.label)}</span></h3>
@@ -52,8 +63,9 @@ function section(branchId: string): string {
 }
 
 function menu(): string {
-  const growth = childrenOf('growth')
-    .map((s) => `<a href="#/${s.id}" class="m-menu-sub">${esc(t(s.label))}</a>`)
+  // the menu lists what the Growth section shows: the three flagship cases, then the other groups
+  const growth = [...featuredOrder, ...childrenOf('growth').filter((s) => s.type === 'sub').map((s) => s.id)]
+    .map((id) => `<a href="#/${id}" class="m-menu-sub">${esc(t(byId.get(id)!.label))}</a>`)
     .join('');
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">
     <div class="m-menu-quick">
