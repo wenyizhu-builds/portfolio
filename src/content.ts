@@ -58,6 +58,7 @@ export interface SiteNode {
   media?: Media[];
   status?: Status;
   featured?: boolean;
+  diagram?: { src: string; alt: T }; // shown in the card as "How it worked"; click to enlarge
   related?: string[]; // dotted connections
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
@@ -155,11 +156,10 @@ export const nodes: SiteNode[] = [
       { metric: '+13%', en: '365-day ROI vs non-Brand creatives' },
       { metric: '~3.3x', en: 'LTV vs non-Brand creatives' },
     ],
-    media: [{
+    diagram: {
       src: 'media/ua-creative-strategy/ua-system-diagram.png',
-      floating: true,
       alt: { en: 'How the system worked: the creative testing loop and the AI dashboard steps' },
-    }],
+    },
     related: ['ai-workbench'],
   },
   {

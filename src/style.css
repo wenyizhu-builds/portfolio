@@ -392,3 +392,7 @@ dialog.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; bo
 dialog.lightbox::backdrop { background: var(--ink); }
 .m-visual { display: block; width: 100%; padding: 0; border: 0; background: none; margin: 20px 0; cursor: zoom-in; }
 .m-visual img { display: block; width: 100%; height: auto; }
+/* "How it worked": a case's diagram inside the card; click opens the lightbox. */
+.p-visual { display: block; width: 100%; padding: 0; border: 1px solid var(--line-soft); border-radius: 6px; background: var(--panel); overflow: hidden; cursor: zoom-in; }
+.p-visual img { display: block; width: 100%; height: auto; }
+.p-visual:hover { border-color: var(--line); }
