@@ -325,7 +325,7 @@ export const nodes: SiteNode[] = [
     }],
     diagram: {
       src: 'media/zzz-jp-accounts/zzz-system-diagram.png',
-      alt: { en: 'How the channels grew: map the market, position channels, brief and produce, review, adapt winners, hand over' },
+      alt: { en: 'How the channels launched and grew: map the market, position channels, brief and produce, review, adapt winners, hand over' },
     },
   },
   {
