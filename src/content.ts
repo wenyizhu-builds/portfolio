@@ -124,7 +124,7 @@ export const nodes: SiteNode[] = [
     period: 'Jun 2025 – Jun 2026',
     parent: 'growth',
     featured: true,
-    headline: { num: '1% → 15%', highlight: '15%', label: { en: 'Brand creative share of UA spend' } },
+    headline: { num: '~3.7×', label: { en: 'projected LTV vs non-Brand creatives' } },
     label: { en: 'UA Creative Strategy' },
     kicker: { en: 'Genshin Impact · Google Ads' },
     markets: ['JP', 'NA', 'EU'],
@@ -158,7 +158,7 @@ export const nodes: SiteNode[] = [
     ],
     diagram: {
       src: 'media/ua-creative-strategy/ua-system-diagram.png',
-      alt: { en: 'How the system worked: the creative testing loop and the AI dashboard steps' },
+      alt: { en: 'How the pipeline worked: one creative testing loop per game version, supported by the AI Marketing Dashboard' },
     },
     related: ['ai-workbench'],
   },
