@@ -281,7 +281,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'zzz-jp-accounts',
-    team: { en: "Me (social strategy), 2 Japanese content reviewers and 3 agency partners" },
+    team: { en: "Me (social strategy), 2 Japanese-language content reviewers and 3 agency partners" },
     type: 'case',
     parent: 'growth',
     featured: true,
