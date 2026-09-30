@@ -284,7 +284,7 @@ export const nodes: SiteNode[] = [
     type: 'case',
     parent: 'growth',
     featured: true,
-    headline: { num: '80M+', label: { en: 'views across 9 accounts, CPM −50%+ without paid boosting' } },
+    headline: { num: '80M+', label: { en: 'organic views across 9 channels' } },
     label: { en: 'Zenless Zone Zero: JP Account Growth' },
     kicker: { en: 'YouTube, X' },
     context: { en: 'Zenless Zone Zero' },
@@ -322,6 +322,10 @@ export const nodes: SiteNode[] = [
       floating: true,
       alt: { en: 'Zenless Zone Zero — Gentle House character artwork' },
     }],
+    diagram: {
+      src: 'media/zzz-jp-accounts/zzz-system-diagram.png',
+      alt: { en: 'How the channels grew: map the market, position channels, brief and produce, review, adapt winners, hand over' },
+    },
   },
   {
     id: 'genshin-en-accounts',
