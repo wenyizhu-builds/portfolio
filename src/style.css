@@ -5,6 +5,7 @@
   --on-ink: #f6f6f3; /* text on dark fills */
   --cobalt: #2c42f6; /* Winnie Lab electric blue: the name ✳ and links */
   --accent: #d5fd52; /* Winnie Lab acid lime: the current point */
+  --note: #f06a35; /* red-orange: hand-written notes on the map only */
 
   /* Derived colours — never hard-code these; change the base token above instead. */
   --ink-2: color-mix(in srgb, var(--ink) 82%, var(--panel)); /* secondary body text */
@@ -60,6 +61,7 @@
      numbers are the @media lines below; main.ts reads --mq-phone. `npm run check`
      fails if they drift apart. */
   --mq-phone: (max-width: 768px);
+  --hand: 'Nanum Pen Script', cursive; /* hand-written map notes; loaded from Google Fonts by vite.config.ts */
   --sans: 'Schibsted Grotesk', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 'PingFang SC', 'Noto Sans SC', sans-serif;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
@@ -393,3 +395,10 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .p-visual { display: block; width: 100%; padding: 0; border: 1px solid var(--line-soft); border-radius: 6px; background: var(--panel); overflow: hidden; cursor: zoom-in; }
 .p-visual img { display: block; width: 100%; height: auto; }
 .p-visual:hover { border-color: var(--line); }
+
+/* Hand-written notes on the map (v55): red-orange pen, one weight, strokes stay 1.5px at any zoom. */
+.map-notes { pointer-events: none; }
+.map-notes text { font-family: var(--hand); fill: var(--note); }
+.map-notes path, .map-notes rect { fill: none; stroke: var(--note); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.map-notes > g { transition: opacity var(--fade-node); }
+.map-notes > g.is-hidden { opacity: 0; }

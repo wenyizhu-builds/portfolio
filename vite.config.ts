@@ -19,6 +19,9 @@ function token(name: string): string {
   return m[1].trim();
 }
 
+/** The first family of a font token, as a Google Fonts family parameter. */
+const family = (name: string) => token(name).split(',')[0].replace(/['"]/g, '').trim().replace(/ /g, '+');
+
 function headFromContent(): Plugin {
   return {
     name: 'head-from-content',
@@ -38,7 +41,7 @@ function headFromContent(): Plugin {
         // the web font is the first family in --sans: change the font in one place (style.css)
         `<link rel="preconnect" href="https://fonts.googleapis.com" />`,
         `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
-        `<link href="https://fonts.googleapis.com/css2?family=${token('sans').split(',')[0].replace(/['"]/g, '').trim().replace(/ /g, '+')}:wght@400;500&display=swap" rel="stylesheet" />`,
+        `<link href="https://fonts.googleapis.com/css2?family=${family('sans')}:wght@400;500&family=${family('hand')}&display=swap" rel="stylesheet" />`,
       ].join('\n    ');
       const noscript = `<noscript><p>${escAttr(desc)} <a href="${escAttr(site.linkedin)}">LinkedIn</a></p></noscript>`;
       return html

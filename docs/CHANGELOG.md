@@ -230,3 +230,10 @@
 ## 2026-10-01 — v54: More cases spread evenly
 
 - Opening "More cases" (or one of its cases) now lays the six cases out as an even fan on the far side from the ✳, alternating near and far. Layout check: 5 → 3 across 36 views (remaining: HoYoverse and AI Workbench, both pre-existing); 0 in the More cases views.
+
+## 2026-10-01 — v55: hand-written notes on the map
+
+- Red-orange (`--note`, 7th base colour) notes in Nanum Pen Script (`--hand`, loaded with the main font from Google Fonts), with clean 1.5px arrows.
+- Home map: "~3.7× projected LTV vs benchmark" (Creator Ad Pipeline), "0 → 80M+ organic views" (ZZZ), "my framework for testing new channels" (TikTok), "tools I built with AI" (AI Projects). Placed by hand in `NOTES` (map.ts); home only.
+- More cases: a rounded frame labelled "integrated social campaigns" around Influencer Activation, Giveaway & Cross-Platform Influencer and Interactive Filter, which now stand in a column; the frame follows them when dragged. "600M+ views" beside Interactive Filter.
+- Text in content.ts (`note`, `clusters`), with Chinese versions. Phone unchanged (no map).

@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-01 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-01 · v55 · 分支 `flagship-restructure`（未合并 main）
 
 ## 2026-09-30 当前状态
 
@@ -12,6 +12,9 @@
   - TikTok UGC Incentive Program · Dec 2024 – Nov 2025 · 图为测试框架；summary 不下结论（公开页面，不评价平台产品）；不提非目标国流量。
 - 每个旗舰在「How it worked」里有一张可点开的流程图（`public/media/<case>/`）。
 - 编辑器存档（Mac 本地）与 `src/published-copy.json` 已对齐；GIP 旧列表项已清除。
+
+- 地图手写批注（v55）已上线：首页四句、More cases 一个框 + 600M+。规则见 SPEC。
+- Xbox 文案已按新规则改完。More cases 打开时均匀展开（v54）。
 
 ## 下一步
 

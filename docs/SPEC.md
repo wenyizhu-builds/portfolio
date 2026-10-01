@@ -5,6 +5,7 @@
 
 - 2026-09-30 草稿（local/flagship-restructure，待批准）：Growth Marketing 下直接挂 3 个重点案例（UA Creative Strategy、ZZZ JP Account Growth、TikTok GIP，顺序见 `featuredOrder`）+「More cases」组（其余 6 个）。重点案例在地图上是实心黑色方块（选中时为荧光绿），尺寸与其他点相同；悬停只放大，不变色（含 ✳）；INDEX 与手机版同步为「Flagship cases / More cases」，列表不显示数量。打开一个末级作品时，兄弟节点保留但变灰。
 - 案例卡片顺序：How it worked（重点案例的系统图，卡片内可点击放大）→ Results（默认展开）→ The Challenge / What I did / The Team（默认收起）。
+- **地图手写批注（v55）**：红橙色（`--note`）、手写字体 Nanum Pen Script（`--hand`）、1.5px 干净箭头。只批注值得看的地方，不重复标题。首页：三个重点案例 + AI 各一句（位置在 `map.ts` 的 `NOTES` 里手工摆放，只在首页显示）。More cases：一个圆角矩形框住「integrated social campaigns」三个案例（`cluster`），框内案例排成一列，拖动时框跟着变；Interactive Filter 旁写「600M+ views」（只在 More cases 打开时显示，位置自动放在外侧）。打开某个案例时不显示它自己的批注。手机版不显示（手机没有地图）。文字在 `content.ts` 的 `note` / `clusters`。
 - 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；手机版每张卡片只放一张图：有系统图的案例只显示系统图，不显示浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
 
 - v61：卡片滚动条固定占位（scrollbar-gutter: stable），高度测量计入边框，避免高度过渡中出现/消失滚动条引发二次换行；保留原高度缓动。
@@ -46,7 +47,7 @@
 |---|---|
 | 首页每个点的位置 | `src/map.ts` 顶部 `HOME_LAYOUT`（`check` 会检查里面的 id 都存在） |
 | 所有文字、案例、链接、中英文、分享描述 | `src/content.ts`（界面文字在 `ui`；`site.launched` / `site.metaDescription`） |
-| 颜色 | `src/style.css` 顶部 `:root` 的 6 个基础色（`--bg --panel --ink --on-ink --cobalt --accent`），其余由 `color-mix()` 派生 |
+| 颜色 | `src/style.css` 顶部 `:root` 的 7 个基础色（`--bg --panel --ink --on-ink --cobalt --accent --note`；`--note` 红橙只用于地图手写批注），其余由 `color-mix()` 派生 |
 | 版面尺寸、时长、手机断点 | `src/style.css` 顶部 `:root`，`main.ts` / `map.ts` 在运行时读取 |
 | 镜头缩放和边距 | `src/map.ts` 顶部 `CAMERA` |
 | 地图布局参数 | `src/map.ts` 顶部 `LAYOUT` / `SEED` / `AREA_DIST` / `WEIGHT` / `WEIGHT_BY_KIND` / `FOLDED_AT_HOME` |

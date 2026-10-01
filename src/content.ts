@@ -62,7 +62,14 @@ export interface SiteNode {
   related?: string[]; // dotted connections
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
+  note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
+  cluster?: keyof typeof clusters; // cases drawn inside one red-orange frame on the map
 }
+
+/* Groups of cases framed together on the map, with their hand-written label. */
+export const clusters = {
+  'integrated-social': { en: 'integrated\nsocial campaigns', zh: '整合社媒营销' } as T,
+};
 
 const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 
@@ -119,6 +126,7 @@ export const nodes: SiteNode[] = [
 
   {
     id: 'ua-creative-strategy',
+    note: { en: '~3.7× projected LTV\nvs benchmark', zh: '预估 LTV\n约为基准 3.7 倍' },
     team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
     type: 'case',
     period: 'Jun 2025 – Jun 2026',
@@ -205,6 +213,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'influencer-activation',
+    cluster: 'integrated-social',
     team: { en: "Influencer Strategy & Execution (my role), Execution Support x2, Agency Partners x2" },
     type: 'case',
     parent: 'more-growth',
@@ -242,6 +251,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
+    note: { en: 'my framework\nfor testing\nnew channels', zh: '我的\n新渠道测试框架' },
     team: { en: "Me (testing strategy and project lead) and 1 data operations specialist, working with 2 platform liaisons from TikTok" },
     type: 'case',
     period: 'Dec 2024 – Nov 2025',
@@ -286,6 +296,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'zzz-jp-accounts',
+    note: { en: '0 → 80M+\norganic views', zh: '0 → 8000 万+\n自然播放' },
     team: { en: "Me (social strategy), 2 Japanese-language content reviewers and 3 agency partners" },
     type: 'case',
     parent: 'growth',
@@ -370,6 +381,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'giveaway-campaign',
+    cluster: 'integrated-social',
     team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
     type: 'case',
     parent: 'more-growth',
@@ -398,6 +410,8 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
+    cluster: 'integrated-social',
+    note: { en: '600M+ views', zh: '6 亿+ 播放' },
     team: { en: "Filter Creative Development & Influencer Activation Support (my role), Campaign Lead x1, TikTok/Snapchat Platform Liaisons x2, Agency Partners x3" },
     type: 'case',
     parent: 'more-growth',
@@ -458,6 +472,7 @@ export const nodes: SiteNode[] = [
   /* ---------------- AI ---------------- */
   {
     id: 'ai',
+    note: { en: 'tools I built\nwith AI', zh: '我用 AI\n搭建的工具' },
     type: 'branch',
     parent: 'root',
     label: { en: 'AI Projects', zh: 'AI 项目' },

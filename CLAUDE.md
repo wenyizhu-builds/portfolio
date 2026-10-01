@@ -15,7 +15,7 @@
 - **不要新建 handoff / notes / summary 类文件。** 旧文件只放进 `docs/archive/`，文件名带日期。
 
 ## 代码：一处定义，全站跟随
-- **颜色**：只在 `src/style.css` 的 `:root` 定义 6 个基础色。其余用 `var()` / `color-mix()` 派生。CSS 规则和 TS 里不写任何色值。（L2）
+- **颜色**：只在 `src/style.css` 的 `:root` 定义 7 个基础色（第 7 个 `--note` 红橙色只用于地图手写批注）。其余用 `var()` / `color-mix()` 派生。CSS 规则和 TS 里不写任何色值。（L2）
 - **尺寸、时长、断点**：
   - 尺寸和时长只在 `:root` 定义，TS 用 `cssPx()` / `cssVar()` 读，不复制数字。（L1, L7）
   - 每个断点只有一个 `@media` 块；手机断点等于 `--mq-phone`。（L9）
