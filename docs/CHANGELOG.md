@@ -217,3 +217,7 @@
 ## 2026-10-01 — TikTok diagram: roadmap removed
 
 - Removed the round-by-round roadmap strip from the TikTok diagram at the owner's request (too detailed for a public page). The diagram now shows only the testing framework.
+
+## 2026-10-01 — TikTok diagram headings
+
+- "Steer creators live" → "Manage the live campaign"; "Judge the full funnel" → "Full-funnel analysis". Full wording review planned once all cases are drafted.
