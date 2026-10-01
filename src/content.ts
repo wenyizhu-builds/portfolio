@@ -164,7 +164,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'xbox-launch',
-    team: { en: "Creative Strategy (my role), Media Strategy x1, Creative Producers x2, Agency Partner x1" },
+    team: { en: "Me (creative strategy), 1 media strategist, 2 creative producers and 1 agency partner" },
     type: 'case',
     period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
     parent: 'more-growth',

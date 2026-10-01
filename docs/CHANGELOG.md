@@ -221,3 +221,8 @@
 ## 2026-10-01 — TikTok diagram headings
 
 - "Steer creators live" → "Manage the live campaign"; "Judge the full funnel" → "Full-funnel analysis". Full wording review planned once all cases are drafted.
+
+## 2026-10-01 — Xbox case brought up to the new rules
+
+- First-person summary with blue numbers; one-paragraph challenge; three blue-labelled "What I did" bullets (lime highlights on bullets removed); team line in the "Me (…)" format; US / French / German wording consistent with the markets.
+- Merged owner edits from the editor: TikTok "Raised content quality" bullet; ZZZ title "Zenless Zone Zero: Social Launch in Japan".
