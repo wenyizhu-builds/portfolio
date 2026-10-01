@@ -281,7 +281,7 @@ export const nodes: SiteNode[] = [
     ],
     diagram: {
       src: 'media/gip-testing/gip-rounds-diagram.png',
-      alt: { en: 'How I ran the tests: set goals, design, run, evaluate; then the roadmap across three rounds (CPM, CPA, CPM) and the decision to stop the program' },
+      alt: { en: 'How I ran the tests: set goals, design the round, run it, evaluate the full funnel; findings shape the next round' },
     },
   },
   {

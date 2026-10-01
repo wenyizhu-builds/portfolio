@@ -213,3 +213,7 @@
 ## 2026-10-01 — Phone: one visual per card
 
 - On the phone, a case with a diagram shows only the diagram (ZZZ no longer shows the Gentle House image there). Cases without a diagram keep their image. Desktop unchanged.
+
+## 2026-10-01 — TikTok diagram: roadmap removed
+
+- Removed the round-by-round roadmap strip from the TikTok diagram at the owner's request (too detailed for a public page). The diagram now shows only the testing framework.
