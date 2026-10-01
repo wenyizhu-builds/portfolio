@@ -226,3 +226,7 @@
 
 - First-person summary with blue numbers; one-paragraph challenge; three blue-labelled "What I did" bullets (lime highlights on bullets removed); team line in the "Me (…)" format; US / French / German wording consistent with the markets.
 - Merged owner edits from the editor: TikTok "Raised content quality" bullet; ZZZ title "Zenless Zone Zero: Social Launch in Japan".
+
+## 2026-10-01 — v54: More cases spread evenly
+
+- Opening "More cases" (or one of its cases) now lays the six cases out as an even fan on the far side from the ✳, alternating near and far. Layout check: 5 → 3 across 36 views (remaining: HoYoverse and AI Workbench, both pre-existing); 0 in the More cases views.

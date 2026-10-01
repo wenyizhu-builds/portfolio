@@ -91,6 +91,7 @@ const LAYOUT = {
   crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
   moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
   siblingRing: 110, // an end point's siblings sit about this far round their parent
+  groupRing: 150, groupStagger: 70, groupSpread: 0.62, groupMin: 4, // an opened group of groupMin+ ends: even fan, alternate ends set further out (v54)
   relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
   chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
   velocityDecay: 0.5, alphaDecay: 0.05, alphaStart: 0.7, dragAlpha: 0.3, dragSlop: 4,
@@ -122,6 +123,17 @@ function leafCount(id: string): number {
 }
 
 /** Link parent used for layout: roles form a chain (a timeline) instead of a star. */
+/** A group whose ends are laid out as an even fan when it is opened (v54). */
+const isGroup = (id: string) => {
+  const kids = childrenOf(id);
+  return kids.length >= LAYOUT.groupMin && kids.every((c) => !childrenOf(c.id).length && c.type !== 'role' && c.type !== 'school');
+};
+const isGroupEnd = (parent: string, id: string) => isGroup(parent) && byId.get(id)?.parent === parent;
+/** Alternate ends of a group sit further out, so neighbouring labels never meet. */
+function groupRadius(parent: string, id: string): number {
+  const i = childrenOf(parent).findIndex((c) => c.id === id);
+  return LAYOUT.groupRing + (i % 2 ? LAYOUT.groupStagger : 0);
+}
 function layoutParent(n: SiteNode): string | undefined {
   if (n.type === 'role') {
     const i = rolesOrder.indexOf(n.id);
@@ -372,12 +384,14 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       // A selection's connections sit on its open side — away from the chain that leads
       // back to the ✳ — fanned out, so their dotted lines never have to cross the chain.
       if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path decides
-      fanOut(focus, relatedOf(focus), LAYOUT.relatedLink, LAYOUT.relatedSpread, alpha, movable);
+      fanOut(focus, relatedOf(focus), () => LAYOUT.relatedLink, LAYOUT.relatedSpread, alpha, movable);
       // an end point: it and its siblings fan out on the parent's open side too (v53), so the
       // line back to the ✳ never runs through one of them
+      // an opened group (e.g. More cases): its ends fan out evenly, alternately near and far
+      if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), LAYOUT.groupSpread, alpha, movable);
       const a = anchorId();
       if (a !== focus && a !== 'experience')
-        fanOut(a, childrenOf(a).map((c) => c.id), LAYOUT.siblingRing, LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
+        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
     })
     .force('path', (alpha: number) => {
       // The career path zig-zags away from Experience instead of forming a straight line:
@@ -407,7 +421,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   /** Pull `ids` onto an arc round `centerId`, on the side facing away from the chain back to
       the ✳, in their current order (so points don't swap), travelling round the centre. */
-  function fanOut(centerId: string, ids: string[], radius: number, spread: number, alpha: number, ok: (n: SimNode) => boolean) {
+  function fanOut(centerId: string, ids: string[], radius: (id: string) => number, spread: number, alpha: number, ok: (n: SimNode) => boolean) {
     const f = simNodes.get(centerId);
     if (!f) return;
     const back = ['root', ...ancestors(centerId)].filter((id) => id !== centerId).map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n);
@@ -422,8 +436,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
       const turn = want - at(n); // never passes behind the centre (the chain)
       const k = LAYOUT.relatedPull * alpha;
-      n.vx! += ((-ry / r) * turn * r + (rx / r) * (radius - r)) * k;
-      n.vy! += ((rx / r) * turn * r + (ry / r) * (radius - r)) * k;
+      const R = radius(n.id);
+      n.vx! += ((-ry / r) * turn * r + (rx / r) * (R - r)) * k;
+      n.vy! += ((rx / r) * turn * r + (ry / r) * (R - r)) * k;
     });
   }
 
@@ -658,6 +673,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         const jitter = LAYOUT.linkJitter[0] + hash(n.id) * LAYOUT.linkJitter[1]; // some children sit close, some far
         const dist = n.type === 'role'
           ? LAYOUT.roleLink + hash(n.id) * LAYOUT.roleLinkVar
+          : (lp === focus || lp === anchorId()) && isGroupEnd(lp, n.id) ? groupRadius(lp, n.id)
           : homeDist(lp, n.id) ?? (d === 1 ? LAYOUT.areaLink : (d === 2 ? LAYOUT.practiceLink : LAYOUT.leafLink) * jitter);
         next.push({ source: lp, target: n.id, kind: 'tree', dist, key: `t:${lp}>${n.id}` });
       }
