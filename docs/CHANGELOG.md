@@ -463,3 +463,7 @@
 
 - Owner: fold all three AI projects on the home map (the dashboard too).
 - Arrange tool came up empty in the viewer: points waited for an animation frame to fade in. In arrange mode they now show at once and the entrance animations are off.
+
+## 2026-10-02 — v62.41 owner's second home layout
+
+- HOME_LAYOUT and NOTES replaced with the owner's new arrange-tool values (all AI projects folded).
