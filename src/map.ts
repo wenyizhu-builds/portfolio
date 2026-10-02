@@ -73,13 +73,13 @@ const CAMERA = {
    (a gentle curve through `via`). The words live in content.ts (`note`). */
 type NotePlace = { text: [number, number]; from: [number, number]; via: [number, number]; to: [number, number]; rot: number };
 const NOTES: Record<string, NotePlace> = {
-  'ua-creative-strategy': { text: [-262, -96], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
+  'ua-creative-strategy': { text: [-240, -80], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
   'zzz-jp-accounts': { text: [-50, -86], from: [-12, -58], via: [-4, -44], to: [-2, -22], rot: -3 },
   'gip-testing': { text: [74, -38], from: [62, -22], via: [36, -18], to: [18, -8], rot: 2 },
   'interactive-filter': { text: [-64, 118], from: [-6, 92], via: [2, 82], to: [0, 70], rot: 2 },
-  ai: { text: [-180, -76], from: [-80, -30], via: [-50, -18], to: [-22, -6], rot: -5 },
+  ai: { text: [-168, -60], from: [-80, -30], via: [-50, -18], to: [-22, -6], rot: -5 },
 };
-const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, line: 1.1, head: 12, headAngle: 0.5 };
+const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 20, line: 1.1, head: 8, headAngle: 0.5 };
 
 /* Layout tuning — every other layout number lives here. */
 const LAYOUT = {

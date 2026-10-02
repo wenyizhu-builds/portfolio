@@ -430,3 +430,7 @@
 
 - Owner: the number of points is fine, the spacing looked off. Branded Filter Campaign is now a flagship (second in Creator & Social) with its "600M+ views" note on the home map.
 - HOME_LAYOUT and NOTES re-placed: areas at similar distances round the ✳, flagships fanned outside their area, notes on sides where the panel edge doesn't push them onto labels. Checked at 1440 and 1180 wide. layout-check 3 (ai-workbench, pre-existing).
+
+## 2026-10-02 — v62.33 smaller map notes
+
+- Owner: notes took too much attention. Note text 27 → 20, arrowheads 12 → 8, stroke 1.5px → 1.2px; UA and AI notes nudged closer to their arrows.
