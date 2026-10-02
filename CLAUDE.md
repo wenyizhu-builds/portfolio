@@ -44,6 +44,7 @@
 - **首要规则：所有英文必须是母语者会说的地道表达，禁止中文直译。**（例：不用 "mother scripts"（母脚本），用 "script templates"；不用 "script structures"（脚本结构），用 "scripts"。）拿不准时，用 JD 原词库或英文行业常用说法，并在交付时标出存疑的词。（L29）
 - 第一人称、口语化。
 - **专业缩写，简洁**：用 CPM / CPA / CPI / CTR，不写 "cost per install"、"per 1,000 views"；流程不说 "repeated"（说 refined / iterated）；图里每条 2–5 个词。（L30）
+- **不写游戏版本号**：不写 "Genshin Impact 5.0"、"the 5.0 launch"，说 "a major update"；全站一致，`check` 会拦。（L33）
 - **Results 每条一行**：数字 + 说明不超过 45 个字符，`check` 会拦。（L32）
 - **What I did 的写法**：每条以关键词短语开头，后跟冒号和一句说明；关键词短语（不含冒号）标**蓝色**（`blueRanges`），不加粗。
 - 不编造职位、客户、数字、结果；占位内容标 `[Placeholder]` / `[Draft]`。

@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.8 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.9 · 分支 `flagship-restructure`（未合并 main）
 
 ## 2026-09-30 当前状态
 

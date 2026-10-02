@@ -416,18 +416,18 @@ export const nodes: SiteNode[] = [
     parent: 'more-growth',
     headline: { num: '~900K', label: { en: 'code redemptions, about 4x the goal' } },
     label: { en: 'Cross-Platform Community Giveaway' },
-    kicker: { en: 'Genshin Impact 5.0 · X, TikTok, Instagram' },
-    context: { en: 'Genshin Impact 5.0' },
+    kicker: { en: 'Genshin Impact · X, TikTok, Instagram' },
+    context: { en: 'Genshin Impact' },
     tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }, { en: 'Creator marketing' }],
     markets: ['NA', 'JP'],
     summary: {
-      en: "For Genshin Impact’s 5.0 launch, I led a giveaway with the biggest Genshin fan account on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
+      en: "For a major Genshin Impact update, I led a giveaway with the biggest Genshin fan account on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact’s community events on official channels kept reaching the same core players. For the 5.0 launch, I wanted to test whether a giveaway hosted by the biggest fan account on X could reach casual and lapsed players, and use in-game reward codes to show whether they actually took part, not just saw the post." },
+          { en: "Genshin Impact’s community events on official channels kept reaching the same core players. For a major update, I wanted to test whether a giveaway hosted by the biggest fan account on X could reach casual and lapsed players, and use in-game reward codes to show whether they actually took part, not just saw the post." },
         ],
       },
       {
@@ -455,8 +455,8 @@ export const nodes: SiteNode[] = [
     parent: 'more-growth',
     headline: { num: '600M+', label: { en: 'global views, 600K+ submissions' } },
     label: { en: 'Interactive Filter Campaign' },
-    kicker: { en: 'Genshin Impact 4.4 · TikTok, Snapchat' },
-    context: { en: 'Genshin Impact 4.4' },
+    kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
+    context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'Snapchat' }],
     markets: ['JP', 'SEA', 'US'],
     summary: {
@@ -485,8 +485,8 @@ export const nodes: SiteNode[] = [
     parent: 'more-growth',
     headline: { num: '9.5M+', label: { en: 'UV and 1.8M+ lottery participants' } },
     label: { en: 'Landing Page Gamification' },
-    kicker: { en: 'Genshin Impact 5.0 · Web' },
-    context: { en: 'Genshin Impact 5.0' },
+    kicker: { en: 'Genshin Impact · Web' },
+    context: { en: 'Genshin Impact' },
     tags: [{ en: 'Web' }],
     markets: ['Global'],
     summary: {

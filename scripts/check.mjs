@@ -105,6 +105,10 @@ for (const n of nodes) for (const r of finalResults(n)) {
   if (len > RESULT_MAX) fail('result-one-line', `${n.id}: "${r.metric} ${r.en}" is ${len} chars (max ${RESULT_MAX}) — it wraps to two lines`);
 }
 
+/* L33: no game version numbers ("Genshin Impact 5.0", "the 5.0 launch") — readers outside the game don't know them. */
+{ const m = copyText.match(/Genshin Impact[’']?s? \d+\.\d|\b\d+\.\d+ (?:launch|update|version)\b|\bV\d+\.\d/);
+  if (m) fail('no-game-version', `found "${m[0]}" — say "a major update" instead of a version number`); }
+
 /* 5. Go-live gate: nothing unfinished reaches the public site. */
 if (launch) {
   if (!site.launched) fail('launch', 'site.launched is false (PROTOTYPE label still shown)');
