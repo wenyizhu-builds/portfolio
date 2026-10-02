@@ -478,7 +478,7 @@ export const nodes: SiteNode[] = [
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
           { en: "Shaped the filter concepts: Researched competitor filters and helped develop two gesture-based ideas: releasing a sky lantern for TikTok and Snapchat, and a lion-mask transformation for a new character on TikTok. I wrote the creative briefs and reviewed each iteration with TikTok’s effects team." },
-          { en: "Briefed creators: Turned each filter into simple video ideas for cosplay, beauty, pet, dance and transition creators, so their posts gave players clear examples to copy." },
+          { en: "Briefed creators: Turned each filter into simple video ideas for cosplay, beauty, pet, dance and transition creators, so their posts inspired players to make their own." },
           { en: "Supported creator activation: Reviewed creator selection and content for 70+ creators across TikTok and Snapchat, whose videos went live in the first week to kick off the trend." },
         ],
       },

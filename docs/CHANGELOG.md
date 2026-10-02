@@ -367,3 +367,7 @@
 
 - Challenge: "simple enough for anyone to recreate"; "a short window to build momentum and get the trend to take off".
 - Owner edits from the editor: Giveaway summary "4x the goal" (blue), Interactive Filter "#1" blue.
+
+## 2026-10-02 — v62.21 Briefing bullet reworded
+
+- Interactive Filter: "so their posts inspired players to make their own" (was "gave players clear examples to copy").
