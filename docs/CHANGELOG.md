@@ -450,3 +450,7 @@
 ## 2026-10-02 — v62.37 arrange mode: drag fixed inside the artifact viewer
 
 - In the real viewer, dragged points sprang back (the map kept easing and the drag relied on the simulation). Arrange mode now has its own drag: the point follows the pointer directly, is drawn at once, the simulation is stopped, window listeners keep the drag alive, and the camera doesn't ease. Real site unchanged.
+
+## 2026-10-02 — v62.38 owner's home layout
+
+- HOME_LAYOUT and NOTES replaced with the exact values the owner placed in the arrange tool. layout-check 2 (contact view), within budget.
