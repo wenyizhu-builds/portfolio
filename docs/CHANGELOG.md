@@ -310,3 +310,8 @@
 ## 2026-10-02 — v62.7 Giveaway: no "third-party"
 
 - Challenge and lesson now say "the biggest fan account on X" / "fan accounts" instead of "third-party community"; "semi-active" → "casual".
+
+## 2026-10-02 — v62.8 Owner edits from the copy editor applied
+
+- X Creator Campaign: shorter summary, challenge in two paragraphs, results reworded ("vs the prev. benchmark", "Event exposure…"), "local players" in the strategy bullet.
+- Xbox: "100+ localized assets".
