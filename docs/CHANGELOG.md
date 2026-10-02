@@ -371,3 +371,7 @@
 ## 2026-10-02 — v62.21 Briefing bullet reworded
 
 - Interactive Filter: "so their posts inspired players to make their own" (was "gave players clear examples to copy").
+
+## 2026-10-02 — v62.22 Retitle: TikTok Branded Effect Campaign
+
+- "Interactive Filter Campaign" → "TikTok Branded Effect Campaign" (TikTok's own name for the format).
