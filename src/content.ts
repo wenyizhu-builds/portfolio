@@ -471,7 +471,7 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Lantern Rite needed a social moment players could join, and this year the filter challenge was moving beyond TikTok to Snapchat for the first time. The filters had to be fun to film, easy to copy and work on two platforms with different habits. Creators also had only a short window to post the first videos and show everyone else how to take part." },
+          { en: "Lantern Rite needed a social moment players could join, and this year the filter challenge was moving beyond TikTok to Snapchat for the first time. The filters had to be fun to use, simple enough for anyone to recreate, and right for two platforms whose users behave differently. We also had only a short window to build momentum and get the trend to take off." },
         ],
       },
       {

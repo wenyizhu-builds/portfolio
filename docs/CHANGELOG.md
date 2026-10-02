@@ -362,3 +362,8 @@
 ## 2026-10-02 — v62.19 Giveaway creator video link
 
 - Cross-Platform Community Giveaway: "Creator video example ↗" (Instagram) under the summary.
+
+## 2026-10-02 — v62.20 Interactive Filter challenge reworded; owner summary edits
+
+- Challenge: "simple enough for anyone to recreate"; "a short window to build momentum and get the trend to take off".
+- Owner edits from the editor: Giveaway summary "4x the goal" (blue), Interactive Filter "#1" blue.
