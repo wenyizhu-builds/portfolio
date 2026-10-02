@@ -341,3 +341,8 @@
 ## 2026-10-02 — v62.14 Dotted line removed
 
 - Removed the X Creator ↔ Giveaway dotted line (owner found it confusing) and the v62.13 group-view link code. The two cases stay next to each other in More cases.
+
+## 2026-10-02 — v62.15 Interactive Filter: event banner and links
+
+- Lantern Rite submission event banner as the floating image (public promotional art).
+- New `links` field: a grey line of links under the summary, opening in a new tab. Interactive Filter links to the TikTok event page and a player's video.

@@ -234,6 +234,7 @@ button { font: inherit; color: inherit; }
 .ngroup:first-child .ngroup-h { margin-top: 2px; }
 .ngroup-h:hover { text-decoration: underline; text-underline-offset: 3px; }
 .p-sum { margin: 0 0 14px; }
+.p-links { margin: -6px 0 14px; color: var(--muted); }
 .p-def { color: var(--ink); } /* a group's description, everywhere (INDEX and cards): same ink as all text (v51, was grey) */
 .zh-note { font-size: 12px; color: var(--muted); background: var(--bg); border-radius: 6px; padding: 6px 10px; margin: 10px 0; }
 

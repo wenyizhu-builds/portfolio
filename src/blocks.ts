@@ -85,9 +85,15 @@ export function summary(n: SiteNode): string {
   return n.summary ? `<p class="p-sum${childrenOf(n.id).length ? ' p-def' : ''}">${tx(n.summary)}</p>` : '';
 }
 
+/** Public pages a reader can open for this piece of work, under its summary. */
+function links(n: SiteNode): string {
+  if (!n.links?.length || n.status) return '';
+  return `<p class="p-links">${n.links.map((l) => `<a class="p-org" href="${esc(l.href)}" target="_blank" rel="noopener">${tx(l.label)} ↗</a>`).join(' · ')}</p>`;
+}
+
 /** Everything a reader sees before the details. `title` is the heading element the caller wants. */
 export function intro(n: SiteNode, title: string): string {
-  return identity(n, title) + (n.results?.length ? '' : figure(n)) + zhNote(n) + summary(n);
+  return identity(n, title) + (n.results?.length ? '' : figure(n)) + zhNote(n) + summary(n) + links(n);
 }
 
 /** The expandable detail lists of a case: its sections, then results. */

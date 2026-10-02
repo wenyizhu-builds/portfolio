@@ -63,6 +63,7 @@ export interface SiteNode {
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
   platforms?: PlatformKey[]; // which platform filter(s) this work matches; regions come from `markets` (regionOfMarket)
+  links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -485,7 +486,12 @@ export const nodes: SiteNode[] = [
       { metric: "#1", en: "sponsored Lens on Snapchat" },
       { metric: "180M+", en: "views from 57 TikTok creators" },
     ],
-    media: [{ alt: { en: 'Filter previews' } }],
+    media: [{ src: 'media/interactive-filter/lantern-rite-event-banner.jpg',
+      thumbnail: 'media/interactive-filter/lantern-rite-event-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Lantern Rite submission event banner, the TikTok event players joined with the filters' } }],
+    links: [
+      { label: { en: 'TikTok event page', zh: 'TikTok 活动页' }, href: 'https://activity.us.tiktok.com/magic/eco/runtime/release/65ae743a08a22502879a1571?appType=muse&magic_page_no=1&use_spark=1&magic_source=usExternal' },
+      { label: { en: 'A player’s video', zh: '玩家投稿示例' }, href: 'https://www.youtube.com/shorts/At8-X34Ouzw' },
+    ],
   },
   {
     id: 'landing-page',
