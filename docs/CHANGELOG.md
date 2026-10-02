@@ -458,3 +458,8 @@
 ## 2026-10-02 — v62.39 AI Projects folded at home
 
 - Owner: only the AI Creative Intelligence Dashboard stays on the home map; the two placeholder AI projects appear when AI Projects is opened (FOLDED_AT_HOME + ALSO_AT_HOME).
+
+## 2026-10-02 — v62.40 all AI projects folded; arrange tool shows at once
+
+- Owner: fold all three AI projects on the home map (the dashboard too).
+- Arrange tool came up empty in the viewer: points waited for an animation frame to fade in. In arrange mode they now show at once and the entrance animations are off.

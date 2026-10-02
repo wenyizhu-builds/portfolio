@@ -3,7 +3,7 @@
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
 > 最后更新：2026-10-02 · 对应版本 v62.39
 
-- **AI Projects 首页折叠（v62.39）**：首页只露出 AI Creative Intelligence Dashboard（`ALSO_AT_HOME`），两个「AI project」占位点收进组里，点开 AI Projects 才出现。
+- **AI Projects 首页折叠（v62.39–40）**：首页 AI Projects 的三个作品全部收起（包括 Dashboard），点开 AI Projects 才出现。`ALSO_AT_HOME` 留作以后单独露出某个点用，现在为空。
 
 - **首页布局由用户亲手摆放（v62.38）**：`HOME_LAYOUT` 和 `NOTES` 全部来自用户在排版工具里拖好后复制的数值，原样写入。以后调首页，先用排版工具让用户摆，再写回，不要自己凭感觉改坐标。
 

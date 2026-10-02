@@ -123,7 +123,7 @@ const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
 const ARRANGE = !!(window as unknown as { __ARRANGE?: boolean }).__ARRANGE;
 const FOLDED_AT_HOME = new Set(['creative', 'info', 'growth-paid', 'growth-social', 'ai']);
 /* Besides the flagship cases, these stay on the home map beside their folded group (v62.39). */
-const ALSO_AT_HOME = new Set(['ai-workbench']); // the two work groups show only their flagship cases at home (v62.31)
+const ALSO_AT_HOME = new Set<string>(); // v62.40: the owner folded all AI projects, the dashboard too // the two work groups show only their flagship cases at home (v62.31)
 
 /** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
 function hash(id: string): number {
@@ -701,6 +701,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const stagger = firstEntrance && !reducedMotion.matches && !ARRANGE
       ? parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--entrance-step')) || 0 : 0;
     const reveal = (el: SVGElement, order: number) => {
+      if (ARRANGE) return el.classList.remove('entering'); // the arrange tool shows everything at once, no animation frame needed
       requestAnimationFrame(() => requestAnimationFrame(() => {
         if (stagger) setTimeout(() => el.classList.remove('entering'), order * stagger);
         else el.classList.remove('entering');
@@ -928,6 +929,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   /* Arrange mode: a small bar over the map with the "Copy layout" button and the text it copies. */
   function arrangeBar() {
     svg.classList.add('arranging');
+    document.body.classList.add('arranging');
     const bar = document.createElement('div');
     bar.className = 'arrange-bar';
     bar.innerHTML = `<span>${esc(t(ui.arrangeHint))}</span><button type="button">${esc(t(ui.arrangeCopy))}</button><textarea readonly rows="3"></textarea>`;

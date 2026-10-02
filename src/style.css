@@ -405,6 +405,7 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .map-notes > g.is-hidden { opacity: 0; }
 /* Arrange mode (owner's layout tool): notes take the pointer and a small bar sits over the map. */
 .map.arranging .map-notes > g:not(.is-hidden) { pointer-events: all; cursor: move; }
+body.arranging .stage, body.arranging .side { animation: none; }
 .map.arranging .node { cursor: move; touch-action: none; }
 .map.arranging .map-notes > g { touch-action: none; }
 .arrange-bar { position: absolute; left: var(--page-x); bottom: var(--bottom-h); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: var(--side-gap); max-width: calc(var(--side-w) * 1.4); padding: var(--side-gap); background: var(--panel); border: var(--rule-card); font-size: var(--fs-label); color: var(--ink-2); }
