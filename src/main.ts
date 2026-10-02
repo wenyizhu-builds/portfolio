@@ -7,7 +7,7 @@ import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
 import { filterBar, wireFilters } from './blocks';
-import { esc, go, onChange, parseRoute, setLang, state, t, type Route } from './state';
+import { esc, filtering, go, onChange, parseRoute, setLang, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
 
@@ -95,7 +95,7 @@ function paintChrome() {
   ls.setAttribute('aria-label', t(ui.langAria));
   const fb = document.getElementById('filters')!;
   fb.innerHTML = filterBar('filters');
-  wireFilters(fb);
+  wireFilters(fb, () => { if (filtering() && route.kind !== 'home') go(''); }); // the unfolded map lives on home
   const proto = document.getElementById('proto');
   if (proto) proto.textContent = t(ui.prototype);
   const lg = (type: Parameters<typeof icon>[0], k: keyof typeof ui) =>

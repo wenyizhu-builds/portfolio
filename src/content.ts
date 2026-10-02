@@ -71,6 +71,7 @@ const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 /* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */
 export type PlatformKey = 'global' | 'cn' | 'paid';
 export type RegionKey = 'na' | 'eu' | 'jp' | 'cn';
+export const filterAll: T = { en: 'All', zh: '全部' }; // the phone's drop-downs start here
 export const filterSets = {
   platform: {
     label: { en: 'Platform', zh: '平台' } as T,
@@ -498,6 +499,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
+    platforms: ['paid'],
     team: { en: 'AI-assisted tool development (my role); handover to the UA content team.' },
     type: 'ai',
     parent: 'ai',

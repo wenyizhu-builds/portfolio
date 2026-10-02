@@ -10,7 +10,7 @@ import {
   type SimulationNodeDatum,
 } from 'd3-force';
 import { ancestors, byId, childrenOf, nodes, rolesOrder, ui, type SiteNode } from './content';
-import { esc, isDone, matches, reducedMotion, state, t } from './state';
+import { esc, filtering, isDone, matches, reducedMotion, state, t } from './state';
 import { shapeFor } from './shapes';
 
 interface SimNode extends SimulationNodeDatum {
@@ -503,8 +503,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       const par = byId.get(f)?.parent;
       if (!childrenOf(f).length && par && par !== 'root') childrenOf(par).forEach((c) => vis.add(c.id));
     }
+    // a filter on the home map unfolds every matching piece of work and the way to it (v61)
+    if (!f && filtering())
+      for (const n of nodes)
+        if (!childrenOf(n.id).length && matches(n.id)) [n.id, ...ancestors(n.id)].forEach((a) => vis.add(a));
     // a visible role needs its whole chain back to Experience
-    if (f && (f === 'experience' || byId.get(f)?.type === 'role')) rolesOrder.forEach((r) => vis.add(r));
+    if ((f && (f === 'experience' || byId.get(f)?.type === 'role')) || rolesOrder.some((r) => vis.has(r))) rolesOrder.forEach((r) => vis.add(r));
     return vis;
   }
 
@@ -852,7 +856,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     noteEls.forEach((g, id) => {
       const n = simNodes.get(id);
       const hand = NOTES[id];
-      const here = hand ? !focus : focus === byId.get(id)?.parent;
+      const here = hand ? !focus && !filtering() : focus === byId.get(id)?.parent; // home notes step aside while a filter unfolds the map
       g.classList.toggle('is-hidden', !shown(id) || !here);
       if (!n || !shown(id) || !here) return;
       g.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`);
@@ -925,8 +929,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       wake();
     },
     refilter() {
-      paintFar();
-      wake();
+      update(); // the set of points changes: matches unfold on the home map
     },
     rerenderLabels() {
       els.forEach((el, id) => fillLabel(el, byId.get(id)!));

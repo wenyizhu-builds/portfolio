@@ -4,9 +4,9 @@ import { publishedMarkup } from './published-copy';
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
-import { byId, childrenOf, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
+import { byId, childrenOf, filterAll, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
 import { copyFieldKey } from './copy-binding';
-import { filters, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
+import { filters, setFilter, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
 
 export const L = (k: keyof typeof ui) => esc(t(ui[k]));
 
@@ -187,11 +187,30 @@ export function filterBar(cls: string): string {
   };
   return `<nav class="${cls}">${group('platform')}${group('region')}</nav>`;
 }
-export function wireFilters(root: ParentNode) {
+/** Phone: two plain drop-downs — easy to reach with a thumb, nothing to swipe. */
+export function filterSelects(): string {
+  const sel = (kind: FilterKind) => {
+    const set = filterSets[kind];
+    const opts = Object.entries(set.options as Record<string, T>)
+      .map(([k, v]) => `<option value="${k}"${filters[kind] === k ? ' selected' : ''}>${esc(t(v))}</option>`)
+      .join('');
+    return `<label class="m-fsel"><span class="fk">${esc(t(set.label))}</span><select data-fsel="${kind}"><option value="">${esc(t(filterAll))}</option>${opts}</select></label>`;
+  };
+  return `<div class="m-filters">${sel('platform')}${sel('region')}</div>`;
+}
+/** Both forms of the filters; `after` runs once a choice has been applied. */
+export function wireFilters(root: ParentNode, after?: () => void) {
   root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) => {
     b.onclick = () => {
       const [kind, key] = b.dataset.filter!.split(':');
       toggleFilter(kind as FilterKind, key);
+      after?.();
+    };
+  });
+  root.querySelectorAll<HTMLSelectElement>('[data-fsel]').forEach((s) => {
+    s.onchange = () => {
+      setFilter(s.dataset.fsel as FilterKind, s.value || null);
+      after?.();
     };
   });
 }

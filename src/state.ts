@@ -41,9 +41,15 @@ try {
   /* malformed address: no filter */
 }
 
+export const filtering = () => !!(filters.platform || filters.region);
+
 /** Pick an option, or clear it when it is picked again. */
 export function toggleFilter(kind: FilterKind, key: string) {
-  (filters as Record<FilterKind, string | null>)[kind] = filters[kind] === key ? null : key;
+  setFilter(kind, filters[kind] === key ? null : key);
+}
+/** Set one filter (null = all) and keep the address in step. */
+export function setFilter(kind: FilterKind, key: string | null) {
+  (filters as Record<FilterKind, string | null>)[kind] = key;
   try {
     const q = new URLSearchParams(location.search);
     (Object.keys(filters) as FilterKind[]).forEach((k) => (filters[k] ? q.set(k, filters[k]!) : q.delete(k)));
@@ -64,6 +70,7 @@ export function matches(id: string): boolean {
   if (!n) return true;
   const kids = childrenOf(id);
   if (kids.length) return kids.some((k) => matches(k.id));
+  if (n.status) return false; // a placeholder has nothing to show for any filter
   const okP = !filters.platform || (n.platforms ?? []).includes(filters.platform);
   const okR = !filters.region || (n.markets ?? []).some((m) => regionOfMarket[m] === filters.region);
   return okP && okR;

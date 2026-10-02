@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v60 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v61 · 分支 `flagship-restructure`（未合并 main）
 
 ## 2026-09-30 当前状态
 
@@ -15,7 +15,8 @@
 
 - 地图手写批注（v55–56）：首页四句、More cases 只留 600M+；批注不会被卡片挡住。规则见 SPEC。
 - 筛选已上线（v60）：平台 + 地区，网址可分享。
-- 待做：个人账号案例（小红书 + TikTok，AI 教育内容，约 14k + 2k 粉丝；需确认展示哪个 dashboard 和账号链接）。
+- 暂缓（用户稍后提供细节）：个人账号案例——小红书约 14k + TikTok 约 2k 粉丝，AI 工具教程与教育；一年前开始、中断后近期回归一个月粉丝翻倍；辞职后全职做内容（gap year）；dashboard = CONTENT/80-product-development/creator-workbench 原型；账号公开可链接（账号名待提供）。
+- 下一步：继续写其余案例（Influencer Activation 起）。
 - Xbox 文案已按新规则改完。More cases 打开时均匀展开（v54）。
 
 ## 下一步

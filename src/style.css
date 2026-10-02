@@ -32,7 +32,6 @@
   --page-x: 40px; /* header and intro-strip side margin */
   --filter-gap: 56px; /* between the Platform and Region groups in the header */
   --filter-item-gap: 18px; /* between options */
-  --m-filter-gap: 32px; /* phone: between the two groups in the swipe row */
   --map-inset: 24px; /* map margin from the window edge */
   /* Card type: ONE typeface, TWO sizes, TWO colours (ink, grey). */
   --fs-text: 14px;
@@ -415,6 +414,7 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .fbtn[aria-pressed='true'] { color: var(--cobalt); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
 .nlink.is-off, .ngroup-h.is-off { opacity: 0.35; }
 .m-card.is-off { opacity: 0.35; }
-.m-filters { display: flex; gap: var(--m-filter-gap); overflow-x: auto; padding: 12px 0; border-bottom: 1px solid var(--line-soft); scrollbar-width: none; white-space: nowrap; }
-.m-filters::-webkit-scrollbar { display: none; }
-.m-filters .fbtn { font-size: var(--fs-text); }
+.m-filters { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); padding: 12px 0 16px; border-bottom: 1px solid var(--line-soft); }
+.m-fsel { display: grid; gap: 6px; }
+/* 16px stops iOS from zooming into the page when the menu opens */
+.m-fsel select { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }

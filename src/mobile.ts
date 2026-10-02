@@ -1,7 +1,7 @@
 import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
-import { esc, matches, reducedMotion, setLang, state, t } from './state';
+import { esc, filtering, matches, reducedMotion, setLang, state, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
-import { L, contactRows, detailLists, filterBar, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
+import { L, contactRows, detailLists, filterSelects, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
 /*
  * Phone layout: one scrolling page. The map becomes a menu (owner decision
@@ -109,7 +109,7 @@ export function renderMobile(root: HTMLElement) {
       <a href="#/" class="m-brand"><span>${esc(site.name.toLowerCase())}</span></a>
       <button class="m-lang" data-lang="${state.lang === 'en' ? 'zh' : 'en'}" aria-label="${L('langAria')}">${L('langName')}</button>
     </header>
-    ${filterBar('m-filters')}
+    ${filterSelects()}
     <div class="m-hero" id="m-home">
       ${astSvg(AST.phoneHero, 'm-hero-ast')}
       <h1>${esc(site.name)}</h1>
@@ -138,7 +138,11 @@ export function renderMobile(root: HTMLElement) {
       if (a.getAttribute('href') === location.hash) window.dispatchEvent(new HashChangeEvent('hashchange'));
     });
   });
-  wireFilters(root);
+  wireFilters(root, () => {
+    // after a choice, go to the first match: a case card, or the résumé for roles
+    const hit = filtering() && (document.querySelector<HTMLElement>('.m-card:not(.is-off):not(.is-prep)') ?? document.getElementById('m-resume'));
+    if (hit) hit.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+  });
   wireCopy(root);
 }
 

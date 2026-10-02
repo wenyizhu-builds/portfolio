@@ -261,3 +261,9 @@
 - One matching rule (`matches()` in state.ts) greys non-matching points on the map, items in the INDEX/card lists and cards on the phone; map notes of non-matching cases hide.
 - Filters are kept in the address (`?platform=…&region=…`) for sharing filtered links. Platform comes from a new `platforms` field; region from `markets` via `regionOfMarket`.
 - Phone: a swipe row under the header.
+
+## 2026-10-02 — v61: filters unfold matches; phone drop-downs
+
+- Picking a filter returns to the home map and unfolds every matching case or role (e.g. Chinese social opens Experience to Nike, Weber Shandwick, NOWNESS); home notes step aside while filtering. Placeholders never match.
+- Phone: two drop-down menus (Platform / Region, default All) replace the swipe row; after a choice the page scrolls to the first match.
+- AI Creative Intelligence Dashboard counts as Paid ads.
