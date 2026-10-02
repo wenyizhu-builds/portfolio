@@ -76,7 +76,7 @@ const NOTES: Record<string, NotePlace> = {
   'gip-testing': { text: [76, 139], from: [111, 117], via: [100, 83], to: [69, 50], rot: 3 },
   ai: { text: [-232, -81], from: [-121, -42], via: [-76, -17], to: [-38, 0], rot: -5 },
 };
-const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 34, line: 1.1, head: 12, headAngle: 0.5 };
+const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, placedAt: 34, line: 1.1, head: 12, headAngle: 0.5 };
 
 /* Layout tuning — every other layout number lives here. */
 const LAYOUT = {
@@ -849,7 +849,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       g.classList.toggle('is-hidden', !shown(id) || !here);
       if (!n || !shown(id) || !here) return;
       g.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`);
-      let p = hand;
+      let p = hand && scaled(hand);
       let anchor = 'start';
       if (!p) {
         // points here move, so the note sits outward from the parent: arrow beside the shape, words beyond
@@ -865,6 +865,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }
       placeNote(g, p, anchor);
     });
+  }
+  /** NOTES were placed for words at NOTE.placedAt; at another size the arrow's tail stays the same distance into the words. */
+  function scaled(p: NotePlace): NotePlace {
+    const r = NOTE.size / NOTE.placedAt;
+    const tail: [number, number] = [p.text[0] + (p.from[0] - p.text[0]) * r, p.text[1] + (p.from[1] - p.text[1]) * r];
+    return { ...p, from: tail, via: [(p.via[0] + tail[0] + p.via[0] - p.from[0]) / 2, (p.via[1] + tail[1] + p.via[1] - p.from[1]) / 2] };
   }
   /** Draw a note, then shift its words (and the arrow's tail with them) back inside the free map area. */
   function placeNote(g: SVGGElement, p: NotePlace, anchor: string) {

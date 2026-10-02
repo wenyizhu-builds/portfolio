@@ -242,3 +242,7 @@
 
 - Map notes are nudged back inside the free map area, so the card, header or window edge never covers them; after a large shift the arrow re-aims at its point.
 - Removed the "integrated social campaigns" frame and the column layout behind it; More cases keeps only "600M+ views".
+
+## 2026-10-02 — v57: smaller map notes
+
+- Hand-written notes about 20% smaller; arrow tails scale with the text so they still start at the words.
