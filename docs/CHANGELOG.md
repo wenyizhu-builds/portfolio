@@ -350,3 +350,7 @@
 ## 2026-10-02 — v62.16 Second player video link
 
 - Interactive Filter links: TikTok event page · Player video 1 (YouTube) · Player video 2 (TikTok).
+
+## 2026-10-02 — v62.17 Creator video links
+
+- Interactive Filter links renamed and reordered: TikTok event page · Creator video 1 (TikTok) · Creator video 2 (YouTube).
