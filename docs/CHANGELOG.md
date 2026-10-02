@@ -319,3 +319,8 @@
 ## 2026-10-02 — v62.9 No game version numbers
 
 - Removed "5.0" / "4.4" from Giveaway, Interactive Filter and Landing Page (kickers, context, summary, challenge); "a major update" instead. New `check` rule `no-game-version` (L33).
+
+## 2026-10-02 — v62.10 Less repetition
+
+- Giveaway: the "took part, not just saw it" idea now appears once (challenge says "get them to act"; bullet says codes "turned views into a measurable action"); "official channels" and "biggest fan account" no longer repeated in every block.
+- X Creator Campaign results: "vs benchmark" / "than benchmark".

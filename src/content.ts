@@ -427,13 +427,13 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact’s community events on official channels kept reaching the same core players. For a major update, I wanted to test whether a giveaway hosted by the biggest fan account on X could reach casual and lapsed players, and use in-game reward codes to show whether they actually took part, not just saw the post." },
+          { en: "Genshin Impact’s community events on official channels kept reaching the same core players. For a major update, I wanted to test whether a giveaway hosted by a big fan account could reach casual and lapsed players and get them to act." },
         ],
       },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Designed the campaign: Partnered with the biggest Genshin fan account on X (1M+ followers) to reach players outside official channels. To enter, players quote-posted the giveaway with their own creative take, and in-game reward codes showed who actually took part, not just who saw it." },
+          { en: "Designed the campaign: Partnered with the biggest Genshin fan account on X (1M+ followers). To enter, players quote-posted the giveaway with their own creative take, and in-game reward codes turned views into a measurable action." },
           { en: "Activated creators across platforms: Coordinated 67 creators across X, TikTok and Instagram, who posted their own entries first to show players how to join." },
           { en: "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking. Code redemptions beat the goal, but fewer players entered the giveaway itself because quote-posting a creative entry took too much effort on X. The lesson: giveaways run with fan accounts need one-tap actions, like a repost or a reply." },
         ],
