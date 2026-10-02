@@ -243,8 +243,11 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       simNodes.forEach((n) => {
         const h = homeOf(n.id);
         if (!h || n.fx != null) return;
-        n.vx! += (h[0] - n.x!) * LAYOUT.homePull * alpha;
-        n.vy! += (h[1] - n.y!) * LAYOUT.homePull * alpha;
+        // full strength until the layout stops (not scaled by alpha), so every point really gets home
+        // after a group was open; the other forces fade with alpha and can't strand it halfway (v62.48)
+        void alpha;
+        n.vx! += (h[0] - n.x!) * LAYOUT.homePull;
+        n.vy! += (h[1] - n.y!) * LAYOUT.homePull;
       });
     })
     .force('boxes', (alpha: number) => {

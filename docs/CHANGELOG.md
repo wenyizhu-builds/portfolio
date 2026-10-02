@@ -492,3 +492,7 @@
 ## 2026-10-02 — v62.47 AI Projects views tidied; layout-check 0
 
 - The AI projects were bunched up because AI Projects moved but its folded projects kept stale HOME_LAYOUT spots, so the line to the dashboard was ~30 units long. Folded points no longer have home entries (normal line lengths apply). Small groups' siblings sit a little wider (siblingRing 150, siblingSpread ≈57°). layout-check: 0 over 35 views.
+
+## 2026-10-02 — v62.48 home map always returns to the owner's layout
+
+- Owner: after opening Creator & Social and going back, Social Launch in Japan sat over the Paid & UA lines. The home pull was scaled by alpha and faded before points arrived. It now keeps full strength while the layout runs, so every point gets home. Checked round trips via Paid & UA, Creator & Social, a case, AI, Information and HoYoverse: positions identical before and after. layout-check 0–2 (only ai-workbench when reached straight from an unrelated view).
