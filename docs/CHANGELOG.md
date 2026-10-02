@@ -475,3 +475,7 @@
 ## 2026-10-02 — v62.43 Gamified Landing Page under North America and Europe
 
 - Owner: the page was English for all English-speaking players, so it is listed under both North America and Europe instead of "Global" (which matched no region).
+
+## 2026-10-02 — v62.44 region tags: landing page global, filter campaign adds Europe
+
+- Owner: the Gamified Landing Page ran in every language → North America, Europe and Japan (not China: global Genshin version). Branded Filter Campaign also worked with European creators → US, EU, JP.

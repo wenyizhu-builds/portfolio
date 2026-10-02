@@ -267,7 +267,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · Web' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
-    markets: ['NA', 'EU'], // English-language page for all English-speaking players (owner: list under both)
+    markets: ['NA', 'EU', 'JP'], // global launch page in every language (owner)
     summary: {
       en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
     },
@@ -373,7 +373,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'Snapchat' }, { en: 'AR filters' }, { en: 'Creator marketing' }],
-    markets: ['US', 'JP'],
+    markets: ['US', 'EU', 'JP'], // creators in Europe too (owner)
     summary: {
       en: "I helped create two AR filters for Lantern Rite, Genshin Impact’s annual Lunar New Year event, and activated 70+ creators to show players how to use them, as the campaign expanded from TikTok to Snapchat for the first time. It drew 600M+ views and 600K+ player videos, and the Snapchat Lens ranked #1 among sponsored Lenses.",
     },

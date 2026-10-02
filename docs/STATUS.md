@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.43 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.44 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.43）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.44）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -43,8 +43,8 @@
 1. 用户在预览里看两组的结构和新文案，有意见再改。两组的一句话说明待她确认。
 2. INDEX 个人简介要一起改：`site.intro` 里有一句 "translate performance data into creative insights that inform iterations and new concepts"，像是从 JD 库粘贴进去的笔记（用户在编辑器里加的，没动）；关键数字 "1% → 15%" 与案例的 "0% → 15%" 不一致；"JP creator matrix" 是"矩阵"直译，应改为 "network of social channels"。Growth Marketing 节点已删，它的占位总述也一起删了。
 3. 待用户确认的小问题：
-   - Gamified Landing Page：测验概念和奖励机制是不是她提出的（是的话 Team 行写清楚，摘要去掉 "helped"）；标题。markets 已改为 NA + EU（v62.43）。
-   - Branded Filter：markets 用了 US/JP（旧版有 SEA）；70+ 达人是否包括 14 位 Snap Stars。
+   - Gamified Landing Page：测验概念和奖励机制是不是她提出的（是的话 Team 行写清楚，摘要去掉 "helped"）；标题。markets 为 NA + EU + JP（v62.44，全语言全球页面；不加 China）。
+   - Branded Filter：markets 为 US/EU/JP（v62.44，用户：也合作了欧洲达人）；70+ 达人是否包括 14 位 Snap Stars。
    - 系统图在 file:// 预览里显示不出来（相对路径），发布到 Artifact 时用 `files` 带上图片就正常。
 4. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
 5. 中文手写字体（可选 ZCOOL KuaiLe，未定）。
