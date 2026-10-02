@@ -233,7 +233,7 @@ export const nodes: SiteNode[] = [
     period: 'Jan 2026',
     parent: 'more-growth',
     headline: { num: '~3x', label: { en: 'engagement vs the previous creator campaign' } },
-    label: { en: 'Creator Campaign for a Character Launch' },
+    label: { en: 'X Creator Campaign' },
     kicker: { en: 'Genshin Impact · X' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'X' }, { en: 'Creator marketing' }],

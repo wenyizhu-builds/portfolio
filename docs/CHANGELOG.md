@@ -276,6 +276,6 @@
 
 - Added the public "Moon Maiden" Moonlit Support event banner as the case's floating image (thumbnail + full size).
 
-## 2026-10-02 — Creator Campaign for a Character Launch
+## 2026-10-02 — X Creator Campaign
 
-- Retitled "Influencer Activation Campaign" to match its own wording (creators, not influencers); tag "Influencer" → "Creator marketing"; KR removed from markets (<1% of creators).
+- Retitled "Influencer Activation Campaign" to "X Creator Campaign" to match its own wording (creators, not influencers); tag "Influencer" → "Creator marketing"; KR removed from markets (<1% of creators).
