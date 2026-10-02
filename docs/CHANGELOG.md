@@ -271,3 +271,7 @@
 ## 2026-10-02 — Influencer Activation case rewritten
 
 - First-person summary, one-paragraph challenge, four blue-labelled bullets, four results, team in the "Me (…)" format, period Jan 2026.
+
+## 2026-10-02 — Influencer Activation: campaign banner
+
+- Added the public "Moon Maiden" Moonlit Support event banner as the case's floating image (thumbnail + full size).

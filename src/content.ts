@@ -262,7 +262,8 @@ export const nodes: SiteNode[] = [
       { metric: "39%", en: "lower CPM than the previous creator campaign" },
       { metric: "+88%", en: "EN exposure for the official X event vs a comparable launch" },
     ],
-    media: [{ alt: { en: 'Creator content examples' } }],
+    media: [{ src: 'media/influencer-activation/moonlit-support-banner.jpg',
+      thumbnail: 'media/influencer-activation/moonlit-support-thumb.jpg', floating: true, alt: { en: 'Genshin Impact "Moon Maiden" Moonlit Support event banner, the official X event the creator campaign drove players to' } }],
   },
   {
     id: 'gip-testing',
