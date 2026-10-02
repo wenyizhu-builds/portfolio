@@ -245,13 +245,13 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact’s character campaigns on X were losing steam, especially in English. The previous paid creator campaign leaned on broad marketing and meme accounts, which bought reach but little engagement from core players. For a major character launch, I needed a creator strategy that felt native to X and drove players to the official event and its in-game reward codes." },
+          { en: "Engagement on Genshin Impact’s recurring character campaigns on X was flattening, and it was weakest among English-speaking players. Our previous creator campaign aimed for broad appeal: many of its creators reached general gaming audiences rather than core Genshin players, so it brought reach but under 3% engagement. For a major character launch, I needed to refocus creators on core players and drive them to the official X event and its in-game reward codes." },
         ],
       },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Redefined creator targeting: Shifted from broad marketing and meme accounts to mid-tier artists, content creators and Genshin news accounts, so 80% of the roster spoke directly to core players." },
+          { en: "Refocused creators on core players: Replaced broad-appeal accounts with mid-tier artists, content creators and Genshin news accounts, so 80% of the roster spoke directly to core players." },
           { en: "Rebalanced markets and formats: Grew EN creators to half the roster, briefed a US agency on illustration styles North American players love, and kept JP momentum with artists and cosplayers." },
           { en: "Fixed the posting format: Moved creators from quote posts, which X tends to throttle, to native posts with the event link in a thread; in side-by-side tests, native posts drew up to 4–5x the views." },
           { en: "Led execution and benchmarking: Ran budget, sourcing, timelines and approvals across two agencies, then benchmarked results against the previous creator campaign to decide what to scale." },
