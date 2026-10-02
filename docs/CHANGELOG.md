@@ -446,3 +446,7 @@
 ## 2026-10-02 — v62.36 arrange mode for the home map
 
 - Owner wants to place the points herself (dragged points used to spring back). With window.__ARRANGE set, home points and notes stay where dropped and "Copy layout" gives the HOME_LAYOUT/NOTES JSON to paste back. Published as a separate preview; the real site is unchanged.
+
+## 2026-10-02 — v62.37 arrange mode: drag fixed inside the artifact viewer
+
+- In the real viewer, dragged points sprang back (the map kept easing and the drag relied on the simulation). Arrange mode now has its own drag: the point follows the pointer directly, is drawn at once, the simulation is stopped, window listeners keep the drag alive, and the camera doesn't ease. Real site unchanged.

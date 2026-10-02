@@ -205,6 +205,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   let cam = { x: host.clientWidth / 2, y: host.clientHeight / 2, k: 1 };
   let focus: string | null = null;
   let near = new Set<string>();
+  const atHome = () => !focus || focus === 'root'; // the home map can be reached as no focus or as the ✳
 
   const simNodes = new Map<string, SimNode>();
   const els = new Map<string, SVGGElement>();
@@ -618,7 +619,39 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     return { x: (cx - r.left - cam.x) / cam.k, y: (cy - r.top - cam.y) / cam.k };
   }
 
+  /* Arrange mode: the point follows the pointer directly and is drawn at once; the simulation is
+     stopped so nothing pulls it back, and window listeners keep the drag alive outside the shape. */
+  function attachArrangeDrag(g: SVGGElement, id: string) {
+    g.addEventListener('pointerdown', (e) => {
+      const n = simNodes.get(id);
+      if (e.button !== 0 || id === 'root' || !atHome() || !n) return;
+      e.preventDefault();
+      e.stopPropagation();
+      sim.stop();
+      heldCam ??= { ...cam };
+      const w0 = toWorld(e.clientX, e.clientY), ox = n.x! - w0.x, oy = n.y! - w0.y;
+      g.classList.add('dragging');
+      const move = (ev: PointerEvent) => {
+        const w = toWorld(ev.clientX, ev.clientY);
+        n.x = n.fx = Math.round(w.x + ox);
+        n.y = n.fy = Math.round(w.y + oy);
+        HOME_LAYOUT[id] = [n.x, n.y];
+        render();
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move);
+        window.removeEventListener('pointerup', up);
+        window.removeEventListener('pointercancel', up);
+        g.classList.remove('dragging');
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      window.addEventListener('pointercancel', up);
+    });
+  }
+
   function attachPointer(g: SVGGElement, id: string) {
+    if (ARRANGE) return attachArrangeDrag(g, id);
     let start: { x: number; y: number } | null = null;
     let dragging = false;
     // Every way a gesture can end goes through here, so a node is never left pinned
@@ -627,18 +660,15 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (!start) return;
       const n = simNodes.get(id);
       if (dragging) {
-        if (n && ARRANGE && !focus) HOME_LAYOUT[id] = [Math.round(n.x!), Math.round(n.y!)]; // stays where it was dropped
-        else if (n) { n.fx = null; n.fy = null; }
+        if (n) { n.fx = null; n.fy = null; }
         g.classList.remove('dragging');
         sim.alphaTarget(0);
-      } else if (select && !ARRANGE) onSelect(id);
+      } else if (select) onSelect(id);
       start = null;
       dragging = false;
     };
     g.addEventListener('pointerdown', (e) => {
       if (e.button !== 0) return; // right / middle click do nothing
-      if (ARRANGE && id === 'root') return; // the ✳ is the origin of every position
-      if (ARRANGE) heldCam ??= { ...cam }; // from the first drag on, the view stays still
       start = { x: e.clientX, y: e.clientY };
       dragging = false;
       g.setPointerCapture(e.pointerId);
@@ -666,7 +696,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   /* ---------- update graph for a focus ---------- */
   let firstEntrance = true;
   function update() {
-    const stagger = firstEntrance && !reducedMotion.matches
+    const stagger = firstEntrance && !reducedMotion.matches && !ARRANGE
       ? parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--entrance-step')) || 0 : 0;
     const reveal = (el: SVGElement, order: number) => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -799,7 +829,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   // arrange mode: the camera stays still once the map has settled, so a dragged point doesn't shift the view
   let heldCam: typeof cam | null = null;
   function targetCamera() {
-    if (ARRANGE && !focus && heldCam) return heldCam;
+    if (ARRANGE && atHome() && heldCam) return heldCam;
     return baseCamera();
   }
 
@@ -830,7 +860,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   function render(): boolean {
     const tc = targetCamera();
-    const e = reducedMotion.matches ? 1 : CAMERA.ease;
+    const e = reducedMotion.matches || ARRANGE ? 1 : CAMERA.ease;
     const moving = Math.abs(tc.x - cam.x) > CAMERA.still || Math.abs(tc.y - cam.y) > CAMERA.still || Math.abs(tc.k - cam.k) > CAMERA.still / 1000;
     cam = moving ? { x: cam.x + (tc.x - cam.x) * e, y: cam.y + (tc.y - cam.y) * e, k: cam.k + (tc.k - cam.k) * e } : tc;
     world.setAttribute('transform', `translate(${cam.x.toFixed(1)},${cam.y.toFixed(1)}) scale(${cam.k.toFixed(3)})`);
@@ -872,21 +902,25 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   }
   /* Arrange mode: drag a note to move its words and the tail of its arrow; the tip stays at its point. */
   function attachNoteDrag(g: SVGGElement, id: string) {
-    let last: { x: number; y: number } | null = null;
-    const stop = () => { last = null; };
-    g.addEventListener('pointerdown', (e) => { if (e.button !== 0) return; heldCam ??= { ...cam }; last = toWorld(e.clientX, e.clientY); g.setPointerCapture(e.pointerId); e.stopPropagation(); });
-    g.addEventListener('pointermove', (e) => {
-      const p = NOTES[id];
-      if (!last || !p) return;
-      const w = toWorld(e.clientX, e.clientY), dx = w.x - last.x, dy = w.y - last.y;
-      last = w;
-      const mv = (q: [number, number]): [number, number] => [Math.round(q[0] + dx), Math.round(q[1] + dy)];
-      NOTES[id] = { ...p, text: mv(p.text), from: mv(p.from), via: mv(p.via) };
-      drawNotes();
+    g.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0 || !NOTES[id]) return;
+      e.preventDefault();
+      e.stopPropagation();
+      sim.stop();
+      heldCam ??= { ...cam };
+      let last = toWorld(e.clientX, e.clientY);
+      const move = (ev: PointerEvent) => {
+        const p = NOTES[id], w = toWorld(ev.clientX, ev.clientY), dx = w.x - last.x, dy = w.y - last.y;
+        last = w;
+        const mv = (q: [number, number]): [number, number] => [q[0] + dx, q[1] + dy];
+        NOTES[id] = { ...p, text: mv(p.text), from: mv(p.from), via: mv(p.via) };
+        drawNotes();
+      };
+      const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+      window.addEventListener('pointercancel', up);
     });
-    g.addEventListener('pointerup', stop);
-    g.addEventListener('pointercancel', stop);
-    g.addEventListener('lostpointercapture', stop);
   }
 
   /* Arrange mode: a small bar over the map with the "Copy layout" button and the text it copies. */
@@ -897,7 +931,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     bar.innerHTML = `<span>${esc(t(ui.arrangeHint))}</span><button type="button">${esc(t(ui.arrangeCopy))}</button><textarea readonly rows="3"></textarea>`;
     const btn = bar.querySelector('button')!, out = bar.querySelector('textarea')!;
     btn.onclick = async () => {
-      const notes = Object.fromEntries(Object.entries(NOTES).map(([k, v]) => [k, { text: v.text, from: v.from, via: v.via, to: v.to, rot: v.rot }]));
+      const r = (q: [number, number]) => q.map(Math.round);
+      const notes = Object.fromEntries(Object.entries(NOTES).map(([k, v]) => [k, { text: r(v.text), from: r(v.from), via: r(v.via), to: v.to, rot: v.rot }]));
       out.value = JSON.stringify({ HOME_LAYOUT, NOTES: notes });
       out.select();
       try { await navigator.clipboard.writeText(out.value); btn.textContent = t(ui.arrangeCopied); } catch { /* the text stays selected for Cmd+C */ }
