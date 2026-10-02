@@ -6,6 +6,7 @@ import { createMap, type MapApi } from './map';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
+import { filterBar, wireFilters } from './blocks';
 import { esc, go, onChange, parseRoute, setLang, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
@@ -19,9 +20,7 @@ document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
 app.innerHTML = `
   <div class="desk">
     <header class="top">
-      <a href="#/" class="brand" aria-label="${esc(site.name)} — ${esc(t(ui.home))}">
-        <span class="brand-name">${esc(site.name.toLowerCase())}</span>
-      </a>
+      <div id="filters"></div>
       <nav class="top-nav">
         <button class="top-link lang-switch" id="lang-switch"></button>
         <a href="#/resume" class="top-link"><span data-i="resume"></span> <i aria-hidden="true">↗</i></a>
@@ -94,6 +93,9 @@ function paintChrome() {
   const ls = document.getElementById('lang-switch')!;
   ls.textContent = t(ui.langName);
   ls.setAttribute('aria-label', t(ui.langAria));
+  const fb = document.getElementById('filters')!;
+  fb.innerHTML = filterBar('filters');
+  wireFilters(fb);
   const proto = document.getElementById('proto');
   if (proto) proto.textContent = t(ui.prototype);
   const lg = (type: Parameters<typeof icon>[0], k: keyof typeof ui) =>
@@ -254,6 +256,7 @@ mq.addEventListener('change', () => {
 onChange(() => {
   paintChrome();
   map?.rerenderLabels();
+  map?.refilter();
   renderMobile(document.getElementById('mob')!);
   if (!mq.matches) renderPanel(true);
 });

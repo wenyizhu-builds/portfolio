@@ -254,3 +254,10 @@
 ## 2026-10-02 — v59: AI note closer
 
 - "tools I built with AI" moved right, closer to its arrow.
+
+## 2026-10-02 — v60: platform and region filters
+
+- Desktop header (where the name was): PLATFORM Global social · Chinese social · Paid ads, and REGION North America · Europe · Japan · China. Plain words matching the nav; picked = blue underline; pick again to clear.
+- One matching rule (`matches()` in state.ts) greys non-matching points on the map, items in the INDEX/card lists and cards on the phone; map notes of non-matching cases hide.
+- Filters are kept in the address (`?platform=…&region=…`) for sharing filtered links. Platform comes from a new `platforms` field; region from `markets` via `regionOfMarket`.
+- Phone: a swipe row under the header.

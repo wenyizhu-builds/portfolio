@@ -62,10 +62,27 @@ export interface SiteNode {
   related?: string[]; // dotted connections
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
+  platforms?: PlatformKey[]; // which platform filter(s) this work matches; regions come from `markets` (regionOfMarket)
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
 const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
+
+/* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */
+export type PlatformKey = 'global' | 'cn' | 'paid';
+export type RegionKey = 'na' | 'eu' | 'jp' | 'cn';
+export const filterSets = {
+  platform: {
+    label: { en: 'Platform', zh: '平台' } as T,
+    options: { global: { en: 'Global social', zh: '海外社媒' }, cn: { en: 'Chinese social', zh: '中国社媒' }, paid: { en: 'Paid ads', zh: '付费广告' } } as Record<PlatformKey, T>,
+  },
+  region: {
+    label: { en: 'Region', zh: '地区' } as T,
+    options: { na: { en: 'North America', zh: '北美' }, eu: { en: 'Europe', zh: '欧洲' }, jp: { en: 'Japan', zh: '日本' }, cn: { en: 'China', zh: '中国' } } as Record<RegionKey, T>,
+  },
+};
+/** Which region filter a market code counts towards (codes not listed belong to none). */
+export const regionOfMarket: Record<string, RegionKey> = { NA: 'na', US: 'na', EN: 'na', EU: 'eu', DE: 'eu', FR: 'eu', UK: 'eu', JP: 'jp', CN: 'cn' };
 
 export const site = {
   name: 'Wenyi Zhu',
@@ -120,6 +137,7 @@ export const nodes: SiteNode[] = [
 
   {
     id: 'ua-creative-strategy',
+    platforms: ['paid'],
     note: { en: '~3.7× projected LTV\nvs benchmark', zh: '预估 LTV\n约为基准 3.7 倍' },
     team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
     type: 'case',
@@ -166,6 +184,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'xbox-launch',
+    platforms: ['paid'],
     team: { en: "Me (creative strategy), 1 media strategist, 2 creative producers and 1 agency partner" },
     type: 'case',
     period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
@@ -207,6 +226,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'influencer-activation',
+    platforms: ['global'],
     team: { en: "Influencer Strategy & Execution (my role), Execution Support x2, Agency Partners x2" },
     type: 'case',
     parent: 'more-growth',
@@ -244,6 +264,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
+    platforms: ['global'],
     note: { en: 'my framework\nfor testing\nnew channels', zh: '我的\n新渠道测试框架' },
     team: { en: "Me (testing strategy and project lead) and 1 data operations specialist, working with 2 platform liaisons from TikTok" },
     type: 'case',
@@ -289,6 +310,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'zzz-jp-accounts',
+    platforms: ['global'],
     note: { en: '0 → 80M+\norganic views', zh: '0 → 8000 万+\n自然播放' },
     team: { en: "Me (social strategy), 2 Japanese-language content reviewers and 3 agency partners" },
     type: 'case',
@@ -339,6 +361,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'genshin-en-accounts',
+    platforms: ['global'],
     team: { en: "Growth Strategy Support & Content Review (my role), Growth Strategy Lead x1, Agency Partner x1" },
     type: 'case',
     parent: 'more-growth',
@@ -374,6 +397,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'giveaway-campaign',
+    platforms: ['global'],
     team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
     type: 'case',
     parent: 'more-growth',
@@ -402,6 +426,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
+    platforms: ['global'],
     note: { en: '600M+ views', zh: '6 亿+ 播放' },
     team: { en: "Filter Creative Development & Influencer Activation Support (my role), Campaign Lead x1, TikTok/Snapchat Platform Liaisons x2, Agency Partners x3" },
     type: 'case',
@@ -432,6 +457,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'landing-page',
+    platforms: ['global'],
     team: { en: "Creative Development Support (role), Landing Page Strategy Lead x1, Web Production x2" },
     type: 'case',
     parent: 'more-growth',
@@ -540,11 +566,11 @@ export const nodes: SiteNode[] = [
   },
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
-  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
-  { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
-  { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
-  { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
-  { id: 'nowness', type: 'role', parent: 'experience', label: { en: 'NOWNESS' }, kicker: { en: 'Social Media Content Strategy Intern' }, period: 'Sep – Nov 2020', markets: ['CN'], summary: { en: 'WeChat and Weibo content and publishing for art and culture pieces.' } },
+  { id: 'hoyoverse', type: 'role', platforms: ['global', 'paid'], parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
+  { id: 'seminary-coop', type: 'role', platforms: ['global'], parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
+  { id: 'nike', type: 'role', platforms: ['cn'], parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
+  { id: 'weber-shandwick', type: 'role', platforms: ['cn'], parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
+  { id: 'nowness', type: 'role', platforms: ['cn'], parent: 'experience', label: { en: 'NOWNESS' }, kicker: { en: 'Social Media Content Strategy Intern' }, period: 'Sep – Nov 2020', markets: ['CN'], summary: { en: 'WeChat and Weibo content and publishing for art and culture pieces.' } },
 
   { id: 'uchicago', type: 'school', parent: 'education', label: { en: 'University of Chicago' }, kicker: { en: 'MA, Humanities' }, period: '2022 – 2023' },
   { id: 'xjtlu', type: 'school', parent: 'education', label: { en: "Xi'an Jiaotong-Liverpool University" }, kicker: { en: 'BA, Communication and Media Studies' }, period: '2017 – 2021' },

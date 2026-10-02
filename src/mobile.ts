@@ -1,7 +1,7 @@
 import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
-import { esc, reducedMotion, setLang, state, t } from './state';
+import { esc, matches, reducedMotion, setLang, state, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
-import { L, contactRows, detailLists, intro, resumeLists, resumePdf, summary, tx, wireCopy } from './blocks';
+import { L, contactRows, detailLists, filterBar, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
 /*
  * Phone layout: one scrolling page. The map becomes a menu (owner decision
@@ -23,7 +23,7 @@ function card(n: SiteNode): string {
   const media = (n.diagram ? [] : n.media || []).map(m => m.src
     ? `<button class="m-visual" data-visual-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/></button>`
     : `<div class="m-media">${L('visualsPrep')}</div>`).join('');
-  return `<article class="m-card ${n.status ? 'is-prep' : ''}" id="m-${n.id}">
+  return `<article class="m-card ${n.status ? 'is-prep' : ''}${matches(n.id) ? '' : ' is-off'}" id="m-${n.id}">
     <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}
     ${diagram}
@@ -109,6 +109,7 @@ export function renderMobile(root: HTMLElement) {
       <a href="#/" class="m-brand"><span>${esc(site.name.toLowerCase())}</span></a>
       <button class="m-lang" data-lang="${state.lang === 'en' ? 'zh' : 'en'}" aria-label="${L('langAria')}">${L('langName')}</button>
     </header>
+    ${filterBar('m-filters')}
     <div class="m-hero" id="m-home">
       ${astSvg(AST.phoneHero, 'm-hero-ast')}
       <h1>${esc(site.name)}</h1>
@@ -137,6 +138,7 @@ export function renderMobile(root: HTMLElement) {
       if (a.getAttribute('href') === location.hash) window.dispatchEvent(new HashChangeEvent('hashchange'));
     });
   });
+  wireFilters(root);
   wireCopy(root);
 }
 

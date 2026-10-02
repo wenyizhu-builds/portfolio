@@ -30,6 +30,9 @@
   --side-right: 20px; /* minimum gap to the window edge */
   --side-at: 75vw; /* the panel column is centred on this line (as in the reference), never closer to the edge than --side-right */
   --page-x: 40px; /* header and intro-strip side margin */
+  --filter-gap: 56px; /* between the Platform and Region groups in the header */
+  --filter-item-gap: 18px; /* between options */
+  --m-filter-gap: 32px; /* phone: between the two groups in the swipe row */
   --map-inset: 24px; /* map margin from the window edge */
   /* Card type: ONE typeface, TWO sizes, TWO colours (ink, grey). */
   --fs-text: 14px;
@@ -402,3 +405,16 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .map-notes path { fill: none; stroke: var(--note); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .map-notes > g { transition: opacity var(--fade-node); }
 .map-notes > g.is-hidden { opacity: 0; }
+
+/* Filters (v60): plain words in the header, sized and aligned like the nav on the right. */
+.filters { display: flex; align-items: center; gap: var(--filter-gap); }
+.fgroup { display: flex; align-items: baseline; gap: var(--filter-item-gap); }
+.fk { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
+.fbtn { font: inherit; font-size: 16px; color: var(--ink); background: none; border: 0; padding: 4px 0; cursor: pointer; }
+.fbtn:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.fbtn[aria-pressed='true'] { color: var(--cobalt); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.nlink.is-off, .ngroup-h.is-off { opacity: 0.35; }
+.m-card.is-off { opacity: 0.35; }
+.m-filters { display: flex; gap: var(--m-filter-gap); overflow-x: auto; padding: 12px 0; border-bottom: 1px solid var(--line-soft); scrollbar-width: none; white-space: nowrap; }
+.m-filters::-webkit-scrollbar { display: none; }
+.m-filters .fbtn { font-size: var(--fs-text); }

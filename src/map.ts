@@ -10,7 +10,7 @@ import {
   type SimulationNodeDatum,
 } from 'd3-force';
 import { ancestors, byId, childrenOf, nodes, rolesOrder, ui, type SiteNode } from './content';
-import { esc, isDone, reducedMotion, state, t } from './state';
+import { esc, isDone, matches, reducedMotion, state, t } from './state';
 import { shapeFor } from './shapes';
 
 interface SimNode extends SimulationNodeDatum {
@@ -171,6 +171,7 @@ function wrap(label: string, max = LAYOUT.labelWrap): string[] {
 
 export interface MapApi {
   setFocus(id: string | null): void;
+  refilter(): void;
   setViewport(area: { x: number; y: number; w: number; h: number }): void;
   rerenderLabels(): void;
 }
@@ -716,19 +717,13 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }
     }
 
+    paintFar();
     els.forEach((el, id) => {
       el.classList.toggle('is-current', id === (focus || 'root'));
-      el.classList.toggle('is-far', !near.has(id));
       el.classList.toggle('is-visited', id !== 'root' && isDone(id) && id !== focus);
       const par = byId.get(id)?.parent;
       el.classList.toggle('show-kick', !!focus && (id === focus || par === focus || par === byId.get(focus)?.parent));
     });
-    for (const l of links) {
-      const el = linkEls.get(l.key)!;
-      const s = typeof l.source === 'object' ? (l.source as SimNode).id : (l.source as string);
-      const tg = typeof l.target === 'object' ? (l.target as SimNode).id : (l.target as string);
-      el.classList.toggle('is-far', !(near.has(s) && near.has(tg)));
-    }
 
     firstEntrance = false;
     sim.nodes([...simNodes.values()]);
@@ -797,6 +792,18 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   }
 
   /** Draw one frame; returns true while the camera is still easing. */
+  /** Grey a point when it's off to the side of the selection, or doesn't match the chosen filters (v60). */
+  function paintFar() {
+    const lit = (id: string) => near.has(id) && matches(id);
+    els.forEach((el, id) => el.classList.toggle('is-far', !lit(id)));
+    for (const l of links) {
+      const el = linkEls.get(l.key)!;
+      const s = typeof l.source === 'object' ? (l.source as SimNode).id : (l.source as string);
+      const tg = typeof l.target === 'object' ? (l.target as SimNode).id : (l.target as string);
+      el.classList.toggle('is-far', !(lit(s) && lit(tg)));
+    }
+  }
+
   function render(): boolean {
     const tc = targetCamera();
     const e = reducedMotion.matches ? 1 : CAMERA.ease;
@@ -841,7 +848,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   /** Notes: the hand-placed ones (NOTES) show on the home map only; a case's other note shows while its group is open.
       Either way a note is nudged back inside the map's free area, so the card, the header or the window edge never hides it. */
   function drawNotes() {
-    const shown = (id: string) => simNodes.has(id) && near.has(id);
+    const shown = (id: string) => simNodes.has(id) && near.has(id) && matches(id);
     noteEls.forEach((g, id) => {
       const n = simNodes.get(id);
       const hand = NOTES[id];
@@ -915,6 +922,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     },
     setViewport(a) {
       area = a;
+      wake();
+    },
+    refilter() {
+      paintFar();
       wake();
     },
     rerenderLabels() {

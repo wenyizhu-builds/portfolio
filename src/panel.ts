@@ -1,5 +1,5 @@
 import { ancestors, byId, childrenOf, featuredOrder, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
-import { esc, isDone, t } from './state';
+import { esc, isDone, matches, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
 import { L, contactRows, detailLists, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
@@ -20,12 +20,12 @@ function nodeLink(id: string, sub = ''): string {
   const line = n.status ? t(n.kicker) : sub;
   // an item that can't be opened further (a single piece of work, a role) gets a dash; groups don't
   const leaf = !childrenOf(id).length;
-  return `<a class="nlink${leaf ? ' is-leaf' : ''}${isDone(id) ? ' is-visited' : ''}" href="#/${id}"><span class="nlink-t">${tx(n.label)}</span>${line ? `<span class="lab">${esc(line)}</span>` : ''}</a>`;
+  return `<a class="nlink${leaf ? ' is-leaf' : ''}${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}"><span class="nlink-t">${tx(n.label)}</span>${line ? `<span class="lab">${esc(line)}</span>` : ''}</a>`;
 }
 
 function groupLink(id: string): string {
   const n = byId.get(id);
-  return n ? `<a class="ngroup-h${isDone(id) ? ' is-visited' : ''}" href="#/${id}">${tx(n.label)}</a>` : '';
+  return n ? `<a class="ngroup-h${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}">${tx(n.label)}</a>` : '';
 }
 
 function details(mark: string, title: string, body: string, open = false, cls = ''): string {

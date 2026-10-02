@@ -4,9 +4,9 @@ import { publishedMarkup } from './published-copy';
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
-import { byId, childrenOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
+import { byId, childrenOf, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
 import { copyFieldKey } from './copy-binding';
-import { esc, missingZh, state, t } from './state';
+import { filters, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
 
 export const L = (k: keyof typeof ui) => esc(t(ui[k]));
 
@@ -172,6 +172,26 @@ export function wireCopy(root: ParentNode) {
       } catch {
         /* clipboard unavailable: the address is still visible and selectable */
       }
+    };
+  });
+}
+
+/* ---------- Filters (v60): the same row in the desktop header and on the phone ---------- */
+export function filterBar(cls: string): string {
+  const group = (kind: FilterKind) => {
+    const set = filterSets[kind];
+    const opts = Object.entries(set.options as Record<string, T>)
+      .map(([k, v]) => `<button type="button" class="fbtn" data-filter="${kind}:${k}" aria-pressed="${filters[kind] === k}">${esc(t(v))}</button>`)
+      .join('');
+    return `<div class="fgroup" role="group" aria-label="${esc(t(set.label))}"><span class="fk">${esc(t(set.label))}</span>${opts}</div>`;
+  };
+  return `<nav class="${cls}">${group('platform')}${group('region')}</nav>`;
+}
+export function wireFilters(root: ParentNode) {
+  root.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((b) => {
+    b.onclick = () => {
+      const [kind, key] = b.dataset.filter!.split(':');
+      toggleFilter(kind as FilterKind, key);
     };
   });
 }
