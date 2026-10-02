@@ -358,3 +358,7 @@
 ## 2026-10-02 — v62.18 One creator video
 
 - Interactive Filter links: TikTok event page · Creator video example (the TikTok one only).
+
+## 2026-10-02 — v62.19 Giveaway creator video link
+
+- Cross-Platform Community Giveaway: "Creator video example ↗" (Instagram) under the summary.

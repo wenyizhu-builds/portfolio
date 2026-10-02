@@ -401,6 +401,9 @@ export const nodes: SiteNode[] = [
       { metric: "~50%", en: "lower CPM than target" },
       { metric: "99%", en: "positive sentiment" },
     ],
+    links: [
+      { label: { en: 'Creator video example', zh: '达人视频示例' }, href: 'https://www.instagram.com/p/C_Myepry5Co/' },
+    ],
   },
   {
     id: 'genshin-en-accounts',
