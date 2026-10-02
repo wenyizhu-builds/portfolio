@@ -329,3 +329,7 @@
 
 - Interactive Filter Campaign: first-person summary with context for Lantern Rite, one-paragraph challenge, three blue-labelled bullets, four one-line results, team in the "Me (…)" format, period Jan – Feb 2024, markets US/JP.
 - X Creator Campaign now has a dotted connection to the Giveaway (its benchmark campaign); the Giveaway moved next to it in More cases.
+
+## 2026-10-02 — v62.12 Editor launcher
+
+- `Open Editor.command` (Mac only) now stops a leftover editor holding the port before starting; executable permission restored after the edit (L34).
