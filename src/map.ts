@@ -40,14 +40,14 @@ const HOME_LAYOUT: Record<string, [number, number]> = {
   'growth-social': [200, 40],
   'zzz-jp-accounts': [330, -60],
   'interactive-filter': [265, 170],
-  info: [-165, -60],
-  education: [-205, -175],
-  experience: [-285, 15],
+  info: [-215, -70],
+  education: [-265, -180],
+  experience: [-345, 5],
   ai: [-110, 170],
-  'ai-workbench': [-225, 245],
-  'ai-slot-1': [-120, 300],
-  'ai-slot-2': [5, 270],
-  creative: [80, 210],
+  'ai-workbench': [-235, 240],
+  'ai-slot-1': [-115, 295],
+  'ai-slot-2': [5, 262],
+  creative: [-235, 50],
 };
 const homeOf = (id: string): [number, number] | undefined => (id === 'root' ? [0, 0] : HOME_LAYOUT[id]);
 /** Link length from the home layout, when both ends have a home position. */
@@ -77,7 +77,7 @@ const NOTES: Record<string, NotePlace> = {
   'zzz-jp-accounts': { text: [-50, -86], from: [-12, -58], via: [-4, -44], to: [-2, -22], rot: -3 },
   'gip-testing': { text: [74, -38], from: [62, -22], via: [36, -18], to: [18, -8], rot: 2 },
   'interactive-filter': { text: [-64, 118], from: [-6, 92], via: [2, 82], to: [0, 70], rot: 2 },
-  ai: { text: [-150, -48], from: [-80, -30], via: [-50, -18], to: [-22, -6], rot: -5 },
+  ai: { text: [52, -40], from: [44, -36], via: [32, -26], to: [18, -10], rot: -3 },
 };
 const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 20, line: 1.1, head: 8, headAngle: 0.5 };
 
@@ -117,7 +117,7 @@ const LAYOUT = {
 };
 
 const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
-const FOLDED_AT_HOME = new Set(['creative', 'growth-paid', 'growth-social']); // the two work groups show only their flagship cases at home (v62.31)
+const FOLDED_AT_HOME = new Set(['creative', 'info', 'growth-paid', 'growth-social']); // the two work groups show only their flagship cases at home (v62.31)
 
 /** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
 function hash(id: string): number {
