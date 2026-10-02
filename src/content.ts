@@ -503,20 +503,20 @@ export const nodes: SiteNode[] = [
     type: 'case',
     period: 'Aug – Sep 2024',
     parent: 'more-growth',
-    headline: { num: '9.5M+', label: { en: 'visitors, ~7x the previous event page' } },
-    label: { en: 'Gamified Launch Landing Page' },
+    headline: { num: '9.5M+', label: { en: 'visitors, ~7x benchmark' } },
+    label: { en: 'Gamified Landing Page' },
     kicker: { en: 'Genshin Impact · Web' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
     markets: ['Global'],
     summary: {
-      en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than a similar campaign page.",
+      en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Every major Genshin Impact update sends a huge wave of traffic to its launch landing page, and this one was set to get 1B+ impressions from ads, creators and social. But past pages only listed what was new, so most visitors looked and left. As the team’s first interactive landing page, it needed a game that felt like Genshin, gave players a reason to share, and still led them to the download button." },
+          { en: "Our previous launch landing pages were mostly informational. This time, the team wanted to experiment: add a game and a reward system to make the page interactive, and see whether that would boost conversion. The challenge was designing our first gamified landing page." },
         ],
       },
       {
@@ -524,15 +524,15 @@ export const nodes: SiteNode[] = [
         items: [
           { en: "Researched formats: Studied interactive web campaigns, from quizzes and recaps to referral and reward pages, to find a format that could do more than list what’s new." },
           { en: "Designed the quiz: Developed an MBTI-style quiz built on scenes from the new region, then cut it to three questions and eight results so fewer players dropped off. The quiz became the heart of the page, linked to the rewards and the download button." },
-          { en: "Built the sharing loop: Shaped the result cards and the reward draw, so finishing the quiz earned a draw and inviting friends earned more. Sharing became the natural next step after getting a result, and each share brought in 4.1 visitors on average, twice the target." },
+          { en: "Built the sharing loop: Shaped the result cards and the reward draw, so finishing the quiz earned a draw and inviting friends earned more. Sharing became the natural next step after getting a result, and each share brought in about 4 visitors, twice the target." },
         ],
       },
     ],
     results: [
-      { metric: "9.5M+", en: "visitors, ~7x the previous event page" },
-      { metric: "1.8M+", en: "players in the reward draw, up 60%" },
-      { metric: "3x", en: "conversion rate vs a similar campaign page" },
-      { metric: "4.1", en: "visitors per share, 2x the target" },
+      { metric: "9.5M+", en: "visitors, ~7x benchmark" },
+      { metric: "1.8M+", en: "players in the reward draw, up 60% vs benchmark" },
+      { metric: "3x", en: "conversion rate vs benchmark" },
+      { metric: "~4", en: "visitors per share, 2x the target" },
     ],
     media: [{ src: 'media/landing-page/blaze-to-natlan-banner.jpg',
       thumbnail: 'media/landing-page/blaze-to-natlan-thumb.jpg', floating: true, alt: { en: 'Genshin Impact “Blaze to Natlan” web event banner: take part to win in-game rewards' } }],

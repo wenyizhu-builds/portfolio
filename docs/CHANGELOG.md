@@ -383,3 +383,7 @@
 ## 2026-10-02 — v62.24 Landing page case rewritten
 
 - Retitled "Gamified Launch Landing Page" (was "Landing Page Gamification"); first-person summary, one-paragraph challenge, three blue-labelled bullets, four one-line results, team in the "Me (…)" format, period Aug – Sep 2024; Blaze to Natlan event banner and event page link (personal invite code removed from the URL).
+
+## 2026-10-02 — v62.25 Landing page copy simplified
+
+- Retitled "Gamified Landing Page"; challenge rewritten in the owner's framing (experiment: game + rewards to test conversion; first gamified landing page), 1B+ impressions removed; comparisons say "benchmark"; "~4 visitors per share".
