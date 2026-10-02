@@ -285,3 +285,7 @@
 - Opening a group of 4+ cases (More cases, Creative Work) spreads them all the way round it, leaving one gap for the line back to the parent; with one of its cases open, siblings keep a half fan.
 - Flagship cases are white squares like the other cases; the hand-written notes now do the highlighting.
 - Layout check: 8 (was 11 before this change); remaining issues are in the AI Workbench and HoYoverse views and predate it.
+
+## 2026-10-02 — v62.1: fix career path unfolding outside filters
+
+- Opening Growth Marketing no longer pulls in every role: the "show the whole career path" rule now applies only on the filtered home map (L31).

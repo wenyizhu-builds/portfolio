@@ -510,7 +510,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       for (const n of nodes)
         if (!childrenOf(n.id).length && matches(n.id)) [n.id, ...ancestors(n.id)].forEach((a) => vis.add(a));
     // a visible role needs its whole chain back to Experience
-    if ((f && (f === 'experience' || byId.get(f)?.type === 'role')) || rolesOrder.some((r) => vis.has(r))) rolesOrder.forEach((r) => vis.add(r));
+    if ((f && (f === 'experience' || byId.get(f)?.type === 'role')) || (!f && filtering() && rolesOrder.some((r) => vis.has(r)))) rolesOrder.forEach((r) => vis.add(r));
     return vis;
   }
 
