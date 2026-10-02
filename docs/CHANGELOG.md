@@ -306,3 +306,7 @@
 ## 2026-10-02 — v62.6 Giveaway copy clarified
 
 - "third-party community" → "the biggest Genshin fan account on X" (owner edit). Bullets now say how players entered (quote-posting a creative entry), what creators did (posted entries first), and why entries fell short (too much effort on X), for readers with no context.
+
+## 2026-10-02 — v62.7 Giveaway: no "third-party"
+
+- Challenge and lesson now say "the biggest fan account on X" / "fan accounts" instead of "third-party community"; "semi-active" → "casual".
