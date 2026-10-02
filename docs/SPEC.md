@@ -115,7 +115,7 @@
 - **没有 Contact 节点**：联系方式放在顶栏的 "Let's talk ↗"。
 - **HoYoverse** 用虚线连到 Growth Marketing 和 AI Workbench；每个案例卡片上写 "HoYoverse · 日期 →"。
 - **X Creator Campaign** 和 **Cross-Platform Community Giveaway** 在 More cases 里相邻排列（同类创作者活动）；不加虚线（用户看过后觉得容易混淆，v62.14 去掉）。
-- **案例外链**（`links`）：摘要下方一行灰色带下划线的链接（例如 "TikTok event page ↗ · A player’s video ↗"），新窗口打开；只放公开页面。Interactive Filter 用了活动页和两条达人视频（Creator video 1 / 2）。（v62.15–62.17）
+- **案例外链**（`links`）：摘要下方一行灰色带下划线的链接（例如 "TikTok event page ↗ · A player’s video ↗"），新窗口打开；只放公开页面。Interactive Filter 用了活动页和一条达人视频（Creator video example）。（v62.15–62.18）
 
 ### 交互模型（参考 andrewtrousdale.com，v32 起）
 

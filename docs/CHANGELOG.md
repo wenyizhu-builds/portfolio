@@ -354,3 +354,7 @@
 ## 2026-10-02 — v62.17 Creator video links
 
 - Interactive Filter links renamed and reordered: TikTok event page · Creator video 1 (TikTok) · Creator video 2 (YouTube).
+
+## 2026-10-02 — v62.18 One creator video
+
+- Interactive Filter links: TikTok event page · Creator video example (the TikTok one only).

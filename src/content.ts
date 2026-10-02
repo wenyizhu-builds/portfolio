@@ -490,8 +490,7 @@ export const nodes: SiteNode[] = [
       thumbnail: 'media/interactive-filter/lantern-rite-event-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Lantern Rite submission event banner, the TikTok event players joined with the filters' } }],
     links: [
       { label: { en: 'TikTok event page', zh: 'TikTok 活动页' }, href: 'https://activity.us.tiktok.com/magic/eco/runtime/release/65ae743a08a22502879a1571?appType=muse&magic_page_no=1&use_spark=1&magic_source=usExternal' },
-      { label: { en: 'Creator video 1', zh: '达人视频 1' }, href: 'https://www.tiktok.com/@claudiaalende/video/7330704427923377450' },
-      { label: { en: 'Creator video 2', zh: '达人视频 2' }, href: 'https://www.youtube.com/shorts/At8-X34Ouzw' },
+      { label: { en: 'Creator video example', zh: '达人视频示例' }, href: 'https://www.tiktok.com/@claudiaalende/video/7330704427923377450' },
     ],
   },
   {
