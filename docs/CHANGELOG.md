@@ -395,3 +395,7 @@
 ## 2026-10-02 — v62.27 Landing page bullets cut to the point
 
 - Each What I did bullet is now one short sentence.
+
+## 2026-10-02 — v62.28 Landing page bullets in growth language
+
+- Benchmarked formats / Designed the hook (personality quiz as a viral format, three questions to cut drop-off) / Built the viral loop (rewards tied to referrals, ~4 visitors per share).

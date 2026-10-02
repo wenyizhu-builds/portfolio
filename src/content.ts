@@ -522,9 +522,9 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Researched formats: Studied interactive web campaigns to find a format that does more than list what’s new." },
-          { en: "Designed the quiz: Built a three-question MBTI-style quiz with eight results, linked to rewards and the download button." },
-          { en: "Built the sharing loop: Finishing the quiz earned a reward draw and inviting friends earned more, so each share brought in about 4 visitors." },
+          { en: "Benchmarked formats: Studied interactive web campaigns to find a mechanic with shareability built in." },
+          { en: "Designed the hook: Chose a personality quiz, a proven viral format, so every player got a personalized result worth sharing, and kept it to three questions to cut drop-off." },
+          { en: "Built the viral loop: Tied rewards to referrals. Finishing the quiz unlocked a reward draw and each friend invited earned another, so every share brought in about 4 new visitors." },
         ],
       },
     ],
