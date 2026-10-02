@@ -665,6 +665,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         if (n) { n.fx = null; n.fy = null; }
         g.classList.remove('dragging');
         sim.alphaTarget(0);
+        // on the home map a dropped point goes all the way back to its place (and the others settle round it), v62.45
+        if (!focus) sim.alpha(LAYOUT.alphaStart).restart();
       } else if (select) onSelect(id);
       start = null;
       dragging = false;

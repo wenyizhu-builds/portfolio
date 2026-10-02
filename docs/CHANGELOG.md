@@ -479,3 +479,8 @@
 ## 2026-10-02 — v62.44 region tags: landing page global, filter campaign adds Europe
 
 - Owner: the Gamified Landing Page ran in every language → North America, Europe and Japan (not China: global Genshin version). Branded Filter Campaign also worked with European creators → US, EU, JP.
+
+## 2026-10-02 — v62.45 dropped points return home; sharper landing-page visual
+
+- Owner saw ZZZ sitting among the Paid & UA cases with lines crossing. Cause: after dragging a point on the home map, the pull back faded out before it arrived, and the avoidance forces then settled round the wrong spot. Dropping a point on the home map now reheats the layout, so it returns all the way.
+- Gamified Landing Page visual replaced with the owner's higher-resolution banner (2050×1135, frame edge trimmed).
