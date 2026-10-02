@@ -289,3 +289,7 @@
 ## 2026-10-02 — v62.1: fix career path unfolding outside filters
 
 - Opening Growth Marketing no longer pulls in every role: the "show the whole career path" rule now applies only on the filtered home map (L31).
+
+## 2026-10-02 — EN Social Channel Growth case rewritten
+
+- Retitled from "Genshin Impact: EN Social Growth"; "accounts" → "channels"; first-person summary, one-paragraph challenge, four blue-labelled bullets, four results, team in the "Me (…)" format.

@@ -365,31 +365,41 @@ export const nodes: SiteNode[] = [
   {
     id: 'genshin-en-accounts',
     platforms: ['global'],
-    team: { en: "Growth Strategy Support & Content Review (my role), Growth Strategy Lead x1, Agency Partner x1" },
+    team: { en: "Me (growth strategy support and content review), 1 growth strategy lead and 1 agency partner" },
     type: 'case',
     parent: 'more-growth',
-    headline: { num: '136%', label: { en: 'of view KPI on established accounts' } },
-    label: { en: 'Genshin Impact: EN Social Growth' },
-    kicker: { en: 'TikTok, YouTube' },
+    headline: { num: '136%', label: { en: 'of view target on established channels' } },
+    label: { en: 'EN Social Channel Growth' },
+    kicker: { en: 'Genshin Impact · TikTok, YouTube' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'YouTube' }],
     period: 'Q4 2023',
-    markets: ['NA'],
+    markets: ['EN'],
     summary: {
-      en: 'Helped refresh content direction for plateauing EN creator-style accounts and set lanes for three new ones.',
+      en: "I helped grow a network of 8 English-language Genshin Impact channels on TikTok and YouTube, refreshing 5 that had plateaued and finding a clear niche for 3 new ones. The established channels hit 136% of their view target at about 30% below target CPM.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact used creator-style matrix accounts to keep players engaged outside official brand channels. These accounts distributed useful game content, maintained platform buzz between major campaigns, and created low-cost social reach for active players." },
-          { en: "The 5 established EN accounts I supported had already built audiences, but growth was slowing: formats were becoming repetitive, follower interest was weakening, and traffic rose around major game updates but softened in quieter periods. The goal was to refresh established account direction while helping 3 new accounts find clearer verticals and content directions, all while keeping CPM efficient." },
+          { en: "Genshin Impact ran a network of English-language social channels on TikTok and YouTube to keep players engaged between major updates. The 5 established channels had stalled: formats were getting repetitive, fewer viewers were following, and views dropped between updates. I needed to help refresh them and find a clear niche for 3 new channels, while keeping CPM under target." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Diagnosed what stalled growth: Used Tubular and monthly reports to compare TikTok trends, competitor channels and each channel’s performance, and pinpointed the gaps: too few evergreen topics, stale formats and weak follower conversion." },
+          { en: "Refreshed the content mix: Turned the findings into changes for each channel. Guide channels that leaned on time-sensitive patch tutorials added short, entertaining gameplay tips and varied their covers, so views no longer depended on update days." },
+          { en: "Positioned the new channels: Researched trends, competitors and early performance signals to give each of the 3 new channels a clear niche before scaling production." },
+          { en: "Ran monthly reviews: Tracked KPIs, reviewed English content and kept the agency’s output aligned with each channel’s growth goals." },
         ],
       },
     ],
     results: [
-      { metric: '5', en: 'established accounts: +45K followers, 21M new views, 136% of view KPI' },
-      { metric: '3', en: 'new accounts: 19K followers, 14M views' },
+      { metric: "136%", en: "of view target on the 5 established channels" },
+      { metric: "+45K", en: "followers and 21M new views on the established channels" },
+      { metric: "14M", en: "views and 19K followers for the 3 new channels" },
+      { metric: "~30%", en: "below target CPM" },
     ],
     media: [{
       src: 'media/genshin-en-accounts/genshin-social-growth.jpg',
