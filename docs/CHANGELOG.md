@@ -467,3 +467,7 @@
 ## 2026-10-02 — v62.41 owner's second home layout
 
 - HOME_LAYOUT and NOTES replaced with the owner's new arrange-tool values (all AI projects folded).
+
+## 2026-10-02 — v62.42 Region filter only
+
+- Platform filter removed (it repeated the two groups; Chinese social matched no case). `platforms` fields and PlatformKey removed; URL keeps ?region= only. X Creator and English Social Channel Growth markets EN → NA (owner: EN was mainly North America).

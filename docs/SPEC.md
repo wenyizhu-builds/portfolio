@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.39
+> 最后更新：2026-10-02 · 对应版本 v62.42
+
+- **筛选只留地区（v62.42，用户确认）**：去掉 Platform（Global social / Chinese social / Paid ads）。原因：它和两个大类重复（Paid ads ≈ Paid & UA Growth，Global social ≈ Creator & Social），且「Chinese social」匹配不到任何案例。地区筛选照旧，网址只剩 `?region=`。X Creator Campaign 和 English Social Channel Growth 的市场从 EN 改为 NA（用户：EN 主要是北美）；`regionOfMarket` 去掉 EN。
 
 - **AI Projects 首页折叠（v62.39–40）**：首页 AI Projects 的三个作品全部收起（包括 Dashboard），点开 AI Projects 才出现。`ALSO_AT_HOME` 留作以后单独露出某个点用，现在为空。
 

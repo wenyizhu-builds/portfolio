@@ -191,7 +191,7 @@ export function filterBar(cls: string): string {
       .join('');
     return `<div class="fgroup" role="group" aria-label="${esc(t(set.label))}"><span class="fk">${esc(t(set.label))}</span>${opts}</div>`;
   };
-  return `<nav class="${cls}">${group('platform')}${group('region')}</nav>`;
+  return `<nav class="${cls}">${group('region')}</nav>`;
 }
 /** Phone: two plain drop-downs — easy to reach with a thumb, nothing to swipe. */
 export function filterSelects(): string {
@@ -202,7 +202,7 @@ export function filterSelects(): string {
       .join('');
     return `<label class="m-fsel"><span class="fk">${esc(t(set.label))}</span><select data-fsel="${kind}"><option value="">${esc(t(filterAll))}</option>${opts}</select></label>`;
   };
-  return `<div class="m-filters">${sel('platform')}${sel('region')}</div>`;
+  return `<div class="m-filters">${sel('region')}</div>`;
 }
 /** Both forms of the filters; `after` runs once a choice has been applied. */
 export function wireFilters(root: ParentNode, after?: () => void) {

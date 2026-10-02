@@ -1,4 +1,4 @@
-import { byId, childrenOf, filterSets, regionOfMarket, type Lang, type PlatformKey, type RegionKey, type T } from './content';
+import { byId, childrenOf, filterSets, regionOfMarket, type Lang, type RegionKey, type T } from './content';
 
 type Listener = () => void;
 const listeners = new Set<Listener>();
@@ -29,19 +29,18 @@ export function setLang(lang: Lang) {
   listeners.forEach((l) => l());
 }
 
-/* ---------- Filters (v60): kept in the address (?platform=…&region=…) so a filtered view can be shared ---------- */
+/* ---------- Filters (v60; region only since v62.42): kept in the address (?region=…) so a filtered view can be shared ---------- */
 export type FilterKind = keyof typeof filterSets;
-export const filters: { platform: PlatformKey | null; region: RegionKey | null } = { platform: null, region: null };
+export const filters: { region: RegionKey | null } = { region: null };
 try {
   const q = new URLSearchParams(location.search);
-  const p = q.get('platform'), r = q.get('region');
-  if (p && p in filterSets.platform.options) filters.platform = p as PlatformKey;
+  const r = q.get('region');
   if (r && r in filterSets.region.options) filters.region = r as RegionKey;
 } catch {
   /* malformed address: no filter */
 }
 
-export const filtering = () => !!(filters.platform || filters.region);
+export const filtering = () => !!filters.region;
 
 /** Pick an option, or clear it when it is picked again. */
 export function toggleFilter(kind: FilterKind, key: string) {
@@ -64,16 +63,14 @@ export function setFilter(kind: FilterKind, key: string | null) {
 /** One rule for the map, the INDEX and the phone list: a piece of work matches every chosen filter;
     a group matches when anything inside it does. Nothing chosen = everything matches. */
 export function matches(id: string): boolean {
-  if (!filters.platform && !filters.region) return true;
+  if (!filters.region) return true;
   if (id === 'root') return true;
   const n = byId.get(id);
   if (!n) return true;
   const kids = childrenOf(id);
   if (kids.length) return kids.some((k) => matches(k.id));
   if (n.status) return false; // a placeholder has nothing to show for any filter
-  const okP = !filters.platform || (n.platforms ?? []).includes(filters.platform);
-  const okR = !filters.region || (n.markets ?? []).some((m) => regionOfMarket[m] === filters.region);
-  return okP && okR;
+  return (n.markets ?? []).some((m) => regionOfMarket[m] === filters.region);
 }
 
 export function onChange(l: Listener) {
