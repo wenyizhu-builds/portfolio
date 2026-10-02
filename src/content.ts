@@ -459,7 +459,7 @@ export const nodes: SiteNode[] = [
     period: 'Jan – Feb 2024',
     parent: 'more-growth',
     headline: { num: '600M+', label: { en: 'views across TikTok and Snapchat' } },
-    label: { en: 'TikTok Branded Effect Campaign' },
+    label: { en: 'TikTok & Snapchat Branded Filter Campaign' },
     kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'Snapchat' }, { en: 'AR filters' }, { en: 'Creator marketing' }],

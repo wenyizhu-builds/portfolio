@@ -375,3 +375,7 @@
 ## 2026-10-02 — v62.22 Retitle: TikTok Branded Effect Campaign
 
 - "Interactive Filter Campaign" → "TikTok Branded Effect Campaign" (TikTok's own name for the format).
+
+## 2026-10-02 — v62.23 Retitle: TikTok & Snapchat Branded Filter Campaign
+
+- "Branded Effect" is TikTok's internal term and few readers know it; "branded filter" is the everyday word, and the title now names both platforms.
