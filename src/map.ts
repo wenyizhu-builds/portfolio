@@ -103,7 +103,7 @@ const LAYOUT = {
   crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
   moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
   siblingRing: 110, // an end point's siblings sit about this far round their parent
-  groupRing: 150, groupStagger: 70, groupSpread: 0.62, groupMin: 4, // an opened group of groupMin+ ends: even fan, alternate ends set further out (v54)
+  groupRing: 175, groupStagger: 35, groupMin: 4, groupSiblingSpread: 0.62, // an opened group of groupMin+ ends: a full radial fan, alternate ends a little further out (v62); with one of its ends open, a half fan (radians apart)
   relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
   chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
   velocityDecay: 0.5, alphaDecay: 0.05, alphaStart: 0.7, dragAlpha: 0.3, dragSlop: 4,
@@ -141,7 +141,9 @@ const isGroup = (id: string) => {
   return kids.length >= LAYOUT.groupMin && kids.every((c) => !childrenOf(c.id).length && c.type !== 'role' && c.type !== 'school');
 };
 const isGroupEnd = (parent: string, id: string) => isGroup(parent) && byId.get(id)?.parent === parent;
-/** Alternate ends of a group sit further out, so neighbouring labels never meet. */
+/** A group's ends spread all the way round it, leaving one gap for the line back to its parent (v62). */
+const groupSpread = (id: string) => (2 * Math.PI) / (childrenOf(id).length + 1);
+/** Alternate ends of a group sit a little further out, so neighbouring labels never meet. */
 function groupRadius(parent: string, id: string): number {
   const i = childrenOf(parent).findIndex((c) => c.id === id);
   return LAYOUT.groupRing + (i % 2 ? LAYOUT.groupStagger : 0);
@@ -403,10 +405,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       // an end point: it and its siblings fan out on the parent's open side too (v53), so the
       // line back to the ✳ never runs through one of them
       // an opened group (e.g. More cases): its ends fan out evenly, alternately near and far
-      if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), LAYOUT.groupSpread, alpha, movable);
+      if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), groupSpread(focus), alpha, movable);
       const a = anchorId();
       if (a !== focus && a !== 'experience')
-        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
+        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSiblingSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
     })
     .force('path', (alpha: number) => {
       // The career path zig-zags away from Experience instead of forming a straight line:

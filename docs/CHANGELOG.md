@@ -279,3 +279,9 @@
 ## 2026-10-02 — X Creator Campaign
 
 - Retitled "Influencer Activation Campaign" to "X Creator Campaign" to match its own wording (creators, not influencers); tag "Influencer" → "Creator marketing"; KR removed from markets (<1% of creators).
+
+## 2026-10-02 — v62: radial More cases; white flagship squares
+
+- Opening a group of 4+ cases (More cases, Creative Work) spreads them all the way round it, leaving one gap for the line back to the parent; with one of its cases open, siblings keep a half fan.
+- Flagship cases are white squares like the other cases; the hand-written notes now do the highlighting.
+- Layout check: 8 (was 11 before this change); remaining issues are in the AI Workbench and HoYoverse views and predate it.

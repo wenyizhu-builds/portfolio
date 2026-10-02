@@ -127,8 +127,6 @@ button { font: inherit; color: inherit; }
 /* Growth Marketing, the main area: cobalt outline */
 .node.is-key .shp { stroke: var(--cobalt); stroke-width: 1.8; }
 .node.is-key.is-far .shp { stroke: var(--cobalt-faded); }
-.node.is-featured .shp { fill: var(--ink); stroke: var(--ink); } /* the three flagship cases: solid black (option A) */
-.node.is-featured.is-far .shp { fill: var(--muted); }
 .lg-num { font-weight: 400; font-size: 9px; border: 1px solid var(--muted); border-radius: 2px; padding: 0 3px; }
 .node.t-branch .shp { stroke-width: 1.3; }
 .node.is-prep .shp { stroke-dasharray: 2.5 2; }
