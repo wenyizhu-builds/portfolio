@@ -297,3 +297,8 @@
 ## 2026-10-02 — Cross-Platform Community Giveaway case rewritten
 
 - Retitled from "Giveaway & Cross-Platform Influencer Campaign"; first-person summary, one-paragraph challenge, three blue-labelled bullets (lesson folded into the last), four results, team in the "Me (…)" format, period Aug 2024.
+
+## 2026-10-02 — v62.5 Results fit on one line
+
+- Every result is now one line (number + label ≤ 45 characters). Shortened: X Creator Campaign (~3x, 39%, +88%), Giveaway (~900K), Landing Page (1.4M+). Headline labels updated to match.
+- New `check` rule `result-one-line` (L32), applied to the published copy.

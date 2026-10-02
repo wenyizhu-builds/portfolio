@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.5 · 分支 `flagship-restructure`（未合并 main）
 
 ## 2026-09-30 当前状态
 
@@ -18,7 +18,8 @@
 - 暂缓（用户稍后提供细节）：个人账号案例——小红书约 14k + TikTok 约 2k 粉丝，AI 工具教程与教育；一年前开始、中断后近期回归一个月粉丝翻倍；辞职后全职做内容（gap year）；dashboard = CONTENT/80-product-development/creator-workbench 原型；账号公开可链接（账号名待提供）。
 - X Creator Campaign（原 Influencer Activation）文案完成。
 - 已知问题：layout-check 8 处，集中在 AI Workbench 和 HoYoverse 视图（早于 v62），超出 2 处上限，待单独处理。
-- 下一步：Genshin Impact: EN Social Growth 案例。
+- EN Social Channel Growth、Cross-Platform Community Giveaway 文案完成（v62.3–62.4）。Results 每条一行（v62.5，check 规则 L32）。
+- 下一步：Interactive Filter Campaign（团队行仍是旧格式），然后 Landing Page。
 - Xbox 文案已按新规则改完。More cases 打开时均匀展开（v54）。
 
 ## 下一步

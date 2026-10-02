@@ -87,6 +87,24 @@ for (const re of [/cost per install/i, /per 1,000 views/i, /repeated (each|every
   if (m) fail('copy-shorthand', `found "${m[0]}" — use CPM / CPA / CPI, or "refined" instead of "repeated"`);
 }
 
+/* L32: each result fits on one line — the number plus its label stays within RESULT_MAX characters
+   (calibrated against the card width: 45 chars fits, 47 wraps). */
+const RESULT_MAX = 45;
+const published = JSON.parse(readFileSync(join(src, 'published-copy.json'), 'utf8'));
+const finalResults = (n) => {  // results as the site shows them: content.ts with the published copy applied
+  const key = `nodes.${n.id}.results`, base = n.results || [];
+  const ids = published.lists[key] || base.map((_, i) => String(i));
+  return ids.map((id) => {
+    const r = id.startsWith('added-') ? {} : { ...base[Number(id)] };
+    for (const f of ['metric', 'en']) { const e = published.edits[`${key}.${id}.${f}`]; if (e) r[f] = e.text; }
+    return r;
+  });
+};
+for (const n of nodes) for (const r of finalResults(n)) {
+  const len = `${r.metric || ''} ${r.en || ''}`.trim().length;
+  if (len > RESULT_MAX) fail('result-one-line', `${n.id}: "${r.metric} ${r.en}" is ${len} chars (max ${RESULT_MAX}) — it wraps to two lines`);
+}
+
 /* 5. Go-live gate: nothing unfinished reaches the public site. */
 if (launch) {
   if (!site.launched) fail('launch', 'site.launched is false (PROTOTYPE label still shown)');
