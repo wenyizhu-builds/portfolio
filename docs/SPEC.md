@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.31
+> 最后更新：2026-10-02 · 对应版本 v62.32
+
+- **2026-10-02 首页重新排布（v62.32）**：Branded Filter Campaign 也设为重点案例（`featured`），在 Creator & Social 里排第二，首页带「600M+ views」批注（位置改为 `NOTES` 手摆，只在首页显示；打开该组时不再显示这条批注）。首页坐标重排：各大类离 ✳ 距离相近，重点案例在所属大类外侧展开；批注放在不挡标签、不被面板边缘推回的一侧。点的数量不变（用户确认数量不是问题，是间距）。
 
 - **2026-10-02 去掉 Growth Marketing 节点（v62.31，用户要求：节点太多，画面太满）**：Paid & UA Growth 和 Creator & Social 直接挂在 ✳ 下，是两个大类（`type: 'branch'`，都带钴蓝描边 `KEY_AREAS`）。首页两组折叠（`FOLDED_AT_HOME`），只显示各自的重点案例和批注；点开一组才显示全部案例。INDEX、手机版、手机目录里两组各占一节。HoYoverse 只用虚线连 AI Creative Intelligence Dashboard（案例在卡片的 Work from this role 里）。下面 v62.30 那条里关于「Growth Marketing 下分两组」的说法以此为准。
 

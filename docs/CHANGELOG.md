@@ -425,3 +425,8 @@
 - Owner: too many nodes. Paid & UA Growth and Creator & Social now hang straight off the ✳ as the two main areas (cobalt outline). At home they stay folded, showing only their flagship cases and notes; opening one shows all its cases.
 - INDEX, phone sections and phone menu list the two areas. HoYoverse's dotted line now goes only to the AI dashboard. Growth Marketing's placeholder summary removed from the published copy and the editor archive.
 - layout-check 4 (hoyoverse 1, ai-workbench 3; ai-workbench varies run to run, both pre-existing).
+
+## 2026-10-02 — v62.32 home map re-spaced; Branded Filter on the home map
+
+- Owner: the number of points is fine, the spacing looked off. Branded Filter Campaign is now a flagship (second in Creator & Social) with its "600M+ views" note on the home map.
+- HOME_LAYOUT and NOTES re-placed: areas at similar distances round the ✳, flagships fanned outside their area, notes on sides where the panel edge doesn't push them onto labels. Checked at 1440 and 1180 wide. layout-check 3 (ai-workbench, pre-existing).

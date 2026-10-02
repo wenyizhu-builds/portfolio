@@ -366,6 +366,53 @@ export const nodes: SiteNode[] = [
     },
   },
   {
+    id: 'interactive-filter',
+    platforms: ['global'],
+    note: { en: '600M+ views', zh: '6 亿+ 播放' },
+    team: { en: "Me (filter concepts and creator activation support), 1 campaign lead, 2 platform liaisons from TikTok and Snapchat, and 3 agency partners" },
+    type: 'case',
+    period: 'Jan – Feb 2024',
+    parent: 'growth-social',
+    featured: true,
+    headline: { num: '600M+', label: { en: 'views across TikTok and Snapchat' } },
+    label: { en: 'TikTok & Snapchat Branded Filter Campaign' },
+    kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'TikTok' }, { en: 'Snapchat' }, { en: 'AR filters' }, { en: 'Creator marketing' }],
+    markets: ['US', 'JP'],
+    summary: {
+      en: "I helped create two AR filters for Lantern Rite, Genshin Impact’s annual Lunar New Year event, and activated 70+ creators to show players how to use them, as the campaign expanded from TikTok to Snapchat for the first time. It drew 600M+ views and 600K+ player videos, and the Snapchat Lens ranked #1 among sponsored Lenses.",
+    },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Lantern Rite needed a social moment players could join, and this year the filter challenge was moving beyond TikTok to Snapchat for the first time. The filters had to be fun to use, simple enough for anyone to recreate, and right for two platforms whose users behave differently. We also had only a short window to build momentum and get the trend to take off." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Shaped the filter concepts: Researched competitor filters and helped develop two gesture-based ideas: releasing a sky lantern for TikTok and Snapchat, and a lion-mask transformation for a new character on TikTok. I wrote the creative briefs and reviewed each iteration with TikTok’s effects team." },
+          { en: "Briefed creators: Turned each filter into simple video ideas for cosplay, beauty, pet, dance and transition creators, so their posts inspired players to make their own." },
+          { en: "Supported creator activation: Reviewed creator selection and content for 70+ creators across TikTok and Snapchat, whose videos went live in the first week to kick off the trend." },
+        ],
+      },
+    ],
+    results: [
+      { metric: "600M+", en: "views across TikTok and Snapchat" },
+      { metric: "600K+", en: "player videos made with the filters" },
+      { metric: "#1", en: "sponsored Lens on Snapchat" },
+      { metric: "180M+", en: "views from 57 TikTok creators" },
+    ],
+    media: [{ src: 'media/interactive-filter/lantern-rite-event-banner.jpg',
+      thumbnail: 'media/interactive-filter/lantern-rite-event-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Lantern Rite submission event banner, the TikTok event players joined with the filters' } }],
+    links: [
+      { label: { en: 'TikTok event page', zh: 'TikTok 活动页' }, href: 'https://activity.us.tiktok.com/magic/eco/runtime/release/65ae743a08a22502879a1571?appType=muse&magic_page_no=1&use_spark=1&magic_source=usExternal' },
+      { label: { en: 'Creator video example', zh: '达人视频示例' }, href: 'https://www.tiktok.com/@claudiaalende/video/7330704427923377450' },
+    ],
+  },
+  {
     id: 'influencer-activation',
     platforms: ['global'],
     team: { en: "Me (influencer strategy and execution), 2 execution support specialists and 2 agency partners" },
@@ -445,52 +492,6 @@ export const nodes: SiteNode[] = [
     ],
     links: [
       { label: { en: 'Creator video example', zh: '达人视频示例' }, href: 'https://www.instagram.com/p/C_Myepry5Co/' },
-    ],
-  },
-  {
-    id: 'interactive-filter',
-    platforms: ['global'],
-    note: { en: '600M+ views', zh: '6 亿+ 播放' },
-    team: { en: "Me (filter concepts and creator activation support), 1 campaign lead, 2 platform liaisons from TikTok and Snapchat, and 3 agency partners" },
-    type: 'case',
-    period: 'Jan – Feb 2024',
-    parent: 'growth-social',
-    headline: { num: '600M+', label: { en: 'views across TikTok and Snapchat' } },
-    label: { en: 'TikTok & Snapchat Branded Filter Campaign' },
-    kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
-    context: { en: 'Genshin Impact' },
-    tags: [{ en: 'TikTok' }, { en: 'Snapchat' }, { en: 'AR filters' }, { en: 'Creator marketing' }],
-    markets: ['US', 'JP'],
-    summary: {
-      en: "I helped create two AR filters for Lantern Rite, Genshin Impact’s annual Lunar New Year event, and activated 70+ creators to show players how to use them, as the campaign expanded from TikTok to Snapchat for the first time. It drew 600M+ views and 600K+ player videos, and the Snapchat Lens ranked #1 among sponsored Lenses.",
-    },
-    sections: [
-      {
-        title: { en: 'The Challenge', zh: '项目挑战' },
-        items: [
-          { en: "Lantern Rite needed a social moment players could join, and this year the filter challenge was moving beyond TikTok to Snapchat for the first time. The filters had to be fun to use, simple enough for anyone to recreate, and right for two platforms whose users behave differently. We also had only a short window to build momentum and get the trend to take off." },
-        ],
-      },
-      {
-        title: { en: 'What I did', zh: '我做了什么' },
-        items: [
-          { en: "Shaped the filter concepts: Researched competitor filters and helped develop two gesture-based ideas: releasing a sky lantern for TikTok and Snapchat, and a lion-mask transformation for a new character on TikTok. I wrote the creative briefs and reviewed each iteration with TikTok’s effects team." },
-          { en: "Briefed creators: Turned each filter into simple video ideas for cosplay, beauty, pet, dance and transition creators, so their posts inspired players to make their own." },
-          { en: "Supported creator activation: Reviewed creator selection and content for 70+ creators across TikTok and Snapchat, whose videos went live in the first week to kick off the trend." },
-        ],
-      },
-    ],
-    results: [
-      { metric: "600M+", en: "views across TikTok and Snapchat" },
-      { metric: "600K+", en: "player videos made with the filters" },
-      { metric: "#1", en: "sponsored Lens on Snapchat" },
-      { metric: "180M+", en: "views from 57 TikTok creators" },
-    ],
-    media: [{ src: 'media/interactive-filter/lantern-rite-event-banner.jpg',
-      thumbnail: 'media/interactive-filter/lantern-rite-event-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Lantern Rite submission event banner, the TikTok event players joined with the filters' } }],
-    links: [
-      { label: { en: 'TikTok event page', zh: 'TikTok 活动页' }, href: 'https://activity.us.tiktok.com/magic/eco/runtime/release/65ae743a08a22502879a1571?appType=muse&magic_page_no=1&use_spark=1&magic_source=usExternal' },
-      { label: { en: 'Creator video example', zh: '达人视频示例' }, href: 'https://www.tiktok.com/@claudiaalende/video/7330704427923377450' },
     ],
   },
   {
@@ -652,7 +653,7 @@ export function kindOf(id: string): NodeType {
 export const indexSections = ['growth-paid', 'growth-social', 'ai', 'creative', 'experience', 'education'];
 
 /* The three flagship Growth Marketing cases, in reading order (each leads its group; v62.30). */
-export const featuredOrder = ['ua-creative-strategy', 'gip-testing', 'zzz-jp-accounts'];
+export const featuredOrder = ['ua-creative-strategy', 'gip-testing', 'zzz-jp-accounts', 'interactive-filter'];
 
 export const rolesOrder = ['hoyoverse', 'seminary-coop', 'nike', 'weber-shandwick', 'nowness'];
 export const schoolsOrder = ['uchicago', 'xjtlu'];

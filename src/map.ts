@@ -33,19 +33,21 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    pull brings every point back, so home always looks the same. Link lengths between
    these points are derived from the same numbers, so the forces agree with the layout. */
 const HOME_LAYOUT: Record<string, [number, number]> = {
-  'growth-paid': [235, -150],
-  'ua-creative-strategy': [130, -265],
-  'gip-testing': [375, -290],
-  'growth-social': [330, 40],
-  'zzz-jp-accounts': [480, -40],
-  info: [-149, -90],
-  education: [-239, -158],
-  experience: [-310, -8],
-  ai: [-22, 203],
-  'ai-workbench': [-140, 290],
-  'ai-slot-1': [-17, 328],
-  'ai-slot-2': [86, 292],
-  creative: [181, 166],
+  // v62.32: areas sit evenly round the ✳ at similar distances; flagship cases fan out beyond their area
+  'growth-paid': [130, -150],
+  'ua-creative-strategy': [-15, -250],
+  'gip-testing': [175, -290],
+  'growth-social': [200, 40],
+  'zzz-jp-accounts': [330, -60],
+  'interactive-filter': [265, 170],
+  info: [-165, -60],
+  education: [-205, -175],
+  experience: [-285, 15],
+  ai: [-110, 170],
+  'ai-workbench': [-225, 245],
+  'ai-slot-1': [-120, 300],
+  'ai-slot-2': [5, 270],
+  creative: [80, 210],
 };
 const homeOf = (id: string): [number, number] | undefined => (id === 'root' ? [0, 0] : HOME_LAYOUT[id]);
 /** Link length from the home layout, when both ends have a home position. */
@@ -72,9 +74,10 @@ const CAMERA = {
 type NotePlace = { text: [number, number]; from: [number, number]; via: [number, number]; to: [number, number]; rot: number };
 const NOTES: Record<string, NotePlace> = {
   'ua-creative-strategy': { text: [-262, -96], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
-  'zzz-jp-accounts': { text: [-40, 128], from: [6, 102], via: [14, 86], to: [8, 70], rot: 3 },
-  'gip-testing': { text: [-46, 118], from: [4, 92], via: [12, 74], to: [4, 56], rot: 3 },
-  ai: { text: [-160, -70], from: [-70, -26], via: [-46, -16], to: [-22, -6], rot: -5 },
+  'zzz-jp-accounts': { text: [-50, -86], from: [-12, -58], via: [-4, -44], to: [-2, -22], rot: -3 },
+  'gip-testing': { text: [74, -38], from: [62, -22], via: [36, -18], to: [18, -8], rot: 2 },
+  'interactive-filter': { text: [-64, 118], from: [-6, 92], via: [2, 82], to: [0, 70], rot: 2 },
+  ai: { text: [-180, -76], from: [-80, -30], via: [-50, -18], to: [-22, -6], rot: -5 },
 };
 const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, line: 1.1, head: 12, headAngle: 0.5 };
 
