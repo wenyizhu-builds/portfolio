@@ -442,3 +442,7 @@
 ## 2026-10-02 — v62.35 Information folded; Creative Work beside it
 
 - Owner: fold Information and put Creative Work next to it, both folded; AI Projects a little to the left. Education/Experience now appear only when Information is opened. AI note moved to the upper right of AI Projects. Education/Experience home positions moved outward so the career path still unfolds away from the ✳. layout-check 2 (ai-videos), within budget.
+
+## 2026-10-02 — v62.36 arrange mode for the home map
+
+- Owner wants to place the points herself (dragged points used to spring back). With window.__ARRANGE set, home points and notes stay where dropped and "Copy layout" gives the HOME_LAYOUT/NOTES JSON to paste back. Published as a separate preview; the real site is unchanged.

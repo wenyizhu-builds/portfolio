@@ -721,6 +721,9 @@ export const ui = {
   index: { en: 'Index', zh: '索引' },
   moreAbout: { en: 'More about me', zh: '更多关于我' },
   backToIndex: { en: 'Back to the index', zh: '回到索引' },
+  arrangeHint: { en: 'Arrange mode: drag points and notes, then copy the layout and send it to Claude', zh: '排版模式：拖动点和批注，然后复制布局发给 Claude' },
+  arrangeCopy: { en: 'Copy layout', zh: '复制布局' },
+  arrangeCopied: { en: 'Copied', zh: '已复制' },
 } satisfies Record<string, T>;
 
 /** The small type line on a card. Experience and Education read as their own kind, not "Practice". */

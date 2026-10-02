@@ -117,6 +117,10 @@ const LAYOUT = {
 };
 
 const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
+/* Arrange mode (v62.36): the owner's layout tool. On a page that sets window.__ARRANGE, points on the
+   home map stay exactly where they are dropped, notes can be dragged too, clicks don't open anything,
+   and "Copy layout" hands back HOME_LAYOUT and NOTES to paste into this file. Off on the real site. */
+const ARRANGE = !!(window as unknown as { __ARRANGE?: boolean }).__ARRANGE;
 const FOLDED_AT_HOME = new Set(['creative', 'info', 'growth-paid', 'growth-social']); // the two work groups show only their flagship cases at home (v62.31)
 
 /** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
@@ -561,7 +565,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const longest = Math.max(...wrap(n.label.en).map((l) => l.length));
     const Rr = LAYOUT.radius;
     const rad = n.id === 'root' ? Rr.root : Math.max(Rr.min, Math.min(Rr.max, longest * Rr.perChar)) ;
-    return { id: n.id, x, y, vx: 0, vy: 0, depth: d, rad, bend: hash(n.id + ':b') < 0.5 ? -1 : 1, box: boxOf(n) };
+    const held = ARRANGE && home ? { fx: x, fy: y } : {}; // arrange mode: home points stay where they are put
+    return { id: n.id, x, y, vx: 0, vy: 0, depth: d, rad, bend: hash(n.id + ':b') < 0.5 ? -1 : 1, box: boxOf(n), ...held };
   }
 
   function nodeEl(n: SiteNode): SVGGElement {
@@ -622,15 +627,18 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (!start) return;
       const n = simNodes.get(id);
       if (dragging) {
-        if (n) { n.fx = null; n.fy = null; }
+        if (n && ARRANGE && !focus) HOME_LAYOUT[id] = [Math.round(n.x!), Math.round(n.y!)]; // stays where it was dropped
+        else if (n) { n.fx = null; n.fy = null; }
         g.classList.remove('dragging');
         sim.alphaTarget(0);
-      } else if (select) onSelect(id);
+      } else if (select && !ARRANGE) onSelect(id);
       start = null;
       dragging = false;
     };
     g.addEventListener('pointerdown', (e) => {
       if (e.button !== 0) return; // right / middle click do nothing
+      if (ARRANGE && id === 'root') return; // the ✳ is the origin of every position
+      if (ARRANGE) heldCam ??= { ...cam }; // from the first drag on, the view stays still
       start = { x: e.clientX, y: e.clientY };
       dragging = false;
       g.setPointerCapture(e.pointerId);
@@ -788,7 +796,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     return { x: area.x + area.w / 2 - cx * k, y: area.y + area.h / 2 - cy * k, k };
   }
 
+  // arrange mode: the camera stays still once the map has settled, so a dragged point doesn't shift the view
+  let heldCam: typeof cam | null = null;
   function targetCamera() {
+    if (ARRANGE && !focus && heldCam) return heldCam;
     return baseCamera();
   }
 
@@ -856,8 +867,45 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       g.innerHTML = `<path/><text font-size="${NOTE.size}">${lines(t(n.note), NOTE.size)}</text>`;
       gNotes.append(g);
       noteEls.set(n.id, g);
+      if (ARRANGE) attachNoteDrag(g, n.id);
     }
   }
+  /* Arrange mode: drag a note to move its words and the tail of its arrow; the tip stays at its point. */
+  function attachNoteDrag(g: SVGGElement, id: string) {
+    let last: { x: number; y: number } | null = null;
+    const stop = () => { last = null; };
+    g.addEventListener('pointerdown', (e) => { if (e.button !== 0) return; heldCam ??= { ...cam }; last = toWorld(e.clientX, e.clientY); g.setPointerCapture(e.pointerId); e.stopPropagation(); });
+    g.addEventListener('pointermove', (e) => {
+      const p = NOTES[id];
+      if (!last || !p) return;
+      const w = toWorld(e.clientX, e.clientY), dx = w.x - last.x, dy = w.y - last.y;
+      last = w;
+      const mv = (q: [number, number]): [number, number] => [Math.round(q[0] + dx), Math.round(q[1] + dy)];
+      NOTES[id] = { ...p, text: mv(p.text), from: mv(p.from), via: mv(p.via) };
+      drawNotes();
+    });
+    g.addEventListener('pointerup', stop);
+    g.addEventListener('pointercancel', stop);
+    g.addEventListener('lostpointercapture', stop);
+  }
+
+  /* Arrange mode: a small bar over the map with the "Copy layout" button and the text it copies. */
+  function arrangeBar() {
+    svg.classList.add('arranging');
+    const bar = document.createElement('div');
+    bar.className = 'arrange-bar';
+    bar.innerHTML = `<span>${esc(t(ui.arrangeHint))}</span><button type="button">${esc(t(ui.arrangeCopy))}</button><textarea readonly rows="3"></textarea>`;
+    const btn = bar.querySelector('button')!, out = bar.querySelector('textarea')!;
+    btn.onclick = async () => {
+      const notes = Object.fromEntries(Object.entries(NOTES).map(([k, v]) => [k, { text: v.text, from: v.from, via: v.via, to: v.to, rot: v.rot }]));
+      out.value = JSON.stringify({ HOME_LAYOUT, NOTES: notes });
+      out.select();
+      try { await navigator.clipboard.writeText(out.value); btn.textContent = t(ui.arrangeCopied); } catch { /* the text stays selected for Cmd+C */ }
+    };
+    host.append(bar);
+  }
+  if (ARRANGE) arrangeBar();
+
   /** Notes: the hand-placed ones (NOTES) show on the home map only; a case's other note shows while its group is open.
       Either way a note is nudged back inside the map's free area, so the card, the header or the window edge never hides it. */
   function drawNotes() {

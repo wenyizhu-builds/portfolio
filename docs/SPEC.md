@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.35
+> 最后更新：2026-10-02 · 对应版本 v62.36
+
+- **排版模式（v62.36，用户自己摆首页）**：页面设了 `window.__ARRANGE` 时（单独发布的「排版工具」预览），首页的点拖到哪里就停在哪里（`fx/fy` 固定，并写回 `HOME_LAYOUT`），批注也能拖（移动文字和箭头尾，箭头尖不动），点击不打开内容，第一次拖动后镜头不再移动。左下角「Copy layout」把 `HOME_LAYOUT` 和 `NOTES` 以 JSON 复制出来，用户发给 Claude，Claude 写回 `map.ts`。正式网站不设这个开关，不受影响。只覆盖首页可见的点（折叠组里的点不在首页）。
 
 - **首页再减（v62.35，用户要求）**：Information 在首页也折叠（`FOLDED_AT_HOME`），Education / Experience 只在点开 Information 时出现。Creative Work 挪到左边，紧挨 Information，两个都折叠；AI Projects 往左下移，「tools I built with AI」批注改到 AI Projects 右上方。
 

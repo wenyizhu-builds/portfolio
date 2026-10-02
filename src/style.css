@@ -403,6 +403,12 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .map-notes path { fill: none; stroke: var(--note); stroke-width: 1.2px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .map-notes > g { transition: opacity var(--fade-node); }
 .map-notes > g.is-hidden { opacity: 0; }
+/* Arrange mode (owner's layout tool): notes take the pointer and a small bar sits over the map. */
+.map.arranging .map-notes > g:not(.is-hidden) { pointer-events: all; cursor: move; }
+.map.arranging .node { cursor: move; }
+.arrange-bar { position: absolute; left: var(--page-x); bottom: var(--bottom-h); z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: var(--side-gap); max-width: calc(var(--side-w) * 1.4); padding: var(--side-gap); background: var(--panel); border: var(--rule-card); font-size: var(--fs-label); color: var(--ink-2); }
+.arrange-bar button { font: inherit; padding: 4px 10px; border: 1px solid var(--ink); background: var(--ink); color: var(--on-ink); cursor: pointer; }
+.arrange-bar textarea { width: 100%; font: inherit; font-size: var(--fs-label); color: var(--muted); border: var(--rule); background: var(--bg); resize: none; }
 
 /* Filters (v60): plain words in the header, sized and aligned like the nav on the right. */
 .filters { display: flex; align-items: center; gap: var(--filter-gap); }
