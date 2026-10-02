@@ -399,3 +399,7 @@
 ## 2026-10-02 — v62.28 Landing page bullets in growth language
 
 - Benchmarked formats / Designed the hook (personality quiz as a viral format, three questions to cut drop-off) / Built the viral loop (rewards tied to referrals, ~4 visitors per share).
+
+## 2026-10-02 — v62.28 STATUS rewritten as the hand-off for a new session
+
+- STATUS now covers the sync workflow, the copy-editor archive, the owner's writing preferences from this session, and open questions.
