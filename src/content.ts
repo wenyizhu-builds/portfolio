@@ -410,30 +410,40 @@ export const nodes: SiteNode[] = [
   {
     id: 'giveaway-campaign',
     platforms: ['global'],
-    team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
+    team: { en: "Me (campaign lead and strategy), 2 execution support specialists and 4 agency partners" },
     type: 'case',
+    period: 'Aug 2024',
     parent: 'more-growth',
-    headline: { num: '~900K', label: { en: 'in-game code redemptions, ~4x the goal' } },
-    label: { en: 'Giveaway & Cross-Platform Influencer Campaign' },
+    headline: { num: '~900K', label: { en: 'in-game code redemptions, about 4x the goal' } },
+    label: { en: 'Cross-Platform Community Giveaway' },
     kicker: { en: 'Genshin Impact 5.0 · X, TikTok, Instagram' },
     context: { en: 'Genshin Impact 5.0' },
-    tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }],
+    tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }, { en: 'Creator marketing' }],
     markets: ['NA', 'JP'],
     summary: {
-      en: 'Tested a third-party, reward-based giveaway with in-game codes as a measurable conversion layer.',
+      en: "For Genshin Impact’s 5.0 launch, I led a giveaway with a major third-party Genshin community on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Regular community activations on official channels were repeatedly reaching the same core audience. For a major version launch, the team needed to explore new activation formats that could expand topic exposure, reach semi-active and lapsed players, and create measurable engagement beyond standard official-account posting." },
-          { en: "We wanted to test whether a more entertainment-oriented, lower-funnel social format could activate player participation and distribute in-game redemption codes through third-party communities. Even if the format did not fully work, the test would clarify what kind of incentive and participation mechanic could move players outside the official-channel loop." },
+          { en: "Genshin Impact’s official community activations kept reaching the same core players. For the 5.0 launch, I wanted to test whether a giveaway run through a third-party community could reach semi-active and lapsed players, and use in-game reward codes to show whether they actually took part, not just saw the post." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Designed the campaign: Chose X for its strong Genshin conversation and partnered with a leading third-party Genshin community (1M+ followers) to reach players outside official channels. In-game reward codes made player action trackable, not just reach." },
+          { en: "Activated creators across platforms: Coordinated 67 creators across X, TikTok and Instagram, seeding example posts so the prompt was easy to understand and share." },
+          { en: "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking. The recap showed quote-post participation fell short, a clear lesson that third-party giveaways need simple, platform-native actions." },
         ],
       },
     ],
     results: [
-      { metric: '33M+', en: 'impressions (56% above target); ~900K code redemptions (~4x goal)' },
-      { en: 'Learning: quote participation underperformed — platform-native, simple actions matter' },
+      { metric: "33M+", en: "impressions, 56% above target" },
+      { metric: "~900K", en: "in-game code redemptions, about 4x the goal" },
+      { metric: "~50%", en: "lower CPM than target" },
+      { metric: "99%", en: "positive sentiment" },
     ],
   },
   {

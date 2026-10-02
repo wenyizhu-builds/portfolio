@@ -293,3 +293,7 @@
 ## 2026-10-02 — EN Social Channel Growth case rewritten
 
 - Retitled from "Genshin Impact: EN Social Growth"; "accounts" → "channels"; first-person summary, one-paragraph challenge, four blue-labelled bullets, four results, team in the "Me (…)" format.
+
+## 2026-10-02 — Cross-Platform Community Giveaway case rewritten
+
+- Retitled from "Giveaway & Cross-Platform Influencer Campaign"; first-person summary, one-paragraph challenge, three blue-labelled bullets (lesson folded into the last), four results, team in the "Me (…)" format, period Aug 2024.
