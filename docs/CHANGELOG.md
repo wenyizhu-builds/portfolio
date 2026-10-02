@@ -337,3 +337,7 @@
 ## 2026-10-02 — v62.13 Linked cases show their dotted line when the group is open
 
 - Opening More cases now shows the X Creator ↔ Giveaway dotted line (before, it only appeared when one of the two was selected). The line pulls on nothing, and linked cases are kept side by side in the fan so it stays short.
+
+## 2026-10-02 — v62.14 Dotted line removed
+
+- Removed the X Creator ↔ Giveaway dotted line (owner found it confusing) and the v62.13 group-view link code. The two cases stay next to each other in More cases.

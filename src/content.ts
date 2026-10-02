@@ -227,7 +227,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'influencer-activation',
-    related: ['giveaway-campaign'], // the giveaway was this campaign's benchmark
     platforms: ['global'],
     team: { en: "Me (influencer strategy and execution), 2 execution support specialists and 2 agency partners" },
     type: 'case',

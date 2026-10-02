@@ -24,7 +24,6 @@ interface SimLink extends SimulationLinkDatum<SimNode> {
   kind: 'tree' | 'related';
   dist: number;
   key: string;
-  drawOnly?: boolean; // shown, but exerts no pull (a link between two cases of the open group)
 }
 
 const SVGNS = 'http://www.w3.org/2000/svg';
@@ -223,7 +222,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       forceLink<SimNode, SimLink>([])
         .id((d) => d.id)
         .distance((l) => l.dist)
-        .strength((l) => (l.drawOnly ? 0 : l.kind === 'tree' ? LAYOUT.treeStrength : LAYOUT.relatedStrength)),
+        .strength((l) => (l.kind === 'tree' ? LAYOUT.treeStrength : LAYOUT.relatedStrength)),
     )
     .force('charge', forceManyBody<SimNode>().strength((d) => LAYOUT.charge[Math.min(d.depth, 2)]).distanceMax(LAYOUT.chargeMax))
     .force('collide', forceCollide<SimNode>().radius((d) => d.rad).strength(LAYOUT.collide.strength).iterations(LAYOUT.collide.iterations))
@@ -449,11 +448,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const off = (x: number) => Math.atan2(Math.sin(x - base), Math.cos(x - base)); // angle from the open side
     const at = (n: SimNode) => off(Math.atan2(n.y! - f.y!, n.x! - f.x!));
     const pts = ids.map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && ok(n)).sort((a, b) => at(a) - at(b));
-    // linked cases sit side by side in the fan, so their dotted line stays short and crosses nothing
-    for (let i = 0; i < pts.length; i++) {
-      const j = pts.findIndex((m, k) => k > i + 1 && (byId.get(pts[i].id)?.related?.includes(m.id) || byId.get(m.id)?.related?.includes(pts[i].id)));
-      if (j > 0) pts.splice(i + 1, 0, ...pts.splice(j, 1));
-    }
     pts.forEach((n, i) => {
       const want = (i - (pts.length - 1) / 2) * spread;
       const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
@@ -706,11 +700,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }
       (n.related || []).forEach((r) => {
         const key = `r:${[n.id, r].sort().join('~')}`;
-        // only the selection's own connections: an ancestor's dotted lines are its business, not this view's.
-        // Exception: two linked cases in the same group also show their link while that group is open.
-        const siblingsInFocus = !!focus && n.parent === focus && byId.get(r)?.parent === focus;
-        if (vis.has(r) && (n.id === focus || r === focus || siblingsInFocus) && !next.some((l) => l.key === key))
-          next.push({ source: n.id, target: r, kind: 'related', dist: LAYOUT.relatedLink, key, drawOnly: siblingsInFocus && n.id !== focus && r !== focus });
+        // only the selection's own connections: an ancestor's dotted lines are its business, not this view's
+        if (vis.has(r) && (n.id === focus || r === focus) && !next.some((l) => l.key === key))
+          next.push({ source: n.id, target: r, kind: 'related', dist: LAYOUT.relatedLink, key });
       });
     }
     links = next;
