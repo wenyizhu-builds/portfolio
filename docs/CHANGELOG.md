@@ -346,3 +346,7 @@
 
 - Lantern Rite submission event banner as the floating image (public promotional art).
 - New `links` field: a grey line of links under the summary, opening in a new tab. Interactive Filter links to the TikTok event page and a player's video.
+
+## 2026-10-02 — v62.16 Second player video link
+
+- Interactive Filter links: TikTok event page · Player video 1 (YouTube) · Player video 2 (TikTok).
