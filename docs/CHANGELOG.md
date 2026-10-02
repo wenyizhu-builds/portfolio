@@ -267,3 +267,7 @@
 - Picking a filter returns to the home map and unfolds every matching case or role (e.g. Chinese social opens Experience to Nike, Weber Shandwick, NOWNESS); home notes step aside while filtering. Placeholders never match.
 - Phone: two drop-down menus (Platform / Region, default All) replace the swipe row; after a choice the page scrolls to the first match.
 - AI Creative Intelligence Dashboard counts as Paid ads.
+
+## 2026-10-02 — Influencer Activation case rewritten
+
+- First-person summary, one-paragraph challenge, four blue-labelled bullets, four results, team in the "Me (…)" format, period Jan 2026.
