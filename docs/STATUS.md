@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.45 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.46 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.45）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.46）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -38,7 +38,7 @@
 
 ## 下一步
 
-- 用户在本地编辑器里新改了标题（存档 revision 978，未同步进 published-copy）：ZZZ → "Social Launch in Japan"，Filter → "TikTok & Snapchat Filter Campaign"，AI 工具 → "Creative Intelligence Dashboard"。下次开工先确认是否同步。
+- 标题保持简短（用户偏好）：游戏名只放在卡片的身份行，不进标题（v62.46 已同步她改的三个标题）。
 
 0. 首页布局已按用户在排版工具里摆的数值写入（v62.38）。以后要调首页：用排版工具 Artifact `https://claude.ai/artifact/TDYgQnYFQmTqbKHPZxXaMf`（= preview.html 第一个 `<script>` 前插入 `<script>window.__ARRANGE=true</script>` 再发布），让她拖好后发来「Copy layout」的 JSON，原样写回 `HOME_LAYOUT` / `NOTES`。v62.40：首页 AI Projects 的三个作品全部折叠。v62.41：用户第二次用排版工具摆的首页布局。
 

@@ -484,3 +484,7 @@
 
 - Owner saw ZZZ sitting among the Paid & UA cases with lines crossing. Cause: after dragging a point on the home map, the pull back faded out before it arrived, and the avoidance forces then settled round the wrong spot. Dropping a point on the home map now reheats the layout, so it returns all the way.
 - Gamified Landing Page visual replaced with the owner's higher-resolution banner (2050×1135, frame edge trimmed).
+
+## 2026-10-02 — v62.46 owner's shorter titles
+
+- Synced from the editor: ZZZ → "Social Launch in Japan", Branded Filter → "TikTok & Snapchat Filter Campaign", AI dashboard → "Creative Intelligence Dashboard". Owner wants titles simple; the game name stays on each card's identity line.
