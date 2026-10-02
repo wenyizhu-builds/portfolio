@@ -454,3 +454,7 @@
 ## 2026-10-02 — v62.38 owner's home layout
 
 - HOME_LAYOUT and NOTES replaced with the exact values the owner placed in the arrange tool. layout-check 2 (contact view), within budget.
+
+## 2026-10-02 — v62.39 AI Projects folded at home
+
+- Owner: only the AI Creative Intelligence Dashboard stays on the home map; the two placeholder AI projects appear when AI Projects is opened (FOLDED_AT_HOME + ALSO_AT_HOME).

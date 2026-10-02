@@ -121,7 +121,9 @@ const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
    home map stay exactly where they are dropped, notes can be dragged too, clicks don't open anything,
    and "Copy layout" hands back HOME_LAYOUT and NOTES to paste into this file. Off on the real site. */
 const ARRANGE = !!(window as unknown as { __ARRANGE?: boolean }).__ARRANGE;
-const FOLDED_AT_HOME = new Set(['creative', 'info', 'growth-paid', 'growth-social']); // the two work groups show only their flagship cases at home (v62.31)
+const FOLDED_AT_HOME = new Set(['creative', 'info', 'growth-paid', 'growth-social', 'ai']);
+/* Besides the flagship cases, these stay on the home map beside their folded group (v62.39). */
+const ALSO_AT_HOME = new Set(['ai-workbench']); // the two work groups show only their flagship cases at home (v62.31)
 
 /** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
 function hash(id: string): number {
@@ -501,7 +503,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         childrenOf(b.id).forEach((c) => vis.add(c.id));
     }
     // flagship cases stay on the home map beside their (folded) group (v62.30)
-    const flagships = () => nodes.forEach((n) => { if (n.featured && n.parent && vis.has(n.parent)) vis.add(n.id); });
+    const flagships = () => nodes.forEach((n) => { if ((n.featured || ALSO_AT_HOME.has(n.id)) && n.parent && vis.has(n.parent)) vis.add(n.id); });
     if (!f) flagships();
     if (f && f !== 'root') {
       // A selection shows only its own chain: the way back to the ✳, what's inside it,
