@@ -419,3 +419,9 @@
 
 - "More cases" and the separate "Flagship cases" list removed. Two groups named after the target JD families: Paid & UA Growth (Creator Ad Pipeline ★, TikTok UGC Channel Test ★, Xbox, Gamified Landing Page) and Creator & Social (ZZZ ★, X Creator, Giveaway, Branded Filter, English Social Channel Growth).
 - Flagships lead their group and stay on the home map (and in an opened Growth Marketing) with their notes; HOME_LAYOUT and the ZZZ note moved; phone menu lists the two groups. layout-check total 3 (same two pre-existing views, hoyoverse and ai-workbench).
+
+## 2026-10-02 — v62.31 Growth Marketing node removed
+
+- Owner: too many nodes. Paid & UA Growth and Creator & Social now hang straight off the ✳ as the two main areas (cobalt outline). At home they stay folded, showing only their flagship cases and notes; opening one shows all its cases.
+- INDEX, phone sections and phone menu list the two areas. HoYoverse's dotted line now goes only to the AI dashboard. Growth Marketing's placeholder summary removed from the published copy and the editor archive.
+- layout-check 4 (hoyoverse 1, ai-workbench 3; ai-workbench varies run to run, both pre-existing).

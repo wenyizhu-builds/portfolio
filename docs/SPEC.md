@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.30
+> 最后更新：2026-10-02 · 对应版本 v62.31
+
+- **2026-10-02 去掉 Growth Marketing 节点（v62.31，用户要求：节点太多，画面太满）**：Paid & UA Growth 和 Creator & Social 直接挂在 ✳ 下，是两个大类（`type: 'branch'`，都带钴蓝描边 `KEY_AREAS`）。首页两组折叠（`FOLDED_AT_HOME`），只显示各自的重点案例和批注；点开一组才显示全部案例。INDEX、手机版、手机目录里两组各占一节。HoYoverse 只用虚线连 AI Creative Intelligence Dashboard（案例在卡片的 Work from this role 里）。下面 v62.30 那条里关于「Growth Marketing 下分两组」的说法以此为准。
 
 - **2026-10-02 案例分组（v62.30，用户选定方案 A，取代下面 2026-09-30 的「重点案例 + More cases」）**：Growth Marketing 下分两组，按目标岗位的两个 JD 家族命名——**Paid & UA Growth**（`growth-paid`：Creator Ad Pipeline ★、TikTok UGC Channel Test ★、Xbox Launch Paid Campaign、Gamified Landing Page）和 **Creator & Social**（`growth-social`：ZZZ Social Launch in Japan ★、X Creator Campaign、Cross-Platform Community Giveaway、Branded Filter Campaign、English Social Channel Growth）。不再有「More cases」和单独的「Flagship cases」列表。★ 重点案例仍是 `featured: true`，在组内排第一（`content.ts` 里的顺序就是展示顺序）。首页地图：显示两组，以及每组的重点案例（带手写批注），其他案例收在组里；打开 Growth Marketing 时同样显示重点案例。打开一组时，组内全部案例放射展开。INDEX、手机版、手机目录都按这两组列出。
 
@@ -102,9 +104,7 @@
 ### 结构
 
 - **中心**：Wenyi Zhu ✳。
-- **Growth Marketing**（主打）：2 个分组、9 个案例（v62.30）。
-  - Paid & UA Growth（4 个，含 2 个重点案例）
-  - Creator & Social（5 个，含 1 个重点案例）
+- **Paid & UA Growth**（4 个案例，含 2 个重点案例）和 **Creator & Social**（5 个，含 1 个重点案例）：两个主打大类，直接挂在 ✳ 下（v62.31，取代 Growth Marketing）。
 - **AI Projects**：AI Marketing Workbench + 2 个占位。
 - **Creative Work**：首页默认折叠，4 个占位。
   - Photography
@@ -113,7 +113,7 @@
   - AI Creative Videos
 - **Information**：Experience（折叠，之字形排列）和 Education。
 - **没有 Contact 节点**：联系方式放在顶栏的 "Let's talk ↗"。
-- **HoYoverse** 用虚线连到 Growth Marketing 和 AI Workbench；每个案例卡片上写 "HoYoverse · 日期 →"。
+- **HoYoverse** 用虚线连到 AI Workbench（v62.31）；每个案例卡片上写 "HoYoverse · 日期 →"。
 - **X Creator Campaign** 和 **Cross-Platform Community Giveaway** 在 Creator & Social 里相邻排列（同类创作者活动）；不加虚线（用户看过后觉得容易混淆，v62.14 去掉）。
 - **案例外链**（`links`）：摘要下方一行灰色带下划线的链接（例如 "TikTok event page ↗ · A player’s video ↗"），新窗口打开；只放公开页面。Interactive Filter 用了活动页和一条达人视频（Creator video example）。（v62.15–62.18）
 

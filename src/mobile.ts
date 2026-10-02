@@ -64,17 +64,15 @@ function section(branchId: string): string {
 }
 
 function menu(): string {
-  // the menu lists the Growth section's groups (v62.30: flagship cases lead their own group)
-  const growth = childrenOf('growth').filter((s) => s.type === 'sub').map((s) => s.id)
-    .map((id) => `<a href="#/${id}" class="m-menu-sub">${esc(t(byId.get(id)!.label))}</a>`)
+  const work = ['growth-paid', 'growth-social']
+    .map((id) => `<a href="#/${id}" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get(id)!.label)}</span></a>`)
     .join('');
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">
     <div class="m-menu-quick">
       <a href="#/resume" class="btn">${L('resume')} →</a>
       <a href="#/contact" class="btn">${L('contact')} →</a>
     </div>
-    <a href="#/growth" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get('growth')!.label)}</span></a>
-    <div class="m-menu-subs">${growth}</div>
+    ${work}
     <a href="#/ai" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get('ai')!.label)}</span></a>
     <a href="#/creative" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get('creative')!.label)}</span></a>
     <a href="#/info" class="m-menu-item">${icon('branch', 11, true)}<span>${tx(byId.get('info')!.label)}</span></a>
@@ -117,7 +115,8 @@ export function renderMobile(root: HTMLElement) {
       <p class="m-intro">${tx(site.intro)}</p>
     </div>
     ${menu()}
-    ${section('growth')}
+    ${section('growth-paid')}
+    ${section('growth-social')}
     ${section('ai')}
     ${section('creative')}
     ${info()}

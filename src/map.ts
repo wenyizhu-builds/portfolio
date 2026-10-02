@@ -33,12 +33,11 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    pull brings every point back, so home always looks the same. Link lengths between
    these points are derived from the same numbers, so the forces agree with the layout. */
 const HOME_LAYOUT: Record<string, [number, number]> = {
-  growth: [242, -123],
-  'growth-paid': [300, -255],
-  'ua-creative-strategy': [190, -345],
-  'gip-testing': [430, -375],
-  'growth-social': [420, 30],
-  'zzz-jp-accounts': [565, -45],
+  'growth-paid': [235, -150],
+  'ua-creative-strategy': [130, -265],
+  'gip-testing': [375, -290],
+  'growth-social': [330, 40],
+  'zzz-jp-accounts': [480, -40],
   info: [-149, -90],
   education: [-239, -158],
   experience: [-310, -8],
@@ -114,7 +113,8 @@ const LAYOUT = {
   elbow: { at: 0.42, max: 42, slope: 0.28, min: 16 }, // link shape: bend point, step size
 };
 
-const FOLDED_AT_HOME = new Set(['creative']);
+const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
+const FOLDED_AT_HOME = new Set(['creative', 'growth-paid', 'growth-social']); // the two work groups show only their flagship cases at home (v62.31)
 
 /** Stable pseudo-random number in [0,1) from an id, so the layout is varied but repeatable. */
 function hash(id: string): number {
@@ -492,7 +492,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (!FOLDED_AT_HOME.has(b.id) || f === b.id || (f && ancestors(f).includes(b.id)))
         childrenOf(b.id).forEach((c) => vis.add(c.id));
     }
-    // flagship cases stay on the home map (and in an opened Growth Marketing) beside their group (v62.30)
+    // flagship cases stay on the home map beside their (folded) group (v62.30)
     const flagships = () => nodes.forEach((n) => { if (n.featured && n.parent && vis.has(n.parent)) vis.add(n.id); });
     if (!f) flagships();
     if (f && f !== 'root') {
@@ -503,7 +503,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       vis.add(f);
       ancestors(f).forEach((a) => vis.add(a));
       childrenOf(f).forEach((c) => vis.add(c.id));
-      if (f === 'growth') flagships();
       relatedOf(f).forEach((r) => vis.add(r));
       // An end point (a single piece of work) keeps its siblings on the map, so the reader can
       // go from one to the next directly instead of stepping up to the parent and back down (v53).
@@ -568,7 +567,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     if (n.id === 'info') g.classList.add('is-info');
     if (n.status) g.classList.add('is-prep');
     if (n.featured) g.classList.add('is-featured');
-    if (n.id === 'growth') g.classList.add('is-key'); // the main area gets a cobalt outline
+    if (KEY_AREAS.has(n.id)) g.classList.add('is-key'); // the main work areas get a cobalt outline
     g.setAttribute('tabindex', '0');
     g.setAttribute('role', 'button');
     g.dataset.id = n.id;

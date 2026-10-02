@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.30 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.31 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.30）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.31）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -15,9 +15,10 @@
 
 ## 当前状态
 
-- Growth Marketing 分两组（v62.30，方案 A）：**Paid & UA Growth**（Creator Ad Pipeline ★ · TikTok UGC Channel Test ★ · Xbox Launch Paid Campaign · Gamified Landing Page）和 **Creator & Social**（Zenless Zone Zero: Social Launch in Japan ★ · X Creator Campaign · Cross-Platform Community Giveaway · TikTok & Snapchat Branded Filter Campaign · English Social Channel Growth）。★ 在首页地图上和所在组一起显示，带手写批注；打开一组时全部案例放射展开。
+- 案例分两大类，直接挂在 ✳ 下（v62.31，已去掉 Growth Marketing 节点）：**Paid & UA Growth**（Creator Ad Pipeline ★ · TikTok UGC Channel Test ★ · Xbox Launch Paid Campaign · Gamified Landing Page）和 **Creator & Social**（Zenless Zone Zero: Social Launch in Japan ★ · X Creator Campaign · Cross-Platform Community Giveaway · TikTok & Snapchat Branded Filter Campaign · English Social Channel Growth）。首页两组折叠，只露出 ★ 和批注；点开一组显示全部案例。
 - 9 个案例已按 JD 语言库润色（v62.29）：× / vs / benchmark 统一；英式拼写；Results 标签小写接在数字后。
 - 两组的一句话说明（`growth-paid` / `growth-social` 的 summary）是我起草的，用户还没看过。
+- 用户偏好：地图上节点要少，画面已经很满；加结构时优先减节点。
 - 筛选（平台 + 地区）在左上角，网址可分享；手机版为下拉框。
 - 全站规则（都有 `check`）：Results 每条一行 ≤45 字符（L32）；不写游戏版本号（L33）；不用 "cost per install" / "repeated"（L30）。
 
@@ -38,7 +39,7 @@
 ## 下一步
 
 1. 用户在预览里看两组的结构和新文案，有意见再改。两组的一句话说明待她确认。
-2. INDEX 个人简介要一起改：`site.intro` 里有一句 "translate performance data into creative insights that inform iterations and new concepts"，像是从 JD 库粘贴进去的笔记（用户在编辑器里加的，没动）；关键数字 "1% → 15%" 与案例的 "0% → 15%" 不一致；"JP creator matrix" 是"矩阵"直译，应改为 "network of social channels"。Growth Marketing 总述仍是 [Placeholder copy]。
+2. INDEX 个人简介要一起改：`site.intro` 里有一句 "translate performance data into creative insights that inform iterations and new concepts"，像是从 JD 库粘贴进去的笔记（用户在编辑器里加的，没动）；关键数字 "1% → 15%" 与案例的 "0% → 15%" 不一致；"JP creator matrix" 是"矩阵"直译，应改为 "network of social channels"。Growth Marketing 节点已删，它的占位总述也一起删了。
 3. 待用户确认的小问题：
    - Gamified Landing Page：测验概念和奖励机制是不是她提出的（是的话 Team 行写清楚，摘要去掉 "helped"）；标题；markets 是 "Global"，地区筛选匹配不到。
    - X Creator 和 English Social Channel Growth 的 markets 用了 "EN"（语言，不是市场），筛选把它算作北美。
@@ -47,5 +48,5 @@
 4. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
 5. 中文手写字体（可选 ZCOOL KuaiLe，未定）。
 6. 暂缓：个人账号案例（小红书约 14k + TikTok 约 2k）。
-7. 已知问题：layout-check 3 处（hoyoverse 1、ai-workbench 2，早于 v62），待单独处理。
+7. 已知问题：layout-check 3–4 处（hoyoverse 1、ai-workbench 2–3，每次跑结果略有浮动，早于 v62），待单独处理。
 8. 用户确认后再合并到 main。

@@ -117,23 +117,13 @@ export const site = {
 export const nodes: SiteNode[] = [
   { id: 'root', type: 'root', label: { en: 'Wenyi Zhu', zh: 'Wenyi Zhu' } },
 
-  /* ---------------- Growth Marketing ---------------- */
-  {
-    id: 'growth',
-    type: 'branch',
-    parent: 'root',
-    label: { en: 'Growth Marketing', zh: '增长营销' },
-    kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: {
-      en: 'Three years of global marketing at HoYoverse, across paid social, creators and campaigns — always measured against acquisition and cost efficiency. [Placeholder copy]',
-    },
-  },
+  /* ---------------- Work: two groups, straight off the ✳ (v62.31) ---------------- */
   {
     id: 'growth-paid',
-    type: 'sub',
-    parent: 'growth',
+    type: 'branch',
+    parent: 'root',
     label: { en: 'Paid & UA Growth', zh: '付费与 UA 增长' },
-    kicker: { en: 'Practice', zh: '方向' },
+    kicker: { en: 'Area of work', zh: '工作领域' },
     summary: { en: 'Creative strategy and channel tests for user acquisition, measured on installs, ROI and cost efficiency.' },
   },
   {
@@ -318,10 +308,10 @@ export const nodes: SiteNode[] = [
 
   {
     id: 'growth-social',
-    type: 'sub',
-    parent: 'growth',
+    type: 'branch',
+    parent: 'root',
     label: { en: 'Creator & Social', zh: '创作者与社媒' },
-    kicker: { en: 'Practice', zh: '方向' },
+    kicker: { en: 'Area of work', zh: '工作领域' },
     summary: { en: 'Creator campaigns and always-on social channels across X, TikTok, YouTube, Instagram and Snapchat, for English-speaking and Japanese players.' },
   },
   {
@@ -630,7 +620,7 @@ export const nodes: SiteNode[] = [
   },
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
-  { id: 'hoyoverse', type: 'role', platforms: ['global', 'paid'], parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['growth', 'ai-workbench'] },
+  { id: 'hoyoverse', type: 'role', platforms: ['global', 'paid'], parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' }, related: ['ai-workbench'] },
   { id: 'seminary-coop', type: 'role', platforms: ['global'], parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
   { id: 'nike', type: 'role', platforms: ['cn'], parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
   { id: 'weber-shandwick', type: 'role', platforms: ['cn'], parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
@@ -659,7 +649,7 @@ export function kindOf(id: string): NodeType {
 }
 
 /* The INDEX card lists these sections, in this order, below the bio. */
-export const indexSections = ['growth', 'ai', 'creative', 'experience', 'education'];
+export const indexSections = ['growth-paid', 'growth-social', 'ai', 'creative', 'experience', 'education'];
 
 /* The three flagship Growth Marketing cases, in reading order (each leads its group; v62.30). */
 export const featuredOrder = ['ua-creative-strategy', 'gip-testing', 'zzz-jp-accounts'];
