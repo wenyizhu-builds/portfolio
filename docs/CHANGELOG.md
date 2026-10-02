@@ -246,3 +246,7 @@
 ## 2026-10-02 — v57: smaller map notes
 
 - Hand-written notes about 20% smaller; arrow tails scale with the text so they still start at the words.
+
+## 2026-10-02 — v58: map notes re-placed
+
+- Home notes re-placed by hand for the smaller size so each arrow is short and lands on its point; ZZZ and TikTok notes moved to where the map has room.

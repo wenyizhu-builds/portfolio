@@ -71,12 +71,12 @@ const CAMERA = {
    (a gentle curve through `via`). The words live in content.ts (`note`). */
 type NotePlace = { text: [number, number]; from: [number, number]; via: [number, number]; to: [number, number]; rot: number };
 const NOTES: Record<string, NotePlace> = {
-  'ua-creative-strategy': { text: [-289, -138], from: [-164, -96], via: [-81, -68], to: [-32, -21], rot: -6 },
-  'zzz-jp-accounts': { text: [82, -138], from: [96, -72], via: [68, -50], to: [40, -31], rot: -5 },
-  'gip-testing': { text: [76, 139], from: [111, 117], via: [100, 83], to: [69, 50], rot: 3 },
-  ai: { text: [-232, -81], from: [-121, -42], via: [-76, -17], to: [-38, 0], rot: -5 },
+  'ua-creative-strategy': { text: [-262, -96], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
+  'zzz-jp-accounts': { text: [-150, -112], from: [-60, -66], via: [-34, -46], to: [-20, -20], rot: -5 },
+  'gip-testing': { text: [-46, 118], from: [4, 92], via: [12, 74], to: [4, 56], rot: 3 },
+  ai: { text: [-206, -72], from: [-96, -26], via: [-58, -18], to: [-22, -6], rot: -5 },
 };
-const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, placedAt: 34, line: 1.1, head: 12, headAngle: 0.5 };
+const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, line: 1.1, head: 12, headAngle: 0.5 };
 
 /* Layout tuning — every other layout number lives here. */
 const LAYOUT = {
@@ -849,7 +849,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       g.classList.toggle('is-hidden', !shown(id) || !here);
       if (!n || !shown(id) || !here) return;
       g.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`);
-      let p = hand && scaled(hand);
+      let p = hand;
       let anchor = 'start';
       if (!p) {
         // points here move, so the note sits outward from the parent: arrow beside the shape, words beyond
@@ -865,12 +865,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }
       placeNote(g, p, anchor);
     });
-  }
-  /** NOTES were placed for words at NOTE.placedAt; at another size the arrow's tail stays the same distance into the words. */
-  function scaled(p: NotePlace): NotePlace {
-    const r = NOTE.size / NOTE.placedAt;
-    const tail: [number, number] = [p.text[0] + (p.from[0] - p.text[0]) * r, p.text[1] + (p.from[1] - p.text[1]) * r];
-    return { ...p, from: tail, via: [(p.via[0] + tail[0] + p.via[0] - p.from[0]) / 2, (p.via[1] + tail[1] + p.via[1] - p.from[1]) / 2] };
   }
   /** Draw a note, then shift its words (and the arrow's tail with them) back inside the free map area. */
   function placeNote(g: SVGGElement, p: NotePlace, anchor: string) {
