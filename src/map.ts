@@ -9,7 +9,7 @@ import {
   type SimulationLinkDatum,
   type SimulationNodeDatum,
 } from 'd3-force';
-import { ancestors, byId, childrenOf, clusters, nodes, rolesOrder, ui, type SiteNode } from './content';
+import { ancestors, byId, childrenOf, nodes, rolesOrder, ui, type SiteNode } from './content';
 import { esc, isDone, reducedMotion, state, t } from './state';
 import { shapeFor } from './shapes';
 
@@ -68,7 +68,7 @@ const CAMERA = {
 
 /* Hand-written notes (v55). Where each note sits beside its point, in world units from the
    point's centre: `text` is where the first line starts; the arrow runs from → via → to
-   (a gentle curve through `via`). The words live in content.ts (`note`, `clusters`). */
+   (a gentle curve through `via`). The words live in content.ts (`note`). */
 type NotePlace = { text: [number, number]; from: [number, number]; via: [number, number]; to: [number, number]; rot: number };
 const NOTES: Record<string, NotePlace> = {
   'ua-creative-strategy': { text: [-289, -138], from: [-164, -96], via: [-81, -68], to: [-32, -21], rot: -6 },
@@ -76,7 +76,7 @@ const NOTES: Record<string, NotePlace> = {
   'gip-testing': { text: [76, 139], from: [111, 117], via: [100, 83], to: [69, 50], rot: 3 },
   ai: { text: [-232, -81], from: [-121, -42], via: [-76, -17], to: [-38, 0], rot: -5 },
 };
-const NOTE = { tipGap: 22, columnGap: 90, columnPull: 2, outward: 70, outwardText: 14, size: 34, line: 1.1, head: 12, headAngle: 0.5, clusterSize: 30, clusterPad: 14, clusterGap: 12, clusterRadius: 12 };
+const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 34, line: 1.1, head: 12, headAngle: 0.5 };
 
 /* Layout tuning — every other layout number lives here. */
 const LAYOUT = {
@@ -143,7 +143,6 @@ const isGroup = (id: string) => {
 const isGroupEnd = (parent: string, id: string) => isGroup(parent) && byId.get(id)?.parent === parent;
 /** Alternate ends of a group sit further out, so neighbouring labels never meet. */
 function groupRadius(parent: string, id: string): number {
-  if (byId.get(id)?.cluster) return LAYOUT.groupRing + LAYOUT.groupStagger / 2; // framed cases stand in a column (fanOut)
   const i = childrenOf(parent).findIndex((c) => c.id === id);
   return LAYOUT.groupRing + (i % 2 ? LAYOUT.groupStagger : 0);
 }
@@ -403,10 +402,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       // an end point: it and its siblings fan out on the parent's open side too (v53), so the
       // line back to the ✳ never runs through one of them
       // an opened group (e.g. More cases): its ends fan out evenly, alternately near and far
-      if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), LAYOUT.groupSpread, alpha, movable, true);
+      if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), LAYOUT.groupSpread, alpha, movable);
       const a = anchorId();
       if (a !== focus && a !== 'experience')
-        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null, isGroup(a));
+        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
     })
     .force('path', (alpha: number) => {
       // The career path zig-zags away from Experience instead of forming a straight line:
@@ -436,7 +435,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   /** Pull `ids` onto an arc round `centerId`, on the side facing away from the chain back to
       the ✳, in their current order (so points don't swap), travelling round the centre. */
-  function fanOut(centerId: string, ids: string[], radius: (id: string) => number, spread: number, alpha: number, ok: (n: SimNode) => boolean, columns = false) {
+  function fanOut(centerId: string, ids: string[], radius: (id: string) => number, spread: number, alpha: number, ok: (n: SimNode) => boolean) {
     const f = simNodes.get(centerId);
     if (!f) return;
     const back = ['root', ...ancestors(centerId)].filter((id) => id !== centerId).map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n);
@@ -445,36 +444,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const base = Math.atan2(f.y! - by, f.x! - bx);
     const off = (x: number) => Math.atan2(Math.sin(x - base), Math.cos(x - base)); // angle from the open side
     const at = (n: SimNode) => off(Math.atan2(n.y! - f.y!, n.x! - f.x!));
-    const raw = ids.map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && ok(n));
-    // cases framed together (`cluster`) take neighbouring places, at their group's average angle
-    const angle = new Map(raw.map((n) => [n, at(n)]));
-    const groupAt = new Map<string, number>();
-    for (const key of new Set(raw.map((n) => byId.get(n.id)?.cluster).filter(Boolean)))
-      { const ms = raw.filter((n) => byId.get(n.id)?.cluster === key); groupAt.set(key!, ms.reduce((s, n) => s + angle.get(n)!, 0) / ms.length); }
-    const order = (n: SimNode) => groupAt.get(byId.get(n.id)?.cluster ?? '') ?? angle.get(n)!;
-    const pts = raw.sort((a, b) => order(a) - order(b) || angle.get(a)! - angle.get(b)!);
-    // cases sharing a frame stand in a column at their group's place in the fan, so the frame is a neat box
-    const cl = (n: SimNode) => (columns ? byId.get(n.id)?.cluster : undefined);
-    const wantOf = (i: number) => (i - (pts.length - 1) / 2) * spread;
-    const inColumn = new Set<SimNode>();
-    for (const key of new Set(pts.map(cl).filter(Boolean))) {
-      const ms = pts.filter((n) => cl(n) === key);
-      if (ms.length < 2) continue;
-      const a = base + ms.reduce((s, n) => s + wantOf(pts.indexOf(n)), 0) / ms.length;
-      const ux = Math.cos(a), uy = Math.sin(a);
-      const R = LAYOUT.groupRing + LAYOUT.groupStagger / 2;
-      ms.forEach((n, j) => {
-        const off = (j - (ms.length - 1) / 2) * NOTE.columnGap;
-        const tx = f.x! + ux * R - uy * off, ty = f.y! + uy * R + ux * off;
-        const k = LAYOUT.relatedPull * alpha * NOTE.columnPull;
-        n.vx! += (tx - n.x!) * k;
-        n.vy! += (ty - n.y!) * k;
-        inColumn.add(n);
-      });
-    }
+    const pts = ids.map((id) => simNodes.get(id)).filter((n): n is SimNode => !!n && ok(n)).sort((a, b) => at(a) - at(b));
     pts.forEach((n, i) => {
-      if (inColumn.has(n)) return;
-      const want = wantOf(i);
+      const want = (i - (pts.length - 1) / 2) * spread;
       const rx = n.x! - f.x!, ry = n.y! - f.y!, r = Math.hypot(rx, ry) || 1;
       const turn = want - at(n); // never passes behind the centre (the chain)
       const k = LAYOUT.relatedPull * alpha;
@@ -844,7 +816,6 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   /* ---------- hand-written notes (v55) ---------- */
   const noteEls = new Map<string, SVGGElement>();
-  const clusterEls = new Map<string, { g: SVGGElement; rect: SVGRectElement; text: SVGTextElement }>();
   const lines = (s: string, size: number) =>
     s.split('\n').map((l, i) => `<tspan x="0" dy="${i ? size * NOTE.line : 0}">${esc(l)}</tspan>`).join('');
   function arrowPath(p: NotePlace): string {
@@ -857,66 +828,76 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   function buildNotes() {
     gNotes.replaceChildren();
     noteEls.clear();
-    clusterEls.clear();
     for (const n of nodes) {
       if (!n.note) continue;
       const g = document.createElementNS(SVGNS, 'g');
       g.classList.add('is-hidden');
+      g.dataset.id = n.id;
       g.innerHTML = `<path/><text font-size="${NOTE.size}">${lines(t(n.note), NOTE.size)}</text>`;
       gNotes.append(g);
       noteEls.set(n.id, g);
     }
-    for (const [key, label] of Object.entries(clusters)) {
-      const g = document.createElementNS(SVGNS, 'g');
-      g.classList.add('is-hidden');
-      g.innerHTML = `<rect rx="${NOTE.clusterRadius}"/><text font-size="${NOTE.clusterSize}">${lines(t(label), NOTE.clusterSize)}</text>`;
-      gNotes.append(g);
-      clusterEls.set(key, { g, rect: g.querySelector('rect')!, text: g.querySelector('text')! });
-    }
   }
-  /** Notes: the hand-placed ones (NOTES) show on the home map only; a case's other note shows while its group is open; a frame shows round two or more of its cases, and follows them when they are dragged. */
+  /** Notes: the hand-placed ones (NOTES) show on the home map only; a case's other note shows while its group is open.
+      Either way a note is nudged back inside the map's free area, so the card, the header or the window edge never hides it. */
   function drawNotes() {
     const shown = (id: string) => simNodes.has(id) && near.has(id);
     noteEls.forEach((g, id) => {
       const n = simNodes.get(id);
-      // hand-placed notes belong to the home map; the others show when their group is open
-      const p = NOTES[id];
-      const here = p ? !focus : focus === byId.get(id)?.parent;
+      const hand = NOTES[id];
+      const here = hand ? !focus : focus === byId.get(id)?.parent;
       g.classList.toggle('is-hidden', !shown(id) || !here);
-      if (!n) return;
+      if (!n || !shown(id) || !here) return;
       g.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`);
-      const path = g.querySelector('path')!, text = g.querySelector('text')!;
-      if (p) {
-        // the home map is laid out by hand, and so are its notes
-        path.setAttribute('d', arrowPath(p));
-        text.setAttribute('text-anchor', 'start');
-        text.setAttribute('transform', `translate(${p.text}) rotate(${p.rot})`);
-        return;
+      let p = hand;
+      let anchor = 'start';
+      if (!p) {
+        // points here move, so the note sits outward from the parent: arrow beside the shape, words beyond
+        const par = simNodes.get(byId.get(id)?.parent ?? '');
+        if (!par) return;
+        const dx = n.x! - par.x!, dy = n.y! - par.y!, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
+        const to: [number, number] = [ux * NOTE.tipGap, uy * NOTE.tipGap];
+        const from: [number, number] = [to[0] + ux * NOTE.outward, to[1] + uy * NOTE.outward];
+        const via: [number, number] = [(to[0] + from[0]) / 2 - uy * 12, (to[1] + from[1]) / 2 + ux * 12];
+        const text: [number, number] = [from[0] + (ux >= 0 ? NOTE.outwardText : -NOTE.outwardText), from[1] + (uy >= 0 ? NOTE.size * 0.8 : 0)];
+        p = { text, from, via, to, rot: -3 };
+        anchor = ux >= 0 ? 'start' : 'end';
       }
-      // elsewhere points move, so the note sits outward from the parent: arrow beside the shape, words beyond
-      const par = simNodes.get(byId.get(id)?.parent ?? '');
-      if (!par) return;
-      const dx = n.x! - par.x!, dy = n.y! - par.y!, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
-      const to: [number, number] = [ux * NOTE.tipGap, uy * NOTE.tipGap]; // ends just beside the point's shape
-      const from: [number, number] = [to[0] + ux * NOTE.outward, to[1] + uy * NOTE.outward];
-      const via: [number, number] = [(to[0] + from[0]) / 2 - uy * 12, (to[1] + from[1]) / 2 + ux * 12];
-      path.setAttribute('d', arrowPath({ text: from, from, via, to, rot: 0 }));
-      const tx = from[0] + (ux >= 0 ? NOTE.outwardText : -NOTE.outwardText), ty = from[1] + (uy >= 0 ? NOTE.size * 0.8 : 0);
-      text.setAttribute('text-anchor', ux >= 0 ? 'start' : 'end');
-      text.setAttribute('transform', `translate(${tx.toFixed(1)},${ty.toFixed(1)}) rotate(-3)`);
+      placeNote(g, p, anchor);
     });
-    clusterEls.forEach(({ g, rect, text }, key) => {
-      const ms = nodes.filter((n) => n.cluster === key && shown(n.id)).map((n) => simNodes.get(n.id)!);
-      g.classList.toggle('is-hidden', ms.length < 2);
-      if (ms.length < 2) return;
-      const P = NOTE.clusterPad;
-      const x0 = Math.min(...ms.map((n) => n.x! - n.box.w / 2)) - P, x1 = Math.max(...ms.map((n) => n.x! + n.box.w / 2)) + P;
-      const y0 = Math.min(...ms.map((n) => n.y! + n.box.top)) - P, y1 = Math.max(...ms.map((n) => n.y! + n.box.bottom)) + P;
-      rect.setAttribute('x', x0.toFixed(1)); rect.setAttribute('y', y0.toFixed(1));
-      rect.setAttribute('width', (x1 - x0).toFixed(1)); rect.setAttribute('height', (y1 - y0).toFixed(1));
-      const rows = text.querySelectorAll('tspan').length;
-      text.setAttribute('transform', `translate(${x0.toFixed(1)},${(y0 - NOTE.clusterGap - (rows - 1) * NOTE.clusterSize * NOTE.line).toFixed(1)})`);
-    });
+  }
+  /** Draw a note, then shift its words (and the arrow's tail with them) back inside the free map area. */
+  function placeNote(g: SVGGElement, p: NotePlace, anchor: string) {
+    const path = g.querySelector('path')!, text = g.querySelector('text')!;
+    text.setAttribute('text-anchor', anchor);
+    const draw = (sx: number, sy: number) => {
+      path.setAttribute('d', arrowPath({ ...p, from: [p.from[0] + sx, p.from[1] + sy], via: [p.via[0] + sx / 2, p.via[1] + sy / 2] }));
+      text.setAttribute('transform', `translate(${(p.text[0] + sx).toFixed(1)},${(p.text[1] + sy).toFixed(1)}) rotate(${p.rot})`);
+    };
+    draw(0, 0);
+    const r = text.getBoundingClientRect(), o = svg.getBoundingClientRect(), E = NOTE.edge;
+    const x0 = r.left - o.left, x1 = r.right - o.left, y0 = r.top - o.top, y1 = r.bottom - o.top;
+    const fit = (lo: number, hi: number, min: number, max: number) => (hi > max ? max - hi : 0) || (lo < min ? min - lo : 0);
+    const dx = fit(x0, x1, area.x + E, area.x + area.w - E), dy = fit(y0, y1, area.y + E, area.y + area.h - E);
+    if (!dx && !dy) return;
+    const sx = dx / cam.k, sy = dy / cam.k;
+    draw(sx, sy);
+    if (Math.hypot(sx, sy) < NOTE.reaim) return; // a small nudge: the arrow's tail just moves with the words
+    // the words moved far, so the arrow restarts from the edge of the words nearest its point
+    const n = simNodes.get(g.dataset.id!)!;
+    const w = (px: number, py: number): [number, number] => [(px - cam.x) / cam.k - n.x!, (py - cam.y) / cam.k - n.y!];
+    const r2 = text.getBoundingClientRect();
+    const [bx0, by0] = w(r2.left - o.left, r2.top - o.top), [bx1, by1] = w(r2.right - o.left, r2.bottom - o.top);
+    const G = NOTE.tailGap;
+    // tail: the words' nearest corner or edge to the point; tip: just beside the point, facing the words
+    const from: [number, number] = [Math.min(Math.max(0, bx0 - G), bx1 + G), Math.min(Math.max(0, by0 - G), by1 + G)];
+    // tip: where the line towards the words leaves the point's shape-and-label box
+    const hx = n.box.w / 2 + G, top = n.box.top - G, bot = n.box.bottom + G;
+    const k = Math.min(from[0] ? hx / Math.abs(from[0]) : Infinity, from[1] < 0 ? top / from[1] : from[1] > 0 ? bot / from[1] : Infinity, 1);
+    const to: [number, number] = [from[0] * k, from[1] * k];
+    const len = Math.hypot(to[0] - from[0], to[1] - from[1]) || 1;
+    const via: [number, number] = [(to[0] + from[0]) / 2 + ((to[1] - from[1]) / len) * NOTE.bend, (to[1] + from[1]) / 2 - ((to[0] - from[0]) / len) * NOTE.bend];
+    path.setAttribute('d', arrowPath({ ...p, from, via, to }));
   }
   buildNotes();
 

@@ -237,3 +237,8 @@
 - Home map: "~3.7× projected LTV vs benchmark" (Creator Ad Pipeline), "0 → 80M+ organic views" (ZZZ), "my framework for testing new channels" (TikTok), "tools I built with AI" (AI Projects). Placed by hand in `NOTES` (map.ts); home only.
 - More cases: a rounded frame labelled "integrated social campaigns" around Influencer Activation, Giveaway & Cross-Platform Influencer and Interactive Filter, which now stand in a column; the frame follows them when dragged. "600M+ views" beside Interactive Filter.
 - Text in content.ts (`note`, `clusters`), with Chinese versions. Phone unchanged (no map).
+
+## 2026-10-02 — v56: notes never hidden; frame removed
+
+- Map notes are nudged back inside the free map area, so the card, header or window edge never covers them; after a large shift the arrow re-aims at its point.
+- Removed the "integrated social campaigns" frame and the column layout behind it; More cases keeps only "600M+ views".

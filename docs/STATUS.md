@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-01 · v55 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v56 · 分支 `flagship-restructure`（未合并 main）
 
 ## 2026-09-30 当前状态
 
@@ -13,7 +13,8 @@
 - 每个旗舰在「How it worked」里有一张可点开的流程图（`public/media/<case>/`）。
 - 编辑器存档（Mac 本地）与 `src/published-copy.json` 已对齐；GIP 旧列表项已清除。
 
-- 地图手写批注（v55）已上线：首页四句、More cases 一个框 + 600M+。规则见 SPEC。
+- 地图手写批注（v55–56）：首页四句、More cases 只留 600M+；批注不会被卡片挡住。规则见 SPEC。
+- 待定：按平台筛选作品（中国社媒 / 海外社媒等），方案已提给用户。
 - Xbox 文案已按新规则改完。More cases 打开时均匀展开（v54）。
 
 ## 下一步

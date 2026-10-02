@@ -63,13 +63,7 @@ export interface SiteNode {
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
-  cluster?: keyof typeof clusters; // cases drawn inside one red-orange frame on the map
 }
-
-/* Groups of cases framed together on the map, with their hand-written label. */
-export const clusters = {
-  'integrated-social': { en: 'integrated\nsocial campaigns', zh: '整合社媒营销' } as T,
-};
 
 const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 
@@ -213,7 +207,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'influencer-activation',
-    cluster: 'integrated-social',
     team: { en: "Influencer Strategy & Execution (my role), Execution Support x2, Agency Partners x2" },
     type: 'case',
     parent: 'more-growth',
@@ -381,7 +374,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'giveaway-campaign',
-    cluster: 'integrated-social',
     team: { en: "Campaign Lead & Strategy Owner (my role), Execution Support x2, Agency Partners x4" },
     type: 'case',
     parent: 'more-growth',
@@ -410,7 +402,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
-    cluster: 'integrated-social',
     note: { en: '600M+ views', zh: '6 亿+ 播放' },
     team: { en: "Filter Creative Development & Influencer Activation Support (my role), Campaign Lead x1, TikTok/Snapchat Platform Liaisons x2, Agency Partners x3" },
     type: 'case',
