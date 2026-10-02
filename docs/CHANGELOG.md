@@ -333,3 +333,7 @@
 ## 2026-10-02 — v62.12 Editor launcher
 
 - `Open Editor.command` (Mac only) now stops a leftover editor holding the port before starting; executable permission restored after the edit (L34).
+
+## 2026-10-02 — v62.13 Linked cases show their dotted line when the group is open
+
+- Opening More cases now shows the X Creator ↔ Giveaway dotted line (before, it only appeared when one of the two was selected). The line pulls on nothing, and linked cases are kept side by side in the fan so it stays short.
