@@ -391,3 +391,7 @@
 ## 2026-10-02 — v62.26 Fix v62.25
 
 - v62.25 was committed with a failing build (result too long) and a misplaced blue highlight; fixed ("1.8M+ players in the draw, +60% vs benchmark"; blue on 9.5M+, 1.8M+, 3x). L35.
+
+## 2026-10-02 — v62.27 Landing page bullets cut to the point
+
+- Each What I did bullet is now one short sentence.
