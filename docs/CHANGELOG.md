@@ -302,3 +302,7 @@
 
 - Every result is now one line (number + label ≤ 45 characters). Shortened: X Creator Campaign (~3x, 39%, +88%), Giveaway (~900K), Landing Page (1.4M+). Headline labels updated to match.
 - New `check` rule `result-one-line` (L32), applied to the published copy.
+
+## 2026-10-02 — v62.6 Giveaway copy clarified
+
+- "third-party community" → "the biggest Genshin fan account on X" (owner edit). Bullets now say how players entered (quote-posting a creative entry), what creators did (posted entries first), and why entries fell short (too much effort on X), for readers with no context.

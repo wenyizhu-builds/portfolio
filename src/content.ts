@@ -421,7 +421,7 @@ export const nodes: SiteNode[] = [
     tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }, { en: 'Creator marketing' }],
     markets: ['NA', 'JP'],
     summary: {
-      en: "For Genshin Impact’s 5.0 launch, I led a giveaway with a major third-party Genshin community on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
+      en: "For Genshin Impact’s 5.0 launch, I led a giveaway with the biggest Genshin fan account on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
     },
     sections: [
       {
@@ -433,9 +433,9 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Designed the campaign: Chose X for its strong Genshin conversation and partnered with a leading third-party Genshin community (1M+ followers) to reach players outside official channels. In-game reward codes made player action trackable, not just reach." },
-          { en: "Activated creators across platforms: Coordinated 67 creators across X, TikTok and Instagram, seeding example posts so the prompt was easy to understand and share." },
-          { en: "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking. The recap showed quote-post participation fell short, a clear lesson that third-party giveaways need simple, platform-native actions." },
+          { en: "Designed the campaign: Partnered with the biggest Genshin fan account on X (1M+ followers) to reach players outside official channels. To enter, players quote-posted the giveaway with their own creative take, and in-game reward codes showed who actually took part, not just who saw it." },
+          { en: "Activated creators across platforms: Coordinated 67 creators across X, TikTok and Instagram, who posted their own entries first to show players how to join." },
+          { en: "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking. Code redemptions beat the goal, but fewer players entered the giveaway itself because quote-posting a creative entry took too much effort on X. The lesson: third-party giveaways need one-tap actions, like a repost or a reply." },
         ],
       },
     ],
