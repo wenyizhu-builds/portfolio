@@ -32,16 +32,17 @@
 - 不放可以留到面试说的细节（例如 1B+ impressions）。
 - 链接文字：用 "Creator video example"、"Event page" 这类，只放一个最好的例子。
 
-## 下一步
+## 下一步（用户 2026-10-02 会话结束时定的顺序）
 
-1. **其余 6 个案例的 What I did 按上面的偏好压缩**（用户刚确认 Gamified Landing Page 的写法，问过是否推广到其他案例，尚未回答——新会话先问一句或直接做第一个给她看）。
-2. 待用户确认的小问题：
+1. **全部案例复查与润色**：先读 JD 语言库 `~/Desktop/JS_workspace/career/job-targets/research-handoffs/2026/JDR-20260911-001__market-scan__independent-overseas-career-research/jd-language-bank-2026-09-28.md`，再逐个复查 9 个案例（摘要、挑战、What I did、Results、Team），统一措辞、去重复、按上面的写作偏好压缩 What I did，最后整体综合。
+2. **讨论案例的组织方式（先讨论，不直接动手）**：用户的初步想法是去掉「More cases」，改成两个大类——**Growth Marketing** 和 **Social Campaigns**（整合社媒活动）。她明确表示欢迎任何反馈：新会话应结合她的目标岗位（英国 Creative Strategist / Growth Marketing / AI-enabled growth，见 memory 的 job-search 和 JD 语言库）给出几种组织方案和利弊，和她讨论后再定。定下来后先写进 SPEC（L14），再改地图、INDEX、手机版、筛选、`HOME_LAYOUT`、`NOTES`，改完跑 layout-check。
+3. 待用户确认的小问题：
    - Gamified Landing Page 标题（备选 "Interactive Quiz Landing Page"）；测验题目是否真的以纳塔为背景；markets 是 "Global"，地区筛选匹配不到。
    - Branded Filter：markets 用了 US/JP（旧版有 SEA）；70+ 达人是否包括 14 位 Snap Stars。
    - "600M+ views" 手写批注在新长标题旁边可能挤，用户如果看到再挪。
-3. Growth Marketing 总述 → INDEX 个人简介（旧数字 1%→15% 等仍在，"[Placeholder copy]" 还在 More cases 描述里）。
-4. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
-5. 全站措辞统一检查；中文手写字体（可选 ZCOOL KuaiLe，未定）。
-6. 暂缓：个人账号案例（小红书约 14k + TikTok 约 2k，AI 工具教程；dashboard = CONTENT/80-product-development/creator-workbench 原型；等用户给账号名和细节）。
-7. 已知问题：layout-check 3–4 处，集中在 HoYoverse 和 AI Workbench 视图（早于 v62），超出 2 处上限，待单独处理。
-8. 用户确认后再合并到 main。
+4. Growth Marketing 总述 → INDEX 个人简介（旧数字 1%→15% 等仍在；More cases 描述里还有 "[Placeholder copy]"，结构定下来后一起重写）。
+5. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
+6. 中文手写字体（可选 ZCOOL KuaiLe，未定）。
+7. 暂缓：个人账号案例（小红书约 14k + TikTok 约 2k，AI 工具教程；dashboard = CONTENT/80-product-development/creator-workbench 原型；等用户给账号名和细节）。
+8. 已知问题：layout-check 3–4 处，集中在 HoYoverse 和 AI Workbench 视图（早于 v62），超出 2 处上限，待单独处理。
+9. 用户确认后再合并到 main。

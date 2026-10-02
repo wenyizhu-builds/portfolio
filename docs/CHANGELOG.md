@@ -403,3 +403,7 @@
 ## 2026-10-02 — v62.28 STATUS rewritten as the hand-off for a new session
 
 - STATUS now covers the sync workflow, the copy-editor archive, the owner's writing preferences from this session, and open questions.
+
+## 2026-10-02 — v62.28 STATUS: next steps set by the owner
+
+- Next: review and polish all cases against the JD language bank; then discuss how to organise the cases (owner's first idea: Growth Marketing + Social Campaigns instead of More cases; open to other options based on target roles).
