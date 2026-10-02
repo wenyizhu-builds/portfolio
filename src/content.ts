@@ -368,7 +368,7 @@ export const nodes: SiteNode[] = [
     team: { en: "Me (growth strategy support and content review), 1 growth strategy lead and 1 agency partner" },
     type: 'case',
     parent: 'more-growth',
-    headline: { num: '136%', label: { en: 'of view target on established channels' } },
+    headline: { num: '35M+', label: { en: 'views across 8 channels' } },
     label: { en: 'EN Social Channel Growth' },
     kicker: { en: 'Genshin Impact · TikTok, YouTube' },
     context: { en: 'Genshin Impact' },
@@ -376,13 +376,13 @@ export const nodes: SiteNode[] = [
     period: 'Q4 2023',
     markets: ['EN'],
     summary: {
-      en: "I helped grow a network of 8 English-language Genshin Impact channels on TikTok and YouTube, refreshing 5 that had plateaued and finding a clear niche for 3 new ones. The established channels hit 136% of their view target at about 30% below target CPM.",
+      en: "I helped grow a network of 8 English-language Genshin Impact channels on TikTok and YouTube, refreshing the strategy for channels that had plateaued and building it from scratch for new ones. Together they drew 35M+ views and 64K+ new followers at about 30% below target CPM.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Genshin Impact ran a network of English-language social channels on TikTok and YouTube to keep players engaged between major updates. The 5 established channels had stalled: formats were getting repetitive, fewer viewers were following, and views dropped between updates. I needed to help refresh them and find a clear niche for 3 new channels, while keeping CPM under target." },
+          { en: "Genshin Impact ran a network of English-language social channels on TikTok and YouTube to keep players engaged between major updates. The established channels had stalled: formats were getting repetitive, fewer viewers were following, and views dropped between updates. At the same time, new channels needed a social strategy built from scratch, all while keeping CPM under target." },
         ],
       },
       {
@@ -390,15 +390,14 @@ export const nodes: SiteNode[] = [
         items: [
           { en: "Diagnosed what stalled growth: Used Tubular and monthly reports to compare TikTok trends, competitor channels and each channel’s performance, and pinpointed the gaps: too few evergreen topics, stale formats and weak follower conversion." },
           { en: "Refreshed the content mix: Turned the findings into changes for each channel. Guide channels that leaned on time-sensitive patch tutorials added short, entertaining gameplay tips and varied their covers, so views no longer depended on update days." },
-          { en: "Positioned the new channels: Researched trends, competitors and early performance signals to give each of the 3 new channels a clear niche before scaling production." },
+          { en: "Built strategy for the new channels: Defined each channel’s audience, positioning, content pillars, formats and posting cadence from platform research and competitor benchmarks, then refined them on early performance data before scaling production." },
           { en: "Ran monthly reviews: Tracked KPIs, reviewed English content and kept the agency’s output aligned with each channel’s growth goals." },
         ],
       },
     ],
     results: [
-      { metric: "136%", en: "of view target on the 5 established channels" },
-      { metric: "+45K", en: "followers and 21M new views on the established channels" },
-      { metric: "14M", en: "views and 19K followers for the 3 new channels" },
+      { metric: "35M+", en: "views across 8 channels" },
+      { metric: "+64K", en: "new followers" },
       { metric: "~30%", en: "below target CPM" },
     ],
     media: [{
