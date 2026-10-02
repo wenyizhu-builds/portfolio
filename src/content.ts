@@ -530,7 +530,7 @@ export const nodes: SiteNode[] = [
     ],
     results: [
       { metric: "9.5M+", en: "visitors, ~7x benchmark" },
-      { metric: "1.8M+", en: "players in the reward draw, up 60% vs benchmark" },
+      { metric: "1.8M+", en: "players in the draw, +60% vs benchmark" },
       { metric: "3x", en: "conversion rate vs benchmark" },
       { metric: "~4", en: "visitors per share, 2x the target" },
     ],

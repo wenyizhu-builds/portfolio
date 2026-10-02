@@ -387,3 +387,7 @@
 ## 2026-10-02 — v62.25 Landing page copy simplified
 
 - Retitled "Gamified Landing Page"; challenge rewritten in the owner's framing (experiment: game + rewards to test conversion; first gamified landing page), 1B+ impressions removed; comparisons say "benchmark"; "~4 visitors per share".
+
+## 2026-10-02 — v62.26 Fix v62.25
+
+- v62.25 was committed with a failing build (result too long) and a misplaced blue highlight; fixed ("1.8M+ players in the draw, +60% vs benchmark"; blue on 9.5M+, 1.8M+, 3x). L35.
