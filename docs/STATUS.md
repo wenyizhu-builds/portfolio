@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.46 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.47 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.46）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.47）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -51,5 +51,5 @@
 4. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
 5. 中文手写字体（可选 ZCOOL KuaiLe，未定）。
 6. 暂缓：个人账号案例（小红书约 14k + TikTok 约 2k）。
-7. 已知问题：layout-check 2 处（contact 视图，v62.38）；经历视图里 ✳ → Information → Experience 的链条会往回折（早已存在），待单独处理。
+7. layout-check 0 处（v62.47）；经历视图里 ✳ → Information → Experience 的链条会往回折（早已存在），待单独处理。
 8. 用户确认后再合并到 main。

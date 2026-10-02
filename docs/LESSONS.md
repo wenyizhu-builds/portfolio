@@ -45,3 +45,4 @@
 | L36 | 2026-10-02 | 在 Mac 上跑了一次 `git fetch`/`git status`，留下 `.git/index.lock` 删不掉，之后 git 全部会报错 | 远程连接的 Mac 默认不允许删除文件，而 git 每次操作都要删自己的锁文件 | 在 Mac 上执行任何 git 命令前，先申请该文件夹的删除权限；结束时确认没有 `.git/*.lock` 残留 | STATUS 交接第一条；交付清单加"检查 .git/*.lock" |
 | L37 | 2026-10-02 | 我在截图里看批注间距觉得正常，你在电脑上看到 ~3.7× 和 AI 两条批注的文字离箭头明显更远 | 云端截图拿不到 Google Fonts，批注用的是后备衬线字体，宽度和行高都和 Nanum Pen Script 不一样 | 看地图批注、字体相关的版面时，截图必须加载真实字体 | 截图脚本拦截 fonts.googleapis.com，改用本地 @fontsource 的 Nanum Pen Script 和 Schibsted Grotesk |
 | L38 | 2026-10-02 | 首页拖动一个点后松手，它只回去一半，停在别的组中间，线交叉，看起来像防重叠失效 | 松手时只把 alphaTarget 归零，模拟很快冷却；回家的拉力乘以 alpha，还没到家就停了 | 首页拖动结束时重新加热模拟（alpha 回到 alphaStart），让点回到 HOME_LAYOUT | 回归测试：拖动 ZZZ 到别处松手，5 秒后位置回到原位 |
+| L39 | 2026-10-02 | AI Projects 打开后三个作品挤在一起、线贴在一起 | 父点被挪了位置，折叠的子点还留着旧的 HOME_LAYOUT 坐标，连线长度由这两个坐标算出，只剩约 30 | 首页折叠的点不写进 HOME_LAYOUT；挪动一个组时，检查它的子点有没有残留的首页坐标 | 交付前跑 layout-check；排版工具复制出的布局里不应出现首页不可见的点 |

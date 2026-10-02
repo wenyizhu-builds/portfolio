@@ -33,7 +33,8 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    pull brings every point back, so home always looks the same. Link lengths between
    these points are derived from the same numbers, so the forces agree with the layout. */
 const HOME_LAYOUT: Record<string, [number, number]> = {
-  // v62.41: placed by the owner in the arrange tool
+  // v62.41: placed by the owner in the arrange tool. Points folded at home (AI projects) have no entry,
+  // so their lines use the normal lengths instead of a stale home spot (v62.47).
   'growth-paid': [100, -91],
   'ua-creative-strategy': [99, -218],
   'gip-testing': [206, -170],
@@ -44,9 +45,6 @@ const HOME_LAYOUT: Record<string, [number, number]> = {
   education: [-265, -180],
   experience: [-345, 5],
   ai: [-248, 73],
-  'ai-workbench': [-271, 90],
-  'ai-slot-1': [-40, 231],
-  'ai-slot-2': [-280, 321],
   creative: [-184, 255],
 };
 const homeOf = (id: string): [number, number] | undefined => (id === 'root' ? [0, 0] : HOME_LAYOUT[id]);
@@ -105,7 +103,7 @@ const LAYOUT = {
   fanMin: 0.62, fanPush: 0.5, // two lines leaving the same point keep at least this angle (radians, ≈35°)
   crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
   moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
-  siblingRing: 110, // an end point's siblings sit about this far round their parent
+  siblingRing: 150, siblingSpread: 1.0, // an end point's siblings (small groups) sit this far round their parent, this far apart (radians, ≈57°), v62.47
   groupRing: 175, groupStagger: 35, groupMin: 4, groupSiblingSpread: 0.62, // an opened group of groupMin+ ends: a full radial fan, alternate ends a little further out (v62); with one of its ends open, a half fan (radians apart)
   relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
   chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
@@ -419,7 +417,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (focus && isGroup(focus)) fanOut(focus, childrenOf(focus).map((c) => c.id), (id) => groupRadius(focus!, id), groupSpread(focus), alpha, movable);
       const a = anchorId();
       if (a !== focus && a !== 'experience')
-        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSiblingSpread : LAYOUT.relatedSpread, alpha, (n) => n.fx == null);
+        fanOut(a, childrenOf(a).map((c) => c.id), isGroup(a) ? (id) => groupRadius(a, id) : () => LAYOUT.siblingRing, isGroup(a) ? LAYOUT.groupSiblingSpread : LAYOUT.siblingSpread, alpha, (n) => n.fx == null);
     })
     .force('path', (alpha: number) => {
       // The career path zig-zags away from Experience instead of forming a straight line:

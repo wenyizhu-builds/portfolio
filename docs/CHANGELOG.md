@@ -488,3 +488,7 @@
 ## 2026-10-02 — v62.46 owner's shorter titles
 
 - Synced from the editor: ZZZ → "Social Launch in Japan", Branded Filter → "TikTok & Snapchat Filter Campaign", AI dashboard → "Creative Intelligence Dashboard". Owner wants titles simple; the game name stays on each card's identity line.
+
+## 2026-10-02 — v62.47 AI Projects views tidied; layout-check 0
+
+- The AI projects were bunched up because AI Projects moved but its folded projects kept stale HOME_LAYOUT spots, so the line to the dashboard was ~30 units long. Folded points no longer have home entries (normal line lengths apply). Small groups' siblings sit a little wider (siblingRing 150, siblingSpread ≈57°). layout-check: 0 over 35 views.
