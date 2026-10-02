@@ -471,3 +471,7 @@
 ## 2026-10-02 — v62.42 Region filter only
 
 - Platform filter removed (it repeated the two groups; Chinese social matched no case). `platforms` fields and PlatformKey removed; URL keeps ?region= only. X Creator and English Social Channel Growth markets EN → NA (owner: EN was mainly North America).
+
+## 2026-10-02 — v62.43 Gamified Landing Page under North America and Europe
+
+- Owner: the page was English for all English-speaking players, so it is listed under both North America and Europe instead of "Global" (which matched no region).

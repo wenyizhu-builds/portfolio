@@ -267,7 +267,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · Web' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
-    markets: ['Global'],
+    markets: ['NA', 'EU'], // English-language page for all English-speaking players (owner: list under both)
     summary: {
       en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
     },
