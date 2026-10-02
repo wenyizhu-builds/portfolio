@@ -324,3 +324,8 @@
 
 - Giveaway: the "took part, not just saw it" idea now appears once (challenge says "get them to act"; bullet says codes "turned views into a measurable action"); "official channels" and "biggest fan account" no longer repeated in every block.
 - X Creator Campaign results: "vs benchmark" / "than benchmark".
+
+## 2026-10-02 — v62.11 Interactive Filter Campaign rewritten; X Creator ↔ Giveaway linked
+
+- Interactive Filter Campaign: first-person summary with context for Lantern Rite, one-paragraph challenge, three blue-labelled bullets, four one-line results, team in the "Me (…)" format, period Jan – Feb 2024, markets US/JP.
+- X Creator Campaign now has a dotted connection to the Giveaway (its benchmark campaign); the Giveaway moved next to it in More cases.

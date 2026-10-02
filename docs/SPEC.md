@@ -114,6 +114,7 @@
 - **Information**：Experience（折叠，之字形排列）和 Education。
 - **没有 Contact 节点**：联系方式放在顶栏的 "Let's talk ↗"。
 - **HoYoverse** 用虚线连到 Growth Marketing 和 AI Workbench；每个案例卡片上写 "HoYoverse · 日期 →"。
+- **X Creator Campaign** 用虚线连到 **Cross-Platform Community Giveaway**（同类创作者活动，后者是前者的对照基准）；两者在 More cases 里相邻排列。（v62.11）
 
 ### 交互模型（参考 andrewtrousdale.com，v32 起）
 
