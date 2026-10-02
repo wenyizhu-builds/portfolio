@@ -251,10 +251,8 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Refocused creators on core players: Replaced broad-appeal accounts with mid-tier artists, content creators and Genshin news accounts, so 80% of the roster spoke directly to core players." },
-          { en: "Rebalanced markets and formats: Grew EN creators to half the roster, briefed a US agency on illustration styles North American players love, and kept JP momentum with artists and cosplayers." },
-          { en: "Fixed the posting format: Moved creators from quote posts, which X tends to throttle, to native posts with the event link in a thread; in side-by-side tests, native posts drew up to 4–5x the views." },
-          { en: "Led execution and benchmarking: Ran budget, sourcing, timelines and approvals across two agencies, then benchmarked results against the previous creator campaign to decide what to scale." },
+          { en: "Rebuilt the creator strategy: Shifted spend from broad-appeal creators to the artists, cosplayers, streamers and Genshin news creators that core players follow, so 80% of the lineup reached core players. I also grew English-language creators to half the lineup and briefed a US agency on art styles North American players respond to." },
+          { en: "Led execution and benchmarking: Managed budget, creator sourcing, timelines and approvals with two agencies, then benchmarked results against the previous creator campaign to decide what to scale next." },
         ],
       },
     ],
