@@ -250,3 +250,7 @@
 ## 2026-10-02 — v58: map notes re-placed
 
 - Home notes re-placed by hand for the smaller size so each arrow is short and lands on its point; ZZZ and TikTok notes moved to where the map has room.
+
+## 2026-10-02 — v59: AI note closer
+
+- "tools I built with AI" moved right, closer to its arrow.

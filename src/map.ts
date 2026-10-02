@@ -74,7 +74,7 @@ const NOTES: Record<string, NotePlace> = {
   'ua-creative-strategy': { text: [-262, -96], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
   'zzz-jp-accounts': { text: [-150, -112], from: [-60, -66], via: [-34, -46], to: [-20, -20], rot: -5 },
   'gip-testing': { text: [-46, 118], from: [4, 92], via: [12, 74], to: [4, 56], rot: 3 },
-  ai: { text: [-206, -72], from: [-96, -26], via: [-58, -18], to: [-22, -6], rot: -5 },
+  ai: { text: [-160, -70], from: [-70, -26], via: [-46, -16], to: [-22, -6], rot: -5 },
 };
 const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 27, line: 1.1, head: 12, headAngle: 0.5 };
 
