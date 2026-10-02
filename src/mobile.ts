@@ -64,8 +64,8 @@ function section(branchId: string): string {
 }
 
 function menu(): string {
-  // the menu lists what the Growth section shows: the three flagship cases, then the other groups
-  const growth = [...featuredOrder, ...childrenOf('growth').filter((s) => s.type === 'sub').map((s) => s.id)]
+  // the menu lists the Growth section's groups (v62.30: flagship cases lead their own group)
+  const growth = childrenOf('growth').filter((s) => s.type === 'sub').map((s) => s.id)
     .map((id) => `<a href="#/${id}" class="m-menu-sub">${esc(t(byId.get(id)!.label))}</a>`)
     .join('');
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">

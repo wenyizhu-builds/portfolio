@@ -1,11 +1,13 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-09-29 · 对应版本 v61（本地待视觉验收）
+> 最后更新：2026-10-02 · 对应版本 v62.30
+
+- **2026-10-02 案例分组（v62.30，用户选定方案 A，取代下面 2026-09-30 的「重点案例 + More cases」）**：Growth Marketing 下分两组，按目标岗位的两个 JD 家族命名——**Paid & UA Growth**（`growth-paid`：Creator Ad Pipeline ★、TikTok UGC Channel Test ★、Xbox Launch Paid Campaign、Gamified Landing Page）和 **Creator & Social**（`growth-social`：ZZZ Social Launch in Japan ★、X Creator Campaign、Cross-Platform Community Giveaway、Branded Filter Campaign、English Social Channel Growth）。不再有「More cases」和单独的「Flagship cases」列表。★ 重点案例仍是 `featured: true`，在组内排第一（`content.ts` 里的顺序就是展示顺序）。首页地图：显示两组，以及每组的重点案例（带手写批注），其他案例收在组里；打开 Growth Marketing 时同样显示重点案例。打开一组时，组内全部案例放射展开。INDEX、手机版、手机目录都按这两组列出。
 
 - 2026-09-30 草稿（local/flagship-restructure，待批准）：Growth Marketing 下直接挂 3 个重点案例（UA Creative Strategy、ZZZ JP Account Growth、TikTok GIP，顺序见 `featuredOrder`）+「More cases」组（其余 6 个）。重点案例在地图上是实心黑色方块（选中时为荧光绿），尺寸与其他点相同；悬停只放大，不变色（含 ✳）；INDEX 与手机版同步为「Flagship cases / More cases」，列表不显示数量。打开一个末级作品时，兄弟节点保留但变灰。
 - 案例卡片顺序：How it worked（重点案例的系统图，卡片内可点击放大）→ Results（默认展开）→ The Challenge / What I did / The Team（默认收起）。
-- **地图手写批注（v55）**：红橙色（`--note`）、手写字体 Nanum Pen Script（`--hand`）、1.5px 干净箭头。只批注值得看的地方，不重复标题。首页：三个重点案例 + AI 各一句（位置在 `map.ts` 的 `NOTES` 里手工摆放，只在首页显示）。More cases：只在 Interactive Filter 旁写「600M+ views」（不加框）（只在 More cases 打开时显示，位置自动放在外侧）。打开某个案例时不显示它自己的批注。手机版不显示（手机没有地图）。文字在 `content.ts` 的 `note`。批注永远不被卡片、页头或窗口边缘挡住：超出地图空白区时自动挪回，挪得远时箭头重新指向该点。
+- **地图手写批注（v55）**：红橙色（`--note`）、手写字体 Nanum Pen Script（`--hand`）、1.5px 干净箭头。只批注值得看的地方，不重复标题。首页：三个重点案例 + AI 各一句（位置在 `map.ts` 的 `NOTES` 里手工摆放，只在首页显示）。Creator & Social：只在 Branded Filter 旁写「600M+ views」（不加框）（只在该组打开时显示，位置自动放在外侧）。打开某个案例时不显示它自己的批注。手机版不显示（手机没有地图）。文字在 `content.ts` 的 `note`。批注永远不被卡片、页头或窗口边缘挡住：超出地图空白区时自动挪回，挪得远时箭头重新指向该点。
 - **筛选（v60）**：电脑版页头左上角一行纯文字（取代原来的名字），与右侧导航同高同字号：PLATFORM（Global social / Chinese social / Paid ads）+ REGION（North America / Europe / Japan / China）。不选 = 全部；再点一次取消。选中项蓝色下划线。匹配规则只有一处：`state.ts` 的 `matches()`——作品同时满足所选平台和地区；组里有任一匹配即匹配。选择筛选项时回到首页地图，所有匹配的作品自动展开（连同通往它们的分支），不匹配的变灰；首页手写批注在筛选时让位。INDEX 列表、手机卡片同样把不匹配的变灰。“准备中”的占位作品不匹配任何筛选。平台来自 `content.ts` 的 `platforms` 字段，地区由 `markets` 经 `regionOfMarket` 换算。选择写在网址里（`?platform=cn&region=jp`），可以把筛好的链接发给招聘方。手机版：页头下方两个下拉菜单（平台 / 地区，默认“全部”），选完自动滚到第一个匹配的案例（没有则到履历）。
 - 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；手机版每张卡片只放一张图：有系统图的案例只显示系统图，不显示浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
 
@@ -100,11 +102,9 @@
 ### 结构
 
 - **中心**：Wenyi Zhu ✳。
-- **Growth Marketing**（主打）：4 个分类、9 个案例。
-  - Paid Social & Creative Strategy
-  - UGC & Influencer
-  - Account Growth
-  - Campaigns
+- **Growth Marketing**（主打）：2 个分组、9 个案例（v62.30）。
+  - Paid & UA Growth（4 个，含 2 个重点案例）
+  - Creator & Social（5 个，含 1 个重点案例）
 - **AI Projects**：AI Marketing Workbench + 2 个占位。
 - **Creative Work**：首页默认折叠，4 个占位。
   - Photography
@@ -114,7 +114,7 @@
 - **Information**：Experience（折叠，之字形排列）和 Education。
 - **没有 Contact 节点**：联系方式放在顶栏的 "Let's talk ↗"。
 - **HoYoverse** 用虚线连到 Growth Marketing 和 AI Workbench；每个案例卡片上写 "HoYoverse · 日期 →"。
-- **X Creator Campaign** 和 **Cross-Platform Community Giveaway** 在 More cases 里相邻排列（同类创作者活动）；不加虚线（用户看过后觉得容易混淆，v62.14 去掉）。
+- **X Creator Campaign** 和 **Cross-Platform Community Giveaway** 在 Creator & Social 里相邻排列（同类创作者活动）；不加虚线（用户看过后觉得容易混淆，v62.14 去掉）。
 - **案例外链**（`links`）：摘要下方一行灰色带下划线的链接（例如 "TikTok event page ↗ · A player’s video ↗"），新窗口打开；只放公开页面。Interactive Filter 用了活动页和一条达人视频（Creator video example）。（v62.15–62.18）
 
 ### 交互模型（参考 andrewtrousdale.com，v32 起）

@@ -129,14 +129,13 @@ export const nodes: SiteNode[] = [
     },
   },
   {
-    id: 'more-growth',
+    id: 'growth-paid',
     type: 'sub',
     parent: 'growth',
-    label: { en: 'More cases', zh: '更多案例' },
+    label: { en: 'Paid & UA Growth', zh: '付费与 UA 增长' },
     kicker: { en: 'Practice', zh: '方向' },
-    summary: { en: 'Launches, creator campaigns and account growth work. [Placeholder copy]' },
+    summary: { en: 'Creative strategy and channel tests for user acquisition, measured on installs, ROI and cost efficiency.' },
   },
-
   {
     id: 'ua-creative-strategy',
     platforms: ['paid'],
@@ -144,7 +143,7 @@ export const nodes: SiteNode[] = [
     team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
     type: 'case',
     period: 'Jun 2025 – Jun 2026',
-    parent: 'growth',
+    parent: 'growth-paid',
     featured: true,
     headline: { num: '~3.7×', label: { en: 'projected LTV vs UA-team creatives' } },
     label: { en: 'Creator Ad Pipeline' },
@@ -185,95 +184,13 @@ export const nodes: SiteNode[] = [
     related: ['ai-workbench'],
   },
   {
-    id: 'xbox-launch',
-    platforms: ['paid'],
-    team: { en: "Me (creative strategy), 1 media strategist, 2 creative producers and 1 agency partner" },
-    type: 'case',
-    period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
-    parent: 'more-growth',
-    headline: { num: '+338%', label: { en: 'CTR vs the earlier benchmark' } },
-    label: { en: 'Xbox Launch Paid Campaign' },
-    kicker: { en: 'Genshin Impact · Meta, YouTube, TikTok, X' },
-    context: { en: 'Genshin Impact' },
-    tags: [{ en: 'Meta' }, { en: 'YouTube' }, { en: 'TikTok' }, { en: 'X' }],
-    markets: ['US', 'DE', 'FR'],
-    summary: {
-      en: 'Structured a localized creative test around four value propositions to move console players from interest to landing-page action.',
-    },
-    sections: [
-      {
-        title: { en: 'The Challenge', zh: '项目挑战' },
-        items: [
-          { en: "For the Xbox launch, paid media needed to drive landing-page traffic, not just awareness. The goal was to improve CTR and identify which creative messages could move console players from interest to action across YouTube, X, Meta, and TikTok." },
-          { en: "The challenge was execution-heavy: our team had to turn existing brand materials into a large localized creative test while keeping platform specs, language needs, and approval requirements aligned." },
-        ],
-      },
-      {
-        title: { en: 'What I did', zh: '我做了什么' },
-        items: [
-          { en: 'Built the test around four messages: open world, global community, cloud gaming across devices, free content.' },
-          { en: 'Adapted brand materials into 16 cuts, localized into 144 EN / FR / DE assets.' },
-          { en: 'Reviewed results by channel, region and message with Media Strategy.' },
-        ],
-      },
-    ],
-    results: [
-      { metric: '+338%', en: 'CTR versus the earlier benchmark.' },
-      { metric: '66%', en: 'lower CPC versus the earlier benchmark.' },
-      { metric: '120M+', en: 'impressions across the campaign.' },
-      { metric: '~700K', en: 'landing-page clicks across the campaign.' },
-    ],
-    media: [{ src: 'media/xbox-launch/genshin-xbox-banner-en-qr-blurred.jpg',
-      thumbnail: 'media/xbox-launch/genshin-xbox-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Xbox launch promotional visual — QR code blurred' } }],
-  },
-  {
-    id: 'influencer-activation',
-    platforms: ['global'],
-    team: { en: "Me (influencer strategy and execution), 2 execution support specialists and 2 agency partners" },
-    type: 'case',
-    period: 'Jan 2026',
-    parent: 'more-growth',
-    headline: { num: '~3x', label: { en: 'engagement vs the last creator campaign' } },
-    label: { en: 'X Creator Campaign' },
-    kicker: { en: 'Genshin Impact · X' },
-    context: { en: 'Genshin Impact' },
-    tags: [{ en: 'X' }, { en: 'Creator marketing' }],
-    markets: ['EN', 'JP'],
-    summary: {
-      en: "I rebuilt the creator strategy for a flagship Genshin Impact character launch on X, focusing on the creators core players actually follow. The campaign delivered 13M+ views at 8%+ engagement, about 3x the previous creator campaign at 39% lower CPM.",
-    },
-    sections: [
-      {
-        title: { en: 'The Challenge', zh: '项目挑战' },
-        items: [
-          { en: "Engagement on Genshin Impact’s recurring character campaigns on X was flattening, and it was weakest among English-speaking players. Our previous creator campaign aimed for broad appeal: many of its creators reached general gaming audiences rather than core Genshin players, so it brought reach but under 3% engagement. For a major character launch, I needed to refocus creators on core players and drive them to the official X event and its in-game reward codes." },
-        ],
-      },
-      {
-        title: { en: 'What I did', zh: '我做了什么' },
-        items: [
-          { en: "Rebuilt the creator strategy: Shifted spend from broad-appeal creators to the artists, cosplayers, streamers and Genshin news creators that core players follow, so 80% of the lineup reached core players. I also grew English-language creators to half the lineup and briefed a US agency on art styles North American players respond to." },
-          { en: "Led execution and benchmarking: Managed budget, creator sourcing, timelines and approvals with two agencies, then benchmarked results against the previous creator campaign to decide what to scale next." },
-        ],
-      },
-    ],
-    results: [
-      { metric: "13M+", en: "views across 56 creators and 78 posts" },
-      { metric: "~3x", en: "engagement vs the last creator campaign" },
-      { metric: "39%", en: "lower CPM than the last creator campaign" },
-      { metric: "+88%", en: "EN impressions vs a comparable launch" },
-    ],
-    media: [{ src: 'media/influencer-activation/moonlit-support-banner.jpg',
-      thumbnail: 'media/influencer-activation/moonlit-support-thumb.jpg', floating: true, alt: { en: 'Genshin Impact "Moon Maiden" Moonlit Support event banner, the official X event the creator campaign drove players to' } }],
-  },
-  {
     id: 'gip-testing',
     platforms: ['global'],
     note: { en: 'my framework\nfor testing\nnew channels', zh: '我的\n新渠道测试框架' },
     team: { en: "Me (testing strategy and project lead) and 1 data operations specialist, working with 2 platform liaisons from TikTok" },
     type: 'case',
     period: 'Dec 2024 – Nov 2025',
-    parent: 'growth',
+    parent: 'growth-paid',
     featured: true,
     headline: { num: '80M+', label: { en: 'views across three test rounds' } },
     label: { en: 'TikTok UGC Incentive Program' },
@@ -313,12 +230,107 @@ export const nodes: SiteNode[] = [
     },
   },
   {
+    id: 'xbox-launch',
+    platforms: ['paid'],
+    team: { en: "Me (creative strategy), 1 media strategist, 2 creative producers and 1 agency partner" },
+    type: 'case',
+    period: 'Nov 2024', // Confirmed launch month; full production start/end not established.
+    parent: 'growth-paid',
+    headline: { num: '+338%', label: { en: 'CTR vs the earlier benchmark' } },
+    label: { en: 'Xbox Launch Paid Campaign' },
+    kicker: { en: 'Genshin Impact · Meta, YouTube, TikTok, X' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'Meta' }, { en: 'YouTube' }, { en: 'TikTok' }, { en: 'X' }],
+    markets: ['US', 'DE', 'FR'],
+    summary: {
+      en: 'Structured a localized creative test around four value propositions to move console players from interest to landing-page action.',
+    },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "For the Xbox launch, paid media needed to drive landing-page traffic, not just awareness. The goal was to improve CTR and identify which creative messages could move console players from interest to action across YouTube, X, Meta, and TikTok." },
+          { en: "The challenge was execution-heavy: our team had to turn existing brand materials into a large localized creative test while keeping platform specs, language needs, and approval requirements aligned." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: 'Built the test around four messages: open world, global community, cloud gaming across devices, free content.' },
+          { en: 'Adapted brand materials into 16 cuts, localized into 144 EN / FR / DE assets.' },
+          { en: 'Reviewed results by channel, region and message with Media Strategy.' },
+        ],
+      },
+    ],
+    results: [
+      { metric: '+338%', en: 'CTR versus the earlier benchmark.' },
+      { metric: '66%', en: 'lower CPC versus the earlier benchmark.' },
+      { metric: '120M+', en: 'impressions across the campaign.' },
+      { metric: '~700K', en: 'landing-page clicks across the campaign.' },
+    ],
+    media: [{ src: 'media/xbox-launch/genshin-xbox-banner-en-qr-blurred.jpg',
+      thumbnail: 'media/xbox-launch/genshin-xbox-thumb.jpg', floating: true, alt: { en: 'Genshin Impact Xbox launch promotional visual — QR code blurred' } }],
+  },
+  {
+    id: 'landing-page',
+    platforms: ['global'],
+    team: { en: "Me (creative development support), 1 landing page strategy lead and 2 web developers" },
+    type: 'case',
+    period: 'Aug – Sep 2024',
+    parent: 'growth-paid',
+    headline: { num: '9.5M+', label: { en: 'visitors, ~7x benchmark' } },
+    label: { en: 'Gamified Landing Page' },
+    kicker: { en: 'Genshin Impact · Web' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
+    markets: ['Global'],
+    summary: {
+      en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
+    },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Our previous launch landing pages were mostly informational. This time, the team wanted to experiment: add a game and a reward system to make the page interactive, and see whether that would boost conversion. The challenge was designing our first gamified landing page." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Benchmarked formats: Studied interactive web campaigns to find a mechanic with shareability built in." },
+          { en: "Designed the hook: Chose a personality quiz, a proven viral format, so every player got a personalized result worth sharing, and kept it to three questions to cut drop-off." },
+          { en: "Built the viral loop: Tied rewards to referrals. Finishing the quiz unlocked a reward draw and each friend invited earned another, so every share brought in about 4 new visitors." },
+        ],
+      },
+    ],
+    results: [
+      { metric: "9.5M+", en: "visitors, ~7x benchmark" },
+      { metric: "1.8M+", en: "players in the draw, +60% vs benchmark" },
+      { metric: "3x", en: "conversion rate vs benchmark" },
+      { metric: "~4", en: "visitors per share, 2x the target" },
+    ],
+    media: [{ src: 'media/landing-page/blaze-to-natlan-banner.jpg',
+      thumbnail: 'media/landing-page/blaze-to-natlan-thumb.jpg', floating: true, alt: { en: 'Genshin Impact “Blaze to Natlan” web event banner: take part to win in-game rewards' } }],
+    links: [
+      { label: { en: 'Event page', zh: '活动页' }, href: 'https://act.hoyoverse.com/ys/event/e20240816natlan-iseatr/index.html?game_biz=hk4e_global' },
+    ],
+  },
+
+  {
+    id: 'growth-social',
+    type: 'sub',
+    parent: 'growth',
+    label: { en: 'Creator & Social', zh: '创作者与社媒' },
+    kicker: { en: 'Practice', zh: '方向' },
+    summary: { en: 'Creator campaigns and always-on social channels across X, TikTok, YouTube, Instagram and Snapchat, for English-speaking and Japanese players.' },
+  },
+  {
     id: 'zzz-jp-accounts',
     platforms: ['global'],
     note: { en: '0 → 80M+\norganic views', zh: '0 → 8000 万+\n自然播放' },
     team: { en: "Me (social strategy), 2 Japanese-language content reviewers and 3 agency partners" },
     type: 'case',
-    parent: 'growth',
+    parent: 'growth-social',
     featured: true,
     headline: { num: '80M+', label: { en: 'organic views across 9 channels' } },
     label: { en: 'Zenless Zone Zero: JP Account Growth' },
@@ -364,12 +376,52 @@ export const nodes: SiteNode[] = [
     },
   },
   {
+    id: 'influencer-activation',
+    platforms: ['global'],
+    team: { en: "Me (influencer strategy and execution), 2 execution support specialists and 2 agency partners" },
+    type: 'case',
+    period: 'Jan 2026',
+    parent: 'growth-social',
+    headline: { num: '~3x', label: { en: 'engagement vs the last creator campaign' } },
+    label: { en: 'X Creator Campaign' },
+    kicker: { en: 'Genshin Impact · X' },
+    context: { en: 'Genshin Impact' },
+    tags: [{ en: 'X' }, { en: 'Creator marketing' }],
+    markets: ['EN', 'JP'],
+    summary: {
+      en: "I rebuilt the creator strategy for a flagship Genshin Impact character launch on X, focusing on the creators core players actually follow. The campaign delivered 13M+ views at 8%+ engagement, about 3x the previous creator campaign at 39% lower CPM.",
+    },
+    sections: [
+      {
+        title: { en: 'The Challenge', zh: '项目挑战' },
+        items: [
+          { en: "Engagement on Genshin Impact’s recurring character campaigns on X was flattening, and it was weakest among English-speaking players. Our previous creator campaign aimed for broad appeal: many of its creators reached general gaming audiences rather than core Genshin players, so it brought reach but under 3% engagement. For a major character launch, I needed to refocus creators on core players and drive them to the official X event and its in-game reward codes." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Rebuilt the creator strategy: Shifted spend from broad-appeal creators to the artists, cosplayers, streamers and Genshin news creators that core players follow, so 80% of the lineup reached core players. I also grew English-language creators to half the lineup and briefed a US agency on art styles North American players respond to." },
+          { en: "Led execution and benchmarking: Managed budget, creator sourcing, timelines and approvals with two agencies, then benchmarked results against the previous creator campaign to decide what to scale next." },
+        ],
+      },
+    ],
+    results: [
+      { metric: "13M+", en: "views across 56 creators and 78 posts" },
+      { metric: "~3x", en: "engagement vs the last creator campaign" },
+      { metric: "39%", en: "lower CPM than the last creator campaign" },
+      { metric: "+88%", en: "EN impressions vs a comparable launch" },
+    ],
+    media: [{ src: 'media/influencer-activation/moonlit-support-banner.jpg',
+      thumbnail: 'media/influencer-activation/moonlit-support-thumb.jpg', floating: true, alt: { en: 'Genshin Impact "Moon Maiden" Moonlit Support event banner, the official X event the creator campaign drove players to' } }],
+  },
+  {
     id: 'giveaway-campaign',
     platforms: ['global'],
     team: { en: "Me (campaign lead and strategy), 2 execution support specialists and 4 agency partners" },
     type: 'case',
     period: 'Aug 2024',
-    parent: 'more-growth',
+    parent: 'growth-social',
     headline: { num: '~900K', label: { en: 'code redemptions, about 4x the goal' } },
     label: { en: 'Cross-Platform Community Giveaway' },
     kicker: { en: 'Genshin Impact · X, TikTok, Instagram' },
@@ -406,58 +458,13 @@ export const nodes: SiteNode[] = [
     ],
   },
   {
-    id: 'genshin-en-accounts',
-    platforms: ['global'],
-    team: { en: "Me (growth strategy support and content review), 1 growth strategy lead and 1 agency partner" },
-    type: 'case',
-    parent: 'more-growth',
-    headline: { num: '35M+', label: { en: 'views across 8 channels' } },
-    label: { en: 'EN Social Channel Growth' },
-    kicker: { en: 'Genshin Impact · TikTok, YouTube' },
-    context: { en: 'Genshin Impact' },
-    tags: [{ en: 'TikTok' }, { en: 'YouTube' }],
-    period: 'Q4 2023',
-    markets: ['EN'],
-    summary: {
-      en: "I helped grow a network of 8 English-language Genshin Impact channels on TikTok and YouTube, refreshing the strategy for channels that had plateaued and building it from scratch for new ones. Together they drew 35M+ views and 64K+ new followers at about 30% below target CPM.",
-    },
-    sections: [
-      {
-        title: { en: 'The Challenge', zh: '项目挑战' },
-        items: [
-          { en: "Genshin Impact ran a network of English-language social channels on TikTok and YouTube to keep players engaged between major updates. The established channels had stalled: formats were getting repetitive, fewer viewers were following, and views dropped between updates. At the same time, new channels needed a social strategy built from scratch, all while keeping CPM under target." },
-        ],
-      },
-      {
-        title: { en: 'What I did', zh: '我做了什么' },
-        items: [
-          { en: "Diagnosed what stalled growth: Used Tubular and monthly reports to compare TikTok trends, competitor channels and each channel’s performance, and pinpointed the gaps: too few evergreen topics, stale formats and weak follower conversion." },
-          { en: "Refreshed the content mix: Turned the findings into changes for each channel. Guide channels that leaned on time-sensitive patch tutorials added short, entertaining gameplay tips and varied their covers, so views no longer depended on update days." },
-          { en: "Built strategy for the new channels: Defined each channel’s audience, positioning, content pillars, formats and posting cadence from platform research and competitor benchmarks, then refined them on early performance data before scaling production." },
-          { en: "Ran monthly reviews: Tracked KPIs, reviewed English content and kept the agency’s output aligned with each channel’s growth goals." },
-        ],
-      },
-    ],
-    results: [
-      { metric: "35M+", en: "views across 8 channels" },
-      { metric: "+64K", en: "new followers" },
-      { metric: "~30%", en: "below target CPM" },
-    ],
-    media: [{
-      src: 'media/genshin-en-accounts/genshin-social-growth.jpg',
-      thumbnail: 'media/genshin-en-accounts/genshin-social-growth-thumb.jpg',
-      floating: true,
-      alt: { en: 'Genshin Impact artwork featuring Aether and Lumine' },
-    }],
-  },
-  {
     id: 'interactive-filter',
     platforms: ['global'],
     note: { en: '600M+ views', zh: '6 亿+ 播放' },
     team: { en: "Me (filter concepts and creator activation support), 1 campaign lead, 2 platform liaisons from TikTok and Snapchat, and 3 agency partners" },
     type: 'case',
     period: 'Jan – Feb 2024',
-    parent: 'more-growth',
+    parent: 'growth-social',
     headline: { num: '600M+', label: { en: 'views across TikTok and Snapchat' } },
     label: { en: 'TikTok & Snapchat Branded Filter Campaign' },
     kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
@@ -497,48 +504,49 @@ export const nodes: SiteNode[] = [
     ],
   },
   {
-    id: 'landing-page',
+    id: 'genshin-en-accounts',
     platforms: ['global'],
-    team: { en: "Me (creative development support), 1 landing page strategy lead and 2 web developers" },
+    team: { en: "Me (growth strategy support and content review), 1 growth strategy lead and 1 agency partner" },
     type: 'case',
-    period: 'Aug – Sep 2024',
-    parent: 'more-growth',
-    headline: { num: '9.5M+', label: { en: 'visitors, ~7x benchmark' } },
-    label: { en: 'Gamified Landing Page' },
-    kicker: { en: 'Genshin Impact · Web' },
+    parent: 'growth-social',
+    headline: { num: '35M+', label: { en: 'views across 8 channels' } },
+    label: { en: 'EN Social Channel Growth' },
+    kicker: { en: 'Genshin Impact · TikTok, YouTube' },
     context: { en: 'Genshin Impact' },
-    tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
-    markets: ['Global'],
+    tags: [{ en: 'TikTok' }, { en: 'YouTube' }],
+    period: 'Q4 2023',
+    markets: ['EN'],
     summary: {
-      en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
+      en: "I helped grow a network of 8 English-language Genshin Impact channels on TikTok and YouTube, refreshing the strategy for channels that had plateaued and building it from scratch for new ones. Together they drew 35M+ views and 64K+ new followers at about 30% below target CPM.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "Our previous launch landing pages were mostly informational. This time, the team wanted to experiment: add a game and a reward system to make the page interactive, and see whether that would boost conversion. The challenge was designing our first gamified landing page." },
+          { en: "Genshin Impact ran a network of English-language social channels on TikTok and YouTube to keep players engaged between major updates. The established channels had stalled: formats were getting repetitive, fewer viewers were following, and views dropped between updates. At the same time, new channels needed a social strategy built from scratch, all while keeping CPM under target." },
         ],
       },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Benchmarked formats: Studied interactive web campaigns to find a mechanic with shareability built in." },
-          { en: "Designed the hook: Chose a personality quiz, a proven viral format, so every player got a personalized result worth sharing, and kept it to three questions to cut drop-off." },
-          { en: "Built the viral loop: Tied rewards to referrals. Finishing the quiz unlocked a reward draw and each friend invited earned another, so every share brought in about 4 new visitors." },
+          { en: "Diagnosed what stalled growth: Used Tubular and monthly reports to compare TikTok trends, competitor channels and each channel’s performance, and pinpointed the gaps: too few evergreen topics, stale formats and weak follower conversion." },
+          { en: "Refreshed the content mix: Turned the findings into changes for each channel. Guide channels that leaned on time-sensitive patch tutorials added short, entertaining gameplay tips and varied their covers, so views no longer depended on update days." },
+          { en: "Built strategy for the new channels: Defined each channel’s audience, positioning, content pillars, formats and posting cadence from platform research and competitor benchmarks, then refined them on early performance data before scaling production." },
+          { en: "Ran monthly reviews: Tracked KPIs, reviewed English content and kept the agency’s output aligned with each channel’s growth goals." },
         ],
       },
     ],
     results: [
-      { metric: "9.5M+", en: "visitors, ~7x benchmark" },
-      { metric: "1.8M+", en: "players in the draw, +60% vs benchmark" },
-      { metric: "3x", en: "conversion rate vs benchmark" },
-      { metric: "~4", en: "visitors per share, 2x the target" },
+      { metric: "35M+", en: "views across 8 channels" },
+      { metric: "+64K", en: "new followers" },
+      { metric: "~30%", en: "below target CPM" },
     ],
-    media: [{ src: 'media/landing-page/blaze-to-natlan-banner.jpg',
-      thumbnail: 'media/landing-page/blaze-to-natlan-thumb.jpg', floating: true, alt: { en: 'Genshin Impact “Blaze to Natlan” web event banner: take part to win in-game rewards' } }],
-    links: [
-      { label: { en: 'Event page', zh: '活动页' }, href: 'https://act.hoyoverse.com/ys/event/e20240816natlan-iseatr/index.html?game_biz=hk4e_global' },
-    ],
+    media: [{
+      src: 'media/genshin-en-accounts/genshin-social-growth.jpg',
+      thumbnail: 'media/genshin-en-accounts/genshin-social-growth-thumb.jpg',
+      floating: true,
+      alt: { en: 'Genshin Impact artwork featuring Aether and Lumine' },
+    }],
   },
 
   /* ---------------- AI ---------------- */
@@ -653,8 +661,8 @@ export function kindOf(id: string): NodeType {
 /* The INDEX card lists these sections, in this order, below the bio. */
 export const indexSections = ['growth', 'ai', 'creative', 'experience', 'education'];
 
-/* The three flagship Growth Marketing cases, in reading order (01, 02, 03). */
-export const featuredOrder = ['ua-creative-strategy', 'zzz-jp-accounts', 'gip-testing'];
+/* The three flagship Growth Marketing cases, in reading order (each leads its group; v62.30). */
+export const featuredOrder = ['ua-creative-strategy', 'gip-testing', 'zzz-jp-accounts'];
 
 export const rolesOrder = ['hoyoverse', 'seminary-coop', 'nike', 'weber-shandwick', 'nowness'];
 export const schoolsOrder = ['uchicago', 'xjtlu'];

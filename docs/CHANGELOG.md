@@ -407,3 +407,15 @@
 ## 2026-10-02 — v62.28 STATUS: next steps set by the owner
 
 - Next: review and polish all cases against the JD language bank; then discuss how to organise the cases (owner's first idea: Growth Marketing + Social Campaigns instead of More cases; open to other options based on target roles).
+
+## 2026-10-02 — v62.29 all 9 cases polished
+
+- Synced four owner edits from the editor archive (X Creator "event", ZZZ "repeatable system", Filter challenge wording, GIP "Raised content quality" removed).
+- House style: × for multiples, "vs", every comparison called "benchmark", Results labels lowercase after the number; UK spelling (localised, optimisation, behaviour, programme, personalised).
+- Ownership wording from the JD language bank: "Owned the testing framework", "Partnered on media optimisation", "co-developed", "Vetted creators and content"; X Creator described as a new strategy for a new campaign (not "rebuilt"); ZZZ challenge says "the Genshin Impact brand team" (owner's wording).
+- Retitled: TikTok UGC Channel Test (headline ~60% lower CPM; summary now carries the stop decision), English Social Channel Growth. Xbox challenge keeps "100+" (a projection before the work; 144 is the delivered count).
+
+## 2026-10-02 — v62.30 Growth Marketing in two groups (owner chose option A)
+
+- "More cases" and the separate "Flagship cases" list removed. Two groups named after the target JD families: Paid & UA Growth (Creator Ad Pipeline ★, TikTok UGC Channel Test ★, Xbox, Gamified Landing Page) and Creator & Social (ZZZ ★, X Creator, Giveaway, Branded Filter, English Social Channel Growth).
+- Flagships lead their group and stay on the home map (and in an opened Growth Marketing) with their notes; HOME_LAYOUT and the ZZZ note moved; phone menu lists the two groups. layout-check total 3 (same two pre-existing views, hoyoverse and ai-workbench).

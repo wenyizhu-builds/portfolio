@@ -34,10 +34,11 @@ const SVGNS = 'http://www.w3.org/2000/svg';
    these points are derived from the same numbers, so the forces agree with the layout. */
 const HOME_LAYOUT: Record<string, [number, number]> = {
   growth: [242, -123],
-  'ua-creative-strategy': [205, -262],
-  'zzz-jp-accounts': [400, -205],
-  'gip-testing': [430, -70],
-  'more-growth': [300, 15],
+  'growth-paid': [300, -255],
+  'ua-creative-strategy': [190, -345],
+  'gip-testing': [430, -375],
+  'growth-social': [420, 30],
+  'zzz-jp-accounts': [565, -45],
   info: [-149, -90],
   education: [-239, -158],
   experience: [-310, -8],
@@ -72,7 +73,7 @@ const CAMERA = {
 type NotePlace = { text: [number, number]; from: [number, number]; via: [number, number]; to: [number, number]; rot: number };
 const NOTES: Record<string, NotePlace> = {
   'ua-creative-strategy': { text: [-262, -96], from: [-118, -56], via: [-66, -46], to: [-22, -20], rot: -6 },
-  'zzz-jp-accounts': { text: [-150, -112], from: [-60, -66], via: [-34, -46], to: [-20, -20], rot: -5 },
+  'zzz-jp-accounts': { text: [-40, 128], from: [6, 102], via: [14, 86], to: [8, 70], rot: 3 },
   'gip-testing': { text: [-46, 118], from: [4, 92], via: [12, 74], to: [4, 56], rot: 3 },
   ai: { text: [-160, -70], from: [-70, -26], via: [-46, -16], to: [-22, -6], rot: -5 },
 };
@@ -491,6 +492,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (!FOLDED_AT_HOME.has(b.id) || f === b.id || (f && ancestors(f).includes(b.id)))
         childrenOf(b.id).forEach((c) => vis.add(c.id));
     }
+    // flagship cases stay on the home map (and in an opened Growth Marketing) beside their group (v62.30)
+    const flagships = () => nodes.forEach((n) => { if (n.featured && n.parent && vis.has(n.parent)) vis.add(n.id); });
+    if (!f) flagships();
     if (f && f !== 'root') {
       // A selection shows only its own chain: the way back to the ✳, what's inside it,
       // and what it connects to. Everything else steps away, so nothing needs zooming.
@@ -499,6 +503,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       vis.add(f);
       ancestors(f).forEach((a) => vis.add(a));
       childrenOf(f).forEach((c) => vis.add(c.id));
+      if (f === 'growth') flagships();
       relatedOf(f).forEach((r) => vis.add(r));
       // An end point (a single piece of work) keeps its siblings on the map, so the reader can
       // go from one to the next directly instead of stepping up to the parent and back down (v53).
