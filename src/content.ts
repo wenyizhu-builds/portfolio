@@ -499,32 +499,46 @@ export const nodes: SiteNode[] = [
   {
     id: 'landing-page',
     platforms: ['global'],
-    team: { en: "Creative Development Support (role), Landing Page Strategy Lead x1, Web Production x2" },
+    team: { en: "Me (creative development support), 1 landing page strategy lead and 2 web developers" },
     type: 'case',
+    period: 'Aug – Sep 2024',
     parent: 'more-growth',
-    headline: { num: '9.5M+', label: { en: 'UV and 1.8M+ lottery participants' } },
-    label: { en: 'Landing Page Gamification' },
+    headline: { num: '9.5M+', label: { en: 'visitors, ~7x the previous event page' } },
+    label: { en: 'Gamified Launch Landing Page' },
     kicker: { en: 'Genshin Impact · Web' },
     context: { en: 'Genshin Impact' },
-    tags: [{ en: 'Web' }],
+    tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
     markets: ['Global'],
     summary: {
-      en: 'Helped design the first gamified launch page: a three-question quiz with shareable results and a reward loop.',
+      en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than a similar campaign page.",
     },
     sections: [
       {
         title: { en: 'The Challenge', zh: '项目挑战' },
         items: [
-          { en: "The launch landing page was expected to receive 1B+ impressions, but previous version pages were mostly informational. The traffic opportunity could have stopped at passive awareness instead of driving engagement or downloads." },
-          { en: "As the team's first interactive landing page attempt, the challenge was to create a mechanic that felt native to Genshin Impact while supporting rewards, sharing, and the download CTA." },
+          { en: "Every major Genshin Impact update sends a huge wave of traffic to its launch landing page, and this one was set to get 1B+ impressions from ads, creators and social. But past pages only listed what was new, so most visitors looked and left. As the team’s first interactive landing page, it needed a game that felt like Genshin, gave players a reason to share, and still led them to the download button." },
+        ],
+      },
+      {
+        title: { en: 'What I did', zh: '我做了什么' },
+        items: [
+          { en: "Researched formats: Studied interactive web campaigns, from quizzes and recaps to referral and reward pages, to find a format that could do more than list what’s new." },
+          { en: "Designed the quiz: Developed an MBTI-style quiz built on scenes from the new region, then cut it to three questions and eight results so fewer players dropped off. The quiz became the heart of the page, linked to the rewards and the download button." },
+          { en: "Built the sharing loop: Shaped the result cards and the reward draw, so finishing the quiz earned a draw and inviting friends earned more. Sharing became the natural next step after getting a result, and each share brought in 4.1 visitors on average, twice the target." },
         ],
       },
     ],
     results: [
-      { metric: '9.5M+', en: 'UV, 1.8M+ lottery participants' },
-      { metric: '1.4M+', en: 'unique visitors from shares' },
+      { metric: "9.5M+", en: "visitors, ~7x the previous event page" },
+      { metric: "1.8M+", en: "players in the reward draw, up 60%" },
+      { metric: "3x", en: "conversion rate vs a similar campaign page" },
+      { metric: "4.1", en: "visitors per share, 2x the target" },
     ],
-    media: [{ alt: { en: 'Landing page screens' } }],
+    media: [{ src: 'media/landing-page/blaze-to-natlan-banner.jpg',
+      thumbnail: 'media/landing-page/blaze-to-natlan-thumb.jpg', floating: true, alt: { en: 'Genshin Impact “Blaze to Natlan” web event banner: take part to win in-game rewards' } }],
+    links: [
+      { label: { en: 'Event page', zh: '活动页' }, href: 'https://act.hoyoverse.com/ys/event/e20240816natlan-iseatr/index.html?game_biz=hk4e_global' },
+    ],
   },
 
   /* ---------------- AI ---------------- */

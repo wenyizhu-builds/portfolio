@@ -379,3 +379,7 @@
 ## 2026-10-02 — v62.23 Retitle: TikTok & Snapchat Branded Filter Campaign
 
 - "Branded Effect" is TikTok's internal term and few readers know it; "branded filter" is the everyday word, and the title now names both platforms.
+
+## 2026-10-02 — v62.24 Landing page case rewritten
+
+- Retitled "Gamified Launch Landing Page" (was "Landing Page Gamification"); first-person summary, one-paragraph challenge, three blue-labelled bullets, four one-line results, team in the "Me (…)" format, period Aug – Sep 2024; Blaze to Natlan event banner and event page link (personal invite code removed from the URL).

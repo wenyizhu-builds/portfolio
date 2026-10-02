@@ -1,14 +1,14 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.23 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-02 · v62.24 · 分支 `flagship-restructure`（未合并 main）
 
 ## 当前状态
 
 - Growth 分支：三个旗舰（白方块，带手写批注）+「More cases」（6 个，放射状展开）。筛选（平台 + 地区）在左上角，网址可分享；手机版为下拉框。
 - 文案已重写（第一稿，最后统一过一遍措辞）：
   - 旗舰：Creator Ad Pipeline · Zenless Zone Zero: Social Launch in Japan · TikTok UGC Incentive Program
-  - More cases：Xbox Launch Paid Campaign · X Creator Campaign · Cross-Platform Community Giveaway · EN Social Channel Growth · TikTok & Snapchat Branded Filter Campaign（原 Interactive Filter，v62.11–62.23）
+  - More cases：Xbox Launch Paid Campaign · X Creator Campaign · Cross-Platform Community Giveaway · EN Social Channel Growth · TikTok & Snapchat Branded Filter Campaign（原 Interactive Filter，v62.11–62.23） · Gamified Launch Landing Page（原 Landing Page Gamification，v62.24，待用户确认）
 - X Creator Campaign 和 Giveaway 在 More cases 里相邻；试过虚线关联，用户觉得容易混淆，已去掉（v62.14）。
 - Interactive Filter：加了活动海报（浮动图）和两条外链（TikTok 活动页、一条达人视频示例），v62.15–62.18。
 - Giveaway：加了一条达人视频示例链接（Instagram），v62.19。
@@ -19,7 +19,6 @@
 
 ## 下一步
 
-1. Landing Page Gamification 文案。
 2. Growth Marketing 总述 → INDEX 个人简介（旧数字 1%→15% 等仍在）。
 3. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
 4. 全站措辞统一检查；中文手写字体（可选 ZCOOL KuaiLe，未定）。
