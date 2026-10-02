@@ -438,3 +438,7 @@
 ## 2026-10-02 — v62.34 UA and AI notes closer to their arrows
 
 - Owner: the gap between the words and the arrow on the ~3.7× and "tools I built with AI" notes was bigger than on the other three. Both texts moved in so all five notes have the same gap (checked with the real Nanum Pen Script font).
+
+## 2026-10-02 — v62.35 Information folded; Creative Work beside it
+
+- Owner: fold Information and put Creative Work next to it, both folded; AI Projects a little to the left. Education/Experience now appear only when Information is opened. AI note moved to the upper right of AI Projects. Education/Experience home positions moved outward so the career path still unfolds away from the ✳. layout-check 2 (ai-videos), within budget.

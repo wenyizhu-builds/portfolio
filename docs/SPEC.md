@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.33
+> 最后更新：2026-10-02 · 对应版本 v62.35
+
+- **首页再减（v62.35，用户要求）**：Information 在首页也折叠（`FOLDED_AT_HOME`），Education / Experience 只在点开 Information 时出现。Creative Work 挪到左边，紧挨 Information，两个都折叠；AI Projects 往左下移，「tools I built with AI」批注改到 AI Projects 右上方。
 
 - **批注变小（v62.33）**：手写批注字号 27 → 20（`NOTE.size`），箭头头部 12 → 8，线宽 1.5px → 1.2px，让批注不抢地图的注意力。
 
