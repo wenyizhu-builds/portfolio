@@ -43,3 +43,4 @@
 | L34 | 2026-10-02 | 修改 `Open Editor.command` 后，你双击时提示"没有权限执行"，编辑器打不开 | 用脚本重写文件时丢了"可执行"权限 | 改 `.command` / 脚本文件后，立即恢复可执行权限（`chmod 755`）并确认 | 交付清单：动过启动脚本就检查权限 |
 | L35 | 2026-10-02 | v62.25 构建失败（Results 超长）却照样提交了；摘要里的蓝色标记也错位到了 "an" | 命令写成 `npm run build:file \| tail -1 && git commit`，管道吃掉了失败的退出码；改文字后按旧位置平移蓝色范围，算错了 | 构建和提交之间不加管道（或 `set -o pipefail`）；改了带格式的文字，按关键词重新定位蓝色范围并打印核对 | 交付命令改为 `set -o pipefail; npm run build:file 2>&1 \| tail -1 && git commit`；脚本里按文字重新计算 blueRanges |
 | L36 | 2026-10-02 | 在 Mac 上跑了一次 `git fetch`/`git status`，留下 `.git/index.lock` 删不掉，之后 git 全部会报错 | 远程连接的 Mac 默认不允许删除文件，而 git 每次操作都要删自己的锁文件 | 在 Mac 上执行任何 git 命令前，先申请该文件夹的删除权限；结束时确认没有 `.git/*.lock` 残留 | STATUS 交接第一条；交付清单加"检查 .git/*.lock" |
+| L37 | 2026-10-02 | 我在截图里看批注间距觉得正常，你在电脑上看到 ~3.7× 和 AI 两条批注的文字离箭头明显更远 | 云端截图拿不到 Google Fonts，批注用的是后备衬线字体，宽度和行高都和 Nanum Pen Script 不一样 | 看地图批注、字体相关的版面时，截图必须加载真实字体 | 截图脚本拦截 fonts.googleapis.com，改用本地 @fontsource 的 Nanum Pen Script 和 Schibsted Grotesk |

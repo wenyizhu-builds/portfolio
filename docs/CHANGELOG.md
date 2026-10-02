@@ -434,3 +434,7 @@
 ## 2026-10-02 — v62.33 smaller map notes
 
 - Owner: notes took too much attention. Note text 27 → 20, arrowheads 12 → 8, stroke 1.5px → 1.2px; UA and AI notes nudged closer to their arrows.
+
+## 2026-10-02 — v62.34 UA and AI notes closer to their arrows
+
+- Owner: the gap between the words and the arrow on the ~3.7× and "tools I built with AI" notes was bigger than on the other three. Both texts moved in so all five notes have the same gap (checked with the real Nanum Pen Script font).
