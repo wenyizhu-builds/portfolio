@@ -56,6 +56,39 @@ function open(seq: Shot[], start: number, label: string) {
   lb.showModal();
 }
 
+/**
+ * A clickable page (the dashboard prototype, v64.6) in the same overlay as the pictures: the same dark
+ * background, the same × and Esc, a note underneath. Sized to the page's own window ratio (--proto-w / --proto-h).
+ */
+export function openFrame(src: string, label: string, note: string) {
+  if (document.querySelector('.lightbox')) return;
+  const previous = document.activeElement as HTMLElement | null;
+  const lb = document.createElement('dialog');
+  lb.className = 'lightbox is-frame';
+  lb.setAttribute('aria-label', label);
+  // the × comes first so it takes the focus on opening; a focused frame would swallow Esc
+  lb.innerHTML = `<button class="p-btn lb-close" aria-label="${esc(t(ui.close))}">×</button>
+    <figure class="lb-fig"><iframe class="lb-frame" src="${esc(src)}" title="${esc(label)}" scrolling="no"></iframe><figcaption class="lb-note">${esc(note)}</figcaption></figure>`;
+  const frame = lb.querySelector<HTMLElement>('.lb-frame')!;
+  const fit = () => {
+    const ratio = cssPx('--proto-w') / cssPx('--proto-h'), pad = cssPx('--lb-pad');
+    const w = Math.min(window.innerWidth - 2 * pad, (window.innerHeight - 2 * pad - cssPx('--lb-note-room')) * ratio);
+    Object.assign(frame.style, { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px` });
+  };
+  // Esc pressed inside the page arrives as a message (public/demo/dashboard.html)
+  const onMessage = (e: MessageEvent) => { if ((e.data as { protoEsc?: boolean } | null)?.protoEsc) close(); };
+  const close = () => { removeEventListener('resize', fit); removeEventListener('message', onMessage); lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); };
+  lb.querySelector<HTMLButtonElement>('.lb-close')!.onclick = close;
+  lb.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+  lb.onclick = (e) => { if (e.target === lb || e.target === lb.querySelector('.lb-fig')) close(); };
+  addEventListener('resize', fit);
+  addEventListener('message', onMessage);
+  fit();
+  document.body.append(lb);
+  lb.showModal();
+  lb.querySelector<HTMLButtonElement>('.lb-close')!.focus();
+}
+
 /** One picture, e.g. a case's "How it worked" diagram. */
 export function openLightbox(src: string, alt = '') {
   open([{ src, caption: '' }], 0, alt);

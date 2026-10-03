@@ -7,7 +7,7 @@ import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
 import { L, filterBar, galleryGrid, wireFilters } from './blocks';
-import { openGallery, openLightbox } from './lightbox';
+import { openFrame, openGallery, openLightbox } from './lightbox';
 import { esc, filtering, go, onChange, parseRoute, reducedMotion, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
@@ -205,41 +205,11 @@ function placeProto(side: HTMLElement) {
   box.style.marginTop = `${Math.max(0, sideTop - restingTop(box))}px`;
 }
 
-/* ---------- the app pop-up ---------- */
-const appModal = document.createElement('div');
-appModal.className = 'app-modal';
-appModal.hidden = true;
-appModal.innerHTML = `<div class="app-window" role="dialog" aria-modal="true"><button class="app-close" type="button" data-act="closeapp" aria-label="${esc(L('closeApp'))}">×</button><iframe class="app-frame" scrolling="no"></iframe></div>`;
-document.body.append(appModal);
-const appFrame = appModal.querySelector<HTMLIFrameElement>('.app-frame')!;
-const appWindow = appModal.querySelector<HTMLElement>('.app-window')!;
-let appOpener: HTMLElement | null = null;
-function sizeApp() {
-  const ratio = cssPx('--proto-w') / cssPx('--proto-h'), share = cssPx('--app-share') / 100;
-  const w = Math.min(window.innerWidth * share, window.innerHeight * share * ratio);
-  Object.assign(appWindow.style, { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px` });
-}
-function openApp(from: HTMLElement) {
+/* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */
+function openApp() {
   const n = byId.get(currentNodeId() || '');
-  if (!n?.prototype) return;
-  appOpener = from;
-  appWindow.setAttribute('aria-label', t(n.label));
-  appFrame.title = t(n.label);
-  if (appFrame.getAttribute('src') !== n.prototype.src) appFrame.src = n.prototype.src;
-  sizeApp();
-  appModal.hidden = false;
-  requestAnimationFrame(() => appModal.classList.add('open'));
-  appModal.querySelector<HTMLElement>('.app-close')!.focus();
+  if (n?.prototype) openFrame(n.prototype.src, t(n.label), L('protoNote'));
 }
-function closeApp() {
-  if (appModal.hidden) return;
-  appModal.classList.remove('open');
-  appModal.hidden = true;
-  appOpener?.focus();
-}
-appModal.addEventListener('click', (e) => { if (e.target === appModal) closeApp(); }); // a click on the dimmed page closes it
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeApp(); });
-addEventListener('resize', () => { if (!appModal.hidden) sizeApp(); });
 
 function placeAnchor() {
   if (!map) return;
@@ -272,9 +242,7 @@ document.addEventListener('click', e => {
     const target = gallery.querySelector<HTMLElement>(`#g-${CSS.escape(jump.dataset.gjump!)}`);
     if (target) gallery.scrollTo({ top: target.offsetTop, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
   }
-  const opener = el.closest<HTMLElement>('[data-act="openapp"]');
-  if (opener) openApp(opener);
-  if (el.closest('[data-act="closeapp"]')) closeApp();
+  if (el.closest('[data-act="openapp"]')) openApp();
   if (el.closest('[data-act="gback"]')) {
     const p = byId.get(currentNodeId() || '')?.parent;
     go(p && p !== 'root' ? p : '');

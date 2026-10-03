@@ -591,3 +591,8 @@
 - The prototype keeps its own colours again (the dark backdrop sets it apart). Phone unchanged: the eight screens as a sideways row.
 
 - v64.5: the × sits above the pop-up's top-right corner instead of over the dashboard (owner).
+
+## 2026-10-03 — v64.6 dashboard pop-up uses the site's one overlay; note underneath
+
+- Owner: the pop-up's × (a white circle) did not match the photo lightbox. The dashboard now opens in the same lightbox (lightbox.ts `openFrame`): same dark background, same ×, Esc and click-outside. L44.
+- Under the dashboard: "This is a display prototype with sample data. For details on the full project, feel free to get in touch."

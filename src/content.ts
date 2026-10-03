@@ -744,7 +744,7 @@ export const ui = {
   protoHint: { en: 'click to try the app', zh: '点开试试' },
   videoSoon: { en: 'Promo video coming soon', zh: '宣传片制作中' },
   openApp: { en: 'Open the dashboard prototype', zh: '打开看板原型' },
-  closeApp: { en: 'Close', zh: '关闭' },
+  protoNote: { en: 'This is a display prototype with sample data. For details on the full project, feel free to get in touch.', zh: '这是展示用原型，数据为示例。想了解完整项目，欢迎联系我。' },
   backToMap: { en: 'Back to the map', zh: '回到地图' },
   mapWord: { en: 'Map', zh: '地图' },
   prev: { en: 'Previous', zh: '上一张' },

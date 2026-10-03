@@ -27,7 +27,6 @@
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
   --proto-share: 92; /* the video + app icon take at most this % of the gallery column (owner: more room around it) */
   --app-col: 120px; /* the app icon's column beside the video */
-  --app-share: 86; /* the pop-up takes at most this % of the window */
   --side-max-h: 1080px; /* cap the complete desktop reading column */
   --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
@@ -69,6 +68,8 @@
   --g-strip-h: 210px; /* phone: height of every picture in a set's sideways row */
   --g-set-gap: 96px; /* between sets (series, issues) */
   --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
+  --lb-pad: 40px; /* the lightbox's inner margin (dialog.lightbox padding) */
+  --lb-note-room: 72px; /* room under a framed page for its note */
 
   /* Breakpoints: CSS @media cannot read variables, so the only copies of these
      numbers are the @media lines below; main.ts reads --mq-phone. `npm run check`
@@ -395,7 +396,7 @@ button { font: inherit; color: inherit; }
 .floating-visual[hidden] { display: none; }
 .floating-visual img { display: block; width: 100%; height: auto; }
 .floating-visual:focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
-dialog.lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 40px; border: 0; box-sizing: border-box; background: var(--ink); }
+dialog.lightbox { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: var(--lb-pad); border: 0; box-sizing: border-box; background: var(--ink); }
 dialog.lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 0; cursor: default; }
 dialog.lightbox::backdrop { background: var(--ink); }
 .m-visual { display: block; width: 100%; padding: 0; border: 0; background: none; margin: 20px 0; cursor: zoom-in; }
@@ -430,12 +431,10 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .proto-note { position: relative; margin: 6px 0 0; padding-top: 34px; text-align: center; font-family: var(--hand); font-size: 22px; line-height: 1.05; color: var(--note); }
 .proto-note svg { position: absolute; left: 50%; top: 0; width: 30px; height: 30px; transform: translateX(-30%); overflow: visible; }
 .proto-note path { fill: none; stroke: var(--note); stroke-width: 1.2px; stroke-linecap: round; stroke-linejoin: round; }
-.app-modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: color-mix(in srgb, var(--ink) 62%, transparent); backdrop-filter: blur(4px); opacity: 0; transition: opacity var(--dur-card) var(--ease); }
-.app-modal[hidden] { display: none; }
-.app-modal.open { opacity: 1; }
-.app-window { position: relative; border-radius: 14px; background: var(--panel); box-shadow: 0 24px 80px color-mix(in srgb, var(--ink) 40%, transparent); }
-.app-frame { display: block; width: 100%; height: 100%; border: 0; border-radius: 14px; }
-.app-close { position: absolute; bottom: calc(100% + 12px); right: 0; z-index: 1; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--panel); color: var(--ink); box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 30%, transparent); font-size: 18px; line-height: 1; cursor: pointer; }
+/* the prototype in the lightbox (lightbox.ts openFrame): same dark overlay and × as the photos */
+dialog.lightbox.is-frame { cursor: default; }
+.lb-frame { display: block; flex: none; border: 0; border-radius: 6px; background: var(--panel); }
+.lb-note { margin: 0; max-width: 60ch; text-align: center; font-size: var(--fs-text); line-height: 1.45; color: var(--on-ink); opacity: 0.7; }
 
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }

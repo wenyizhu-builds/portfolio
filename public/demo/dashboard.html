@@ -707,5 +707,6 @@ function render(){ stage.innerHTML = RENDER[current](); fit(); try { parent.post
 document.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && RENDER[t.dataset.go]) { current = t.dataset.go; render(); } });
 addEventListener('message', e => { const id = e.data && e.data.protoGo; if (id && RENDER[id]) { current = id; render(); } });
 addEventListener('resize', fit);
+addEventListener('keydown', e => { if (e.key === 'Escape') try { parent.postMessage({protoEsc: true}, '*'); } catch (err) {} });
 render();
 </script></body></html>
