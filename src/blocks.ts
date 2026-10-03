@@ -120,7 +120,7 @@ export function detailLists(n: SiteNode): DetailList[] {
   });
   if (n.results && (n.results.length || import.meta.env.DEV))
     head.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
-  if (isWork(n) && n.team && !n.gallery) out.push({ // a gallery has no team line
+  if (isWork(n) && n.team && (!n.gallery || n.prototype)) out.push({ // a gallery has no team line (a prototype keeps it)
     title: state.lang === 'zh' ? '项目团队' : 'The Team',
     body: `<div class="challenge-paragraph"><p>${tx(n.team)}</p></div>`,
     defaultOpen: false,
@@ -130,7 +130,7 @@ export function detailLists(n: SiteNode): DetailList[] {
 
 /* ---------- galleries (v63): photo series and design sets ---------- */
 /** "36 photos" / "36 张". */
-const unitLabel = { photos: ui.unitPhotos, pages: ui.unitPages, posters: ui.unitPosters };
+const unitLabel = { photos: ui.unitPhotos, pages: ui.unitPages, posters: ui.unitPosters, screens: ui.unitScreens };
 export function setCount(g: GallerySet): string {
   return `${g.items.length} ${esc(t(unitLabel[g.unit]))}`;
 }
@@ -203,7 +203,8 @@ export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
 
 /** The card's list of sets (desktop): each one scrolls the grid beside the card to that set. */
 export function gallerySetList(n: SiteNode): string {
-  if (!n.gallery) return '';
+  // a prototype node has no list: visitors click through the prototype itself (owner, v64)
+  if (n.prototype || !n.gallery) return '';
   return `<div class="p-list"><div class="nlist">${n.gallery.map((g) => `<button class="nlink g-jump" type="button" data-gjump="${esc(g.id)}"><span class="nlink-t">${tx(g.title)}</span><span class="lab">${setLine(g)}</span></button>`).join('')}</div></div>`;
 }
 

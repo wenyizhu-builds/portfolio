@@ -45,7 +45,7 @@ export interface Media {
 /** One picture in a gallery: the grid shows `thumb`, the lightbox `src`. */
 export interface Photo { src: string; thumb: string; w: number; h: number; tag: string; large?: string; lw?: number } // large: the 2400px copy, lw its width
 /** A set inside a gallery (a photo series, a magazine issue). `unit` names what the count counts. */
-export interface GallerySet { id: string; title: T; meta?: T; unit: 'photos' | 'pages' | 'posters'; items: Photo[] }
+export interface GallerySet { id: string; title: T; meta?: T; unit: 'photos' | 'pages' | 'posters' | 'screens'; items: Photo[] }
 
 export interface SiteNode {
   id: string;
@@ -71,6 +71,7 @@ export interface SiteNode {
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
+  prototype?: { src: string }; // a clickable prototype shown in the map's place on desktop (v64); the phone shows `gallery` instead
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -553,28 +554,29 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
-    
-    team: { en: 'AI-assisted tool development (my role); handover to the UA content team.' },
+    team: { en: 'Solo project: I designed and built it from scratch' },
     type: 'ai',
     parent: 'ai',
-    headline: { num: 'Shipped', label: { en: 'built with AI-assisted coding, handed over to the UA content team' } },
-    label: { en: 'AI Creative Intelligence Dashboard' },
-    kicker: { en: 'AI-assisted internal tool' },
-    role: { en: 'Built with AI-assisted coding; primary user' },
+    headline: { num: '30–40%', label: { en: 'less time on creative analysis' } },
+    label: { en: 'Creative Intelligence Dashboard' },
+    kicker: { en: 'AI tool · built with Claude Code' },
     summary: {
-      en: 'An internal workbench for creative analysis, script production and campaign reviews. I used it in my own UA workflow and handed it over to the UA content team.',
+      en: 'I built this dashboard from scratch, on my own, using Claude Code. It tags every ad with AI, links those tags to performance data to find the winning formula, then turns that formula into new scripts and campaign plans. UA teams use it in their work. What you see here is a display prototype with sample data from a fictional game. If you’d like to see the full project, get in touch.',
     },
     sections: [
       {
         title: { en: 'What it does', zh: '功能' },
         items: [
-          { en: 'AI tagging of video creatives, with field rules and human review' },
-          { en: 'Performance aggregation by version and creative scope for reviews' },
-          { en: 'Knowledge retrieval that feeds strategy and script drafting' },
+          { en: 'AI tagging: Watches every video ad and tags its hook, format, pacing and more, with a human review step.' },
+          { en: 'Winning formula: Links tags to performance data to show what top ads have in common, across updates and markets.' },
+          { en: 'Script Studio: Turns the winning formula into new scripts, written natively for each market.' },
+          { en: 'Campaign planning: Drafts the creative plan for the next campaign from past results.' },
+          { en: 'Knowledge Base: Learns from every note, edit and piece of feedback, so results get sharper over time.' },
         ],
       },
     ],
-    media: [{ alt: { en: 'Workbench demo (synthetic data)' } }],
+    prototype: { src: 'prototype/dashboard.html' },
+    gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
   },
   { id: 'ai-slot-1', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
@@ -739,6 +741,8 @@ export const ui = {
   unitPhotos: { en: 'photos', zh: '张' },
   unitPages: { en: 'pages', zh: '页' },
   unitPosters: { en: 'posters', zh: '张' },
+  unitScreens: { en: 'screens', zh: '屏' },
+  protoHint: { en: 'click the sidebar to explore', zh: '点左侧导航，随便看看' },
   backToMap: { en: 'Back to the map', zh: '回到地图' },
   mapWord: { en: 'Map', zh: '地图' },
   prev: { en: 'Previous', zh: '上一张' },

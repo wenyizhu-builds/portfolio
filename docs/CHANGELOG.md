@@ -576,3 +576,9 @@
 
 - Bio draft A (owner): "I'm a growth marketer on the creative side: I find out which ads and content actually drive installs and engagement, then scale them. I spent three years at HoYoverse, the studio behind Genshin Impact, running campaigns across North America, Europe and Japan. Lately I've been building my own AI tools to do it faster." Highlight on "drive installs and engagement". Final bio to be written last.
 - Removed the INDEX key-numbers block (owner: the map notes already highlight these). The stray pasted line after the bio is gone too.
+
+## 2026-10-03 — v64 Creative Intelligence Dashboard: clickable prototype in the gallery's place
+
+- Desktop: opening the dashboard folds the map and shows an English, clickable prototype of all eight screens (synthetic data from a fictional game), with a hand-written note pointing to its sidebar. Phone: the eight screens as a sideways row.
+- New card copy (owner): built from scratch, solo, with Claude Code; UA teams use it; 30–40% less time on creative analysis; a display prototype, get in touch for the full project. Old placeholder media tile removed.
+- Owner: no screen list in the card (too ugly); visitors click through the prototype itself.

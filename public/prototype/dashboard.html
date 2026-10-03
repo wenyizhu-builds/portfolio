@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Creative Intelligence Dashboard · prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* Layout: screen picker on top, then one desktop window (1240×870, scaled to fit) showing the chosen screen.
+   The app itself uses one fixed look (style A, matches the portfolio); the page around it follows the viewer theme. */
+:root {
+  --page-bg: #f3f3f0; --page-fg: #1b1c20; --page-muted: #6b6d75; --page-line: #d9d9d4; --page-accent: #2c42f6; --page-card: #ffffff;
+  --ui: "Schibsted Grotesk", -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --page-bg: #15161a; --page-fg: #ececef; --page-muted: #9a9ca5; --page-line: #2c2e35; --page-accent: #8c9bff; --page-card: #1d1f24; color-scheme: dark; } }
+:root[data-theme="dark"] { --page-bg: #15161a; --page-fg: #ececef; --page-muted: #9a9ca5; --page-line: #2c2e35; --page-accent: #8c9bff; --page-card: #1d1f24; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--page-bg); color: var(--page-fg); font-family: var(--ui); }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 48px; display: grid; gap: 18px; }
+.intro h1 { font-size: 22px; font-weight: 500; margin: 0 0 6px; }
+.intro p { margin: 0; color: var(--page-muted); max-width: 70ch; line-height: 1.5; }
+.picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick { all: unset; cursor: pointer; padding: 8px 14px; border: 1px solid var(--page-line); border-radius: 999px; background: var(--page-card); font-size: 14px; }
+.pick[aria-pressed="true"] { border-color: var(--page-accent); color: var(--page-accent); box-shadow: 0 0 0 1px var(--page-accent) inset; }
+.pick:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+.stage { position: relative; width: 100%; overflow: hidden; border-radius: 12px; box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 12px 40px rgb(0 0 0 / .10); }
+.note { font-size: 12.5px; color: var(--page-muted); margin: 0; }
+
+/* ---------- the app (style A) ---------- */
+.app {
+  --bg: #f6f6f3; --surface: #ffffff; --fg: #17181c; --muted: #6e7079; --faint: #9a9ca4; --line: #e3e3de; --line-soft: #ededea;
+  --accent: #2c42f6; --accent-soft: #e9ecff; --hi: #d7ff3a; --lose: #b9bcc6; --good: #1a7f4b; --good-soft: #e5f3ea; --warn: #a15c07; --warn-soft: #fbefdc;
+  --chip: #f1f1ee; --r: 10px;
+  --f: "Schibsted Grotesk", -apple-system, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
+  width: 1240px; height: 870px; transform-origin: 0 0; display: grid; grid-template-columns: 232px 1fr;
+  font-family: var(--f); color: var(--fg); background: var(--bg); font-size: 13.5px; line-height: 1.4;
+}
+.side { border-right: 1px solid var(--line); padding: 16px 12px; display: flex; flex-direction: column; gap: 18px; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; }
+.logo { width: 26px; height: 26px; border-radius: 7px; background: var(--accent); display: grid; place-items: center; flex: none; }
+.logo svg { width: 15px; height: 15px; }
+.brand b { font-weight: 600; font-size: 13px; line-height: 1.2; }
+.brand small { display: block; color: var(--muted); font-size: 11.5px; font-weight: 400; }
+.ws { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); font-size: 12.5px; }
+.ws small { color: var(--muted); font-size: 11.5px; display: block; font-weight: 400; }
+.navgroup { display: grid; gap: 2px; }
+.navgroup h6 { margin: 0 0 4px; padding: 0 10px; font-size: 11px; font-weight: 500; color: var(--muted); letter-spacing: .05em; text-transform: uppercase; }
+.nav { all: unset; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; color: var(--fg); cursor: pointer; }
+.nav[disabled] { cursor: default; color: var(--faint); }
+.nav svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; opacity: .8; flex: none; }
+.nav:not([disabled]):hover { background: var(--line-soft); }
+.nav.on { background: var(--surface); box-shadow: 0 0 0 1px var(--line); color: var(--accent); font-weight: 500; }
+.nav:focus-visible { outline: 2px solid var(--accent); }
+.side .foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px 10px; font-size: 12px; color: var(--muted); }
+.avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 11px; font-weight: 600; }
+.main { display: grid; grid-template-rows: auto 1fr; min-width: 0; min-height: 0; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px; border-bottom: 1px solid var(--line); min-height: 57px; }
+.crumbs { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 13px; }
+.crumbs b { color: var(--fg); font-weight: 500; }
+.tabs { display: flex; gap: 4px; }
+.tab { padding: 6px 10px; border-radius: 8px; color: var(--muted); font-size: 13px; }
+.tab.on { background: var(--chip); color: var(--fg); font-weight: 500; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 500; font-size: 12.5px; white-space: nowrap; }
+.btn.ghost { background: var(--surface); color: var(--fg); box-shadow: 0 0 0 1px var(--line) inset; }
+.btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.topr { display: flex; gap: 8px; align-items: center; }
+.content { padding: 22px 24px; overflow: hidden; min-height: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.pad { padding: 14px 16px; }
+.eyebrow { font-size: 11.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+h2.title { margin: 0; font-weight: 500; font-size: 24px; letter-spacing: -.01em; }
+h3.sec { margin: 0; font-size: 14px; font-weight: 600; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 999px; background: var(--chip); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chip b { color: var(--fg); font-weight: 500; }
+.chip.blue { background: var(--accent-soft); color: var(--accent); }
+.mono { font-family: var(--mono); font-size: 12px; }
+.muted { color: var(--muted); }
+mark { background: var(--hi); color: inherit; padding: 0 2px; }
+.pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 500; white-space: nowrap; }
+.pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.win { background: var(--good-soft); color: var(--good); }
+.pill.mid { background: var(--chip); color: var(--muted); }
+.pill.low { background: var(--warn-soft); color: var(--warn); }
+.conf { display: inline-flex; gap: 3px; align-items: center; }
+.conf i { width: 5px; height: 10px; border-radius: 1px; background: var(--line); display: inline-block; }
+.conf i.f { background: var(--good); }
+.pri { font-size: 11px; font-weight: 500; padding: 2px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+.pri.p2 { background: var(--chip); color: var(--muted); }
+
+/* shared additions */
+.tghead { display: flex; justify-content: space-between; align-items: baseline; }
+.confh { font-size: 11px; color: var(--muted); }
+/* overview */
+.ov { display: grid; gap: 14px; }
+.hello { display: flex; justify-content: space-between; align-items: end; }
+.hello h2 { margin: 4px 0 0; font-size: 26px; font-weight: 500; letter-spacing: -.01em; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpi { padding: 14px 16px; display: grid; gap: 4px; }
+.kpi .n { font-size: 26px; font-weight: 500; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.kpi .l { color: var(--muted); font-size: 12.5px; }
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+.step { padding: 14px 16px; display: grid; gap: 5px; position: relative; border-right: 1px solid var(--line); }
+.step:last-child { border-right: 0; }
+.step .num { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+.step b { font-size: 14.5px; font-weight: 600; }
+.step p { margin: 0; color: var(--muted); font-size: 12.5px; }
+.step .st { margin-top: 6px; font-size: 12px; }
+.step .arrow { position: absolute; right: -9px; top: 50%; width: 17px; height: 17px; background: var(--surface); border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; z-index: 1; font-size: 10px; color: var(--muted); transform: translateY(-50%); }
+.two { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; }
+.latest { padding: 16px; display: grid; gap: 10px; }
+.latest p { margin: 0; font-size: 16px; line-height: 1.5; font-weight: 500; }
+.act { list-style: none; margin: 0; padding: 4px 16px; }
+.act li { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+.act li:last-child { border-bottom: 0; }
+.act .ic { width: 28px; height: 28px; border-radius: 8px; background: var(--chip); display: grid; place-items: center; }
+.act .ic svg { width: 14px; height: 14px; stroke: var(--fg); fill: none; stroke-width: 1.7; }
+.loop { display: flex; gap: 12px; align-items: center; padding: 12px 16px; border: 1px dashed var(--line); border-radius: var(--r); color: var(--muted); font-size: 12.5px; }
+.loop svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.6; flex: none; }
+
+/* tagging */
+.tg { display: grid; grid-template-columns: 250px 300px 1fr; gap: 14px; height: 100%; min-height: 0; }
+.stepper { display: flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted); }
+.stepper .s { display: flex; gap: 6px; align-items: center; }
+.stepper .d { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--line); display: grid; place-items: center; font-size: 10.5px; font-family: var(--mono); background: var(--surface); }
+.stepper .s.done .d { background: var(--accent); border-color: var(--accent); color: #fff; }
+.stepper .s.cur { color: var(--fg); font-weight: 500; }
+.stepper .s.cur .d { border-color: var(--accent); color: var(--accent); }
+.stepper .ln { width: 22px; height: 1px; background: var(--line); }
+.queue { display: grid; align-content: start; overflow: hidden; }
+.queue .qh { padding: 12px 14px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.qi { display: grid; grid-template-columns: 34px 1fr; gap: 10px; padding: 9px 12px; border-bottom: 1px solid var(--line-soft); align-items: center; }
+.qi.sel { background: var(--accent-soft); }
+.thumb { width: 34px; height: 48px; border-radius: 5px; background: linear-gradient(170deg, var(--t1), var(--t2)); }
+.qi b { font-family: var(--mono); font-weight: 500; font-size: 11.5px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qi span { font-size: 11.5px; color: var(--muted); }
+.qi .run { color: var(--accent); }
+.prog { height: 4px; border-radius: 2px; background: var(--line-soft); overflow: hidden; margin-top: 4px; }
+.prog i { display: block; height: 100%; width: 62%; background: var(--accent); }
+.player { display: grid; gap: 10px; align-content: start; }
+.vid { position: relative; aspect-ratio: 9/16; max-height: 520px; border-radius: var(--r); overflow: hidden; background: linear-gradient(180deg, #b9c6ff 0%, #dfe4ff 38%, #ffe2cf 72%, #fff3e4 100%); box-shadow: inset 0 0 0 1px rgb(23 24 28 / .06); }
+.vid .isle { position: absolute; border-radius: 50% 50% 46% 54%; background: linear-gradient(180deg, #a7b2ee, #8a97dc); opacity: .9; }
+.vid .sail { position: absolute; left: 42%; top: 54%; width: 34px; height: 30px; background: #f6f6f3; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.vid .dmg { position: absolute; left: 14%; top: 22%; font: 600 34px/1 var(--f); color: var(--accent); text-shadow: 0 0 14px rgb(255 255 255 / .95), 0 0 2px #fff; letter-spacing: -.02em; }
+.vid .cap { position: absolute; left: 10%; right: 10%; bottom: 14%; background: rgb(255 255 255 / .9); color: var(--fg); box-shadow: 0 1px 4px rgb(23 24 28 / .08); border-radius: 6px; padding: 6px 8px; font-size: 12px; text-align: center; }
+.vid .tc { position: absolute; left: 10px; top: 10px; font-family: var(--mono); font-size: 11px; color: var(--fg); background: rgb(255 255 255 / .8); padding: 2px 6px; border-radius: 4px; }
+.scrub { display: grid; gap: 6px; }
+.scrub .bar { position: relative; height: 26px; border-radius: 6px; background: var(--line-soft); overflow: hidden; display: flex; }
+.scrub .bar span { height: 100%; display: flex; align-items: center; padding-left: 6px; font-size: 10.5px; color: #fff; white-space: nowrap; overflow: hidden; }
+.scrub .lab { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+.tags { display: grid; grid-template-rows: auto 1fr auto; min-height: 0; overflow: hidden; }
+.tags .th { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tgroups { padding: 4px 16px; overflow: hidden; }
+.tgroup { padding: 10px 0; border-bottom: 1px solid var(--line-soft); display: grid; gap: 6px; }
+.tgroup h5 { margin: 0 0 2px; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 500; }
+.tr { display: grid; grid-template-columns: 120px 1fr auto; gap: 10px; align-items: center; font-size: 12.5px; }
+.tr .k { color: var(--muted); }
+.tv { display: inline-flex; gap: 6px; align-items: center; padding: 3px 8px; border-radius: 6px; background: var(--chip); font-weight: 500; justify-self: start; }
+.tv.edited { box-shadow: 0 0 0 1px var(--accent) inset; background: var(--accent-soft); }
+.why { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--bg); font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.why b { color: var(--fg); font-weight: 500; }
+.tags .tf { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+
+/* library */
+.lib { display: grid; gap: 14px; }
+.lh { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.fchip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); font-size: 12.5px; }
+.fchip b { font-weight: 500; }
+.fchip.on { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg span { padding: 5px 10px; font-size: 12.5px; color: var(--muted); }
+.seg span.on { background: var(--chip); color: var(--fg); font-weight: 500; }
+table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.t th { text-align: left; font-weight: 500; color: var(--muted); font-size: 11.5px; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--surface); }
+.t td { padding: 8px 12px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; vertical-align: middle; }
+.t tr:last-child td { border-bottom: 0; }
+.t td.num, .t th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.t .nm { display: flex; gap: 10px; align-items: center; }
+.t .nm .thumb { width: 24px; height: 34px; border-radius: 4px; }
+.t tr.sel td { background: var(--accent-soft); }
+.tagc { display: inline-block; padding: 2px 7px; border-radius: 5px; background: var(--chip); font-size: 12px; }
+.spk { display: inline-block; vertical-align: middle; }
+.libfoot { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); }
+
+/* insights */
+.ins { display: grid; grid-template-columns: 1fr 290px; gap: 20px; }
+.report { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.rh { display: grid; gap: 6px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.verdict { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; padding: 14px 16px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); }
+.verdict .k { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); padding-top: 3px; }
+.verdict p { margin: 0; font-size: 15px; line-height: 1.5; font-weight: 500; }
+.legend { display: flex; justify-content: space-between; align-items: baseline; }
+.legend .keys { display: flex; gap: 14px; font-size: 12px; color: var(--muted); }
+.legend .keys > span > i:only-child { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.legend .keys .conf { margin-right: 6px; vertical-align: -1px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.dcard { padding: 14px 16px; display: grid; gap: 10px; }
+.ch { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.ch b { font-weight: 600; }
+.row { display: grid; grid-template-columns: 52px 112px 1fr 34px; align-items: center; gap: 10px; font-size: 12.5px; }
+.row .who { color: var(--muted); font-size: 11.5px; }
+.lab { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dbar { position: relative; height: 8px; border-radius: 5px; background: var(--line-soft); overflow: hidden; }
+.dbar span { position: absolute; inset: 0 auto 0 0; border-radius: 5px; }
+.dbar.w span { background: var(--accent); } .dbar.l span { background: var(--lose); }
+.pct { text-align: right; font-family: var(--mono); font-size: 12px; }
+.dcard p { margin: 0; color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+.rail { display: grid; gap: 12px; align-content: start; }
+.rail h4 { margin: 0 0 8px; font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+.big { font-size: 26px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.big small { font-size: 13px; color: var(--muted); font-weight: 400; letter-spacing: 0; }
+.spark svg { width: 100%; height: 78px; display: block; }
+.spark text { font-size: 10px; fill: var(--muted); font-family: var(--mono); }
+.list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+.list li { display: flex; gap: 8px; align-items: baseline; line-height: 1.4; }
+.dot { width: 7px; height: 7px; border-radius: 50%; flex: none; transform: translateY(-1px); }
+.cta { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: var(--r); border: 1px dashed var(--accent); color: var(--accent); font-size: 12.5px; font-weight: 500; }
+.cta svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; flex: none; }
+
+/* script studio */
+.ss { display: grid; grid-template-columns: 300px 1fr; gap: 16px; height: 100%; min-height: 0; }
+.cfg { display: grid; gap: 12px; align-content: start; }
+.cfg .card { padding: 14px 16px; display: grid; gap: 10px; }
+.cfg h5 { margin: 0; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 500; }
+.ref { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; }
+.ref b { font-family: var(--mono); font-weight: 500; font-size: 11.5px; }
+.applied { display: flex; flex-wrap: wrap; gap: 6px; }
+.opts { display: flex; gap: 6px; flex-wrap: wrap; }
+.opt { padding: 5px 10px; border-radius: 7px; border: 1px solid var(--line); font-size: 12.5px; background: var(--surface); }
+.opt.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 500; }
+.gen { display: grid; grid-template-rows: auto 1fr; gap: 12px; min-height: 0; }
+.genh { display: flex; justify-content: space-between; align-items: center; }
+.scripts { display: grid; grid-template-columns: 1.15fr 1fr; gap: 12px; min-height: 0; }
+.sc { display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+.sc .sh { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.beats { padding: 4px 16px; overflow: hidden; }
+.beat { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
+.beat:last-child { border-bottom: 0; }
+.beat .tm { font-family: var(--mono); font-size: 11.5px; color: var(--muted); padding-top: 2px; }
+.beat .tm b { display: block; color: var(--accent); font-weight: 500; font-family: var(--f); font-size: 11.5px; margin-top: 2px; }
+.vo { font-size: 13px; font-weight: 500; line-height: 1.45; }
+.vis { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.jp .vo { font-family: "Noto Sans JP", var(--f); }
+.sc .sf { padding: 10px 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--muted); gap: 8px; }
+.score { display: flex; gap: 6px; align-items: center; }
+
+/* performance */
+.pf { display: grid; gap: 12px; }
+.pk { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.pk .kpi .n { font-size: 24px; }
+.pk .kpi .d { font-size: 12px; color: var(--good); }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pf .chartc svg { height: 160px; }
+.chartc { padding: 14px 16px; display: grid; gap: 8px; }
+.chartc svg { width: 100%; height: 190px; display: block; }
+.chartc text { font-family: var(--mono); font-size: 10px; fill: var(--muted); }
+.keys2 { display: flex; gap: 14px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+.keys2 i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.summ { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; padding: 12px 16px; }
+.summ p { margin: 0; font-weight: 500; font-size: 14px; }
+/* planning */
+.pl { display: grid; grid-template-columns: 1fr 290px; gap: 16px; }
+.plm { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.goal { padding: 14px 16px; display: grid; gap: 10px; }
+.goal .g { font-size: 16px; font-weight: 500; }
+.hyp { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 12.5px; counter-reset: h; }
+.hyp li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.hyp li::before { counter-increment: h; content: counter(h); width: 18px; height: 18px; border-radius: 50%; background: var(--chip); display: grid; place-items: center; font-size: 10.5px; font-family: var(--mono); color: var(--muted); }
+.themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.theme { padding: 14px 16px; display: grid; gap: 8px; align-content: start; }
+.theme .tt { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.theme b { font-size: 13.5px; }
+.theme p { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.ti { display: grid; grid-template-columns: 30px 1fr 20px; gap: 8px; font-size: 12px; padding: 6px 0; border-top: 1px solid var(--line-soft); }
+.ti .mono { color: var(--accent); }
+.mix { padding: 14px 16px; display: grid; gap: 10px; }
+.mix h4 { margin: 0; font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+.mrow { display: grid; grid-template-columns: 104px 1fr 34px; gap: 8px; align-items: center; font-size: 12.5px; }
+.stackb { display: flex; height: 8px; border-radius: 5px; overflow: hidden; }
+.basis { font-size: 12px; color: var(--muted); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.basis svg { width: 14px; height: 14px; stroke: var(--accent); fill: none; stroke-width: 1.6; }
+/* knowledge */
+.kb { display: grid; grid-template-columns: 330px 1fr; gap: 16px; height: 100%; min-height: 0; }
+.kin { padding: 14px 16px; display: grid; gap: 12px; align-content: start; }
+.field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.inp { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; background: var(--surface); display: flex; gap: 6px; flex-wrap: wrap; min-height: 34px; align-items: center; }
+.ta { min-height: 150px; align-items: flex-start; color: var(--fg); line-height: 1.5; }
+.klist { display: grid; grid-template-rows: auto auto 1fr; min-height: 0; overflow: hidden; }
+.klist .kh { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.kcats { padding: 10px 16px; display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line-soft); }
+.krules { padding: 4px 16px; overflow: hidden; }
+.kr { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line-soft); align-items: center; }
+.kr:last-child { border-bottom: 0; }
+.kr b { font-weight: 500; font-size: 13px; display: block; }
+.kr span.sub { font-size: 12px; color: var(--muted); }
+.kr .tg2 { display: flex; gap: 6px; align-items: center; }
+.ev { font-size: 11px; padding: 2px 7px; border-radius: 999px; }
+.ev.t { background: var(--good-soft); color: var(--good); }
+.ev.h { background: var(--warn-soft); color: var(--warn); }
+
+/* ---------- polish pass ---------- */
+.app { --side-bg: #efefea; --shadow: 0 1px 2px rgb(23 24 28 / .04), 0 2px 8px rgb(23 24 28 / .03); }
+.side { background: var(--side-bg); }
+.card { box-shadow: var(--shadow); border-color: #e6e6e1; }
+.nav.on { box-shadow: 0 1px 2px rgb(23 24 28 / .08), 0 0 0 1px var(--line); }
+.nav .cnt { margin-left: auto; font-size: 11px; font-variant-numeric: tabular-nums; padding: 1px 7px; border-radius: 999px; background: var(--accent); color: #fff; font-weight: 500; }
+.nav .cnt.soft { background: var(--hi); color: var(--fg); }
+.logo { background: var(--fg); }
+.ws { box-shadow: var(--shadow); }
+.ws .wsdot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(160deg, #b9c6ff, #ffe1cc); box-shadow: inset 0 0 0 1px rgb(23 24 28 / .06); flex: none; }
+.ws .wsl { display: flex; gap: 8px; align-items: center; }
+/* ad thumbnails: tiny drawn frames of each ad */
+.adt { box-shadow: inset 0 0 0 1px rgb(23 24 28 / .06); position: relative; overflow: hidden; border-radius: 6px; background: linear-gradient(180deg, var(--a1) 0%, var(--a2) 55%, var(--a3) 100%); flex: none; }
+.adt::before { content: ""; position: absolute; left: -12%; right: 30%; bottom: 18%; height: 14%; border-radius: 50%; background: var(--isle); opacity: .9; }
+.adt::after { content: ""; position: absolute; left: 48%; right: -14%; bottom: 10%; height: 11%; border-radius: 50%; background: var(--isle); opacity: .75; }
+.adt .fx { position: absolute; left: 12%; top: 20%; font-weight: 600; color: var(--accent); letter-spacing: -.02em; text-shadow: 0 0 6px rgb(255 255 255 / .9); white-space: nowrap; }
+.adt .face { position: absolute; right: 10%; top: 12%; width: 28%; aspect-ratio: 1; border-radius: 50%; background: #f3cdb3; box-shadow: 0 0 0 2px #fff; }
+.adt .bar2 { position: absolute; left: 12%; right: 12%; bottom: 30%; height: 7%; border-radius: 3px; background: rgb(255 255 255 / .85); }
+.adt .dur { position: absolute; right: 5%; bottom: 4%; font: 500 8px/1 var(--mono); color: var(--fg); background: rgb(255 255 255 / .85); padding: 2px 3px; border-radius: 3px; }
+.thumb.adt { width: 34px; height: 48px; }
+.t .nm .adt { width: 26px; height: 38px; border-radius: 4px; }
+/* overview hero + top ads */
+.latest.hero { background: var(--accent); border-color: var(--accent); color: #fff; }
+.latest.hero .eyebrow { color: rgb(255 255 255 / .75); }
+.latest.hero .chip { background: rgb(255 255 255 / .14); color: rgb(255 255 255 / .85); }
+.latest.hero .chip b { color: #fff; }
+.latest.hero p { font-size: 18px; letter-spacing: -.005em; }
+.latest.hero mark { color: var(--fg); }
+.tops { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.topad { padding: 10px; display: grid; grid-template-columns: 54px 1fr; gap: 10px; align-items: center; }
+.topad .adt { width: 54px; height: 78px; border-radius: 6px; }
+.topad b { font-family: var(--mono); font-size: 10.5px; font-weight: 500; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.topad .m { font-size: 11.5px; color: var(--muted); display: grid; gap: 4px; }
+.kpi .n { color: var(--fg); }
+.kpis .kpi:first-child .n { color: var(--accent); }
+/* performance market table */
+.mkt { overflow: hidden; }
+.mkt .t td, .mkt .t th { padding: 8px 14px; }
+.mbar { display: inline-block; height: 6px; border-radius: 3px; background: var(--accent); vertical-align: middle; margin-right: 8px; }
+.best { color: var(--good); font-weight: 500; }
+.lib .t th, .lib .t td { padding-left: 9px; padding-right: 9px; }
+.lib .t .mono { font-size: 11px; }
+.vid .burst { position: absolute; left: 50%; top: 40%; width: 230px; height: 230px; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(circle, rgb(255 255 255 / 1) 0%, rgb(215 255 58 / .45) 20%, rgb(140 155 255 / .28) 46%, transparent 70%); }
+.vid .streak { position: absolute; height: 2px; background: linear-gradient(90deg, transparent, rgb(44 66 246 / .55), transparent); }
+.vid .dmg { z-index: 1; }
+
+/* embed: the window fills the frame width; the portfolio page sets the frame's height from the same ratio */
+html, body { margin: 0; background: transparent; }
+.stage { position: relative; width: 100%; overflow: hidden; border-radius: 12px; }
+.app button:not([data-go]) { cursor: default; }
+</style></head><body>
+<div class="stage" id="stage"></div>
+<script>
+
+const I = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
+  lib:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/>',
+  ins:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  script:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/>',
+  plan:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  kb:'<path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/>',
+  data:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+  up:'<path d="M12 19V5M5 12l7-7 7 7"/>',
+  loop:'<path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/>',
+  check:'<path d="M5 12l5 5L20 7"/>',
+  play:'<path d="M8 5v14l11-7z"/>'
+};
+const ic = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
+const conf = n => `<span class="conf" title="Confidence ${n} of 5">${[1,2,3,4,5].map(i=>`<i class="${i<=n?'f':''}"></i>`).join('')}</span>`;
+// Each thumbnail is a tiny drawn frame: sky, floating isles, and one cue for the ad's opening (damage number, creator face or caption).
+const SCENES = [
+  ['#c9d4ff','#e6e9ff','#ffe1cc','#9aa6e8','fx'],
+  ['#b9c6ff','#dfe5ff','#f3f6ff','#7f8ee0','fx'],
+  ['#e3d6ff','#f1e9ff','#ffe7d6','#b3a3e6','face'],
+  ['#cdeee2','#e7f6ef','#f7fbe8','#93cbb5','bar'],
+  ['#ffe0c7','#fff0e0','#fff8ec','#e7b38c','face'],
+  ['#dfe3ec','#eef0f5','#fbfbf8','#aeb4c6','bar'],
+];
+const DUR = ['0:24','0:21','0:23','0:31','0:21','0:53','0:51','0:18','0:37','0:18','0:27','0:54'];
+function thumb(i, cls='thumb'){
+  const [a1,a2,a3,isle,cue] = SCENES[i%6];
+  const big = cls.includes('big');
+  const c = cue==='fx' ? `<span class="fx" style="font-size:${big?13:8}px">${['128K','96K','204K'][i%3]}</span>` : cue==='face' ? '<span class="face"></span>' : '<span class="bar2"></span>';
+  return `<div class="adt ${cls}" style="--a1:${a1};--a2:${a2};--a3:${a3};--isle:${isle}">${c}${big?`<span class="dur">${DUR[i%12]}</span>`:''}</div>`;
+}
+
+const SCREENS = [
+  {id:'overview', label:'Overview', icon:'home'},
+  {id:'tagging', label:'AI Tagging', icon:'tag'},
+  {id:'library', label:'Creative Library', icon:'lib'},
+  {id:'insights', label:'Insights', icon:'ins'},
+  {id:'scripts', label:'Script Studio', icon:'script'},
+  {id:'performance', label:'Performance', icon:'data'},
+  {id:'planning', label:'Campaign Planning', icon:'plan'},
+];
+
+function shell(cur, top, body){
+  const CNT = {tagging:'<span class="cnt">8</span>', insights:'<span class="cnt soft">New</span>'};
+  const nav = SCREENS.map(s=>`<button class="nav${s.id===cur?' on':''}" data-go="${s.id}">${ic(s.icon)}<span>${s.label}</span>${CNT[s.id]||''}</button>`).join('');
+  return `<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg></div><b>Creative Intelligence<small>Dashboard</small></b></div>
+    <div class="ws"><span class="wsl"><span class="wsdot"></span><b>Starisle<small>Mobile game · 5 updates</small></b></span><span class="muted">▾</span></div>
+    <div class="navgroup"><h6>Workflow</h6>${nav}</div>
+    <div class="navgroup"><h6>Workspace</h6><button class="nav${cur==='knowledge'?' on':''}" data-go="knowledge">${ic('kb')}<span>Knowledge Base</span></button></div>
+    <div class="foot"><div class="avatar">WZ</div>Wenyi Zhu</div>
+  </aside>
+  <section class="main"><header class="top">${top}</header><div class="content">${body}</div></section></div>`;
+}
+
+/* ---------- 1. Overview ---------- */
+function overview(){
+  const top = `<div class="crumbs"><b>Overview</b></div><div class="topr"><span class="btn ghost">Import ads</span><span class="btn">${ic('spark')}New analysis</span></div>`;
+  const body = `<div class="ov">
+    <div class="hello"><div><span class="eyebrow">Starisle · update v2.2 in planning</span><h2>Good afternoon, Wenyi</h2></div></div>
+    <div class="kpis">
+      <div class="card kpi"><span class="n">96</span><span class="l">ads tagged by AI</span></div>
+      <div class="card kpi"><span class="n">27%</span><span class="l">hit rate · 26 winning ads</span></div>
+      <div class="card kpi"><span class="n">61</span><span class="l">creative fields tracked</span></div>
+      <div class="card kpi"><span class="n">5</span><span class="l">updates of campaign data</span></div>
+    </div>
+    <div class="card flow">
+      ${[['01','Tag every ad','AI watches each video and tags hook, opening, length, tone and more.','96 tagged · 8 in review'],
+         ['02','Find what wins','Compare top performers with underperformers and track patterns across updates.','4 reports saved'],
+         ['03','Write the next scripts','Turn winning patterns into new scripts for each market.','12 scripts this week'],
+         ['04','Plan the next update','Past results shape the creative plan for the next campaign.','v2.2 plan drafted']]
+        .map(([n,t,p,s],i)=>`<div class="step"><span class="num">${n}</span><b>${t}</b><p>${p}</p><span class="st chip">${s}</span>${i<3?'<span class="arrow">→</span>':''}</div>`).join('')}
+    </div>
+    <div class="two">
+      <div class="card latest hero"><div class="ch"><span class="eyebrow">Latest insight</span><span class="chip">Top vs underperformers</span></div>
+        <p>Winning ads open with a <mark>twist and straight into combat</mark>, and keep it under 30 seconds. Underperformers are mostly long ads that tell instead of show.</p>
+        <div class="meta"><span class="chip">Sample <b>26 vs 26</b></span><span class="chip">Confidence <b>High</b></span><span class="chip">Updated <b>2h ago</b></span></div>
+      </div>
+      <div class="card"><ul class="act">
+        <li><span class="ic">${ic('tag')}</span><span>8 new ads from v2.1 tagged and waiting for review</span><span class="muted">10m</span></li>
+        <li><span class="ic">${ic('script')}</span><span>4 JP scripts generated from <span class="mono">RET_NA_V_HERO_v2.1_A</span></span><span class="muted">1h</span></li>
+        <li><span class="ic">${ic('ins')}</span><span>Cross-update report: 15–30s ads up from 25% to 58% of the mix</span><span class="muted">2h</span></li>
+        <li><span class="ic">${ic('kb')}</span><span>2 new rules added to the knowledge base from your edits</span><span class="muted">1d</span></li>
+      </ul></div>
+    </div>
+    <div class="ch"><h3 class="sec">Top ads in v2.1</h3><span class="muted" style="font-size:12.5px">By impressions · all markets</span></div>
+    <div class="tops">${[[2,'ACQ_RU_V_SHOWCASE_v2.1_A','RU · TikTok','2.35M'],[1,'ACQ_EU_V_HERO_v2.1_A','EU · Google','2.14M'],[0,'RET_NA_V_HERO_v2.1_A','NA · Google','2.08M'],[3,'ACQ_KR_V_HERO_v2.1_A','KR · Google','252K'],[4,'ACQ_RU_V_OFFER_v2.1_A','RU · Google','228K']]
+      .map(([t,n,m,v],i)=>`<div class="card topad">${thumb(t,'big')}<div class="m"><b>${n}</b><span>${m}</span><span style="color:var(--fg);font-weight:500">${v} impr.</span><span class="pill ${i<3?'win':'mid'}" style="justify-self:start">${i<3?'Winner':'Mid'}</span></div></div>`).join('')}</div>
+    <div class="loop">${ic('loop')}<span>Gets sharper as you use it: every tag you correct and every script you rewrite feeds the Knowledge Base the AI draws on next time.</span></div>
+  </div>`;
+  return shell('overview', top, body);
+}
+
+/* ---------- 2. AI Tagging ---------- */
+function tagging(){
+  const top = `<div class="crumbs">AI Tagging <span>/</span> <b>Batch · v2.1 new ads</b></div>
+    <div class="stepper"><span class="s done"><span class="d">✓</span>Upload</span><span class="ln"></span><span class="s done"><span class="d">✓</span>AI tags</span><span class="ln"></span><span class="s cur"><span class="d">3</span>Review</span><span class="ln"></span><span class="s"><span class="d">4</span>Save to library</span></div>
+    <div class="topr"><span class="btn">Approve all 8</span></div>`;
+  const q = [['RET_NA_V_HERO_v2.1_A','Tagged · 1 field edited',1],['ACQ_EU_V_HERO_v2.1_A','Tagged',0],['ACQ_RU_V_SHOWCASE_v2.1_A','Tagged',2],['ACQ_JP_V_OFFER_v2.1_A','Tagged',4],['ACQ_KR_V_HERO_v2.1_A','Tagged',5],['ACQ_RU_V_OFFER_v2.1_A','Tagged',3],['ACQ_EU_V_PERF_v2.1_A','run',1],['ACQ_NA_V_STORY_v2.1_B','Queued',2]];
+  const queue = `<div class="card queue"><div class="qh"><h3 class="sec">Queue</h3><span class="chip"><b>7</b>/8 done</span></div>
+    ${q.map(([n,s,t],i)=>`<div class="qi${i===0?' sel':''}">${thumb(t)}<div><b>${n}</b>${s==='run'?`<span class="run">Tagging… 62%</span><div class="prog"><i></i></div>`:`<span>${s}</span>`}</div></div>`).join('')}
+  </div>`;
+  const seg = [['Hook','#2c42f6',14,'#fff'],['Combat highlight','#7d8cf5',30,'#fff'],['Combo demo','#d6dcff',34,'#17181c'],['CTA','#d7ff3a',22,'#17181c']];
+  const player = `<div class="player">
+    <div class="vid" aria-label="Video frame: a combat highlight over a sunset sky">
+      <span class="tc">0:04 / 0:24.8</span>
+      <div class="isle" style="left:-10%;top:60%;width:60%;height:12%"></div>
+      <div class="isle" style="left:55%;top:66%;width:60%;height:10%"></div>
+      <div class="isle" style="left:30%;top:45%;width:28%;height:5%;opacity:.6"></div>
+      <div class="burst"></div><div class="streak" style="top:30%;left:8%;width:70%;transform:rotate(-12deg)"></div><div class="streak" style="top:36%;left:20%;width:64%;transform:rotate(-12deg);opacity:.5"></div>
+      <div class="dmg">128,404</div>
+      <div class="cap">"Then I entered the Storm Eye."</div>
+    </div>
+    <div class="scrub"><div class="bar">${seg.map(([t,c,w,f])=>`<span style="width:${w}%;background:${c};color:${f}">${t}</span>`).join('')}</div>
+    <div class="lab"><span>0:00</span><span>0:03.5</span><span>0:11</span><span>0:19</span><span>0:24.8</span></div></div>
+  </div>`;
+  const tr = (k,v,c,ed)=>`<div class="tr"><span class="k">${k}</span><span class="tv${ed?' edited':''}">${v}</span>${conf(c)}</div>`;
+  const tags = `<div class="card tags">
+    <div class="th"><div><h3 class="sec">RET_NA_V_HERO_v2.1_A</h3><span class="muted" style="font-size:12px">NA · English · Google · 24.8s · creator NovaVoyager</span></div><span class="chip blue">${ic('spark').replace('<svg','<svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.8"')}AI tagged in 38s</span></div>
+    <div class="tgroups">
+      <div class="tgroup"><div class="tghead"><h5>Hook · first 3 seconds</h5><span class="confh">AI confidence</span></div>${tr('Hook type','Twist',5)}${tr('Opening','Combat highlight',5)}${tr('Gameplay in first 6s','Yes',5)}</div>
+      <div class="tgroup"><h5>Message</h5>${tr('Key selling point','New character',4)}${tr('Tone','Humour',4,1)}${tr('CTA','Download + offer',5)}</div>
+      <div class="tgroup"><h5>Edit</h5>${tr('Length','15–30s',5)}${tr('Pacing','Steady',4)}${tr('Voiceover','Creator voice',5)}${tr('Subtitles','On',5)}</div>
+      <div class="tgroup" style="border:0"><p class="why"><b>AI reasoning:</b> Opens on a calm sailing shot, then flips it ("Then I entered the Storm Eye") into combat with big damage numbers. The twist lands at 0:03.5, so the hook is a twist rather than a straight intro. You changed Tone to <b>Humour</b>.</p></div>
+    </div>
+    <div class="tf"><span class="muted" style="font-size:12px">Bars show AI confidence · 12 of 61 fields</span><div class="topr"><span class="btn ghost">Edit fields</span><span class="btn">${ic('check')}Approve</span></div></div>
+  </div>`;
+  return shell('tagging', top, `<div class="tg">${queue}${player}${tags}</div>`);
+}
+
+/* ---------- 3. Creative Library ---------- */
+const ADS = [
+  ['RET_NA_V_HERO_v2.1_A','NA','Google','24.8s','Twist','Combat highlight','win','2.08M','2.1'],
+  ['ACQ_EU_V_HERO_v2.1_A','EU','Google','21.3s','Curiosity','Combat highlight','win','2.14M','2.1'],
+  ['ACQ_RU_V_SHOWCASE_v2.1_A','RU','TikTok','23.1s','Twist','New feature demo','win','2.35M','2.1'],
+  ['ACQ_NA_V_SHOWCASE_v1.1_A','NA','Meta','31.3s','Reaction','Exploration','win','1.74M','1.1'],
+  ['ACQ_JP_V_HERO_v1.2_A','JP','Meta','21.0s','Twist','Combat highlight','mid','217K','1.2'],
+  ['ACQ_KR_V_HERO_v2.1_A','KR','Google','53.6s','Offer','New feature demo','mid','252K','2.1'],
+  ['ACQ_RU_V_OFFER_v2.1_A','RU','Google','51.5s','Twist','Gacha pull','mid','228K','2.1'],
+  ['ACQ_JP_V_OFFER_v2.1_A','JP','Meta','18.1s','Giveaway','Exploration','low','176K','2.1'],
+  ['ACQ_EU_V_PERF_v2.1_A','EU','Google','37.6s','Pain point','Exploration','low','150K','2.1'],
+  ['ACQ_NA_V_PERF_v1.2_A','NA','Google','18.6s','Straight intro','Gacha pull','low','136K','1.2'],
+  ['RET_JP_V_HERO_v1.1_A','JP','Google','27.5s','Hype reaction','Character reveal','low','147K','1.1'],
+  ['ACQ_NA_V_OFFER_v2.0_A','NA','Google','54.1s','Offer','Gacha pull','low','91K','2.0'],
+];
+const tier = {win:'Winner', mid:'Mid', low:'Underperformer'};
+function spk(v){ const w=56,h=18,m=Math.max(...v,1); const p=v.map((y,i)=>`${(i*(w-4)/(v.length-1)+2).toFixed(1)},${(h-2-(y/m)*(h-4)).toFixed(1)}`).join(' ');
+  return `<svg class="spk" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline points="${p}" fill="none" stroke="var(--accent)" stroke-width="1.5"/></svg>`; }
+function library(){
+  const top = `<div class="crumbs"><b>Creative Library</b></div><div class="tabs"><span class="tab on">All ads</span><span class="tab">Winning formats</span><span class="tab">Competitors</span></div><div class="topr"><span class="btn ghost">Export</span><span class="btn">Add ads</span></div>`;
+  const body = `<div class="lib">
+    <div class="lh"><div class="filters">
+      <span class="fchip on"><b>Update</b> v1.0–v2.1</span><span class="fchip"><b>Market</b> All</span><span class="fchip"><b>Channel</b> All</span><span class="fchip on"><b>Hook</b> 6 types</span><span class="fchip">+ Filter</span>
+    </div><div style="display:flex;gap:10px;align-items:center"><span class="muted" style="font-size:12.5px">86 ads · 24 winners</span><span class="seg"><span class="on">Table</span><span>Gallery</span></span></div></div>
+    <div class="card" style="overflow:hidden">
+      <table class="t"><thead><tr><th>Ad</th><th>Market</th><th>Channel</th><th class="num">Length</th><th>Hook</th><th>Opening</th><th>Result</th><th class="num">Impressions</th><th>Update</th></tr></thead>
+      <tbody>${ADS.map((a,i)=>`<tr${i===0?' class="sel"':''}><td><span class="nm">${thumb(i)}<span class="mono">${a[0]}</span></span></td><td>${a[1]}</td><td>${a[2]}</td><td class="num">${a[3]}</td><td><span class="tagc">${a[4]}</span></td><td><span class="tagc">${a[5]}</span></td><td><span class="pill ${a[6]}">${tier[a[6]]}</span></td><td class="num">${a[7]}</td><td class="mono">v${a[8]}</td></tr>`).join('')}</tbody></table>
+      <div class="libfoot"><span>Showing 12 of 86 · sorted by result</span><span>Every column is a field the AI tags. Add your own fields any time.</span></div>
+    </div></div>`;
+  return shell('library', top, body);
+}
+
+/* ---------- 4. Insights ---------- */
+const DIFFS = [
+  {dim:'Hook type', p:'High impact', c:5, a:['Twist',31], b:['Offer',19], why:'A twist creates a curiosity gap and keeps people watching past the first 3 seconds.'},
+  {dim:'Opening', p:'High impact', c:5, a:['Combat highlight',38], b:['Exploration',35], why:'Showing the payoff first beats a slow scenic open.'},
+  {dim:'Length', p:'High impact', c:5, a:['15–30s',58], b:['30–45s',35], why:'Higher completion rates carry straight through to conversion.'},
+  {dim:'Tone', p:'High impact', c:5, a:['Humour',31], b:['Surprise',38], why:'Humour pairs naturally with a twist and holds attention.'},
+  {dim:'Pacing', p:'High impact', c:4, a:['Steady',46], b:['Fast cuts',27], why:'A steady build lets the twist land. Nonstop fast cuts bury it.'},
+  {dim:'Voiceover', p:'Low impact', c:2, a:['Creator voice',73], b:['AI voice',27], why:'Small edge for real voices. Not a key driver.'},
+];
+function sparkSVG(){
+  const trend=[25,50,36,36,58], rel=['1.0','1.1','1.2','2.0','2.1'], W=250,H=78,px=8,top=10,bot=20,max=70;
+  const x=i=>px+i*(W-2*px)/4, y=v=>top+(1-v/max)*(H-top-bot);
+  const area=`M${x(0)},${y(trend[0])} `+trend.map((v,i)=>`L${x(i)},${y(v)}`).join(' ')+` L${x(4)},${H-bot} L${x(0)},${H-bot}Z`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Share of 15–30s ads by update: 25% to 58%"><line x1="${px}" x2="${W-px}" y1="${H-bot}" y2="${H-bot}" stroke="var(--line)"/><path d="${area}" fill="var(--accent)" fill-opacity=".12"/><polyline points="${trend.map((v,i)=>`${x(i)},${y(v)}`).join(' ')}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/><circle cx="${x(4)}" cy="${y(58)}" r="3.5" fill="var(--accent)"/>${rel.map((r,i)=>`<text x="${x(i)}" y="${H-5}" text-anchor="${i==0?'start':i==4?'end':'middle'}">v${r}</text>`).join('')}</svg>`;
+}
+function insights(){
+  const top = `<div class="crumbs">Insights <span>/</span> <b>Top vs underperformers</b></div><div class="tabs"><span class="tab">Saved reports</span><span class="tab on">Analysis</span></div><div class="topr"><span class="btn ghost">Share</span><span class="btn">New analysis</span></div>`;
+  const body = `<div class="ins"><div class="report">
+    <div class="rh"><span class="eyebrow">Winning-ad analysis</span><h2 class="title">Top performers vs underperformers</h2>
+      <div class="meta"><span class="chip">Sample <b>26 vs 26 ads</b></span><span class="chip">From <b>96 ads</b></span><span class="chip">Updates <b>v1.0–v2.1</b></span><span class="chip">Confidence <b>High</b></span></div></div>
+    <div class="verdict"><span class="k">Verdict</span><p>Winning ads open with a <mark>twist and straight into combat</mark>, and keep it under 30 seconds. Underperformers are mostly long ads that tell instead of show.</p></div>
+    <div class="legend"><h3 class="sec">Biggest differences</h3><div class="keys"><span><i style="background:var(--accent)"></i>Top performers</span><span><i style="background:var(--lose)"></i>Underperformers</span><span>${conf(5)} Confidence</span></div></div>
+    <div class="grid2">${DIFFS.map(d=>`<div class="card dcard">
+      <div class="ch"><b>${d.dim}</b><span style="display:flex;gap:8px;align-items:center">${conf(d.c)}<span class="pri${d.p==='Low impact'?' p2':''}">${d.p}</span></span></div>
+      <div class="row"><span class="who">Top</span><span class="lab">${d.a[0]}</span><div class="dbar w"><span style="width:${d.a[1]}%"></span></div><span class="pct">${d.a[1]}%</span></div>
+      <div class="row"><span class="who">Under</span><span class="lab">${d.b[0]}</span><div class="dbar l"><span style="width:${d.b[1]}%"></span></div><span class="pct">${d.b[1]}%</span></div>
+      <p>${d.why}</p></div>`).join('')}</div>
+  </div>
+  <aside class="rail">
+    <div class="card pad"><h4>Hit rate</h4><div class="big">27% <small>of ads become winners</small></div></div>
+    <div class="card pad spark"><h4>Rising across updates</h4><div style="font-weight:500">15–30s share of ads: 25% → 58%</div>${sparkSVG()}</div>
+    <div class="card pad"><h4>What changed</h4><ul class="list">
+      <li><span class="dot" style="background:var(--good)"></span>Combat-highlight openings became the main source of winners</li>
+      <li><span class="dot" style="background:var(--lose)"></span>Static character reveals faded with every update</li>
+      <li><span class="dot" style="background:var(--lose)"></span>Offer hooks grew in volume but rarely won</li></ul></div>
+    <button class="cta" data-go="scripts">${ic('spark')}Turn these findings into new scripts →</button>
+  </aside></div>`;
+  return shell('insights', top, body);
+}
+
+/* ---------- 5. Script Studio ---------- */
+function scripts(){
+  const top = `<div class="crumbs">Script Studio <span>/</span> <b>New scripts from a winner</b></div><div class="tabs"><span class="tab">Diagnose a script</span><span class="tab on">Generate</span><span class="tab">Script library</span></div><div class="topr"><span class="btn ghost">Regenerate</span><span class="btn">Save to library</span></div>`;
+  const EN = [['0:00–0:03','Hook · twist','"They told me this was a cozy sailing game."','Creator on camera, calm sailing footage behind.'],
+              ['0:03–0:06','Combat highlight','"Then I hit the Storm Eye."','Hard cut: storm, Halcyon\'s ultimate fills the screen, big damage numbers.'],
+              ['0:06–0:17','Gameplay demo','"Halcyon\'s counter stance: take the hit, then send it all back. Two buttons. That\'s it."','Combo replay, slow motion on the counter.'],
+              ['0:17–0:22','CTA','"Download Starisle and claim 20 free recruits."','End card, store badges.']];
+  const JP = [['0:00–0:03','Hook · twist','「のんびり船旅ゲームって聞いてたのに…」','Creator on camera, calm sailing shot.'],
+              ['0:03–0:06','Combat highlight','「嵐の目に入った瞬間、これ。」','Hard cut to the storm and Halcyon\'s ultimate.'],
+              ['0:06–0:17','Gameplay demo','「受けて、全部返す。ボタンは2つだけ。」','Combo replay, slow motion on the counter.'],
+              ['0:17–0:22','CTA','「今なら招集チケット20枚プレゼント！」','End card, store badges.']];
+  const card = (lang, mk, beats, jp, score) => `<div class="card sc${jp?' jp':''}">
+    <div class="sh"><div style="display:flex;gap:8px;align-items:center"><span class="chip blue"><b style="color:inherit">${lang}</b></span><b>${mk}</b></div><span class="muted" style="font-size:12px">22s · acquisition</span></div>
+    <div class="beats">${beats.map(([t,l,v,s])=>`<div class="beat"><span class="tm">${t}<b>${l}</b></span><div><div class="vo">${v}</div><div class="vis">${s}</div></div></div>`).join('')}</div>
+    <div class="sf"><span>Built on: twist hook · combat opening · 15–30s · humour</span><span class="topr"><span class="btn ghost">Edit</span></span></div></div>`;
+  const body = `<div class="ss">
+    <div class="cfg">
+      <div class="card"><h5>Start from a winner</h5><div class="ref">${thumb(0)}<div><b>RET_NA_V_HERO_v2.1_A</b><div class="muted" style="font-size:12px">NA · 24.8s · 2.08M impressions</div></div></div><span class="pill win" style="justify-self:start">Winner</span></div>
+      <div class="card"><h5>Insights applied</h5><div class="applied"><span class="chip blue">Twist hook</span><span class="chip blue">Combat-highlight opening</span><span class="chip blue">15–30s</span><span class="chip blue">Humour</span><span class="chip">+ Brand guidelines</span></div><span class="muted" style="font-size:12px">From "Top vs underperformers" and the Knowledge Base.</span></div>
+      <div class="card"><h5>Markets</h5><div class="opts"><span class="opt on">EN</span><span class="opt on">JP</span><span class="opt on">KR</span><span class="opt">RU</span></div>
+        <h5>Goal</h5><div class="opts"><span class="opt on">Acquisition</span><span class="opt">Re-engagement</span></div>
+        <h5>Character</h5><div class="opts"><span class="opt on">Halcyon</span><span class="opt">Stellan</span><span class="opt">Weaver</span></div></div>
+      <span class="btn" style="justify-content:center;padding:10px">${ic('spark')}Generate 3 scripts</span>
+    </div>
+    <div class="gen"><div class="genh"><div><h3 class="sec">3 scripts ready</h3><span class="muted" style="font-size:12px">Written natively for each market, not translated line by line</span></div><div class="tabs"><span class="tab on">EN</span><span class="tab on">JP</span><span class="tab">KR</span></div></div>
+      <div class="scripts">${card('EN','North America',EN,false,'92')}${card('JP','Japan',JP,true,'88')}</div>
+    </div>
+  </div>`;
+  return shell('scripts', top, body);
+}
+
+
+/* ---------- 6. Performance ---------- */
+const UPD = [
+  {v:'1.0', spend:334, inst:33.0, roas:135, inh:40},
+  {v:'1.1', spend:413, inst:38.1, roas:153, inh:41},
+  {v:'1.2', spend:503, inst:47.0, roas:170, inh:37},
+  {v:'2.0', spend:678, inst:65.3, roas:194, inh:43},
+  {v:'2.1', spend:830, inst:80.5, roas:212, inh:40},
+];
+function comboChart(){
+  const W=480,H=190,l=40,r=40,t=12,b=24, cw=(W-l-r)/UPD.length;
+  const ys=v=>t+(1-v/1000)*(H-t-b), yi=v=>t+(1-v/100)*(H-t-b);
+  let g='';
+  [0,250,500,750,1000].forEach(v=>{g+=`<line x1="${l}" x2="${W-r}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line-soft)"/><text x="${l-6}" y="${ys(v)+3}" text-anchor="end">${v===1000?'$1M':'$'+v+'K'}</text>`;});
+  [0,25,50,75,100].forEach(v=>{g+=`<text x="${W-r+6}" y="${yi(v)+3}">${v}K</text>`;});
+  UPD.forEach((u,i)=>{const x=l+i*cw+cw*.22; g+=`<rect x="${x}" y="${ys(u.spend)}" width="${cw*.56}" height="${ys(0)-ys(u.spend)}" rx="3" fill="var(--accent)" fill-opacity=".85"/><text x="${l+i*cw+cw/2}" y="${H-8}" text-anchor="middle">v${u.v}</text>`;});
+  const pts=UPD.map((u,i)=>`${l+i*cw+cw/2},${yi(u.inst)}`).join(' ');
+  g+=`<polyline points="${pts}" fill="none" stroke="var(--good)" stroke-width="2"/>`+UPD.map((u,i)=>`<circle cx="${l+i*cw+cw/2}" cy="${yi(u.inst)}" r="3" fill="var(--good)"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spend and installs by update">${g}</svg>`;
+}
+function mixChart(){
+  const W=480,H=190,l=40,r=40,t=12,b=24, cw=(W-l-r)/UPD.length;
+  const y=v=>t+(1-v/100)*(H-t-b), yr=v=>t+(1-(v-100)/150)*(H-t-b);
+  let g='';
+  [0,50,100].forEach(v=>{g+=`<text x="${l-6}" y="${y(v)+3}" text-anchor="end">${v}%</text>`;});
+  [100,175,250].forEach(v=>{g+=`<text x="${W-r+6}" y="${yr(v)+3}">${v}%</text>`;});
+  UPD.forEach((u,i)=>{const x=l+i*cw+cw*.22, w=cw*.56, cr=100-u.inh;
+    g+=`<rect x="${x}" y="${y(100)}" width="${w}" height="${y(100-cr)-y(100)}" fill="var(--accent)" fill-opacity=".85"/><rect x="${x}" y="${y(u.inh)}" width="${w}" height="${y(0)-y(u.inh)}" fill="var(--lose)"/><text x="${l+i*cw+cw/2}" y="${H-8}" text-anchor="middle">v${u.v}</text>`;});
+  const pts=UPD.map((u,i)=>`${l+i*cw+cw/2},${yr(u.roas)}`).join(' ');
+  g+=`<polyline points="${pts}" fill="none" stroke="var(--fg)" stroke-width="2"/>`+UPD.map((u,i)=>`<circle cx="${l+i*cw+cw/2}" cy="${yr(u.roas)}" r="3" fill="var(--fg)"/>`).join('');
+  g+=`<text x="${l+4*cw+cw/2}" y="${yr(212)-8}" text-anchor="middle" style="fill:var(--fg);font-weight:500">212%</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spend mix by producer and D365 ROAS by update">${g}</svg>`;
+}
+function performance(){
+  const top = `<div class="crumbs"><b>Performance</b></div><div class="tabs"><span class="tab on">Overview</span><span class="tab">Data table</span><span class="tab">Reports</span></div><div class="topr"><span class="btn ghost">Filters</span><span class="btn">Upload data</span></div>`;
+  const k=(n,l,d)=>`<div class="card kpi"><span class="n">${n}</span><span class="l">${l}</span>${d?`<span class="d">${d}</span>`:''}</div>`;
+  const body = `<div class="pf">
+    <div class="lh"><div class="filters"><span class="fchip on"><b>Updates</b> v1.0–v2.1</span><span class="fchip"><b>Market</b> All</span><span class="fchip"><b>Channel</b> All</span><span class="fchip"><b>Producer</b> All</span></div><span class="muted" style="font-size:12.5px">598 ad groups · 5 updates</span></div>
+    <div class="pk">${k('$2.76M','Total spend','Up 2.5× from v1.0 to v2.1')}${k('264K','Installs')}${k('$10.45','Average CPI')}${k('182%','D365 ROAS','Up from 135% to 212%')}</div>
+    <div class="pk">${k('138.7M','Impressions')}${k('0.91%','CTR')}${k('21.0%','Click-to-install rate')}${k('35%','D7 ROAS')}</div>
+    <div class="charts">
+      <div class="card chartc"><div class="ch"><h3 class="sec">Spend and installs by update</h3><div class="keys2"><span><i style="background:var(--accent)"></i>Spend</span><span><i style="background:var(--good)"></i>Installs</span></div></div>${comboChart()}</div>
+      <div class="card chartc"><div class="ch"><h3 class="sec">Creator ads and D365 ROAS</h3><div class="keys2"><span><i style="background:var(--accent)"></i>Creator</span><span><i style="background:var(--lose)"></i>In-house</span><span><i style="background:var(--fg)"></i>ROAS</span></div></div>${mixChart()}</div>
+    </div>
+    <div class="card mkt"><table class="t"><thead><tr><th>Market</th><th>Share of spend</th><th class="num">Spend</th><th class="num">CPI</th><th class="num">CTR</th><th class="num">D365 ROAS</th></tr></thead><tbody>
+      ${[['North America',31,'$847K','$9.86','0.93%','152%'],['Japan',25,'$688K','$10.95','0.89%','225%',1],['Europe',18,'$491K','$10.52','0.91%','168%'],['South Korea',17,'$463K','$11.00','0.89%','177%'],['Taiwan',10,'$269K','$10.16','0.90%','196%']]
+        .map(([m,sh,sp,cpi,ctr,ro,b])=>`<tr><td>${m}</td><td><span class="mbar" style="width:${sh*3}px"></span>${sh}%</td><td class="num">${sp}</td><td class="num">${cpi}</td><td class="num">${ctr}</td><td class="num${b?' best':''}">${ro}</td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="card summ"><span class="chip blue">${ic('spark').replace('<svg','<svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.8"')}AI report</span><p>Spend grew 2.5× while D365 ROAS rose every update, from 135% to 212%. Creator ads now take about 60% of spend, and Japan returns the most per dollar.</p><span class="btn ghost">Open report</span></div>
+  </div>`;
+  return shell('performance', top, body);
+}
+
+/* ---------- 7. Campaign Planning ---------- */
+function planning(){
+  const top = `<div class="crumbs">Campaign Planning <span>/</span> <b>Update v2.2</b></div><div class="tabs"><span class="tab">Update brief</span><span class="tab on">Creative plan</span></div><div class="topr"><span class="btn ghost">Export</span><span class="btn">${ic('script')}Write scripts for this plan</span></div>`;
+  const theme=(t,n,goal,p,items)=>`<div class="card theme"><div class="tt"><b>${t}</b><span class="chip"><b>${n}</b> ads</span></div><span class="chip ${goal==='Acquisition'?'blue':''}" style="justify-self:start">${goal}</span><p>${p}</p>${items.map(([m,d,c])=>`<div class="ti"><span class="mono">${m}</span><span>${d}</span><span class="muted">${c}</span></div>`).join('')}</div>`;
+  const mrow=(l,v,c)=>`<div class="mrow"><span>${l}</span><div class="dbar"><span style="width:${v}%;background:${c}"></span></div><span class="pct">${v}%</span></div>`;
+  const body = `<div class="pl"><div class="plm">
+    <div class="basis">${ic('spark')}AI draft based on 5 past updates (v1.0–v2.1) and 3 saved reports · generated 2h ago</div>
+    <div class="card goal"><span class="eyebrow">Goal for v2.2</span><div class="g">Bring the hit rate back above 25%</div>
+      <ul class="hyp"><li>Combat-highlight openings with the new character, Maren, keep combat-led ads on top</li><li>15–30s ads keep their CTR advantage for acquisition</li><li>In Japan, talking-head creator ads with a soothing tone perform most consistently</li></ul></div>
+    <div class="ch"><h3 class="sec">Creative themes</h3><span class="muted" style="font-size:12.5px">30 ads · $820K budget</span></div>
+    <div class="themes">
+      ${theme('New character: Maren',12,'Acquisition','Open on her ultimate, then a curiosity or twist hook. Keep it short.',[['EN','Combat highlight, curiosity hook, 15–25s',4],['JP','Combat highlight, soothing music',4],['KR','Easy combo tutorial, offer hook',4]])}
+      ${theme('New mode: Abyss Route',10,'Acquisition','Show the first underwater sailing mode in real gameplay, with a twist or curiosity hook.',[['EN','Creator first reaction, twist hook',4],['JP','Route guide walkthrough',3],['KR','Fast-cut gameplay',3]])}
+      ${theme('Welcome-back rewards',8,'Re-engagement','Lead with the free 10-pull for returning players and end on a clear reward CTA.',[['EN','Reward list, straight to the point',4],['JP','Rewards plus update highlights',4]])}
+    </div>
+  </div>
+  <aside class="rail">
+    <div class="card mix"><h4>Channel mix</h4>${mrow('Google',60,'var(--accent)')}${mrow('Meta',30,'var(--accent)')}${mrow('TikTok',10,'var(--accent)')}</div>
+    <div class="card mix"><h4>Language mix</h4>${mrow('English',45,'var(--fg)')}${mrow('Japanese',35,'var(--fg)')}${mrow('Korean',20,'var(--fg)')}</div>
+    <div class="card mix"><h4>Goal split</h4>${mrow('Acquisition',70,'var(--good)')}${mrow('Re-engagement',30,'var(--good)')}</div>
+    <div class="card mix"><h4>Why this plan</h4><ul class="list"><li><span class="dot" style="background:var(--good)"></span>Combat openings got stronger every update; static character reveals stopped working</li><li><span class="dot" style="background:var(--good)"></span>Gameplay ads with creators on camera have been steady across updates</li><li><span class="dot" style="background:var(--lose)"></span>Few re-engagement ads tested so far, so this is a small test</li></ul></div>
+  </aside></div>`;
+  return shell('planning', top, body);
+}
+
+/* ---------- 8. Knowledge Base ---------- */
+const RULES = [
+  ['Curiosity hooks must pose an open question in the first 3 seconds','Hold the answer back. Completion and conversion both improve.',['Curiosity','Twist'],'t'],
+  ['Combat-highlight openings beat static character reveals','Ultimates and damage numbers up front convert better than splash art.',['Opening'],'t'],
+  ['15–25 seconds is the conversion sweet spot','The completion advantage of short ads carries through to CTR.',['15–30s'],'t'],
+  ['Japan responds to soothing music and character-driven stories','Clear regional preference in music and tone.',['JP','Tone'],'t'],
+  ['Paid ads: no organic-style CTAs','Paid placements go straight to the app store, so skip "follow me" or "link in bio".',['CTA'],'t'],
+  ['Brand-creator ads beat in-house edits on long-term ROAS','Licensed creator ads lead on D365 ROAS update after update.',['Producer'],'t'],
+  ['In twist ads, the punchline lands within 8 seconds','Keep the setup under 8 seconds.',['Twist','Pacing'],'h'],
+  ['Week 1 of an update pushes the new character; week 2 switches to gameplay','Content rotation within an update.',['Selling point'],'h'],
+];
+function knowledge(){
+  const top = `<div class="crumbs"><b>Knowledge Base</b></div><div class="tabs"><span class="tab on">Knowledge</span><span class="tab">Feedback</span></div><div class="topr"><span class="btn ghost">Manage</span></div>`;
+  const body = `<div class="kb">
+    <div class="card kin"><div class="ch"><h3 class="sec">Add knowledge</h3><span class="muted" style="font-size:12px">AI summarises and sorts it</span></div>
+      <div class="field"><label>Market</label><div class="inp"><span class="chip">JP</span></div></div>
+      <div class="field"><label>Channel</label><div class="inp"><span class="muted">Any</span></div></div>
+      <div class="seg" style="justify-self:start"><span class="on">Paste text</span><span>Upload doc</span><span>Upload video</span></div>
+      <div class="inp ta">Japan v2.1 recap: talking-head ads with a calm tone kept CPI about 15% lower than fast-cut gameplay. Creators who explained the story beat creators who just reacted.</div>
+      <div class="field"><label>Evidence</label><div class="seg"><span class="on">Tested in data</span><span>Hypothesis</span></div></div>
+      <span class="btn" style="justify-content:center;padding:10px">${ic('spark')}Analyse and add</span>
+    </div>
+    <div class="card klist"><div class="kh"><div style="display:flex;gap:8px;align-items:center"><h3 class="sec">Knowledge</h3><span class="chip"><b>8</b> rules</span></div><span class="muted" style="font-size:12px">Used by AI in every report and script</span></div>
+      <div class="kcats">${['All','Hooks','Openings','Video structure','Pacing','CTA','Audience insights','Market notes','Brand guidelines'].map((c,i)=>`<span class="opt${i===0?' on':''}">${c}</span>`).join('')}</div>
+      <div class="krules">${RULES.map(([t,d,tags,e])=>`<div class="kr"><div><b>${t}</b><span class="sub">${d}</span></div><div class="tg2">${tags.map(x=>`<span class="tagc">${x}</span>`).join('')}<span class="ev ${e}">${e==='t'?'Tested':'Hypothesis'}</span></div></div>`).join('')}</div>
+    </div>
+  </div>`;
+  return shell('knowledge', top, body);
+}
+
+const RENDER = {overview, tagging, library, insights, scripts, performance, planning, knowledge};
+
+const stage = document.getElementById('stage');
+let current = 'overview';
+function fit(){ const app = stage.firstElementChild; if (!app) return; const k = stage.clientWidth/1240; app.style.transform = `scale(${k})`; stage.style.height = (870*k)+'px'; }
+function render(){ stage.innerHTML = RENDER[current](); fit(); try { parent.postMessage({protoScreen: current}, '*'); } catch (e) {} }
+document.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && RENDER[t.dataset.go]) { current = t.dataset.go; render(); } });
+addEventListener('message', e => { const id = e.data && e.data.protoGo; if (id && RENDER[id]) { current = id; render(); } });
+addEventListener('resize', fit);
+render();
+</script></body></html>

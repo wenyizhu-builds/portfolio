@@ -7,6 +7,11 @@
  */
 export type ImageRow = [string, number, number, string, number];
 export const galleryImages: Record<string, ImageRow[]> = {
+  // Creative Intelligence Dashboard: the prototype's eight screens (phone shows these; desktop shows the live prototype)
+  'ai-workbench': [
+    ['01', 1600, 1123, 'overview', 0], ['02', 1600, 1123, 'tagging', 0], ['03', 1600, 1123, 'library', 0], ['04', 1600, 1123, 'insights', 0],
+    ['05', 1600, 1123, 'scripts', 0], ['06', 1600, 1123, 'performance', 0], ['07', 1600, 1123, 'planning', 0], ['08', 1600, 1123, 'knowledge', 0],
+  ],
   'photography/huangshi': [
     ['01', 1067, 1600, 'new-DSC04268', 1600],
     ['02', 1067, 1600, 'new-DSC04152', 1600],

@@ -168,7 +168,10 @@ function renderPanel(keep = false) {
   placeAnchor();
 }
 
-const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk')}`;
+const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${n.prototype ? protoHtml(n) : galleryGrid(n, 'desk')}`;
+/* v64: a prototype node shows its clickable prototype (a page under public/) in the gallery's place. */
+// a hand-written note with an arrow down to the prototype's sidebar tells visitors they can click around
+const protoHtml = (n: SiteNode) => `<p class="proto-note"><span>${L('protoHint')}</span><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M52 4 C 38 6, 22 14, 12 36 M12 36 L 9 26 M12 36 L 21 31"/></svg></p><iframe class="proto-frame" src="${esc(n.prototype!.src)}" title="${esc(t(n.label))}" loading="lazy"></iframe>`;
 
 function placeAnchor() {
   if (!map) return;

@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-03 · v63.16 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-03 · v64 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63.16）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v64）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -15,7 +15,11 @@
 
 ## 当前状态
 
-- **只做英文版**（v63.16，用户：没时间校对中文）。中文开关已从电脑版和手机版去掉，`readLang()` 固定返回 'en'；zh 文案留在 content.ts 不用，以后不必再写中文。
+- **Creative Intelligence Dashboard（v64）**：点开 `ai-workbench`，电脑版地图折叠，左侧是可点击原型（`public/prototype/dashboard.html`，iframe，比例 1240×870），上方一条手写批注箭头指向原型侧栏（"click the sidebar to explore"）。用户要求：**卡片里不放屏幕列表**（她说太丑），只靠原型自身侧栏切换；原型内按钮不可用（展示用）。手机版 = 8 张截图横滑（`public/media/ai-workbench/`，gallery set 'screens'）。原型源文件 + 风格样张在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 `public/prototype/dashboard.html` 和 8 张截图（截图要用本地字体，Google Fonts 在云端被墙）。
+  - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。全部英文用地道 UA 术语（用户强调）。
+  - 下一步：宣传片（Voice B = Kokoro af_heart，`vo-heart.wav` 时间轴在云端 `/home/claude/promo/voice/timing-heart.json`，云端会话结束会丢，需重跑 `vo.py heart`）；用户要加背景音乐；Chatterbox 在线 demo 被用户否决。视频做好后放在原型上方。
+
+- **只做英文版**（v64，用户：没时间校对中文）。中文开关已从电脑版和手机版去掉，`readLang()` 固定返回 'en'；zh 文案留在 content.ts 不用，以后不必再写中文。
 
 - **Creative Work 图库（v63.7：电脑版为最初的相册排法，手机版每组一行左右滑）**：Photography 7 组 125 张（黄石 35 · 日本 17 · 欧洲 20 · 武汉 12 · 芝加哥 19 · 纽约 14 · 亚利桑那 8），Design = X Mirror 第二期 36 页 + 7 张电影放映海报。用户已用管理页删减和上传过一轮（v63.3），并亲手拖动排好了顺序（v63.6，以她的顺序为准，不要再自动重排）。用户说先这样放，之后告诉我删哪些：她会用联系表编号（如 p4-12、d1-18）点名，在 `src/gallery-images.ts` 删对应行和 `public/media/<组>/` 下的两个文件（`NN.jpg`、`NN-t.jpg`）。联系表和挑选表在 Mac 的 `portfolio-prototypes/_review/`（`index.tsv` = 编号 → 原文件路径），定稿后删掉这个文件夹。
   - 原图在 Mac「~/Desktop/Design & photography」（只读用，不改）。新加照片时三种尺寸都要做：900 预览 `-t`、1600、2400 `-l`（原图长边 >1700 才做 `-l`，宽度写进 gallery-images.ts 每行第 5 项）。生成网页版的脚本思路：PIL 读原图 → 长边 1600 / 900、去 EXIF、质量 82。
@@ -48,7 +52,7 @@
 
 ## 下一步
 
-- Creative Work / Photography / Design 说明已定稿（v63.16）：Creative Work = "Away from work, I love taking photos and designing things."；Photography = "Photos from my travels, grouped by place."；**Design 不写说明**（用户：那句话没意义，先空着）。**用户反馈：之前的草稿"做作、不像真人"。她要短、平实、像随口说的话；不要抒情、不要过度细节。她口述的意思要润色成地道英文，不要逐字照搬。** 她 2024 年后很少拿相机，现在多用手机拍，不要写"相机随身带""一直在拍"。
+- Creative Work / Photography / Design 说明已定稿（v64）：Creative Work = "Away from work, I love taking photos and designing things."；Photography = "Photos from my travels, grouped by place."；**Design 不写说明**（用户：那句话没意义，先空着）。**用户反馈：之前的草稿"做作、不像真人"。她要短、平实、像随口说的话；不要抒情、不要过度细节。她口述的意思要润色成地道英文，不要逐字照搬。** 她 2024 年后很少拿相机，现在多用手机拍，不要写"相机随身带""一直在拍"。
 - **Genshin Impact / Zenless Zone Zero 的背景介绍**（读者可能不懂游戏）：建议放在 INDEX 简介里第一次提到 HoYoverse 的地方，一句话说明，例如 "HoYoverse, the studio behind Genshin Impact, one of the highest-grossing mobile games ever, and Zenless Zone Zero, which reached 50 million downloads in its launch weekend."（来源：PocketGamer.biz、Shacknews）。用户还没确认，和下面第 2 条 INDEX 简介一起改。
 - 图库：等用户发来要删的编号，照删。
 
@@ -57,7 +61,7 @@
 0. 首页布局已按用户在排版工具里摆的数值写入（v62.38）。以后要调首页：用排版工具 Artifact `https://claude.ai/artifact/TDYgQnYFQmTqbKHPZxXaMf`（= preview.html 第一个 `<script>` 前插入 `<script>window.__ARRANGE=true</script>` 再发布），让她拖好后发来「Copy layout」的 JSON，原样写回 `HOME_LAYOUT` / `NOTES`。v62.40：首页 AI Projects 的三个作品全部折叠。v62.41：用户第二次用排版工具摆的首页布局。
 
 1. 用户在预览里看两组的结构和新文案，有意见再改。两组的一句话说明待她确认。
-2. INDEX 个人简介（v63.16）：用户选了草稿 A，标 [Draft]，**最终版等她把其他内容都做完再写**。数字块（ix-stats）已整块删除——用户：地图批注已突出这些数字，不要重复。旧的那句粘贴笔记一起删了（published-copy.json 和编辑器存档都已改）。
+2. INDEX 个人简介（v64）：用户选了草稿 A，标 [Draft]，**最终版等她把其他内容都做完再写**。数字块（ix-stats）已整块删除——用户：地图批注已突出这些数字，不要重复。旧的那句粘贴笔记一起删了（published-copy.json 和编辑器存档都已改）。
 3. 待用户确认的小问题：
    - Gamified Landing Page：测验概念和奖励机制是不是她提出的（是的话 Team 行写清楚，摘要去掉 "helped"）；标题。markets 为 NA + EU + JP（v62.44，全语言全球页面；不加 China）。
    - Branded Filter：markets 为 US/EU/JP（v62.44，用户：也合作了欧洲达人）；70+ 达人是否包括 14 位 Snap Stars。
