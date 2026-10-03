@@ -526,3 +526,7 @@
 
 - Owner: arrangement felt random and Huangshi opened on a weak photo. Re-ordered every photo series and the posters: the strongest pictures lead (Huangshi now opens on the two fire pictures), then the series moves in runs of related colour and subject. X Mirror stays in page order. Removed a duplicate in Chicago (same picture as Chicago 01).
 - Owner: edge-to-edge rows felt too dense beside the card. Rows now take 100 / 82 / 92 / 76 % of the column, alternating left and right, with wider gaps and space before the card; pictures in a row still share one height and the count per row still follows the screen width.
+
+## 2026-10-03 — v63.6 owner's own photo order
+
+- Owner re-ordered the series herself in the Gallery Photo Manager (drag and drop) and removed 4 more photos (2 Huangshi, 2 New York). Applied exactly as she arranged them. Photography now 125 photos.
