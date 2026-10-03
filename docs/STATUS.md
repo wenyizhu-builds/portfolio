@@ -15,7 +15,7 @@
 
 ## 当前状态
 
-- **Creative Intelligence Dashboard（v64.8，布局 C，用户从三个预览里选的）**：点开 `ai-workbench`，电脑版地图折叠；宣传片位置（现为 Overview 截图 + "Promo video coming soon"）紧挨卡片（间距 48px，顶边与 INDEX 条对齐，最宽 960px，main.ts `placeProto`），上方一条 app 栏（v64.9 移到视频上方，v64.10 视频顶边对齐 INDEX、app 栏在其上方；图标 · 名称 · "Clickable prototype · sample data" · "Try the prototype" 按钮），点击在站内唯一的灯箱里打开原型（lightbox.ts `openFrame`，L44），灯箱最大为原型原尺寸或屏宽 80%，下方一行说明。卡片里**不放屏幕列表、没有 The Team、Connections 只连 Creator Ad Pipeline**。用户在编辑器改的文案（40% … & production、较短的 summary）已同步。手机版 = 8 张截图横滑。原型页 `public/demo/dashboard.html`；源文件在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 demo 页和 8 张截图（截图用本地字体）。
+- **Creative Intelligence Dashboard（v64.8，布局 C，用户从三个预览里选的）**：点开 `ai-workbench`，电脑版地图折叠；宣传片位置（现为 Overview 截图 + "Promo video coming soon"）紧挨卡片（间距 48px，顶边与 INDEX 条对齐，最宽 960px，main.ts `placeProto`），上方一条 app 栏（v64.9 移到视频上方，v64.10 视频顶边对齐 INDEX、app 栏在其上方；图标 · 名称 · "Clickable prototype · sample data" · "Try the prototype" 按钮），点击在站内唯一的灯箱里打开原型（lightbox.ts `openFrame`，L44），灯箱最大为原型原尺寸或屏宽 80%，下方一行说明。卡片里**不放屏幕列表、没有 The Team、Connections 只连 Creator Ad Pipeline**。用户在编辑器改的文案已同步：headline 40% … & production；**summary 被她删空（v64.11 已去掉）**；身份行改为两个标签 Vibe Coding · Claude Code（与案例标签同一样式）；What it does 默认展开（section `open: true`）。手机版 = 8 张截图横滑。原型页 `public/demo/dashboard.html`；源文件在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 demo 页和 8 张截图（截图用本地字体）。
   - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。英文用地道 UA 术语（用户强调）。
   - 下一步：宣传片（Voice B = Kokoro af_heart；用户要加背景音乐；Chatterbox 在线 demo 被用户否决）。视频做好后替换 `.proto-video` 里的占位图（content.ts `prototype.poster`）。
 

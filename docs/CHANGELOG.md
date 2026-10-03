@@ -608,3 +608,9 @@
 - v64.9: the app bar moves above the video (owner: the bottom of the screen felt heavy).
 
 - v64.10: the video's top edge (not the app bar) lines up with the INDEX bar; the app bar sits above that line (owner).
+
+## 2026-10-04 — v64.11 dashboard card: tags, What it does open, no summary
+
+- Owner: "AI tool · built with Claude Code" line replaced by two tags, Vibe Coding and Claude Code, in the same tag style as every case's markets and platforms.
+- "What it does" is unfolded when the card opens (new `open` flag on a section; every other section stays folded by default).
+- Summary removed (owner emptied it in the editor).

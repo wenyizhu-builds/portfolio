@@ -110,7 +110,7 @@ export function detailLists(n: SiteNode): DetailList[] {
     };
   });
   // Case order (flagship review): How it worked (diagram) and Results first, open; then the story, folded.
-  out.forEach((d) => (d.defaultOpen = false));
+  out.forEach((d, i) => (d.defaultOpen = !!n.sections?.[i]?.open));
   const head: DetailList[] = [];
   if (n.diagram) head.push({
     title: tx({ en: 'How it worked', zh: '运作方式' }),

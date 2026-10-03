@@ -32,6 +32,7 @@ export type Status = 'prep' | 'planned';
 export interface Section {
   title: T;
   items: T[];
+  open?: boolean; // shown unfolded when the card opens (sections are folded by default)
 }
 
 export interface Media {
@@ -558,13 +559,11 @@ export const nodes: SiteNode[] = [
     parent: 'ai',
     headline: { num: '40%', label: { en: 'less time on creative analysis & production' } },
     label: { en: 'Creative Intelligence Dashboard' },
-    kicker: { en: 'AI tool · built with Claude Code' },
-    summary: {
-      en: 'I built this dashboard from scratch using Claude Code. It tags every ad with AI, links those tags to performance data to find the winning formula, then turns that formula into new scripts and campaign plans.',
-    },
+    tags: [{ en: 'Vibe Coding' }, { en: 'Claude Code' }], // same tag style as the cases' markets and platforms (owner)
     sections: [
       {
         title: { en: 'What it does', zh: '功能' },
+        open: true, // owner: unfolded by default on this card
         items: [
           { en: 'AI tagging: Watches every video ad and tags its hook, format, pacing and more, with a human review step.' },
           { en: 'Winning formula: Links tags to performance data to show what top ads have in common, across updates and markets.' },
