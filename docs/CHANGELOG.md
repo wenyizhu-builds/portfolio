@@ -507,3 +507,7 @@
 ## 2026-10-03 — v63.1 photo-book layout for the galleries
 
 - Owner found the even grid rigid and boring. Previewed four looser layouts (photo book, prints on a table, lead + contact sheet, filmstrip); she chose photo book. Rows now change size and rhythm (big + small, three staggered, one alone with space, small + big), with her order kept and a small number under each picture. Row shapes live in `BOOK_ROWS` (blocks.ts): five for desktop, four wider ones for the phone. Same layout for Design.
+
+## 2026-10-03 — v63.2 galleries scroll up and down only
+
+- Owner: no sideways scrolling. A landscape picture widened to 58% in a row meant for small pictures pushed the row past the column. Rows now shrink to fit, and the gallery never scrolls sideways. Checked desktop wide and narrow, Design, and phone: no row overflows (L43).
