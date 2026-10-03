@@ -99,10 +99,10 @@ export const site = {
   tag: { en: 'Growth Marketer · Creative Strategist', zh: '增长营销 · 创意策略' } as T,
   // One-line intro at the top of the sticky note (and the phone hero). [Draft]
   intro: {
-    en: 'I turn audience insight into creative that converts — and build AI tools to do it faster.',
-    zh: '我把用户洞察变成能带来转化的创意，并用自己搭建的 AI 工具让这件事更快。',
+    en: "I'm a growth marketer on the creative side: I find out which ads and content actually drive installs and engagement, then scale them. I spent three years at HoYoverse, the studio behind Genshin Impact, running campaigns across North America, Europe and Japan. Lately I've been building my own AI tools to do it faster.", // [Draft] final bio written last (owner)
+    zh: '',
   } as T,
-  introHighlight: { en: 'converts', zh: '转化' } as T,
+  introHighlight: { en: 'drive installs and engagement' } as T,
   linkedin: 'https://www.linkedin.com/in/wenyi-zhu-mktg/',
   email: '', // PLACEHOLDER: owner will provide a public email
   resumePdf: '', // PLACEHOLDER: put the file in public/ and use a relative path, e.g. 'wenyi-zhu-resume.pdf'
@@ -113,13 +113,6 @@ export const site = {
   metaDescription: {
     en: 'Wenyi Zhu — growth marketer and creative strategist. Case studies from three years of global marketing at HoYoverse, plus AI tools I build.',
   } as T,
-  // Key numbers in the INDEX (the bio card that opens on arrival). Figures come from the case files. [Draft]
-  note: [
-    { num: '3 yrs', label: { en: 'global marketing at HoYoverse', zh: '米哈游全球营销' } },
-    { num: '80M+', label: { en: 'organic views across 9 channels in Japan', zh: '日本 9 个频道的自然播放' } },
-    { num: '0% → 15%', label: { en: 'brand-team share of UA spend', zh: '品牌团队 UA 花费占比' } },
-    { num: 'EN · JP · CN', label: { en: 'markets I work across', zh: '覆盖市场' } },
-  ] as { num: string; label: T }[],
 };
 
 export const nodes: SiteNode[] = [

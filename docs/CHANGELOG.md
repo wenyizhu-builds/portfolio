@@ -571,3 +571,8 @@
 
 - Owner: no Chinese version for now (no time to proofread it). Removed the language switch on desktop and phone; the site always shows English. zh strings stay in content.ts, unused.
 - INDEX key numbers: "1% → 15%" → "0% → 15%" (owner: there was no such pipeline before her), label "brand-team share of UA spend" to match the case; "views from a JP creator matrix I scaled" → "organic views across 9 channels in Japan".
+
+## 2026-10-03 — v63.16 INDEX: new draft bio, key numbers removed
+
+- Bio draft A (owner): "I'm a growth marketer on the creative side: I find out which ads and content actually drive installs and engagement, then scale them. I spent three years at HoYoverse, the studio behind Genshin Impact, running campaigns across North America, Europe and Japan. Lately I've been building my own AI tools to do it faster." Highlight on "drive installs and engagement". Final bio to be written last.
+- Removed the INDEX key-numbers block (owner: the map notes already highlight these). The stray pasted line after the bio is gone too.

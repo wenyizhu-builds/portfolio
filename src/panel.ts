@@ -59,14 +59,11 @@ function insideList(n: SiteNode): string {
  * here; the small INDEX bar above the card brings this view back.
  */
 export function indexPanel(): string {
-  const stats = `<ul class="ix-stats">${site.note
-    .map((x) => `<li><strong>${esc(x.num)}</strong><span>${tx(x.label)}</span></li>`)
-    .join('')}</ul>`;
   const bio = details(
     astSvg(AST.index, 'ix-ast'),
     L('index'),
     `<h2 class="sr-only p-title" tabindex="-1">${esc(site.name)}</h2>
-     <p class="ix-bio">${highlight(t(site.intro), t(site.introHighlight))}</p>${stats}<a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
+     <p class="ix-bio">${highlight(t(site.intro), t(site.introHighlight))}</p><a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
     true,
     'ix',
   );

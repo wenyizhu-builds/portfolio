@@ -209,10 +209,6 @@ button { font: inherit; color: inherit; }
 .ix-body > .sec:first-child { border-top: 0; }
 .ix-bio { margin: 0 0 14px; }
 /* key figures: a clean 2×2 grid, spacing only — no rules */
-.sec-body .ix-stats { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.ix-stats li { display: flex; flex-direction: column; gap: 4px; padding: 0; }
-.ix-stats strong { font-size: var(--fs-figure); font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; color: var(--cobalt); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.ix-stats li > span { font-size: var(--fs-label); letter-spacing: 0.04em; line-height: 1.4; color: var(--muted); }
 .ix-more { display: inline-block; margin: 0 0 14px; text-underline-offset: 3px; }
 /* ---- card: the whole system lives in these rules ---- */
 .panel .p-body, .ixbar, .m-card { font-size: var(--fs-text); line-height: 1.45; letter-spacing: -0.005em; }
