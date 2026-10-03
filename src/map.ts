@@ -59,8 +59,8 @@ function homeDist(parent: string, child: string): number | undefined {
    selection — including dotted connections — stays on screen. The scale only
    shrinks (down to `min`) when what must be shown doesn't fit. */
 const CAMERA = {
-  max: 1.1, // the normal, steady scale
-  min: 0.7, // never smaller than this, however much has to fit
+  max: 0.95, // the normal, steady scale (v63.8, owner: map ~13% smaller overall; was 1.1)
+  min: 0.6, // never smaller than this, however much has to fit (was 0.7)
   pad: { x: 110, top: 40, bottom: 70 }, // room kept around the shown points for their labels
   ease: 0.06, // camera easing per frame
   still: 0.3, // px: closer than this counts as arrived, and drawing stops

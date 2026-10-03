@@ -534,3 +534,7 @@
 ## 2026-10-03 — v63.7 back to the original photo book
 
 - Owner preferred the very first photo-book layout (v63.1) to the justified rows (v63.4) and the spaced rows (v63.5). Restored it as it was, keeping her photo order, the no-sideways-scroll fix (L43) and the phone's one sideways row per series.
+
+## 2026-10-03 — v63.8 map about 14% smaller
+
+- Owner: make the whole map 10–15% smaller. The camera's steady scale went from 1.1 to 0.95 (minimum 0.7 → 0.6); points, labels and notes shrink together, positions unchanged. layout-check 2.
