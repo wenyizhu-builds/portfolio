@@ -140,26 +140,19 @@ const setLine = (g: GallerySet) => [g.meta ? tx(g.meta) : '', setCount(g)].filte
  * Photo-book layout (v63.1, owner's pick from four previews): rows that change size and rhythm like
  * spreads in a photo book. Each row shape gives every picture's width (% of the column), its vertical
  * alignment, and how far the row is indented. Shapes repeat in order; the owner's photo order is kept.
- * The phone uses fewer, wider shapes so nothing gets too small.
+ * The phone does not use the photo book (v63.3, owner): each set is one row of same-height pictures that
+ * scrolls sideways, so the page stays short.
  */
 type RowShape = { w: number[]; align: ('start' | 'center' | 'end')[]; indent: number };
-export const BOOK_ROWS: Record<'desk' | 'phone', RowShape[]> = {
-  desk: [
-    { w: [58, 30], align: ['start', 'end'], indent: 0 },
-    { w: [28, 28, 28], align: ['start', 'center', 'end'], indent: 0 },
-    { w: [44], align: ['start'], indent: 28 },
-    { w: [30, 52], align: ['end', 'start'], indent: 6 },
-    { w: [36, 24], align: ['start', 'end'], indent: 14 },
-  ],
-  phone: [
-    { w: [62, 32], align: ['start', 'end'], indent: 0 },
-    { w: [47, 47], align: ['start', 'end'], indent: 0 },
-    { w: [76], align: ['start'], indent: 12 },
-    { w: [34, 60], align: ['end', 'start'], indent: 0 },
-  ],
-};
+export const BOOK_ROWS: RowShape[] = [
+  { w: [58, 30], align: ['start', 'end'], indent: 0 },
+  { w: [28, 28, 28], align: ['start', 'center', 'end'], indent: 0 },
+  { w: [44], align: ['start'], indent: 28 },
+  { w: [30, 52], align: ['end', 'start'], indent: 6 },
+  { w: [36, 24], align: ['start', 'end'], indent: 14 },
+];
 /** A landscape picture gets at least this share of the row, so it is not shown smaller than the portraits. */
-const WIDE_MIN = { desk: 58, phone: 94 };
+const WIDE_MIN = 58;
 
 /**
  * The grid of a gallery node, one block per set: a heading, then the photo-book rows.
@@ -169,22 +162,31 @@ const WIDE_MIN = { desk: 58, phone: 94 };
  */
 export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
   if (!n.gallery) return '';
-  const shapes = BOOK_ROWS[mode];
   return n.gallery.map((g, si) => {
-    const rows: string[] = [];
-    for (let i = 0, r = 0; i < g.items.length; r++) {
-      const sh = shapes[r % shapes.length];
-      const row = g.items.slice(i, i + sh.w.length);
-      rows.push(`<div class="g-row" style="padding-left:${sh.indent}%">${row.map((p, j) => {
-        const k = i + j;
-        const w = p.w > p.h ? Math.max(sh.w[j], WIDE_MIN[mode]) : sh.w[j];
-        return `<button class="g-item" type="button" style="width:${w}%;align-self:${sh.align[j]}" data-gal="${esc(n.id)}" data-set="${si}" data-i="${k}" aria-label="${esc(t(g.title))} ${k + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/><span class="g-num" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span></button>`;
-      }).join('')}</div>`);
-      i += row.length;
+    const pic = (k: number, style = '') => {
+      const p = g.items[k];
+      return `<button class="g-item" type="button"${style ? ` style="${style}"` : ''} data-gal="${esc(n.id)}" data-set="${si}" data-i="${k}" aria-label="${esc(t(g.title))} ${k + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/><span class="g-num" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span></button>`;
+    };
+    let body: string;
+    if (mode === 'phone') {
+      body = `<div class="g-strip" tabindex="0" aria-label="${esc(t(g.title))}">${g.items.map((_, k) => pic(k)).join('')}</div>`;
+    } else {
+      const rows: string[] = [];
+      for (let i = 0, r = 0; i < g.items.length; r++) {
+        const sh = BOOK_ROWS[r % BOOK_ROWS.length];
+        const n = Math.min(sh.w.length, g.items.length - i);
+        rows.push(`<div class="g-row" style="padding-left:${sh.indent}%">${Array.from({ length: n }, (_, j) => {
+          const p = g.items[i + j];
+          const w = p.w > p.h ? Math.max(sh.w[j], WIDE_MIN) : sh.w[j];
+          return pic(i + j, `width:${w}%;align-self:${sh.align[j]}`);
+        }).join('')}</div>`);
+        i += n;
+      }
+      body = `<div class="g-book">${rows.join('')}</div>`;
     }
     return `<section class="g-set" id="g-${esc(g.id)}">
     <h3 class="g-head"><span class="g-title">${tx(g.title)}</span><span class="lab g-meta">${setLine(g)}</span></h3>
-    <div class="g-book">${rows.join('')}</div>
+    ${body}
   </section>`;
   }).join('');
 }

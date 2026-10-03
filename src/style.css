@@ -62,7 +62,7 @@
   --g-gap: 12px; /* under a set's heading */
   --g-row-x: 6%; /* between pictures in a photo-book row (blocks.ts BOOK_ROWS widths leave room for it) */
   --g-row-y: 56px; /* between photo-book rows */
-  --g-row-y-phone: 22px;
+  --g-strip-h: 210px; /* phone: height of every picture in a set's sideways row */
   --g-set-gap: 96px; /* between sets (series, issues) */
   --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
 
@@ -422,7 +422,9 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-item img { display: block; width: 100%; height: auto; background: var(--line-soft); transition: opacity 300ms; }
 .g-item:hover img { opacity: 0.88; }
 .g-num { display: block; margin-top: 6px; font-size: var(--fs-label); color: var(--muted); font-variant-numeric: tabular-nums; }
-.m-card .g-row { justify-content: space-between; margin-bottom: var(--g-row-y-phone); }
+.g-strip { display: flex; gap: var(--side-gap); overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x proximity; padding-bottom: 6px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; } /* phone only (v63.3, owner): one row per set */
+.g-strip > .g-item { flex: none; scroll-snap-align: start; }
+.g-strip > .g-item img { width: auto; height: var(--g-strip-h); }
 .m-card .g-set { margin-top: var(--gutter); }
 .m-card .g-head { margin-bottom: var(--side-gap); }
 .g-jump { border: 0; background: none; text-align: left; font: inherit; cursor: pointer; }

@@ -602,6 +602,7 @@ export const nodes: SiteNode[] = [
     gallery: [
       set('huangshi', 'photography/huangshi', 'photos', { en: 'Huangshi, Hubei', zh: '湖北黄石' }, { en: 'Lunar New Year · 2022', zh: '春节 · 2022' }),
       set('japan', 'photography/japan', 'photos', { en: 'Japan', zh: '日本' }, { en: '2024' }),
+      set('europe', 'photography/europe', 'photos', { en: 'Europe', zh: '欧洲' }, { en: 'Italy · France · Barcelona · 2024', zh: '意大利 · 法国 · 巴塞罗那 · 2024' }), // owner: three places, one series so it isn't scattered
       set('wuhan', 'photography/wuhan', 'photos', { en: 'Wuhan', zh: '武汉' }, { en: '2021' }),
       set('chicago', 'photography/chicago', 'photos', { en: 'Chicago', zh: '芝加哥' }, { en: '2021 – 2023' }),
       set('new-york', 'photography/new-york', 'photos', { en: 'New York', zh: '纽约' }, { en: '2022' }),
@@ -612,9 +613,7 @@ export const nodes: SiteNode[] = [
     id: 'design', type: 'creative', parent: 'creative', label: { en: 'Design', zh: '设计' }, period: '2019 – 2020',
     summary: { en: 'X Mirror is a student magazine at XJTLU. As editor-in-chief, I laid out every issue myself in InDesign. I also designed posters for film screenings. [Draft]', zh: 'X Mirror 是西交利物浦大学的学生杂志。我担任主编，每一期都由我在 InDesign 里亲手排版。我也为电影放映活动设计海报。' },
     gallery: [
-      set('x-mirror-1', 'design/x-mirror-1', 'pages', { en: 'X Mirror, Issue 1', zh: 'X Mirror 第一期' }, { en: '2019' }),
       set('x-mirror-2', 'design/x-mirror-2', 'pages', { en: 'X Mirror, Issue 2', zh: 'X Mirror 第二期' }, { en: '2019' }),
-      set('x-mirror-3', 'design/x-mirror-3', 'pages', { en: 'X Mirror, Issue 3', zh: 'X Mirror 第三期' }, { en: '2020' }),
       set('posters', 'design/posters', 'posters', { en: 'Film screening posters', zh: '电影放映海报' }),
     ],
   },

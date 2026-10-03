@@ -511,3 +511,9 @@
 ## 2026-10-03 — v63.2 galleries scroll up and down only
 
 - Owner: no sideways scrolling. A landscape picture widened to 58% in a row meant for small pictures pushed the row past the column. Rows now shrink to fit, and the gallery never scrolls sideways. Checked desktop wide and narrow, Design, and phone: no row overflows (L43).
+
+## 2026-10-03 — v63.3 owner's photo edit; phone galleries scroll sideways
+
+- Applied the owner's choices from the Gallery Photo Manager: 54 removed, 97 added. New series **Europe** (Italy, France and Barcelona, 2024; one series so it isn't scattered, the three places in the subtitle). Design keeps only X Mirror Issue 2 (owner's note), now 36 pages in page order; posters 7. Photography 130 photos in 7 series, Design 43. Uploaded pictures were re-saved at 1600px / 900px.
+- Phone: each set is one row of same-height pictures that scrolls sideways (owner: the page was far too long). Desktop keeps the photo book and still scrolls only up and down.
+- Photo manager now also lets the owner drag photos to reorder them.
