@@ -26,7 +26,9 @@ function card(n: SiteNode): string {
   return `<article class="m-card ${n.status ? 'is-prep' : ''}${matches(n.id) ? '' : ' is-off'}" id="m-${n.id}">
     <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}
-    ${galleryGrid(n, 'phone')}
+    ${n.type === 'creative' && n.gallery // owner: Photography and Design are the least important part on the phone, so their pictures start folded
+      ? `<details class="m-more"><summary><span class="o">${L('more')}</span><span class="c">${L('less')}</span></summary>${galleryGrid(n, 'phone')}</details>`
+      : galleryGrid(n, 'phone')}
     ${diagram}
     ${media}
     ${more.length ? `<details class="m-more"><summary><span class="o">${L('more')}</span><span class="c">${L('less')}</span></summary>${more.join('')}</details>` : ''}

@@ -618,3 +618,7 @@
 ## 2026-10-04 — v64.12 prototype: no notes squeezed beside buttons
 
 - Owner: footer notes next to buttons were cramped. Script cards: "Built on …" removed (it repeats "Insights applied"); Edit moves into the card header. Tagging: "Bars show AI confidence" removed (the column is already labelled); "12 of 61 fields" becomes "+ 49 more fields" at the end of the list. Phone screenshots re-shot.
+
+## 2026-10-04 — v64.13 phone: Photography and Design galleries folded
+
+- Owner: on the phone, Photography and Design are the least important part, so their pictures start folded under "More +".
