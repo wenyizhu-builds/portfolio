@@ -622,3 +622,7 @@
 ## 2026-10-04 — v64.13 phone: Photography and Design galleries folded
 
 - Owner: on the phone, Photography and Design are the least important part, so their pictures start folded under "More +".
+
+## 2026-10-04 — v64.14 map: AI Projects shows the dashboard's link to the Creator Ad Pipeline
+
+- Owner: the dashboard should link to the Creator Ad Pipeline on the map. Opening AI Projects now also shows the Creator Ad Pipeline (faded) with a dotted line to the dashboard (`alwaysLinked` in content.ts). layout-check 0 over 33 views.

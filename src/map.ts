@@ -515,6 +515,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       ancestors(f).forEach((a) => vis.add(a));
       childrenOf(f).forEach((c) => vis.add(c.id));
       relatedOf(f).forEach((r) => vis.add(r));
+      linkedOfChildren(f).forEach((r) => vis.add(r)); // e.g. AI Projects shows the Creator Ad Pipeline beside the dashboard (v64.14)
       // An end point (a single piece of work) keeps its siblings on the map, so the reader can
       // go from one to the next directly instead of stepping up to the parent and back down (v53).
       const par = byId.get(f)?.parent;
@@ -532,7 +533,13 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   /* Points drawn at full strength. Everything shown belongs to the current view, so all of them. */
   /** What stays at full strength. An open end point keeps its siblings on the map (v53), but greyed,
       so the chosen piece of work stands out and the next one is still one click away. */
+  /** Points a group's children are always linked to (content.ts alwaysLinked), outside the group itself. */
+  function linkedOfChildren(f: string): string[] {
+    const kids = childrenOf(f).map((c) => c.id);
+    return kids.flatMap((k) => byId.get(k)?.alwaysLinked || []).filter((r) => !kids.includes(r) && r !== f);
+  }
   function nearSet(vis: Set<string>, f: string | null): Set<string> {
+    if (f && childrenOf(f).length) { const extra = new Set(linkedOfChildren(f)); return extra.size ? new Set([...vis].filter((id) => !extra.has(id))) : vis; } // linked points stay faded
     if (!f || childrenOf(f).length) return vis;
     const par = byId.get(f)?.parent;
     if (!par || par === 'root') return vis;
@@ -752,7 +759,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       (n.related || []).forEach((r) => {
         const key = `r:${[n.id, r].sort().join('~')}`;
         // only the selection's own connections: an ancestor's dotted lines are its business, not this view's
-        if (vis.has(r) && (n.id === focus || r === focus) && !next.some((l) => l.key === key))
+        const always = !!n.alwaysLinked?.includes(r) && !!focus && n.parent === focus; // the group's own linked point (v64.14)
+        if (vis.has(r) && (always || n.id === focus || r === focus) && !next.some((l) => l.key === key))
           next.push({ source: n.id, target: r, kind: 'related', dist: LAYOUT.relatedLink, key });
       });
     }

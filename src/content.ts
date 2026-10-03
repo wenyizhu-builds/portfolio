@@ -67,7 +67,8 @@ export interface SiteNode {
   status?: Status;
   featured?: boolean;
   diagram?: { src: string; alt: T }; // shown in the card as "How it worked"; click to enlarge
-  related?: string[]; // dotted connections
+  related?: string[]; // dotted connections, drawn when one end is selected
+  alwaysLinked?: string[]; // also shown (faded, with its dotted line) whenever this point's group is open (owner, v64.14)
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
@@ -576,6 +577,7 @@ export const nodes: SiteNode[] = [
     prototype: { src: 'demo/dashboard.html', poster: 'media/ai-workbench/01.jpg' },
     gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
+    alwaysLinked: ['ua-creative-strategy'], // owner: opening AI Projects shows the Creator Ad Pipeline it grew out of
   },
   { id: 'ai-slot-1', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
   { id: 'ai-slot-2', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
