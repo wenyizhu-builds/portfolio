@@ -517,3 +517,7 @@
 - Applied the owner's choices from the Gallery Photo Manager: 54 removed, 97 added. New series **Europe** (Italy, France and Barcelona, 2024; one series so it isn't scattered, the three places in the subtitle). Design keeps only X Mirror Issue 2 (owner's note), now 36 pages in page order; posters 7. Photography 130 photos in 7 series, Design 43. Uploaded pictures were re-saved at 1600px / 900px.
 - Phone: each set is one row of same-height pictures that scrolls sideways (owner: the page was far too long). Desktop keeps the photo book and still scrolls only up and down.
 - Photo manager now also lets the owner drag photos to reorder them.
+
+## 2026-10-03 — v63.4 desktop galleries: justified rows that follow the screen width
+
+- Owner: the photo book felt more dynamic but too scattered, and the number of photos per row did not change with the screen. Rows now fill the column with no indents or loose gaps; photos in a row share one height. Photos per row follow a rhythm whose maximum depends on the gallery width (3·4·5·4 on wide screens, 2·3·4·3 on a laptop, 2·3·3 narrower) and re-flow when the window is resized. Phone unchanged (one sideways row per series).

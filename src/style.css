@@ -60,8 +60,10 @@
   --spin: 24s; /* the ✳ rotation */
   /* Galleries (v63): Photography and Design. */
   --g-gap: 12px; /* under a set's heading */
-  --g-row-x: 6%; /* between pictures in a photo-book row (blocks.ts BOOK_ROWS widths leave room for it) */
-  --g-row-y: 56px; /* between photo-book rows */
+  --g-row-gap: 14px; /* between pictures and between rows (desktop justified rows) */
+  --g-5up-min: 1100px; /* gallery column at least this wide: rows of up to 5 pictures */
+  --g-4up-min: 820px; /* …up to 4 */
+  --g-3up-min: 540px; /* …at least this wide: up to 3; narrower: 2 */
   --g-strip-h: 210px; /* phone: height of every picture in a set's sideways row */
   --g-set-gap: 96px; /* between sets (series, issues) */
   --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
@@ -417,8 +419,8 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }
 .g-book { overflow-x: hidden; } /* never scroll sideways (owner, v63.2) */
-.g-row { display: flex; justify-content: flex-start; gap: var(--g-row-x); margin-bottom: var(--g-row-y); } /* row shapes: blocks.ts BOOK_ROWS */
-.g-item { display: block; flex: 0 1 auto; min-width: 0; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
+.g-row { display: flex; align-items: flex-start; gap: var(--g-row-gap); margin-bottom: var(--g-row-gap); } /* justified rows: blocks.ts galleryGrid */
+.g-item { display: block; flex: 1 1 0; min-width: 0; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
 .g-item img { display: block; width: 100%; height: auto; background: var(--line-soft); transition: opacity 300ms; }
 .g-item:hover img { opacity: 0.88; }
 .g-num { display: block; margin-top: 6px; font-size: var(--fs-label); color: var(--muted); font-variant-numeric: tabular-nums; }
