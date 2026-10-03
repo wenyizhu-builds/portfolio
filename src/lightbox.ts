@@ -65,7 +65,7 @@ export function openLightbox(src: string, alt = '') {
 export function openGallery(nodeId: string, si: number, i: number) {
   const n = byId.get(nodeId);
   if (!n?.gallery) return;
-  const seq = n.gallery.flatMap((g) => g.items.map((p, k) => ({ src: p.src, caption: `${t(g.title)} · ${k + 1} / ${g.items.length}` })));
+  const seq = n.gallery.flatMap((g) => g.items.map((p, k) => ({ src: p.large || p.src, caption: `${t(g.title)} · ${k + 1} / ${g.items.length}` })));
   const start = n.gallery.slice(0, si).reduce((sum, g) => sum + g.items.length, 0) + i;
   open(seq, Math.min(start, seq.length - 1), t(n.label));
 }

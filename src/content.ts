@@ -43,7 +43,7 @@ export interface Media {
 }
 
 /** One picture in a gallery: the grid shows `thumb`, the lightbox `src`. */
-export interface Photo { src: string; thumb: string; w: number; h: number; tag: string }
+export interface Photo { src: string; thumb: string; w: number; h: number; tag: string; large?: string; lw?: number } // large: the 2400px copy, lw its width
 /** A set inside a gallery (a photo series, a magazine issue). `unit` names what the count counts. */
 export interface GallerySet { id: string; title: T; meta?: T; unit: 'photos' | 'pages' | 'posters'; items: Photo[] }
 
@@ -79,7 +79,7 @@ const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 /** A gallery set from the image list in gallery-images.ts (`key` = its folder under public/media). */
 function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?: T): GallerySet {
   const rows = galleryImages[key] || [];
-  return { id, title, meta, unit, items: rows.map(([f, w, h, tag]) => ({ src: `media/${key}/${f}.jpg`, thumb: `media/${key}/${f}-t.jpg`, w, h, tag })) };
+  return { id, title, meta, unit, items: rows.map(([f, w, h, tag, lw]) => ({ src: `media/${key}/${f}.jpg`, thumb: `media/${key}/${f}-t.jpg`, w, h, tag, ...(lw ? { large: `media/${key}/${f}-l.jpg`, lw } : {}) })) };
 }
 
 /* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */

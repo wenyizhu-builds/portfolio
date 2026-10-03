@@ -154,6 +154,10 @@ export const BOOK_ROWS: RowShape[] = [
 ];
 /** A landscape picture gets at least this share of the row, so it is not shown smaller than the portraits. */
 const WIDE_MIN = 58;
+/** Long side of the grid previews (the -t.jpg files); the full copies are the size in gallery-images.ts. */
+const THUMB_LONG = 900;
+/** Roughly how much of the window the desktop gallery column takes (%), so the browser can choose a size. */
+const GALLERY_SHARE = 60;
 
 /**
  * The grid of a gallery node, one block per set: a heading, then the pictures.
@@ -163,9 +167,15 @@ const WIDE_MIN = 58;
 export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
   if (!n.gallery) return '';
   return n.gallery.map((g, si) => {
-    const pic = (k: number, style = '') => {
+    // share = the picture's share of the gallery column (%). On the desktop the browser picks the
+    // 900px preview, the 1600px copy or the 2400px copy from that (srcset), so big pictures stay sharp on any screen
+    // while small ones stay light (v63.10, owner: the biggest photos looked blurry).
+    const pic = (k: number, style = '', share = 0) => {
       const p = g.items[k];
-      return `<button class="g-item" type="button"${style ? ` style="${style}"` : ''} data-gal="${esc(n.id)}" data-set="${si}" data-i="${k}" aria-label="${esc(t(g.title))} ${k + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/><span class="g-num" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span></button>`;
+      const longSide = Math.max(p.w, p.h), tw = Math.round((p.w * THUMB_LONG) / longSide);
+      const big = p.large ? `, ${esc(p.large)} ${p.lw}w` : '';
+      const pick = share ? ` srcset="${esc(p.thumb)} ${tw}w, ${esc(p.src)} ${p.w}w${big}" sizes="${Math.round(share * GALLERY_SHARE / 100)}vw"` : '';
+      return `<button class="g-item" type="button"${style ? ` style="${style}"` : ''} data-gal="${esc(n.id)}" data-set="${si}" data-i="${k}" aria-label="${esc(t(g.title))} ${k + 1}/${g.items.length}"><img src="${esc(p.thumb)}"${pick} width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/><span class="g-num" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span></button>`;
     };
     let body: string;
     if (mode === 'phone') {
@@ -178,7 +188,7 @@ export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
         rows.push(`<div class="g-row" style="padding-left:${sh.indent}%">${Array.from({ length: n }, (_, j) => {
           const p = g.items[i + j];
           const w = p.w > p.h ? Math.max(sh.w[j], WIDE_MIN) : sh.w[j];
-          return pic(i + j, `width:${w}%;align-self:${sh.align[j]}`);
+          return pic(i + j, `width:${w}%;align-self:${sh.align[j]}`, w);
         }).join('')}</div>`);
         i += n;
       }

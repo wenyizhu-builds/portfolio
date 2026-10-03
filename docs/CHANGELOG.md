@@ -543,3 +543,7 @@
 
 - Map, gallery (with "← Map") and legend now start at 40px, in line with "Region" in the header (owner).
 - The path at the top of a card (e.g. "Creative Work", "Paid & UA Growth") is now a link back to that level, so leaving a gallery is easier (owner).
+
+## 2026-10-03 — v63.10 sharper gallery photos without a slower page
+
+- Owner: the biggest photos looked blurry. Each photo now has three sizes (900px preview, 1600px, and a 2400px copy made from the original where the original is big enough). The desktop grid lets the browser pick by how big the photo is shown and how sharp the screen is (srcset), so small photos still load only the preview and photos still load as you scroll. The lightbox uses the largest copy.
