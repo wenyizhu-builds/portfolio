@@ -9,7 +9,7 @@
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
-- **预览**：`npm run build:file` 生成 `preview.html`，发布到 Artifact `https://claude.ai/artifact/K7QJV2bfsK5neKBpxHuzwX`；新图片要用 `files` 一起发布。
+- **预览**：`npm run build:file` 生成 `preview.html`，发布到 Artifact `https://claude.ai/artifact/K7QJV2bfsK5neKBpxHuzwX`；新图片要用 `files` 一起发布。一个版本最多 511 个文件（现约 486）：图片改名/删除后，用 `files` 里写 `null` 删掉旧路径；每次发布最多 255 个文件、64MB，大批要分两次。
 - **构建命令**：`set -o pipefail; npm run build:file 2>&1 | tail -1 && git commit …`（L35：不要让管道吞掉失败）。
 - 用户不会用终端；需要她做的事只能是"双击某个文件"这种程度。
 
