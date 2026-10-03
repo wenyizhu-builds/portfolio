@@ -554,7 +554,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
-    team: { en: 'Solo project: I designed and built it from scratch' },
     type: 'ai',
     parent: 'ai',
     headline: { num: '30–40%', label: { en: 'less time on creative analysis' } },

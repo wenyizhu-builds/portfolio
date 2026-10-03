@@ -582,3 +582,9 @@
 - Desktop: opening the dashboard folds the map and shows an English, clickable prototype of all eight screens (synthetic data from a fictional game), with a hand-written note pointing to its sidebar. Phone: the eight screens as a sideways row.
 - New card copy (owner): built from scratch, solo, with Claude Code; UA teams use it; 30–40% less time on creative analysis; a display prototype, get in touch for the full project. Old placeholder media tile removed.
 - Owner: no screen list in the card (too ugly); visitors click through the prototype itself.
+
+## 2026-10-03 — v64 Creative Intelligence Dashboard: clickable prototype in the gallery's place
+
+- Desktop: opening the dashboard folds the map and shows an English, clickable prototype of all eight screens (synthetic data from a fictional game), with a hand-written note pointing to its sidebar. Phone: the eight screens as a sideways row.
+- New card copy (owner): built from scratch, solo, with Claude Code; UA teams use it; 30–40% less time on creative analysis; a display prototype, get in touch for the full project. No team line (solo build). Old placeholder media tile removed.
+- Owner: no screen list in the card (too ugly); visitors click through the prototype itself.
