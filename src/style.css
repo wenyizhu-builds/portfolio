@@ -5,7 +5,7 @@
   --on-ink: #f6f6f3; /* text on dark fills */
   --cobalt: #2c42f6; /* Winnie Lab electric blue: the name ✳ and links */
   --accent: #d5fd52; /* Winnie Lab acid lime: the current point */
-  --note: #f06a35; /* red-orange: hand-written notes only (map notes, the prototype note) */
+  --note: #f06a35; /* red-orange: hand-written notes only (map notes, the app-icon note) */
 
   /* Derived colours — never hard-code these; change the base token above instead. */
   --ink-2: color-mix(in srgb, var(--ink) 82%, var(--panel)); /* secondary body text */
@@ -25,8 +25,9 @@
   --top-h: 72px; /* header band */
   --bottom-h: 56px; /* legend band */
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
-  --proto-share: 92; /* the prototype takes at most this % of the gallery column (owner: more room around it) */
-  --proto-note-room: 48px; /* space above the prototype for its hand-written note */
+  --proto-share: 92; /* the video + app icon take at most this % of the gallery column (owner: more room around it) */
+  --app-col: 120px; /* the app icon's column beside the video */
+  --app-share: 86; /* the pop-up takes at most this % of the window */
   --side-max-h: 1080px; /* cap the complete desktop reading column */
   --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
@@ -414,12 +415,27 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-back { display: inline-flex; align-items: baseline; gap: 8px; border: 0; background: none; padding: 4px 0; margin: 0 0 var(--gutter); cursor: pointer; font-size: var(--fs-text); }
 .g-back:hover .lab { text-decoration: underline; text-underline-offset: 3px; }
 .g-set + .g-set { margin-top: var(--g-set-gap); }
-/* v64: a clickable prototype in the gallery's place (Creative Intelligence Dashboard). The frame keeps the prototype's own 1240 × 870 window ratio. */
-.proto-box { position: relative; }
-.proto-note { position: absolute; left: 0; bottom: 100%; margin: 0 0 var(--g-gap); padding-left: 56px; white-space: nowrap; font-family: var(--hand); font-size: 24px; line-height: 1; color: var(--note); }
-.proto-note svg { position: absolute; left: 6px; top: 2px; width: 46px; height: 34px; overflow: visible; }
+/* v64.4: the promo video (a poster for now) in the gallery's place, an app icon beside it, and the prototype in a pop-up. */
+.proto-box { display: grid; grid-template-columns: minmax(0, 1fr) var(--app-col); gap: var(--gutter); align-items: start; }
+.proto-video { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-soft); background: var(--panel); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
+.proto-video img { display: block; width: 100%; height: auto; filter: saturate(0.85); opacity: 0.55; }
+.proto-soon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: var(--panel); box-shadow: 0 4px 16px color-mix(in srgb, var(--ink) 12%, transparent); font-size: var(--fs-text); color: var(--ink); white-space: nowrap; }
+.proto-soon svg { width: 34px; height: 34px; padding: 9px; border-radius: 50%; background: var(--ink); fill: var(--panel); }
+.proto-app { position: relative; display: grid; justify-items: center; }
+.app-icon { display: grid; justify-items: center; gap: 8px; border: 0; background: none; padding: 6px; border-radius: 14px; cursor: pointer; font: inherit; }
+.app-tile { width: 64px; height: 64px; border-radius: 16px; background: var(--ink); display: grid; place-items: center; box-shadow: 0 6px 16px color-mix(in srgb, var(--ink) 22%, transparent); transition: transform var(--dur-card) var(--ease); }
+.app-tile svg { width: 30px; height: 30px; stroke: var(--panel); stroke-width: 2.4; stroke-linecap: round; fill: none; }
+.app-icon:hover .app-tile, .app-icon:focus-visible .app-tile { transform: translateY(-2px) scale(1.04); }
+.app-name { font-size: var(--fs-label); line-height: 1.3; text-align: center; color: var(--ink); }
+.proto-note { position: relative; margin: 6px 0 0; padding-top: 34px; text-align: center; font-family: var(--hand); font-size: 22px; line-height: 1.05; color: var(--note); }
+.proto-note svg { position: absolute; left: 50%; top: 0; width: 30px; height: 30px; transform: translateX(-30%); overflow: visible; }
 .proto-note path { fill: none; stroke: var(--note); stroke-width: 1.2px; stroke-linecap: round; stroke-linejoin: round; }
-.proto-frame { display: block; width: 100%; border: 1px solid var(--line-soft); border-radius: 12px; background: var(--panel); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent), 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
+.app-modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: color-mix(in srgb, var(--ink) 62%, transparent); backdrop-filter: blur(4px); opacity: 0; transition: opacity var(--dur-card) var(--ease); }
+.app-modal[hidden] { display: none; }
+.app-modal.open { opacity: 1; }
+.app-window { position: relative; border-radius: 14px; background: var(--panel); box-shadow: 0 24px 80px color-mix(in srgb, var(--ink) 40%, transparent); }
+.app-frame { display: block; width: 100%; height: 100%; border: 0; border-radius: 14px; }
+.app-close { position: absolute; top: -14px; right: -14px; z-index: 1; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--panel); color: var(--ink); box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 30%, transparent); font-size: 18px; line-height: 1; cursor: pointer; }
 
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }

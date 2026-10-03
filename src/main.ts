@@ -170,32 +170,76 @@ function renderPanel(keep = false) {
 
 const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${n.prototype ? protoHtml(n) : galleryGrid(n, 'desk')}`;
 /* v64: a prototype node shows its clickable prototype (a page under public/) in the gallery's place. */
-// a hand-written note with an arrow down to the prototype's sidebar tells visitors they can click around
-const protoHtml = (n: SiteNode) => `<div class="proto-box"><p class="proto-note"><span>${L('protoHint')}</span><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M52 4 C 38 6, 22 14, 12 36 M12 36 L 9 26 M12 36 L 21 31"/></svg></p><iframe class="proto-frame" src="${esc(n.prototype!.src)}" title="${esc(t(n.label))}" scrolling="no" loading="lazy"></iframe></div>`;
+/* v64.4 (owner): the promo video takes the gallery's place; an app icon beside it opens the clickable
+   prototype in a pop-up window over a dimmed page. Until the video exists, a still of the Overview screen holds its place. */
+const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>';
+const protoHtml = (n: SiteNode) => `<div class="proto-box">
+  <div class="proto-video"><img src="${esc(n.prototype!.poster)}" alt="" loading="lazy"/><span class="proto-soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>${L('videoSoon')}</span></div>
+  <div class="proto-app">
+    <button class="app-icon" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-name">${esc(t(n.label))}</span></button>
+    <p class="proto-note"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M30 36 C 30 22, 24 12, 10 6 M10 6 L 20 5 M10 6 L 15 15"/></svg><span>${L('protoHint')}</span></p>
+  </div>
+</div>`;
+
 /** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
 function restingTop(el: HTMLElement, moving?: HTMLElement): number {
   const shift = moving ? new DOMMatrixReadOnly(getComputedStyle(moving).transform === 'none' ? undefined : getComputedStyle(moving).transform).f : 0;
   return el.getBoundingClientRect().top - shift;
 }
-/** The prototype starts level with the card column and is sized to fit the window with room around it (owner, v64.3). */
-// the card recentres when a section opens or closes; keep the prototype level with it
+// the card recentres when a section opens or closes; keep the video level with it
 {
   const side = document.querySelector<HTMLElement>('.side')!;
   const ro = new ResizeObserver(() => placeProto(side));
   [side, ...side.children].forEach((c) => ro.observe(c)); // the card's height eases (L16), which moves the centred column
 }
+/** The video starts level with the card column (its INDEX bar) and fits the window height (owner, v64.3). */
 function placeProto(side: HTMLElement) {
   const box = gallery.querySelector<HTMLElement>('.proto-box');
   if (!box) return;
-  // the card column is centred, so its first bar (INDEX) is where the card actually starts
   const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--proto-w') / cssPx('--proto-h');
   const avail = window.innerHeight - sideTop - cssPx('--bottom-h') - cssPx('--gutter');
-  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, avail * ratio));
+  const room = cssPx('--app-col') + cssPx('--gutter');
+  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, avail * ratio + room));
   box.style.width = `${w}px`;
-  box.querySelector<HTMLElement>('.proto-frame')!.style.height = `${Math.round(w / ratio)}px`;
   box.style.marginTop = '0px';
-  box.style.marginTop = `${Math.max(cssPx('--proto-note-room'), sideTop - restingTop(box))}px`;
+  box.style.marginTop = `${Math.max(0, sideTop - restingTop(box))}px`;
 }
+
+/* ---------- the app pop-up ---------- */
+const appModal = document.createElement('div');
+appModal.className = 'app-modal';
+appModal.hidden = true;
+appModal.innerHTML = `<div class="app-window" role="dialog" aria-modal="true"><button class="app-close" type="button" data-act="closeapp" aria-label="${esc(L('closeApp'))}">×</button><iframe class="app-frame" scrolling="no"></iframe></div>`;
+document.body.append(appModal);
+const appFrame = appModal.querySelector<HTMLIFrameElement>('.app-frame')!;
+const appWindow = appModal.querySelector<HTMLElement>('.app-window')!;
+let appOpener: HTMLElement | null = null;
+function sizeApp() {
+  const ratio = cssPx('--proto-w') / cssPx('--proto-h'), share = cssPx('--app-share') / 100;
+  const w = Math.min(window.innerWidth * share, window.innerHeight * share * ratio);
+  Object.assign(appWindow.style, { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px` });
+}
+function openApp(from: HTMLElement) {
+  const n = byId.get(currentNodeId() || '');
+  if (!n?.prototype) return;
+  appOpener = from;
+  appWindow.setAttribute('aria-label', t(n.label));
+  appFrame.title = t(n.label);
+  if (appFrame.getAttribute('src') !== n.prototype.src) appFrame.src = n.prototype.src;
+  sizeApp();
+  appModal.hidden = false;
+  requestAnimationFrame(() => appModal.classList.add('open'));
+  appModal.querySelector<HTMLElement>('.app-close')!.focus();
+}
+function closeApp() {
+  if (appModal.hidden) return;
+  appModal.classList.remove('open');
+  appModal.hidden = true;
+  appOpener?.focus();
+}
+appModal.addEventListener('click', (e) => { if (e.target === appModal) closeApp(); }); // a click on the dimmed page closes it
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeApp(); });
+addEventListener('resize', () => { if (!appModal.hidden) sizeApp(); });
 
 function placeAnchor() {
   if (!map) return;
@@ -228,6 +272,9 @@ document.addEventListener('click', e => {
     const target = gallery.querySelector<HTMLElement>(`#g-${CSS.escape(jump.dataset.gjump!)}`);
     if (target) gallery.scrollTo({ top: target.offsetTop, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
   }
+  const opener = el.closest<HTMLElement>('[data-act="openapp"]');
+  if (opener) openApp(opener);
+  if (el.closest('[data-act="closeapp"]')) closeApp();
   if (el.closest('[data-act="gback"]')) {
     const p = byId.get(currentNodeId() || '')?.parent;
     go(p && p !== 'root' ? p : '');

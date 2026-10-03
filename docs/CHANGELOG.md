@@ -583,3 +583,9 @@
 - New card copy (owner): built from scratch, solo, with Claude Code; UA teams use it; 30–40% less time on creative analysis; a display prototype, get in touch for the full project. No team line (solo build). Old placeholder media tile removed.
 - Owner: no screen list in the card (too ugly); visitors click through the prototype itself.
 - Connections: only the Creator Ad Pipeline (owner: the HoYoverse link was not direct). Removed HoYoverse → dashboard.
+
+## 2026-10-03 — v64.4 dashboard: promo video in the gallery's place, app icon opens the prototype in a pop-up
+
+- Owner's idea: the promo video takes the centre (a poster of the Overview screen with "Promo video coming soon" until the video exists), level with the card's INDEX bar.
+- Beside it, an app icon with a hand-written note "click to try the app". One click (not a double-click: web visitors expect one) opens the clickable prototype in a large window over a dimmed, blurred page; Esc, the × or a click outside closes it.
+- The prototype keeps its own colours again (the dark backdrop sets it apart). Phone unchanged: the eight screens as a sideways row.

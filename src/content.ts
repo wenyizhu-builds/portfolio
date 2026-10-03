@@ -71,7 +71,7 @@ export interface SiteNode {
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
-  prototype?: { src: string }; // a clickable prototype shown in the map's place on desktop (v64); the phone shows `gallery` instead
+  prototype?: { src: string; poster: string }; // desktop: the promo video (poster until it exists) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -574,7 +574,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'demo/dashboard.html' },
+    prototype: { src: 'demo/dashboard.html', poster: 'media/ai-workbench/01.jpg' },
     gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
   },
@@ -741,7 +741,10 @@ export const ui = {
   unitPages: { en: 'pages', zh: '页' },
   unitPosters: { en: 'posters', zh: '张' },
   unitScreens: { en: 'screens', zh: '屏' },
-  protoHint: { en: 'click the sidebar to explore', zh: '点左侧导航，随便看看' },
+  protoHint: { en: 'click to try the app', zh: '点开试试' },
+  videoSoon: { en: 'Promo video coming soon', zh: '宣传片制作中' },
+  openApp: { en: 'Open the dashboard prototype', zh: '打开看板原型' },
+  closeApp: { en: 'Close', zh: '关闭' },
   backToMap: { en: 'Back to the map', zh: '回到地图' },
   mapWord: { en: 'Map', zh: '地图' },
   prev: { en: 'Previous', zh: '上一张' },
