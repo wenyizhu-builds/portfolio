@@ -594,11 +594,11 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'Creative Work', zh: '创意作品' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Outside of work, I enjoy photography and design.', zh: '工作之外，我喜欢摄影和设计。' },
+    summary: { en: 'Away from work, I love taking photos and designing things.', zh: '工作之余，我喜欢拍照和做设计。' },
   },
   {
     id: 'photography', type: 'creative', parent: 'creative', label: { en: 'Photography', zh: '摄影' }, period: '2021 – 2024',
-    summary: { en: 'Photos I take when I travel, one set per place.', zh: '旅行时拍的照片，一个地方一组。' },
+    summary: { en: 'Photos from my travels, grouped by place.', zh: '旅行中拍的照片，按地点分组。' },
     gallery: [
       set('huangshi', 'photography/huangshi', 'photos', { en: 'Huangshi, Hubei', zh: '湖北黄石' }, { en: 'Lunar New Year · 2022', zh: '春节 · 2022' }),
       set('japan', 'photography/japan', 'photos', { en: 'Japan', zh: '日本' }, { en: '2024' }),
@@ -611,7 +611,6 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'design', type: 'creative', parent: 'creative', label: { en: 'Design', zh: '设计' }, period: '2019 – 2020',
-    summary: { en: 'I was editor-in-chief of X Mirror, a student magazine at XJTLU.', zh: '我曾是西交利物浦大学学生杂志 X Mirror 的主编。' },
     gallery: [
       set('x-mirror-2', 'design/x-mirror-2', 'pages', { en: 'X Mirror, Issue 2', zh: 'X Mirror 第二期' }, { en: '2019' }),
       set('posters', 'design/posters', 'posters', { en: 'Film screening posters', zh: '电影放映海报' }),

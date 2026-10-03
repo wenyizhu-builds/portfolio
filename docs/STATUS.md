@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-03 · v63.13 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-03 · v63.14 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63.13）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63.14）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -46,7 +46,7 @@
 
 ## 下一步
 
-- Creative Work / Photography / Design 三段说明已定稿（v63.13，用户自己的话，中英都改了，去掉 [Draft]）：Creative Work = "Outside of work, I enjoy photography and design."；Photography = "Photos I take when I travel, one set per place."；Design = "I was editor-in-chief of X Mirror, a student magazine at XJTLU."。**用户反馈：之前的草稿"做作、不像真人"。她要的是短、平实、像随口说的话；不要抒情、不要过度细节。** 她 2024 年后很少拿相机，现在多用手机拍，所以不要写"相机随身带""一直在拍"。
+- Creative Work / Photography / Design 说明已定稿（v63.14）：Creative Work = "Away from work, I love taking photos and designing things."；Photography = "Photos from my travels, grouped by place."；**Design 不写说明**（用户：那句话没意义，先空着）。**用户反馈：之前的草稿"做作、不像真人"。她要短、平实、像随口说的话；不要抒情、不要过度细节。她口述的意思要润色成地道英文，不要逐字照搬。** 她 2024 年后很少拿相机，现在多用手机拍，不要写"相机随身带""一直在拍"。
 - **Genshin Impact / Zenless Zone Zero 的背景介绍**（读者可能不懂游戏）：建议放在 INDEX 简介里第一次提到 HoYoverse 的地方，一句话说明，例如 "HoYoverse, the studio behind Genshin Impact, one of the highest-grossing mobile games ever, and Zenless Zone Zero, which reached 50 million downloads in its launch weekend."（来源：PocketGamer.biz、Shacknews）。用户还没确认，和下面第 2 条 INDEX 简介一起改。
 - 图库：等用户发来要删的编号，照删。
 

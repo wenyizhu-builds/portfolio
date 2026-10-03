@@ -562,3 +562,7 @@
 ## 2026-10-03 — v63.13 Creative Work copy final, in the owner's words
 
 - Owner: the earlier drafts sounded pretentious and not like a real person. Replaced with short, plain lines she chose: Creative Work "Outside of work, I enjoy photography and design."; Photography "Photos I take when I travel, one set per place."; Design "I was editor-in-chief of X Mirror, a student magazine at XJTLU." Chinese updated to match; [Draft] removed.
+
+## 2026-10-03 — v63.14 Creative Work copy polished; Design left without a description
+
+- Owner wanted her ideas polished, not quoted word for word. Creative Work: "Away from work, I love taking photos and designing things." Photography: "Photos from my travels, grouped by place." Design: no description for now (owner). Chinese updated to match.
