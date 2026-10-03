@@ -596,3 +596,5 @@
 
 - Owner: the pop-up's × (a white circle) did not match the photo lightbox. The dashboard now opens in the same lightbox (lightbox.ts `openFrame`): same dark background, same ×, Esc and click-outside. L44.
 - Under the dashboard: "This is a display prototype with sample data. For details on the full project, feel free to get in touch."
+
+- v64.7: the framed dashboard never exceeds its own size (1240px) or 80% of the screen width (owner: too big on large screens); the note under it is one line.

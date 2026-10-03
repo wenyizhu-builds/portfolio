@@ -69,7 +69,8 @@
   --g-set-gap: 96px; /* between sets (series, issues) */
   --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
   --lb-pad: 40px; /* the lightbox's inner margin (dialog.lightbox padding) */
-  --lb-note-room: 72px; /* room under a framed page for its note */
+  --lb-note-room: 56px; /* room under a framed page for its one-line note */
+  --lb-frame-share: 80; /* a framed page takes at most this % of the screen width */
 
   /* Breakpoints: CSS @media cannot read variables, so the only copies of these
      numbers are the @media lines below; main.ts reads --mq-phone. `npm run check`
@@ -434,7 +435,7 @@ dialog.lightbox::backdrop { background: var(--ink); }
 /* the prototype in the lightbox (lightbox.ts openFrame): same dark overlay and × as the photos */
 dialog.lightbox.is-frame { cursor: default; }
 .lb-frame { display: block; flex: none; border: 0; border-radius: 6px; background: var(--panel); }
-.lb-note { margin: 0; max-width: 60ch; text-align: center; font-size: var(--fs-text); line-height: 1.45; color: var(--on-ink); opacity: 0.7; }
+.lb-note { margin: 0; text-align: center; white-space: nowrap; font-size: var(--fs-text); line-height: 1.45; color: var(--on-ink); opacity: 0.7; }
 
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }

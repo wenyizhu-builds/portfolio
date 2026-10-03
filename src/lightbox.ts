@@ -72,7 +72,9 @@ export function openFrame(src: string, label: string, note: string) {
   const frame = lb.querySelector<HTMLElement>('.lb-frame')!;
   const fit = () => {
     const ratio = cssPx('--proto-w') / cssPx('--proto-h'), pad = cssPx('--lb-pad');
-    const w = Math.min(window.innerWidth - 2 * pad, (window.innerHeight - 2 * pad - cssPx('--lb-note-room')) * ratio);
+    // never larger than the page's own size or --lb-frame-share % of the screen (owner: too big on large screens)
+    const w = Math.min(window.innerWidth - 2 * pad, (window.innerHeight - 2 * pad - cssPx('--lb-note-room')) * ratio,
+      window.innerWidth * cssPx('--lb-frame-share') / 100, cssPx('--proto-w'));
     Object.assign(frame.style, { width: `${Math.round(w)}px`, height: `${Math.round(w / ratio)}px` });
   };
   // Esc pressed inside the page arrives as a message (public/demo/dashboard.html)
