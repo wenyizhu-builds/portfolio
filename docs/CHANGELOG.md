@@ -530,3 +530,7 @@
 ## 2026-10-03 — v63.6 owner's own photo order
 
 - Owner re-ordered the series herself in the Gallery Photo Manager (drag and drop) and removed 4 more photos (2 Huangshi, 2 New York). Applied exactly as she arranged them. Photography now 125 photos.
+
+## 2026-10-03 — v63.7 back to the original photo book
+
+- Owner preferred the very first photo-book layout (v63.1) to the justified rows (v63.4) and the spaced rows (v63.5). Restored it as it was, keeping her photo order, the no-sideways-scroll fix (L43) and the phone's one sideways row per series.

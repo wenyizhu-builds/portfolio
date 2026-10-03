@@ -137,45 +137,30 @@ export function setCount(g: GallerySet): string {
 const setLine = (g: GallerySet) => [g.meta ? tx(g.meta) : '', setCount(g)].filter(Boolean).join(' · ');
 
 /**
- * Desktop gallery layout (v63.4, owner: the photo book was dynamic but too scattered and did not adapt
- * to the screen). Justified rows: every row fills the column, the pictures in a row share one height
- * (each grows in proportion to its aspect ratio), and the number per row follows a rhythm whose
- * maximum depends on the column's width (main.ts picks it from --g-5up-min / --g-4up-min / --g-3up-min).
- * The owner's photo order is kept. The phone uses one sideways row per set instead (v63.3).
+ * Desktop gallery layout: the photo book (v63.1, owner's pick from four previews; restored in v63.7 after
+ * she tried justified rows in v63.4–63.5 and preferred the original). Rows change size and rhythm like
+ * spreads in a photo book. Each row shape gives every picture's width (% of the column), its vertical
+ * alignment, and how far the row is indented. Shapes repeat in order; the owner's photo order is kept.
+ * A row that would overflow (a landscape picture in a narrow shape) shrinks to fit (L43).
+ * The phone uses one sideways row per set instead (v63.3).
  */
-export const ROW_RHYTHM: Record<number, number[]> = { 5: [3, 4, 5, 4], 4: [2, 3, 4, 3], 3: [2, 3, 3], 2: [2] };
-/**
- * Photo-book spacing on top of the rows (v63.5, owner: edge-to-edge rows felt too dense beside the card).
- * Each row takes this share (%) of the column and sits at its start or end in turn, so white space
- * moves through the page like spreads in a photo book. Pictures in a row still share one height.
- */
-export const ROW_SHAPE: { share: number; at: 'start' | 'end' }[] = [
-  { share: 100, at: 'start' },
-  { share: 82, at: 'end' },
-  { share: 92, at: 'start' },
-  { share: 76, at: 'end' },
+type RowShape = { w: number[]; align: ('start' | 'center' | 'end')[]; indent: number };
+export const BOOK_ROWS: RowShape[] = [
+  { w: [58, 30], align: ['start', 'end'], indent: 0 },
+  { w: [28, 28, 28], align: ['start', 'center', 'end'], indent: 0 },
+  { w: [44], align: ['start'], indent: 28 },
+  { w: [30, 52], align: ['end', 'start'], indent: 6 },
+  { w: [36, 24], align: ['start', 'end'], indent: 14 },
 ];
-
-/** Split a set into row sizes: follow the rhythm, but never leave a single picture alone on the last row. */
-function rowSizes(count: number, cols: number): number[] {
-  const rhythm = ROW_RHYTHM[cols] || ROW_RHYTHM[2];
-  const out: number[] = [];
-  for (let i = 0, r = 0; i < count; r++) {
-    let n = Math.min(rhythm[r % rhythm.length], count - i);
-    if (count - i - n === 1) n += 1; // take the last one along instead of leaving it alone
-    out.push(n);
-    i += n;
-  }
-  return out;
-}
+/** A landscape picture gets at least this share of the row, so it is not shown smaller than the portraits. */
+const WIDE_MIN = 58;
 
 /**
  * The grid of a gallery node, one block per set: a heading, then the pictures.
- * The desktop shows it beside the card (main.ts, `cols` = most pictures per row), the phone inside the
- * card (mobile.ts). Every picture is a button that opens the lightbox at that picture (main.ts listens
+ * The desktop shows it beside the card (main.ts), the phone inside the card (mobile.ts). Every picture is a button that opens the lightbox at that picture (main.ts listens
  * for data-gal); its small number is the picture's place in the set, which the owner uses to name it.
  */
-export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone', cols = 3): string {
+export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
   if (!n.gallery) return '';
   return n.gallery.map((g, si) => {
     const pic = (k: number, style = '') => {
@@ -186,13 +171,17 @@ export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone', cols = 3): stri
     if (mode === 'phone') {
       body = `<div class="g-strip" tabindex="0" aria-label="${esc(t(g.title))}">${g.items.map((_, k) => pic(k)).join('')}</div>`;
     } else {
-      let i = 0;
-      const rows = rowSizes(g.items.length, cols).map((size, r) => {
-        const shape = ROW_SHAPE[r % ROW_SHAPE.length];
-        const row = Array.from({ length: size }, (_, j) => { const p = g.items[i + j]; return pic(i + j, `flex-grow:${(p.w / p.h).toFixed(4)}`); }).join('');
-        i += size;
-        return `<div class="g-row g-row-${shape.at}" style="inline-size:${shape.share}%">${row}</div>`;
-      });
+      const rows: string[] = [];
+      for (let i = 0, r = 0; i < g.items.length; r++) {
+        const sh = BOOK_ROWS[r % BOOK_ROWS.length];
+        const n = Math.min(sh.w.length, g.items.length - i);
+        rows.push(`<div class="g-row" style="padding-left:${sh.indent}%">${Array.from({ length: n }, (_, j) => {
+          const p = g.items[i + j];
+          const w = p.w > p.h ? Math.max(sh.w[j], WIDE_MIN) : sh.w[j];
+          return pic(i + j, `width:${w}%;align-self:${sh.align[j]}`);
+        }).join('')}</div>`);
+        i += n;
+      }
       body = `<div class="g-book">${rows.join('')}</div>`;
     }
     return `<section class="g-set" id="g-${esc(g.id)}">

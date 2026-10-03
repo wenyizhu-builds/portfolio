@@ -162,7 +162,6 @@ function renderPanel(keep = false) {
   const showGallery = !!n?.gallery;
   if (showGallery) {
     const prevGalleryScroll = gallery.scrollTop;
-    galleryCols = galleryColsFor(gallery.clientWidth || cssPx('--map-min-w'));
     gallery.innerHTML = galleryHtml(n!);
     gallery.scrollTop = keep && galleryOf === n!.id ? prevGalleryScroll : 0;
     gallery.setAttribute('aria-label', t(n!.label));
@@ -174,21 +173,7 @@ function renderPanel(keep = false) {
   placeAnchor();
 }
 
-/* Desktop gallery: how many pictures a row may hold depends on the column's width (v63.4). */
-let galleryCols = 0;
-const galleryColsFor = (outer: number, w = outer - cssPx('--g-side-space')) => (w >= cssPx('--g-5up-min') ? 5 : w >= cssPx('--g-4up-min') ? 4 : w >= cssPx('--g-3up-min') ? 3 : 2);
-const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk', galleryCols)}`;
-/** After the column is sized: if its width now calls for a different row size, lay the rows out again, keeping the reader's place. */
-function refitGallery() {
-  if (!galleryOf) return;
-  const cols = galleryColsFor(gallery.clientWidth);
-  const n = byId.get(galleryOf);
-  if (cols === galleryCols || !n) return;
-  const ratio = gallery.scrollTop / Math.max(1, gallery.scrollHeight);
-  galleryCols = cols;
-  gallery.innerHTML = galleryHtml(n);
-  gallery.scrollTop = ratio * gallery.scrollHeight;
-}
+const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk')}`;
 
 function placeAnchor() {
   if (!map) return;
@@ -206,7 +191,6 @@ function placeAnchor() {
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
-  refitGallery();
 }
 
 /* ---------- lightbox (lightbox.ts) and gallery clicks: one listener for desktop and phone ---------- */
