@@ -556,11 +556,11 @@ export const nodes: SiteNode[] = [
     id: 'ai-workbench',
     type: 'ai',
     parent: 'ai',
-    headline: { num: '30–40%', label: { en: 'less time on creative analysis' } },
+    headline: { num: '40%', label: { en: 'less time on creative analysis & production' } },
     label: { en: 'Creative Intelligence Dashboard' },
     kicker: { en: 'AI tool · built with Claude Code' },
     summary: {
-      en: 'I built this dashboard from scratch, on my own, using Claude Code. It tags every ad with AI, links those tags to performance data to find the winning formula, then turns that formula into new scripts and campaign plans. UA teams use it in their work. What you see here is a display prototype with sample data from a fictional game. If you’d like to see the full project, get in touch.',
+      en: 'I built this dashboard from scratch using Claude Code. It tags every ad with AI, links those tags to performance data to find the winning formula, then turns that formula into new scripts and campaign plans.',
     },
     sections: [
       {
@@ -741,7 +741,8 @@ export const ui = {
   unitPages: { en: 'pages', zh: '页' },
   unitPosters: { en: 'posters', zh: '张' },
   unitScreens: { en: 'screens', zh: '屏' },
-  protoHint: { en: 'click to try the app', zh: '点开试试' },
+  appBarSub: { en: 'Clickable prototype · sample data', zh: '可点击原型 · 示例数据' },
+  tryApp: { en: 'Try the prototype', zh: '试用原型' },
   videoSoon: { en: 'Promo video coming soon', zh: '宣传片制作中' },
   openApp: { en: 'Open the dashboard prototype', zh: '打开看板原型' },
   protoNote: { en: 'This is a display prototype with sample data. For details on the full project, feel free to get in touch.', zh: '这是展示用原型，数据为示例。想了解完整项目，欢迎联系我。' },

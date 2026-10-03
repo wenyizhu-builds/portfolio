@@ -598,3 +598,9 @@
 - Under the dashboard: "This is a display prototype with sample data. For details on the full project, feel free to get in touch."
 
 - v64.7: the framed dashboard never exceeds its own size (1240px) or 80% of the screen width (owner: too big on large screens); the note under it is one line.
+
+## 2026-10-04 — v64.8 dashboard page: layout C; sidebar hover fix; owner's copy
+
+- Owner picked layout C from three previews: the video sits next to the card (48px, top level with INDEX, at most 960px wide), and an app bar under it (icon, name, "Clickable prototype · sample data", "Try the prototype") opens the prototype in the lightbox. The hand-written note and floating icon are gone.
+- Prototype: hovering a sidebar item no longer greys out the selected one.
+- Owner's editor edits: headline "40% less time on creative analysis & production"; shorter summary.

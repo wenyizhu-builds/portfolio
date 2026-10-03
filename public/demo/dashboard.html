@@ -48,7 +48,7 @@ body { background: var(--page-bg); color: var(--page-fg); font-family: var(--ui)
 .nav { all: unset; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; color: var(--fg); cursor: pointer; }
 .nav[disabled] { cursor: default; color: var(--faint); }
 .nav svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.6; opacity: .8; flex: none; }
-.nav:not([disabled]):hover { background: var(--line-soft); }
+.nav:not([disabled]):not(.on):hover { background: var(--line-soft); }
 .nav.on { background: var(--surface); box-shadow: 0 0 0 1px var(--line); color: var(--accent); font-weight: 500; }
 .nav:focus-visible { outline: 2px solid var(--accent); }
 .side .foot { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 8px 10px; font-size: 12px; color: var(--muted); }

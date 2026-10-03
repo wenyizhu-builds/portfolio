@@ -5,7 +5,7 @@
   --on-ink: #f6f6f3; /* text on dark fills */
   --cobalt: #2c42f6; /* Winnie Lab electric blue: the name ✳ and links */
   --accent: #d5fd52; /* Winnie Lab acid lime: the current point */
-  --note: #f06a35; /* red-orange: hand-written notes only (map notes, the app-icon note) */
+  --note: #f06a35; /* red-orange: hand-written notes on the map only */
 
   /* Derived colours — never hard-code these; change the base token above instead. */
   --ink-2: color-mix(in srgb, var(--ink) 82%, var(--panel)); /* secondary body text */
@@ -26,7 +26,8 @@
   --bottom-h: 56px; /* legend band */
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
   --proto-share: 92; /* the video + app icon take at most this % of the gallery column (owner: more room around it) */
-  --app-col: 120px; /* the app icon's column beside the video */
+  --proto-max: 960px; /* the video is never wider than this, even on large screens (owner) */
+  --proto-gap: 32px; /* extra space between the video and the card, on top of --map-gap (48px in all) */
   --side-max-h: 1080px; /* cap the complete desktop reading column */
   --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
@@ -417,21 +418,20 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-back { display: inline-flex; align-items: baseline; gap: 8px; border: 0; background: none; padding: 4px 0; margin: 0 0 var(--gutter); cursor: pointer; font-size: var(--fs-text); }
 .g-back:hover .lab { text-decoration: underline; text-underline-offset: 3px; }
 .g-set + .g-set { margin-top: var(--g-set-gap); }
-/* v64.4: the promo video (a poster for now) in the gallery's place, an app icon beside it, and the prototype in a pop-up. */
-.proto-box { display: grid; grid-template-columns: minmax(0, 1fr) var(--app-col); gap: var(--gutter); align-items: start; }
+/* v64.8 (layout C): the promo video (a poster for now) right next to the card, an app bar under it that opens the prototype in the lightbox. */
+.proto-box { margin-left: auto; margin-right: var(--proto-gap); display: grid; gap: var(--g-gap); }
 .proto-video { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-soft); background: var(--panel); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
 .proto-video img { display: block; width: 100%; height: auto; filter: saturate(0.85); opacity: 0.55; }
 .proto-soon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: var(--panel); box-shadow: 0 4px 16px color-mix(in srgb, var(--ink) 12%, transparent); font-size: var(--fs-text); color: var(--ink); white-space: nowrap; }
 .proto-soon svg { width: 34px; height: 34px; padding: 9px; border-radius: 50%; background: var(--ink); fill: var(--panel); }
-.proto-app { position: relative; display: grid; justify-items: center; }
-.app-icon { display: grid; justify-items: center; gap: 8px; border: 0; background: none; padding: 6px; border-radius: 14px; cursor: pointer; font: inherit; }
-.app-tile { width: 64px; height: 64px; border-radius: 16px; background: var(--ink); display: grid; place-items: center; box-shadow: 0 6px 16px color-mix(in srgb, var(--ink) 22%, transparent); transition: transform var(--dur-card) var(--ease); }
-.app-tile svg { width: 30px; height: 30px; stroke: var(--panel); stroke-width: 2.4; stroke-linecap: round; fill: none; }
-.app-icon:hover .app-tile, .app-icon:focus-visible .app-tile { transform: translateY(-2px) scale(1.04); }
-.app-name { font-size: var(--fs-label); line-height: 1.3; text-align: center; color: var(--ink); }
-.proto-note { position: relative; margin: 6px 0 0; padding-top: 34px; text-align: center; font-family: var(--hand); font-size: 22px; line-height: 1.05; color: var(--note); }
-.proto-note svg { position: absolute; left: 50%; top: 0; width: 30px; height: 30px; transform: translateX(-30%); overflow: visible; }
-.proto-note path { fill: none; stroke: var(--note); stroke-width: 1.2px; stroke-linecap: round; stroke-linejoin: round; }
+.app-bar { justify-self: start; display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 10px; border: 1px solid var(--line-soft); border-radius: 16px; background: var(--panel); box-shadow: 0 6px 18px color-mix(in srgb, var(--ink) 6%, transparent); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.app-bar:hover { border-color: var(--line); }
+.app-bar:hover .btn { background: var(--bg); }
+.app-tile { width: 44px; height: 44px; flex: none; border-radius: 11px; background: var(--ink); display: grid; place-items: center; }
+.app-tile svg { width: 22px; height: 22px; stroke: var(--panel); stroke-width: 2.4; stroke-linecap: round; fill: none; }
+.app-bar-t { display: grid; gap: 2px; font-size: var(--fs-text); line-height: 1.3; }
+.app-bar-sub { font-size: var(--fs-label); color: var(--muted); }
+.app-bar .btn { margin-left: 8px; }
 /* the prototype in the lightbox (lightbox.ts openFrame): same dark overlay and × as the photos */
 dialog.lightbox.is-frame { cursor: default; }
 .lb-frame { display: block; flex: none; border: 0; border-radius: 6px; background: var(--panel); }
