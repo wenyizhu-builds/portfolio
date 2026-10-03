@@ -144,6 +144,17 @@ const setLine = (g: GallerySet) => [g.meta ? tx(g.meta) : '', setCount(g)].filte
  * The owner's photo order is kept. The phone uses one sideways row per set instead (v63.3).
  */
 export const ROW_RHYTHM: Record<number, number[]> = { 5: [3, 4, 5, 4], 4: [2, 3, 4, 3], 3: [2, 3, 3], 2: [2] };
+/**
+ * Photo-book spacing on top of the rows (v63.5, owner: edge-to-edge rows felt too dense beside the card).
+ * Each row takes this share (%) of the column and sits at its start or end in turn, so white space
+ * moves through the page like spreads in a photo book. Pictures in a row still share one height.
+ */
+export const ROW_SHAPE: { share: number; at: 'start' | 'end' }[] = [
+  { share: 100, at: 'start' },
+  { share: 82, at: 'end' },
+  { share: 92, at: 'start' },
+  { share: 76, at: 'end' },
+];
 
 /** Split a set into row sizes: follow the rhythm, but never leave a single picture alone on the last row. */
 function rowSizes(count: number, cols: number): number[] {
@@ -176,10 +187,11 @@ export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone', cols = 3): stri
       body = `<div class="g-strip" tabindex="0" aria-label="${esc(t(g.title))}">${g.items.map((_, k) => pic(k)).join('')}</div>`;
     } else {
       let i = 0;
-      const rows = rowSizes(g.items.length, cols).map((size) => {
+      const rows = rowSizes(g.items.length, cols).map((size, r) => {
+        const shape = ROW_SHAPE[r % ROW_SHAPE.length];
         const row = Array.from({ length: size }, (_, j) => { const p = g.items[i + j]; return pic(i + j, `flex-grow:${(p.w / p.h).toFixed(4)}`); }).join('');
         i += size;
-        return `<div class="g-row">${row}</div>`;
+        return `<div class="g-row g-row-${shape.at}" style="inline-size:${shape.share}%">${row}</div>`;
       });
       body = `<div class="g-book">${rows.join('')}</div>`;
     }

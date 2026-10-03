@@ -521,3 +521,8 @@
 ## 2026-10-03 — v63.4 desktop galleries: justified rows that follow the screen width
 
 - Owner: the photo book felt more dynamic but too scattered, and the number of photos per row did not change with the screen. Rows now fill the column with no indents or loose gaps; photos in a row share one height. Photos per row follow a rhythm whose maximum depends on the gallery width (3·4·5·4 on wide screens, 2·3·4·3 on a laptop, 2·3·3 narrower) and re-flow when the window is resized. Phone unchanged (one sideways row per series).
+
+## 2026-10-03 — v63.5 galleries: strongest photos first, colour flow, breathing room
+
+- Owner: arrangement felt random and Huangshi opened on a weak photo. Re-ordered every photo series and the posters: the strongest pictures lead (Huangshi now opens on the two fire pictures), then the series moves in runs of related colour and subject. X Mirror stays in page order. Removed a duplicate in Chicago (same picture as Chicago 01).
+- Owner: edge-to-edge rows felt too dense beside the card. Rows now take 100 / 82 / 92 / 76 % of the column, alternating left and right, with wider gaps and space before the card; pictures in a row still share one height and the count per row still follows the screen width.

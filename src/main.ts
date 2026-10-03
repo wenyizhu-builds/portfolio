@@ -176,7 +176,7 @@ function renderPanel(keep = false) {
 
 /* Desktop gallery: how many pictures a row may hold depends on the column's width (v63.4). */
 let galleryCols = 0;
-const galleryColsFor = (w: number) => (w >= cssPx('--g-5up-min') ? 5 : w >= cssPx('--g-4up-min') ? 4 : w >= cssPx('--g-3up-min') ? 3 : 2);
+const galleryColsFor = (outer: number, w = outer - cssPx('--g-side-space')) => (w >= cssPx('--g-5up-min') ? 5 : w >= cssPx('--g-4up-min') ? 4 : w >= cssPx('--g-3up-min') ? 3 : 2);
 const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk', galleryCols)}`;
 /** After the column is sized: if its width now calls for a different row size, lay the rows out again, keeping the reader's place. */
 function refitGallery() {

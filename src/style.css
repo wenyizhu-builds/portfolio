@@ -60,7 +60,9 @@
   --spin: 24s; /* the ✳ rotation */
   /* Galleries (v63): Photography and Design. */
   --g-gap: 12px; /* under a set's heading */
-  --g-row-gap: 14px; /* between pictures and between rows (desktop justified rows) */
+  --g-row-gap: 22px; /* between pictures in a row (desktop) */
+  --g-row-space: 44px; /* between rows (desktop) */
+  --g-side-space: 48px; /* empty space between the gallery and the card */
   --g-5up-min: 1100px; /* gallery column at least this wide: rows of up to 5 pictures */
   --g-4up-min: 820px; /* …up to 4 */
   --g-3up-min: 540px; /* …at least this wide: up to 3; narrower: 2 */
@@ -408,7 +410,7 @@ dialog.lightbox::backdrop { background: var(--ink); }
 
 /* Galleries (v63). Desktop: the grid takes the map's place (main.ts sets left / top / width to the
    map's area); the map and legend step aside. Phone: the same grid sits inside the card. */
-.gallery { position: absolute; z-index: 3; bottom: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding: var(--side-nav-gap) 0 var(--bottom-h);
+.gallery { position: absolute; z-index: 3; bottom: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding: var(--side-nav-gap) var(--g-side-space) var(--bottom-h) 0;
   opacity: 0; visibility: hidden; transition: opacity var(--dur-card) var(--ease), visibility 0s linear var(--dur-card); scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .desk.has-gallery .gallery { opacity: 1; visibility: visible; transition: opacity var(--dur-card) var(--ease); }
 .stage, .legend { transition: opacity var(--dur-card) var(--ease), visibility 0s; }
@@ -419,7 +421,8 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }
 .g-book { overflow-x: hidden; } /* never scroll sideways (owner, v63.2) */
-.g-row { display: flex; align-items: flex-start; gap: var(--g-row-gap); margin-bottom: var(--g-row-gap); } /* justified rows: blocks.ts galleryGrid */
+.g-row { display: flex; align-items: flex-start; gap: var(--g-row-gap); margin-bottom: var(--g-row-space); } /* rows: blocks.ts galleryGrid, ROW_SHAPE */
+.g-row-end { margin-left: auto; }
 .g-item { display: block; flex: 1 1 0; min-width: 0; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
 .g-item img { display: block; width: 100%; height: auto; background: var(--line-soft); transition: opacity 300ms; }
 .g-item:hover img { opacity: 0.88; }
