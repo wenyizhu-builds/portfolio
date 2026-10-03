@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-03 · v63.11 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-03 · v63.12 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63.11）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63.12）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -24,7 +24,8 @@
 
 - 案例分两大类，直接挂在 ✳ 下（v62.31，已去掉 Growth Marketing 节点）：**Paid & UA Growth**（Creator Ad Pipeline ★ · TikTok UGC Channel Test ★ · Xbox Launch Paid Campaign · Gamified Landing Page）和 **Creator & Social**（Zenless Zone Zero: Social Launch in Japan ★ · X Creator Campaign · Cross-Platform Community Giveaway · TikTok & Snapchat Branded Filter Campaign · English Social Channel Growth）。首页两组折叠，只露出 ★ 和批注；点开一组显示全部案例。v62.32：Branded Filter 也是 ★（首页带 600M+ 批注），首页间距重排。v62.33–34：手写批注缩小（字号 20、线 1.2px），五条批注文字到箭头的间距统一。截图要加载真实手写字体（L37）。v62.35：首页 Information 也折叠，Creative Work 挪到它旁边，AI Projects 往左下。
 - 9 个案例已按 JD 语言库润色（v62.29）：× / vs / benchmark 统一；英式拼写；Results 标签小写接在数字后。
-- 两组的一句话说明（`growth-paid` / `growth-social` 的 summary）是我起草的，用户还没看过。
+- 两组的一句话说明已定稿（v63.12，用户选的 A）：Paid & UA Growth = "Data-backed creative testing for user acquisition: finding what drives installs, scaling what works and improving ROI."；Creator & Social = 原句，"players" 改为 "audiences"。用户偏好：概括句不用游戏行业词（用 users / installs / audiences，不用 players），她不只找游戏行业的工作；不写 CPI。
+- **JD 语言库**在 Mac：`JS_workspace/career/job-targets/research-handoffs/2026/JDR-20260911-001__market-scan__independent-overseas-career-research/jd-language-bank-2026-09-28.md`。写文案时先查它。
 - 用户偏好：画面要干净；她说节点数量不是问题，问题在间距。调地图时先看间距和批注位置。
 - 筛选只剩地区（v62.42），在左上角，网址 `?region=` 可分享；手机版为一个下拉框。
 - 全站规则（都有 `check`）：Results 每条一行 ≤45 字符（L32）；不写游戏版本号（L33）；不用 "cost per install" / "repeated"（L30）。
@@ -45,7 +46,13 @@
 
 ## 下一步
 
-- **先做**：等用户看完图库发来要删的编号，照删；Photography / Design 的 summary 还标着 [Draft]，待她确认。
+- **先做：Creative Work / Photography / Design 三段说明（还标着 [Draft]）**。用户要求：口语、自然、有感情，像在说自己热爱的事；**不提营销、不扯到工作**（她说那是牵强）；主题是用画面讲故事、留住记忆、日常看不到的美。最后一轮草稿（她还没选，下次拿出来给她挑）：
+  - Creative Work A：*Things I make just because I love them. I've always been drawn to telling stories through pictures, and to the feeling a good image leaves behind.* / B：*Photos and design I make for myself. I love telling a story with pictures, and the way a good one stays with you.*
+  - Photography A：*I take photos to hold on to moments I'd otherwise walk past: a street in evening light, a small town at Lunar New Year, a city I'm only passing through. Each series is one place, the way I saw it.* / B：*I photograph the things I don't see every day. Mostly I'm trying to keep a memory, and to find something beautiful in it.*
+  - Design：*I love the moment a page comes together. At university I was editor-in-chief of X Mirror, a student magazine at XJTLU, and laid out every issue myself in InDesign. I also designed posters for film screenings.*
+  - 定稿后写中文版，去掉 [Draft]。
+- **Genshin Impact / Zenless Zone Zero 的背景介绍**（读者可能不懂游戏）：建议放在 INDEX 简介里第一次提到 HoYoverse 的地方，一句话说明，例如 "HoYoverse, the studio behind Genshin Impact, one of the highest-grossing mobile games ever, and Zenless Zone Zero, which reached 50 million downloads in its launch weekend."（来源：PocketGamer.biz、Shacknews）。用户还没确认，和下面第 2 条 INDEX 简介一起改。
+- 图库：等用户发来要删的编号，照删。
 
 - 标题保持简短（用户偏好）：游戏名只放在卡片的身份行，不进标题（v62.46 已同步她改的三个标题）。
 

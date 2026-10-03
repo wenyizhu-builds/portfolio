@@ -551,3 +551,10 @@
 ## 2026-10-03 — v63.11 Creative Work is Design and Photography only
 
 - Owner: Creative Work holds just Design and Photography. Removed the "in preparation" placeholders Video & Editing and AI Creative Videos. layout-check 2 over 33 views.
+
+## 2026-10-03 — v63.12 group summaries final; session wrap
+
+- Paid & UA Growth summary: "Data-backed creative testing for user acquisition: finding what drives installs, scaling what works and improving ROI." (owner chose A; wording from the JD language bank; no CPI, no gaming words).
+- Creator & Social summary: "players" → "audiences" (owner chose A).
+- Creative Work / Photography / Design copy: drafts in STATUS, not applied yet (owner: personal, natural, no marketing tie-in). Genshin Impact background line proposed for the INDEX intro, pending.
+

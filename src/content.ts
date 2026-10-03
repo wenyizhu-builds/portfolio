@@ -132,7 +132,7 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'Paid & UA Growth', zh: '付费与 UA 增长' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Creative strategy and channel tests for user acquisition, measured on installs, ROI and cost efficiency.' },
+    summary: { en: 'Data-backed creative testing for user acquisition: finding what drives installs, scaling what works and improving ROI.' },
   },
   {
     id: 'ua-creative-strategy',
@@ -320,7 +320,7 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'Creator & Social', zh: '创作者与社媒' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Creator campaigns and always-on social channels across X, TikTok, YouTube, Instagram and Snapchat, for English-speaking and Japanese players.' },
+    summary: { en: 'Creator campaigns and always-on social channels across X, TikTok, YouTube, Instagram and Snapchat, for English-speaking and Japanese audiences.' },
   },
   {
     id: 'zzz-jp-accounts',
