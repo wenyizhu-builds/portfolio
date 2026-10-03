@@ -19,6 +19,7 @@
   - 原图在 Mac「~/Desktop/Design & photography」（只读用，不改）。生成网页版的脚本思路：PIL 读原图 → 长边 1600 / 900、去 EXIF、质量 82。
   - 黄石：不要写 "home"（那是乡下，不是她住的地方），只写地点。X Mirror：她是主编，每期自己用 InDesign 排版。
   - v63.1：图库改成相册式排法（用户从 A 相册 / B 桌上照片 / C 大图 + 联系表 / D 胶片条 四个预览里选了 A；预览 Artifact `https://claude.ai/artifact/JpLNZ1CdtDsWgBSuQME9CF`）。每张下有编号，她也可以说「Japan 05」来点名。
+  - **用户自己管理图库**：Artifact「Gallery Photo Manager」`https://claude.ai/artifact/MLqtmYFxUfWiXm1aZt1XCR`（db + assets）。她点图标记删除（db `removed/<set__file>`，含 tag），按「Add photos」上传新图（浏览器里缩到长边 2400、去 EXIF，存 assets，db `added/<id>` = {set, asset, name}；新系列的 set 为 `new:<名字>`），可留言（`notes/main`）。她说「photo changes are ready」时：用 ArtifactData 读三处 → 删 `gallery-images.ts` 对应行和文件 → 用 Artifact read `path=<asset id>` 下载新图，做 1600 / 900 两份加进对应组（新系列在 content.ts 加 `set(...)`）→ 构建、发布、同步 → 清空 db 里已处理的行，并重新发布管理页（缩略图换成最新）。
   - 未决："p six two"（她要删的一张，可能是 p6-12 或 p6-32），两张目前都在。
 
 - 案例分两大类，直接挂在 ✳ 下（v62.31，已去掉 Growth Marketing 节点）：**Paid & UA Growth**（Creator Ad Pipeline ★ · TikTok UGC Channel Test ★ · Xbox Launch Paid Campaign · Gamified Landing Page）和 **Creator & Social**（Zenless Zone Zero: Social Launch in Japan ★ · X Creator Campaign · Cross-Platform Community Giveaway · TikTok & Snapchat Branded Filter Campaign · English Social Channel Growth）。首页两组折叠，只露出 ★ 和批注；点开一组显示全部案例。v62.32：Branded Filter 也是 ★（首页带 600M+ 批注），首页间距重排。v62.33–34：手写批注缩小（字号 20、线 1.2px），五条批注文字到箭头的间距统一。截图要加载真实手写字体（L37）。v62.35：首页 Information 也折叠，Creative Work 挪到它旁边，AI Projects 往左下。
