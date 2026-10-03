@@ -547,3 +547,7 @@
 ## 2026-10-03 — v63.10 sharper gallery photos without a slower page
 
 - Owner: the biggest photos looked blurry. Each photo now has three sizes (900px preview, 1600px, and a 2400px copy made from the original where the original is big enough). The desktop grid lets the browser pick by how big the photo is shown and how sharp the screen is (srcset), so small photos still load only the preview and photos still load as you scroll. The lightbox uses the largest copy.
+
+## 2026-10-03 — v63.11 Creative Work is Design and Photography only
+
+- Owner: Creative Work holds just Design and Photography. Removed the "in preparation" placeholders Video & Editing and AI Creative Videos. layout-check 2 over 33 views.

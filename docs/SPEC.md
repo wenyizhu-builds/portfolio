@@ -1,7 +1,9 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-03 · 对应版本 v63.10
+> 最后更新：2026-10-03 · 对应版本 v63.11
+
+- **Creative Work 只有两项（v63.11，用户）**：Design 和 Photography。去掉占位的 Video & Editing、AI Creative Videos。
 
 - **图库清晰度（v63.10，用户：大图发虚，但页面不能太慢）**：每张照片三种尺寸：900px 预览（`-t.jpg`）、1600px（`.jpg`）、2400px（`-l.jpg`，从原图生成；原图不够大的没有，如 X Mirror 页面）。电脑版网格用 `srcset` + `sizes`，浏览器按照片显示的大小和屏幕清晰度自己挑，所以小图仍只下载预览，大图在高清屏上才用大尺寸；照片仍是滚到才加载。灯箱用最大的那份。手机版横排只用预览。
 
@@ -19,7 +21,6 @@
   - 手机版（v63.3，用户要求页面不要太长）：不用相册排法。每组一行、同样高度（`--g-strip-h`），左右滑动看完一组；电脑版仍只上下滚动。
   - 点任意一张：灯箱，← → 按钮 / 方向键 / 左右滑动切换，跨组连续，下方写「组名 · 3 / 36」。灯箱仍是全站唯一的浮层。
   - 图片：从用户文件夹「Design & photography」生成网页版，长边 1600px（灯箱）和 900px（网格），去掉 EXIF（含位置信息）。清单在 `src/gallery-images.ts`，每行带用户看过的编号（如 p4-12），删一张 = 删一行 + 两个文件。
-  - Video & Editing、AI Creative Videos 仍是占位。
 
 - **筛选只留地区（v62.42，用户确认）**：去掉 Platform（Global social / Chinese social / Paid ads）。原因：它和两个大类重复（Paid ads ≈ Paid & UA Growth，Global social ≈ Creator & Social），且「Chinese social」匹配不到任何案例。地区筛选照旧，网址只剩 `?region=`。X Creator Campaign 和 English Social Channel Growth 的市场从 EN 改为 NA（用户：EN 主要是北美）；`regionOfMarket` 去掉 EN。
 

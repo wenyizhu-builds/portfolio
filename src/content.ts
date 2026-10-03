@@ -617,8 +617,6 @@ export const nodes: SiteNode[] = [
       set('posters', 'design/posters', 'posters', { en: 'Film screening posters', zh: '电影放映海报' }),
     ],
   },
-  { id: 'video-editing', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'Video & Editing', zh: '视频剪辑' }, kicker: prep },
-  { id: 'ai-videos', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'AI Creative Videos', zh: 'AI 创意视频' }, kicker: prep, related: ['ai'] },
 
   /* ---------------- Information ---------------- */
   {
