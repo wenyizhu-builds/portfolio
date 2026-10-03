@@ -190,17 +190,17 @@ function restingTop(el: HTMLElement, moving?: HTMLElement): number {
   const ro = new ResizeObserver(() => placeProto(side));
   [side, ...side.children].forEach((c) => ro.observe(c)); // the card's height eases (L16), which moves the centred column
 }
-/** The app bar and video sit next to the card, starting level with its INDEX bar, and fit the window height (v64.9). */
+/** The app bar and video sit next to the card; the video's top is level with its INDEX bar; both fit the window height (v64.10). */
 function placeProto(side: HTMLElement) {
   const box = gallery.querySelector<HTMLElement>('.proto-box');
   if (!box) return;
   const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--proto-w') / cssPx('--proto-h');
   const avail = window.innerHeight - sideTop - cssPx('--bottom-h') - cssPx('--gutter');
-  const bar = box.querySelector<HTMLElement>('.app-bar')?.offsetHeight ?? 0;
-  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, cssPx('--proto-max'), (avail - bar - cssPx('--g-gap')) * ratio));
+  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, cssPx('--proto-max'), avail * ratio));
   box.style.width = `${w}px`;
   box.style.marginTop = '0px';
-  box.style.marginTop = `${Math.max(0, sideTop - restingTop(box))}px`;
+  // the video's top edge (not the app bar above it) lines up with the INDEX bar (owner, v64.10)
+  box.style.marginTop = `${Math.max(0, sideTop - restingTop(box.querySelector<HTMLElement>('.proto-video') ?? box))}px`;
 }
 
 /* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */

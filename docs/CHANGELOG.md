@@ -606,3 +606,5 @@
 - Owner's editor edits: headline "40% less time on creative analysis & production"; shorter summary.
 
 - v64.9: the app bar moves above the video (owner: the bottom of the screen felt heavy).
+
+- v64.10: the video's top edge (not the app bar) lines up with the INDEX bar; the app bar sits above that line (owner).
