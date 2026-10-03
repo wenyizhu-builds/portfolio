@@ -566,3 +566,8 @@
 ## 2026-10-03 — v63.14 Creative Work copy polished; Design left without a description
 
 - Owner wanted her ideas polished, not quoted word for word. Creative Work: "Away from work, I love taking photos and designing things." Photography: "Photos from my travels, grouped by place." Design: no description for now (owner). Chinese updated to match.
+
+## 2026-10-03 — v63.15 English only; INDEX key numbers fixed
+
+- Owner: no Chinese version for now (no time to proofread it). Removed the language switch on desktop and phone; the site always shows English. zh strings stay in content.ts, unused.
+- INDEX key numbers: "1% → 15%" → "0% → 15%" (owner: there was no such pipeline before her), label "brand-team share of UA spend" to match the case; "views from a JP creator matrix I scaled" → "organic views across 9 channels in Japan".

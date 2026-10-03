@@ -3,13 +3,9 @@ import { byId, childrenOf, filterSets, regionOfMarket, type Lang, type RegionKey
 type Listener = () => void;
 const listeners = new Set<Listener>();
 
+// English only for now (owner, 2026-10-03): no Chinese version. The zh strings stay in
+// content.ts, unused; to bring Chinese back, restore the language switch and read the saved choice here.
 function readLang(): Lang {
-  try {
-    const v = localStorage.getItem('lang');
-    if (v === 'zh' || v === 'en') return v;
-  } catch {
-    /* storage unavailable */
-  }
   return 'en';
 }
 

@@ -8,7 +8,7 @@ import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel }
 import { icon } from './shapes';
 import { L, filterBar, galleryGrid, wireFilters } from './blocks';
 import { openGallery, openLightbox } from './lightbox';
-import { esc, filtering, go, onChange, parseRoute, reducedMotion, setLang, state, t, type Route } from './state';
+import { esc, filtering, go, onChange, parseRoute, reducedMotion, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
 
@@ -23,7 +23,6 @@ app.innerHTML = `
     <header class="top">
       <div id="filters"></div>
       <nav class="top-nav">
-        <button class="top-link lang-switch" id="lang-switch"></button>
         <a href="#/resume" class="top-link"><span data-i="resume"></span> <i aria-hidden="true">↗</i></a>
         <a href="#/contact" class="top-link"><span data-i="contact"></span> <i aria-hidden="true">↗</i></a>
       </nav>
@@ -95,9 +94,6 @@ let route: Route = parseRoute();
 function paintChrome() {
   document.querySelector('[data-i="resume"]')!.textContent = t(ui.resume);
   document.querySelector('[data-i="contact"]')!.textContent = t(ui.contact);
-  const ls = document.getElementById('lang-switch')!;
-  ls.textContent = t(ui.langName);
-  ls.setAttribute('aria-label', t(ui.langAria));
   const fb = document.getElementById('filters')!;
   fb.innerHTML = filterBar('filters');
   wireFilters(fb, () => { if (filtering() && route.kind !== 'home') go(''); }); // the unfolded map lives on home
@@ -109,7 +105,6 @@ function paintChrome() {
     `<span><b class="lg-num">${esc(t(ui.legendNumSample))}</b>${esc(t(ui.legendNum))}</span>` + lg('case', 'legendCase') + lg('ai', 'legendAi') + lg('creative', 'legendCreative') + lg('role', 'legendPath') + lg('school', 'education');
 }
 
-document.getElementById('lang-switch')!.onclick = () => setLang(state.lang === 'en' ? 'zh' : 'en');
 
 /* ---------- desktop panel + media ---------- */
 

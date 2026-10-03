@@ -116,8 +116,8 @@ export const site = {
   // Key numbers in the INDEX (the bio card that opens on arrival). Figures come from the case files. [Draft]
   note: [
     { num: '3 yrs', label: { en: 'global marketing at HoYoverse', zh: '米哈游全球营销' } },
-    { num: '80M+', label: { en: 'views from a JP creator matrix I scaled', zh: '我扩展的日服创作者矩阵播放' } },
-    { num: '1% → 15%', label: { en: 'Brand share of UA spend', zh: '品牌素材 UA 花费占比' } },
+    { num: '80M+', label: { en: 'organic views across 9 channels in Japan', zh: '日本 9 个频道的自然播放' } },
+    { num: '0% → 15%', label: { en: 'brand-team share of UA spend', zh: '品牌团队 UA 花费占比' } },
     { num: 'EN · JP · CN', label: { en: 'markets I work across', zh: '覆盖市场' } },
   ] as { num: string; label: T }[],
 };
@@ -738,8 +738,6 @@ export const ui = {
   viewWork: { en: 'View work', zh: '查看作品' },
   home: { en: 'home', zh: '首页' },
   mapLabel: { en: 'Portfolio map', zh: '作品地图' },
-  langName: { en: '中文', zh: 'EN' }, // label of the switch = the language you switch TO
-  langAria: { en: '切换到中文', zh: 'Switch to English' },
   email: { en: 'Email', zh: '邮箱' },
   linkedin: { en: 'LinkedIn', zh: 'LinkedIn' },
   index: { en: 'Index', zh: '索引' },

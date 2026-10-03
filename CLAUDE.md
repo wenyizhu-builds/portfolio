@@ -60,7 +60,7 @@
 3. 改了地图布局：运行 `node scripts/layout-check.cjs`，需要 Playwright。重叠超过 2 处不能交付。（L24）
 4. 用浏览器看过：
    - 电脑宽屏和窄屏、手机版
-   - 中英文两种语言
+   - 仅英文（2026-10-03 起不做中文版；中文开关已去掉，zh 文案暂留在 content.ts 不用）
    - 至少点开一个案例、一段经历、一个"准备中"的作品
 5. 上线前运行 `npm run check -- --launch`，必须通过。
 6. 版本管理（L27）：GitHub `wenyizhu-builds/portfolio` 是唯一的版本源。

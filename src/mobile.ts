@@ -1,5 +1,5 @@
 import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
-import { esc, filtering, matches, reducedMotion, setLang, state, t } from './state';
+import { esc, filtering, matches, reducedMotion, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
 import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
@@ -106,7 +106,6 @@ export function renderMobile(root: HTMLElement) {
   root.innerHTML = `
     <header class="m-top">
       <a href="#/" class="m-brand"><span>${esc(site.name.toLowerCase())}</span></a>
-      <button class="m-lang" data-lang="${state.lang === 'en' ? 'zh' : 'en'}" aria-label="${L('langAria')}">${L('langName')}</button>
     </header>
     ${filterSelects()}
     <div class="m-hero" id="m-home">
@@ -125,9 +124,6 @@ export function renderMobile(root: HTMLElement) {
     ${site.launched ? '' : `<footer class="m-foot"><span>${L('prototype')}</span></footer>`}
     <a href="#m-menu" class="m-fab" data-menu>${L('menu')}</a>
   `;
-  root.querySelectorAll<HTMLButtonElement>('[data-lang]').forEach((b) => {
-    b.onclick = () => setLang(b.dataset.lang as 'en' | 'zh');
-  });
   root.querySelector<HTMLAnchorElement>('[data-menu]')!.onclick = (e) => {
     e.preventDefault();
     document.getElementById('m-menu')?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
