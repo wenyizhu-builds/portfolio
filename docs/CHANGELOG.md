@@ -558,3 +558,7 @@
 - Creator & Social summary: "players" → "audiences" (owner chose A).
 - Creative Work / Photography / Design copy: drafts in STATUS, not applied yet (owner: personal, natural, no marketing tie-in). Genshin Impact background line proposed for the INDEX intro, pending.
 
+
+## 2026-10-03 — v63.13 Creative Work copy final, in the owner's words
+
+- Owner: the earlier drafts sounded pretentious and not like a real person. Replaced with short, plain lines she chose: Creative Work "Outside of work, I enjoy photography and design."; Photography "Photos I take when I travel, one set per place."; Design "I was editor-in-chief of X Mirror, a student magazine at XJTLU." Chinese updated to match; [Draft] removed.
