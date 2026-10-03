@@ -32,7 +32,7 @@
   --page-x: 40px; /* header and intro-strip side margin */
   --filter-gap: 56px; /* between the Platform and Region groups in the header */
   --filter-item-gap: 18px; /* between options */
-  --map-inset: 24px; /* map margin from the window edge */
+  --map-inset: 40px; /* map, gallery and legend margin from the window edge = --page-x, so everything lines up with the header (v63.9, owner) */
   /* Card type: ONE typeface, TWO sizes, TWO colours (ink, grey). */
   --fs-text: 14px;
   --fs-label: 11.5px;
@@ -220,6 +220,8 @@ button { font: inherit; color: inherit; }
 .p-ico { flex: 0 0 var(--gutter); width: var(--gutter); display: inline-flex; align-items: center; font-size: var(--fs-text); }
 .p-head { display: flex; align-items: center; padding: 16px 22px 0; }
 .p-path { flex: 1; min-width: 0; }
+.p-up { color: inherit; text-decoration: none; }
+.p-up:hover { text-decoration: underline; text-underline-offset: 3px; }
 .p-actions { display: flex; gap: 4px; margin-left: 12px; }
 .p-btn { border: 0; background: none; cursor: pointer; font-size: var(--fs-text); line-height: 1; padding: 4px 6px; border-radius: 4px; }
 .p-btn:hover { background: var(--bg); }

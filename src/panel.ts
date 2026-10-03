@@ -83,9 +83,9 @@ export function indexBar(): string {
 }
 
 /* No back button (v44): the map and the INDEX bar are the way around; × returns to the INDEX. */
-function head(typeText: string, iconHtml: string): string {
+function head(typeText: string, iconHtml: string, pathHtml = ''): string {
   return `<div class="p-head">
-    <span class="p-ico">${iconHtml}</span><span class="lab p-path">${esc(typeText)}</span>
+    <span class="p-ico">${iconHtml}</span><span class="lab p-path">${pathHtml || esc(typeText)}</span>
     <div class="p-actions">
       <button class="p-btn" data-act="close" aria-label="${L('close')}">×</button>
     </div>
@@ -99,18 +99,22 @@ function head(typeText: string, iconHtml: string): string {
  */
 export function nodePanel(n: SiteNode): string {
   // the header says where the card sits; Information is only a folder, so it is left out
-  const path = ancestors(n.id).filter((a) => a !== 'root' && a !== 'info').reverse().map((a) => t(byId.get(a)!.label)).join(' / ');
+  const up = ancestors(n.id).filter((a) => a !== 'root' && a !== 'info').reverse();
+  const path = up.map((a) => t(byId.get(a)!.label)).join(' / ');
+  // each place in the path is a link back to it (v63.9, owner: from a gallery, "Creative Work" goes back)
+  const pathHtml = up.map((a) => `<a class="p-up" href="#/${a}">${esc(t(byId.get(a)!.label))}</a>`).join(' / ');
   // A top-level card (Growth Marketing, Experience…) has no "where": its own name goes in the
   // header next to its shape, and is not repeated below. Otherwise the header is the path and
   // the name is the first line of the card.
   const top = !path;
+  const upHtml = top ? '' : pathHtml;
   const heading = `<h2 class="p-title${top ? ' sr-only' : ''}" tabindex="-1">${tx(n.label)}</h2>`;
   const label = top ? t(n.label) : path;
   const lead = top ? heading + intro(n, '') : intro(n, heading);
   const inside = insideList(n);
   if (inside) {
     // a group: what it is, then its items — no extra section headings
-    return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
+    return head(label, iconFor(n, 11, true), upHtml) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
   }
 
   const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, d.defaultOpen ?? true));
@@ -126,7 +130,7 @@ export function nodePanel(n: SiteNode): string {
   byId.forEach((o) => o.related?.includes(n.id) && conn.add(o.id)); // reverse relations
   if (conn.size) secs.push(details(MARK.links, L('connections'), `<div class="nlist">${[...conn].map((c) => nodeLink(c, familyOf(c))).join('')}</div>`));
 
-  return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}${gallerySetList(n)}${secs.join('')}</div>`;
+  return head(label, iconFor(n, 11, true), upHtml) + `<div class="p-body">${lead}${gallerySetList(n)}${secs.join('')}</div>`;
 }
 
 export function resumePanel(): string {

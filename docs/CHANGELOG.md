@@ -538,3 +538,8 @@
 ## 2026-10-03 — v63.8 map about 14% smaller
 
 - Owner: make the whole map 10–15% smaller. The camera's steady scale went from 1.1 to 0.95 (minimum 0.7 → 0.6); points, labels and notes shrink together, positions unchanged. layout-check 2.
+
+## 2026-10-03 — v63.9 left edges line up; card path goes back
+
+- Map, gallery (with "← Map") and legend now start at 40px, in line with "Region" in the header (owner).
+- The path at the top of a card (e.g. "Creative Work", "Paid & UA Growth") is now a link back to that level, so leaving a gallery is easier (owner).
