@@ -171,7 +171,31 @@ function renderPanel(keep = false) {
 const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${n.prototype ? protoHtml(n) : galleryGrid(n, 'desk')}`;
 /* v64: a prototype node shows its clickable prototype (a page under public/) in the gallery's place. */
 // a hand-written note with an arrow down to the prototype's sidebar tells visitors they can click around
-const protoHtml = (n: SiteNode) => `<p class="proto-note"><span>${L('protoHint')}</span><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M52 4 C 38 6, 22 14, 12 36 M12 36 L 9 26 M12 36 L 21 31"/></svg></p><iframe class="proto-frame" src="${esc(n.prototype!.src)}" title="${esc(t(n.label))}" loading="lazy"></iframe>`;
+const protoHtml = (n: SiteNode) => `<div class="proto-box"><p class="proto-note"><span>${L('protoHint')}</span><svg viewBox="0 0 60 44" aria-hidden="true"><path d="M52 4 C 38 6, 22 14, 12 36 M12 36 L 9 26 M12 36 L 21 31"/></svg></p><iframe class="proto-frame" src="${esc(n.prototype!.src)}" title="${esc(t(n.label))}" scrolling="no" loading="lazy"></iframe></div>`;
+/** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
+function restingTop(el: HTMLElement, moving?: HTMLElement): number {
+  const shift = moving ? new DOMMatrixReadOnly(getComputedStyle(moving).transform === 'none' ? undefined : getComputedStyle(moving).transform).f : 0;
+  return el.getBoundingClientRect().top - shift;
+}
+/** The prototype starts level with the card column and is sized to fit the window with room around it (owner, v64.3). */
+// the card recentres when a section opens or closes; keep the prototype level with it
+{
+  const side = document.querySelector<HTMLElement>('.side')!;
+  const ro = new ResizeObserver(() => placeProto(side));
+  [side, ...side.children].forEach((c) => ro.observe(c)); // the card's height eases (L16), which moves the centred column
+}
+function placeProto(side: HTMLElement) {
+  const box = gallery.querySelector<HTMLElement>('.proto-box');
+  if (!box) return;
+  // the card column is centred, so its first bar (INDEX) is where the card actually starts
+  const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--proto-w') / cssPx('--proto-h');
+  const avail = window.innerHeight - sideTop - cssPx('--bottom-h') - cssPx('--gutter');
+  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, avail * ratio));
+  box.style.width = `${w}px`;
+  box.querySelector<HTMLElement>('.proto-frame')!.style.height = `${Math.round(w / ratio)}px`;
+  box.style.marginTop = '0px';
+  box.style.marginTop = `${Math.max(cssPx('--proto-note-room'), sideTop - restingTop(box))}px`;
+}
 
 function placeAnchor() {
   if (!map) return;
@@ -189,6 +213,7 @@ function placeAnchor() {
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
+  placeProto(side);
 }
 
 /* ---------- lightbox (lightbox.ts) and gallery clicks: one listener for desktop and phone ---------- */

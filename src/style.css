@@ -24,6 +24,9 @@
   /* Layout — main.ts reads these, so the map's free area always matches the CSS. */
   --top-h: 72px; /* header band */
   --bottom-h: 56px; /* legend band */
+  --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
+  --proto-share: 92; /* the prototype takes at most this % of the gallery column (owner: more room around it) */
+  --proto-note-room: 48px; /* space above the prototype for its hand-written note */
   --side-max-h: 1080px; /* cap the complete desktop reading column */
   --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
@@ -412,10 +415,11 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-back:hover .lab { text-decoration: underline; text-underline-offset: 3px; }
 .g-set + .g-set { margin-top: var(--g-set-gap); }
 /* v64: a clickable prototype in the gallery's place (Creative Intelligence Dashboard). The frame keeps the prototype's own 1240 × 870 window ratio. */
-.proto-note { position: relative; margin: 0 0 var(--g-gap); padding-left: 56px; font-family: var(--hand); font-size: 24px; line-height: 1; color: var(--note); }
+.proto-box { position: relative; }
+.proto-note { position: absolute; left: 0; bottom: 100%; margin: 0 0 var(--g-gap); padding-left: 56px; white-space: nowrap; font-family: var(--hand); font-size: 24px; line-height: 1; color: var(--note); }
 .proto-note svg { position: absolute; left: 6px; top: 2px; width: 46px; height: 34px; overflow: visible; }
 .proto-note path { fill: none; stroke: var(--note); stroke-width: 1.2px; stroke-linecap: round; stroke-linejoin: round; }
-.proto-frame { display: block; width: 100%; aspect-ratio: 1240 / 870; border: 0; border-radius: 12px; background: var(--line-soft); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 6%, transparent), 0 12px 40px color-mix(in srgb, var(--ink) 10%, transparent); }
+.proto-frame { display: block; width: 100%; border: 1px solid var(--line-soft); border-radius: 12px; background: var(--panel); box-shadow: 0 1px 2px color-mix(in srgb, var(--ink) 5%, transparent), 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
 
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }
