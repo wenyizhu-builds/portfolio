@@ -19,10 +19,6 @@
   - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。英文用地道 UA 术语（用户强调）。
   - 下一步：宣传片（Voice B = Kokoro af_heart；用户要加背景音乐；Chatterbox 在线 demo 被用户否决）。视频做好后放在原型上方。
 
-- **Creative Intelligence Dashboard（v64）**：点开 `ai-workbench`，电脑版地图折叠，左侧是可点击原型（`public/prototype/dashboard.html`，iframe，比例 1240×870），上方一条手写批注箭头指向原型侧栏（"click the sidebar to explore"）。用户要求：**卡片里不放屏幕列表**（她说太丑），只靠原型自身侧栏切换；原型内按钮不可用（展示用）。手机版 = 8 张截图横滑（`public/media/ai-workbench/`，gallery set 'screens'）。原型源文件 + 风格样张在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 `public/prototype/dashboard.html` 和 8 张截图（截图要用本地字体，Google Fonts 在云端被墙）。
-  - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。全部英文用地道 UA 术语（用户强调）。
-  - 下一步：宣传片（Voice B = Kokoro af_heart，`vo-heart.wav` 时间轴在云端 `/home/claude/promo/voice/timing-heart.json`，云端会话结束会丢，需重跑 `vo.py heart`）；用户要加背景音乐；Chatterbox 在线 demo 被用户否决。视频做好后放在原型上方。
-
 - **只做英文版**（v64，用户：没时间校对中文）。中文开关已从电脑版和手机版去掉，`readLang()` 固定返回 'en'；zh 文案留在 content.ts 不用，以后不必再写中文。
 
 - **Creative Work 图库（v63.7：电脑版为最初的相册排法，手机版每组一行左右滑）**：Photography 7 组 125 张（黄石 35 · 日本 17 · 欧洲 20 · 武汉 12 · 芝加哥 19 · 纽约 14 · 亚利桑那 8），Design = X Mirror 第二期 36 页 + 7 张电影放映海报。用户已用管理页删减和上传过一轮（v63.3），并亲手拖动排好了顺序（v63.6，以她的顺序为准，不要再自动重排）。用户说先这样放，之后告诉我删哪些：她会用联系表编号（如 p4-12、d1-18）点名，在 `src/gallery-images.ts` 删对应行和 `public/media/<组>/` 下的两个文件（`NN.jpg`、`NN-t.jpg`）。联系表和挑选表在 Mac 的 `portfolio-prototypes/_review/`（`index.tsv` = 编号 → 原文件路径），定稿后删掉这个文件夹。
