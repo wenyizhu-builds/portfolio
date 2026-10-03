@@ -589,3 +589,5 @@
 - Owner's idea: the promo video takes the centre (a poster of the Overview screen with "Promo video coming soon" until the video exists), level with the card's INDEX bar.
 - Beside it, an app icon with a hand-written note "click to try the app". One click (not a double-click: web visitors expect one) opens the clickable prototype in a large window over a dimmed, blurred page; Esc, the × or a click outside closes it.
 - The prototype keeps its own colours again (the dark backdrop sets it apart). Phone unchanged: the eight screens as a sideways row.
+
+- v64.5: the × sits above the pop-up's top-right corner instead of over the dashboard (owner).
