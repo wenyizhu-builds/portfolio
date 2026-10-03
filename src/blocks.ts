@@ -4,7 +4,7 @@ import { publishedMarkup } from './published-copy';
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
-import { byId, childrenOf, filterAll, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode, type T } from './content';
+import { byId, childrenOf, filterAll, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type GallerySet, type SiteNode, type T } from './content';
 import { copyFieldKey } from './copy-binding';
 import { filters, setFilter, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
 
@@ -120,12 +120,50 @@ export function detailLists(n: SiteNode): DetailList[] {
   });
   if (n.results && (n.results.length || import.meta.env.DEV))
     head.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
-  if (isWork(n) && n.team) out.push({
+  if (isWork(n) && n.team && !n.gallery) out.push({ // a gallery has no team line
     title: state.lang === 'zh' ? '项目团队' : 'The Team',
     body: `<div class="challenge-paragraph"><p>${tx(n.team)}</p></div>`,
     defaultOpen: false,
   });
   return [...head, ...out];
+}
+
+/* ---------- galleries (v63): photo series and design sets ---------- */
+/** "36 photos" / "36 张". */
+const unitLabel = { photos: ui.unitPhotos, pages: ui.unitPages, posters: ui.unitPosters };
+export function setCount(g: GallerySet): string {
+  return `${g.items.length} ${esc(t(unitLabel[g.unit]))}`;
+}
+const setLine = (g: GallerySet) => [g.meta ? tx(g.meta) : '', setCount(g)].filter(Boolean).join(' · ');
+
+/**
+ * The grid of a gallery node, one block per set: a heading, then a masonry of thumbnails.
+ * The desktop shows it beside the card (main.ts), the phone inside the card (mobile.ts).
+ * Every picture is a button that opens the lightbox at that picture (main.ts listens for data-gal).
+ */
+export function galleryGrid(n: SiteNode, cols: number): string {
+  if (!n.gallery) return '';
+  return n.gallery.map((g, si) => {
+    // Masonry that keeps the owner's order reading left to right: each picture goes into the
+    // column that is currently shortest (heights measured as h / w, since all columns are equally wide).
+    const columns: string[][] = Array.from({ length: Math.max(1, cols) }, () => []);
+    const height = columns.map(() => 0);
+    g.items.forEach((p, i) => {
+      const c = height.indexOf(Math.min(...height));
+      height[c] += p.h / p.w;
+      columns[c].push(`<button class="g-item" type="button" data-gal="${esc(n.id)}" data-set="${si}" data-i="${i}" aria-label="${esc(t(g.title))} ${i + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/></button>`);
+    });
+    return `<section class="g-set" id="g-${esc(g.id)}">
+    <h3 class="g-head"><span class="g-title">${tx(g.title)}</span><span class="lab g-meta">${setLine(g)}</span></h3>
+    <div class="g-grid">${columns.map((c) => `<div class="g-col">${c.join('')}</div>`).join('')}</div>
+  </section>`;
+  }).join('');
+}
+
+/** The card's list of sets (desktop): each one scrolls the grid beside the card to that set. */
+export function gallerySetList(n: SiteNode): string {
+  if (!n.gallery) return '';
+  return `<div class="p-list"><div class="nlist">${n.gallery.map((g) => `<button class="nlink g-jump" type="button" data-gjump="${esc(g.id)}"><span class="nlink-t">${tx(g.title)}</span><span class="lab">${setLine(g)}</span></button>`).join('')}</div></div>`;
 }
 
 /* ---------- résumé ---------- */

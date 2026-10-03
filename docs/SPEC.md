@@ -1,7 +1,17 @@
 # SPEC — 作品集网站的设计定稿
 
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
-> 最后更新：2026-10-02 · 对应版本 v62.42
+> 最后更新：2026-10-03 · 对应版本 v63
+
+- **Creative Work 图库（v63，用户要求：照片很多，要能放很多）**：Photography 和 Design 不再是占位，各是一个带 `gallery` 的作品（地图结构不变，不新增点）。
+  - Photography 按地点分 6 组，顺序：Huangshi, Hubei（Lunar New Year 2022；不写 "home"，用户说明那是乡下，不是住的地方）→ Japan 2024 → Wuhan 2021 → Chicago 2021–2023 → New York 2022 → Arizona 2023。
+  - Design：X Mirror 三期（学生杂志，用户是主编，每期自己用 InDesign 排版）+ 电影放映海报。校园活动海报和同一张海报的多个版本不放（用户：弱的都不要）。
+  - 电脑版：打开 Photography / Design 时，图库占据地图的位置（地图和图例淡出），按组显示标题、地点 · 年份 · 张数，下面是三列瀑布流；左上「← Map」回到 Creative Work。右侧卡片照常：简介 + 各组列表，点一组，图库滚到那一组。
+  - 瀑布流按用户排的顺序从左到右读：每张放进当前最短的一列（`galleryGrid`），不用 CSS columns（那样会一列读到底，顺序被打散）。
+  - 手机版：同一个图库放在卡片里，两列。
+  - 点任意一张：灯箱，← → 按钮 / 方向键 / 左右滑动切换，跨组连续，下方写「组名 · 3 / 36」。灯箱仍是全站唯一的浮层。
+  - 图片：从用户文件夹「Design & photography」生成网页版，长边 1600px（灯箱）和 900px（网格），去掉 EXIF（含位置信息）。清单在 `src/gallery-images.ts`，每行带用户看过的编号（如 p4-12），删一张 = 删一行 + 两个文件。
+  - Video & Editing、AI Creative Videos 仍是占位。
 
 - **筛选只留地区（v62.42，用户确认）**：去掉 Platform（Global social / Chinese social / Paid ads）。原因：它和两个大类重复（Paid ads ≈ Paid & UA Growth，Global social ≈ Creator & Social），且「Chinese social」匹配不到任何案例。地区筛选照旧，网址只剩 `?region=`。X Creator Campaign 和 English Social Channel Growth 的市场从 EN 改为 NA（用户：EN 主要是北美）；`regionOfMarket` 去掉 EN。
 
@@ -25,7 +35,7 @@
 - 案例卡片顺序：How it worked（重点案例的系统图，卡片内可点击放大）→ Results（默认展开）→ The Challenge / What I did / The Team（默认收起）。
 - **地图手写批注（v55）**：红橙色（`--note`）、手写字体 Nanum Pen Script（`--hand`）、1.2px 干净箭头（v62.33 起；字号 20）。只批注值得看的地方，不重复标题。首页：三个重点案例 + AI 各一句（位置在 `map.ts` 的 `NOTES` 里手工摆放，只在首页显示）。Creator & Social：只在 Branded Filter 旁写「600M+ views」（不加框）（只在该组打开时显示，位置自动放在外侧）。打开某个案例时不显示它自己的批注。手机版不显示（手机没有地图）。文字在 `content.ts` 的 `note`。批注永远不被卡片、页头或窗口边缘挡住：超出地图空白区时自动挪回，挪得远时箭头重新指向该点。
 - **筛选（v60）**：电脑版页头左上角一行纯文字（取代原来的名字），与右侧导航同高同字号：PLATFORM（Global social / Chinese social / Paid ads）+ REGION（North America / Europe / Japan / China）。不选 = 全部；再点一次取消。选中项蓝色下划线。匹配规则只有一处：`state.ts` 的 `matches()`——作品同时满足所选平台和地区；组里有任一匹配即匹配。选择筛选项时回到首页地图，所有匹配的作品自动展开（连同通往它们的分支），不匹配的变灰；首页手写批注在筛选时让位。INDEX 列表、手机卡片同样把不匹配的变灰。“准备中”的占位作品不匹配任何筛选。平台来自 `content.ts` 的 `platforms` 字段，地区由 `markets` 经 `regionOfMarket` 换算。选择写在网址里（`?platform=cn&region=jp`），可以把筛好的链接发给招聘方。手机版：页头下方两个下拉菜单（平台 / 地区，默认“全部”），选完自动滚到第一个匹配的案例（没有则到履历）。
-- 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；手机版每张卡片只放一张图：有系统图的案例只显示系统图，不显示浮动图；大量图片（摄影、设计等 20–30 张）将做成图库模式（待做）。不展示内部账号、素材截图或内部数据。
+- 图片规则：重点案例的系统图放在卡片「How it worked」里；其他案例 1–4 张图用地图空白处的浮动图；手机版每张卡片只放一张图：有系统图的案例只显示系统图，不显示浮动图；大量图片（摄影、设计）用图库模式（v63，见上）。不展示内部账号、素材截图或内部数据。
 
 - v61：卡片滚动条固定占位（scrollbar-gutter: stable），高度测量计入边框，避免高度过渡中出现/消失滚动条引发二次换行；保留原高度缓动。
 
@@ -120,11 +130,11 @@
 - **中心**：Wenyi Zhu ✳。
 - **Paid & UA Growth**（4 个案例，含 2 个重点案例）和 **Creator & Social**（5 个，含 1 个重点案例）：两个主打大类，直接挂在 ✳ 下（v62.31，取代 Growth Marketing）。
 - **AI Projects**：AI Marketing Workbench + 2 个占位。
-- **Creative Work**：首页默认折叠，4 个占位。
-  - Photography
-  - Design
-  - Video & Editing
-  - AI Creative Videos
+- **Creative Work**：首页默认折叠，4 个点。
+  - Photography（图库，v63）
+  - Design（图库，v63）
+  - Video & Editing（占位）
+  - AI Creative Videos（占位）
 - **Information**：Experience（折叠，之字形排列）和 Education。
 - **没有 Contact 节点**：联系方式放在顶栏的 "Let's talk ↗"。
 - **HoYoverse** 用虚线连到 AI Workbench（v62.31）；每个案例卡片上写 "HoYoverse · 日期 →"。

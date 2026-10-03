@@ -1,7 +1,7 @@
 import { ancestors, byId, childrenOf, featuredOrder, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
 import { esc, isDone, matches, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
-import { L, contactRows, detailLists, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
+import { L, contactRows, detailLists, gallerySetList, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
 /* Section marks sit in the gutter, left of the text column (as in the reference). */
@@ -126,7 +126,7 @@ export function nodePanel(n: SiteNode): string {
   byId.forEach((o) => o.related?.includes(n.id) && conn.add(o.id)); // reverse relations
   if (conn.size) secs.push(details(MARK.links, L('connections'), `<div class="nlist">${[...conn].map((c) => nodeLink(c, familyOf(c))).join('')}</div>`));
 
-  return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}${secs.join('')}</div>`;
+  return head(label, iconFor(n, 11, true)) + `<div class="p-body">${lead}${gallerySetList(n)}${secs.join('')}</div>`;
 }
 
 export function resumePanel(): string {

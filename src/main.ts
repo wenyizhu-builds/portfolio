@@ -6,8 +6,9 @@ import { createMap, type MapApi } from './map';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
-import { filterBar, wireFilters } from './blocks';
-import { esc, filtering, go, onChange, parseRoute, setLang, state, t, type Route } from './state';
+import { L, filterBar, galleryGrid, wireFilters } from './blocks';
+import { openGallery, openLightbox } from './lightbox';
+import { esc, filtering, go, onChange, parseRoute, reducedMotion, setLang, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
 
@@ -28,6 +29,7 @@ app.innerHTML = `
       </nav>
     </header>
     <main class="stage" id="stage"></main>
+    <section class="gallery" id="gallery"></section>
     <div class="side">
       <nav class="ixnav" id="ixnav"></nav>
       <aside class="media" id="media"></aside>
@@ -45,6 +47,9 @@ const panel = document.getElementById('panel')!;
 const media = document.getElementById('media')!;
 const ixnav = document.getElementById('ixnav')!;
 const inner = document.getElementById('panel-inner')!;
+/* v63: a gallery node (Photography, Design) shows its pictures in the map's place, left of the card. */
+const gallery = document.getElementById('gallery')!;
+let galleryOf = '';
 /* The card's height follows its content with a CSS transition (see .panel). A
    ResizeObserver catches every change: a new card, an opened section, a language switch. */
 new ResizeObserver(() => {
@@ -152,6 +157,18 @@ function renderPanel(keep = false) {
   media.classList.toggle('open', items.length > 0 && !!html);
   document.querySelector('.desk')!.classList.toggle('has-media', items.length > 0 && !!html);
   media.querySelectorAll<HTMLButtonElement>('.tile[data-src]').forEach((b) => (b.onclick = () => openLightbox(b.dataset.src!)));
+
+  // the gallery takes the map's place; the same node in another language keeps its scroll
+  const showGallery = !!n?.gallery;
+  if (showGallery) {
+    const prevGalleryScroll = gallery.scrollTop;
+    gallery.innerHTML = `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n!, cssPx('--g-cols'))}`;
+    gallery.scrollTop = keep && galleryOf === n!.id ? prevGalleryScroll : 0;
+    gallery.setAttribute('aria-label', t(n!.label));
+  }
+  galleryOf = showGallery ? n!.id : '';
+  document.querySelector('.desk')!.classList.toggle('has-gallery', showGallery);
+  gallery.inert = !showGallery;
   fitSide();
   placeAnchor();
 }
@@ -163,32 +180,33 @@ function placeAnchor() {
   const H = stage.clientHeight;
   // The map uses everything left of the panel column. Read where CSS put the column
   // (--side-at / --side-w) instead of repeating those numbers here.
-  const side = document.querySelector<HTMLElement>('.side')!.getBoundingClientRect();
+  // offsetLeft, not getBoundingClientRect: the card column slides in on entry (sideIn), and a
+  // measurement taken mid-slide left the gallery ~150px short of the card (v63).
+  const side = document.querySelector<HTMLElement>('.side')!;
   const inset = cssPx('--map-inset'), gap = cssPx('--map-gap');
   const top = cssPx('--top-h');
-  const w = side.left - stage.getBoundingClientRect().left - gap - inset;
+  const w = side.offsetLeft - stage.offsetLeft - gap - inset;
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
+  // the gallery covers exactly the map's area and scrolls to the bottom of the window
+  Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
 }
 
-/* ---------- lightbox (the only overlay) ---------- */
-function openLightbox(src: string, alt = '') {
-  if (document.querySelector('.lightbox')) return;
-  const previous = document.activeElement as HTMLElement | null;
-  const lb = document.createElement('dialog');
-  lb.className = 'lightbox';
-  lb.setAttribute('aria-label', alt || 'Project visual');
-  lb.innerHTML = `<img src="${esc(src)}" alt="${esc(alt)}"/><button class="p-btn" aria-label="${esc(t(ui.close))}">×</button>`;
-  const close = () => { lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); };
-  lb.querySelector('button')!.onclick = close;
-  lb.addEventListener('cancel', e => { e.preventDefault(); close(); });
-  lb.onclick = e => { if (e.target === lb) close(); };
-  document.body.append(lb);
-  lb.showModal();
-}
-
+/* ---------- lightbox (lightbox.ts) and gallery clicks: one listener for desktop and phone ---------- */
 document.addEventListener('click', e => {
-  const tile = (e.target as Element).closest<HTMLButtonElement>('[data-visual-src]');
+  const el = e.target as Element;
+  const tile = el.closest<HTMLButtonElement>('[data-visual-src]');
   if (tile) openLightbox(tile.dataset.visualSrc!, tile.querySelector('img')?.alt);
+  const pic = el.closest<HTMLButtonElement>('[data-gal]');
+  if (pic) openGallery(pic.dataset.gal!, Number(pic.dataset.set), Number(pic.dataset.i));
+  const jump = el.closest<HTMLButtonElement>('[data-gjump]');
+  if (jump) {
+    const target = gallery.querySelector<HTMLElement>(`#g-${CSS.escape(jump.dataset.gjump!)}`);
+    if (target) gallery.scrollTo({ top: target.offsetTop, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  }
+  if (el.closest('[data-act="gback"]')) {
+    const p = byId.get(currentNodeId() || '')?.parent;
+    go(p && p !== 'root' ? p : '');
+  }
 });
 
 /* ---------- routing ---------- */

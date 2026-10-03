@@ -58,6 +58,12 @@
   --media-h: 150px; /* height of the image strip above a card */
   --scrollbar-linger: 900ms; /* the card's scrollbar stays this long after scrolling stops */
   --spin: 24s; /* the ✳ rotation */
+  /* Galleries (v63): Photography and Design. */
+  --g-cols: 3; /* desktop grid columns, in the map's place */
+  --g-cols-phone: 2; /* phone grid columns, inside the card */
+  --g-gap: 12px; /* between pictures */
+  --g-set-gap: 56px; /* between sets (series, issues) */
+  --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
 
   /* Breakpoints: CSS @media cannot read variables, so the only copies of these
      numbers are the @media lines below; main.ts reads --mq-phone. `npm run check`
@@ -396,6 +402,40 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .p-visual { display: block; width: 100%; padding: 0; border: 1px solid var(--line-soft); border-radius: 6px; background: var(--panel); overflow: hidden; cursor: zoom-in; }
 .p-visual img { display: block; width: 100%; height: auto; }
 .p-visual:hover { border-color: var(--line); }
+
+/* Galleries (v63). Desktop: the grid takes the map's place (main.ts sets left / top / width to the
+   map's area); the map and legend step aside. Phone: the same grid sits inside the card. */
+.gallery { position: absolute; z-index: 3; bottom: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--side-nav-gap) 0 var(--bottom-h);
+  opacity: 0; visibility: hidden; transition: opacity var(--dur-card) var(--ease), visibility 0s linear var(--dur-card); scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.desk.has-gallery .gallery { opacity: 1; visibility: visible; transition: opacity var(--dur-card) var(--ease); }
+.stage, .legend { transition: opacity var(--dur-card) var(--ease), visibility 0s; }
+.desk.has-gallery .stage, .desk.has-gallery .legend, .desk.has-gallery .floating-visual { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity var(--dur-card) var(--ease), visibility 0s linear var(--dur-card); }
+.g-back { display: inline-flex; align-items: baseline; gap: 8px; border: 0; background: none; padding: 4px 0; margin: 0 0 var(--gutter); cursor: pointer; font-size: var(--fs-text); }
+.g-back:hover .lab { text-decoration: underline; text-underline-offset: 3px; }
+.g-set + .g-set { margin-top: var(--g-set-gap); }
+.g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
+.g-meta { color: var(--muted); }
+.g-grid { display: flex; align-items: flex-start; gap: var(--g-gap); } /* columns are built in blocks.ts (galleryGrid) */
+.g-col { flex: 1 1 0; min-width: 0; }
+.g-item { display: block; width: 100%; padding: 0; border: 0; margin: 0 0 var(--g-gap); background: var(--line-soft); cursor: zoom-in; }
+.g-item img { display: block; width: 100%; height: auto; transition: opacity 300ms; }
+.g-item:hover img { opacity: 0.88; }
+.m-card .g-grid { gap: var(--side-gap); }
+.m-card .g-item { margin-bottom: var(--side-gap); }
+.m-card .g-set { margin-top: var(--gutter); }
+.m-card .g-head { margin-bottom: var(--side-gap); }
+.g-jump { border: 0; background: none; text-align: left; font: inherit; cursor: pointer; }
+.g-jump:hover .nlink-t { text-decoration: underline; text-underline-offset: 3px; }
+/* lightbox sequence: caption under the picture, ← → at the sides */
+.lb-fig { margin: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--side-gap); }
+dialog.lightbox .lb-fig img { min-height: 0; flex: 0 1 auto; }
+dialog.lightbox.is-sequence .lb-fig img { max-height: calc(100% - 2 * var(--gutter)); } /* room for the caption */
+.lb-cap { color: var(--on-ink); opacity: 0.7; }
+.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); border: 0; background: none; color: var(--on-ink); font-size: var(--fs-figure); padding: var(--gutter); cursor: pointer; opacity: 0.7; }
+.lb-nav:hover { opacity: 1; }
+.lb-nav:focus-visible { outline: 1px solid var(--on-ink); outline-offset: -8px; }
+.lb-prev { left: 0; }
+.lb-next { right: 0; }
 
 /* Hand-written notes on the map (v55): red-orange pen, one weight, strokes stay 1.5px at any zoom. */
 .map-notes { pointer-events: none; }

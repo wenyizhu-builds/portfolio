@@ -11,6 +11,8 @@
  * - Nothing here comes from internal datasets or full campaign reports.
  */
 
+import { galleryImages } from './gallery-images.ts';
+
 export type Lang = 'en' | 'zh';
 export type T = { en: string; zh?: string };
 
@@ -40,6 +42,11 @@ export interface Media {
   caption?: T;
 }
 
+/** One picture in a gallery: the grid shows `thumb`, the lightbox `src`. */
+export interface Photo { src: string; thumb: string; w: number; h: number; tag: string }
+/** A set inside a gallery (a photo series, a magazine issue). `unit` names what the count counts. */
+export interface GallerySet { id: string; title: T; meta?: T; unit: 'photos' | 'pages' | 'posters'; items: Photo[] }
+
 export interface SiteNode {
   id: string;
   type: NodeType;
@@ -63,10 +70,17 @@ export interface SiteNode {
   headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
+  gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
 const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
+
+/** A gallery set from the image list in gallery-images.ts (`key` = its folder under public/media). */
+function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?: T): GallerySet {
+  const rows = galleryImages[key] || [];
+  return { id, title, meta, unit, items: rows.map(([f, w, h, tag]) => ({ src: `media/${key}/${f}.jpg`, thumb: `media/${key}/${f}-t.jpg`, w, h, tag })) };
+}
 
 /* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */
 export type RegionKey = 'na' | 'eu' | 'jp' | 'cn';
@@ -580,10 +594,30 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'Creative Work', zh: '创意作品' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Things I make with my own hands and tools. [Placeholder copy]' },
+    summary: { en: 'Photography and design I make myself. [Draft]', zh: '我自己拍的照片和做的设计。' },
   },
-  { id: 'photography', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'Photography', zh: '摄影' }, kicker: prep },
-  { id: 'design', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'Design', zh: '设计' }, kicker: prep },
+  {
+    id: 'photography', type: 'creative', parent: 'creative', label: { en: 'Photography', zh: '摄影' }, period: '2021 – 2024',
+    summary: { en: 'Street and documentary photography, in series by place. [Draft]', zh: '街头与纪实摄影，按地点分组。' },
+    gallery: [
+      set('huangshi', 'photography/huangshi', 'photos', { en: 'Huangshi, Hubei', zh: '湖北黄石' }, { en: 'Lunar New Year · 2022', zh: '春节 · 2022' }),
+      set('japan', 'photography/japan', 'photos', { en: 'Japan', zh: '日本' }, { en: '2024' }),
+      set('wuhan', 'photography/wuhan', 'photos', { en: 'Wuhan', zh: '武汉' }, { en: '2021' }),
+      set('chicago', 'photography/chicago', 'photos', { en: 'Chicago', zh: '芝加哥' }, { en: '2021 – 2023' }),
+      set('new-york', 'photography/new-york', 'photos', { en: 'New York', zh: '纽约' }, { en: '2022' }),
+      set('arizona', 'photography/arizona', 'photos', { en: 'Arizona', zh: '亚利桑那' }, { en: '2023' }),
+    ],
+  },
+  {
+    id: 'design', type: 'creative', parent: 'creative', label: { en: 'Design', zh: '设计' }, period: '2019 – 2020',
+    summary: { en: 'X Mirror is a student magazine at XJTLU. As editor-in-chief, I laid out every issue myself in InDesign. I also designed posters for film screenings. [Draft]', zh: 'X Mirror 是西交利物浦大学的学生杂志。我担任主编，每一期都由我在 InDesign 里亲手排版。我也为电影放映活动设计海报。' },
+    gallery: [
+      set('x-mirror-1', 'design/x-mirror-1', 'pages', { en: 'X Mirror, Issue 1', zh: 'X Mirror 第一期' }, { en: '2019' }),
+      set('x-mirror-2', 'design/x-mirror-2', 'pages', { en: 'X Mirror, Issue 2', zh: 'X Mirror 第二期' }, { en: '2019' }),
+      set('x-mirror-3', 'design/x-mirror-3', 'pages', { en: 'X Mirror, Issue 3', zh: 'X Mirror 第三期' }, { en: '2020' }),
+      set('posters', 'design/posters', 'posters', { en: 'Film screening posters', zh: '电影放映海报' }),
+    ],
+  },
   { id: 'video-editing', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'Video & Editing', zh: '视频剪辑' }, kicker: prep },
   { id: 'ai-videos', type: 'creative', parent: 'creative', status: 'prep', label: { en: 'AI Creative Videos', zh: 'AI 创意视频' }, kicker: prep, related: ['ai'] },
 
@@ -715,6 +749,13 @@ export const ui = {
   index: { en: 'Index', zh: '索引' },
   moreAbout: { en: 'More about me', zh: '更多关于我' },
   backToIndex: { en: 'Back to the index', zh: '回到索引' },
+  unitPhotos: { en: 'photos', zh: '张' },
+  unitPages: { en: 'pages', zh: '页' },
+  unitPosters: { en: 'posters', zh: '张' },
+  backToMap: { en: 'Back to the map', zh: '回到地图' },
+  mapWord: { en: 'Map', zh: '地图' },
+  prev: { en: 'Previous', zh: '上一张' },
+  next: { en: 'Next', zh: '下一张' },
   arrangeHint: { en: 'Arrange mode: drag points and notes, then copy the layout and send it to Claude', zh: '排版模式：拖动点和批注，然后复制布局发给 Claude' },
   arrangeCopy: { en: 'Copy layout', zh: '复制布局' },
   arrangeCopied: { en: 'Copied', zh: '已复制' },

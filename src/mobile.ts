@@ -1,7 +1,10 @@
 import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
 import { esc, filtering, matches, reducedMotion, setLang, state, t } from './state';
 import { AST, astSvg, icon, iconFor } from './shapes';
-import { L, contactRows, detailLists, filterSelects, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
+import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
+
+/** Phone gallery columns (--g-cols-phone in style.css). */
+const phoneCols = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--g-cols-phone')) || 2;
 
 /*
  * Phone layout: one scrolling page. The map becomes a menu (owner decision
@@ -26,6 +29,7 @@ function card(n: SiteNode): string {
   return `<article class="m-card ${n.status ? 'is-prep' : ''}${matches(n.id) ? '' : ' is-off'}" id="m-${n.id}">
     <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}
+    ${galleryGrid(n, phoneCols())}
     ${diagram}
     ${media}
     ${more.length ? `<details class="m-more"><summary><span class="o">${L('more')}</span><span class="c">${L('less')}</span></summary>${more.join('')}</details>` : ''}

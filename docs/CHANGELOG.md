@@ -496,3 +496,10 @@
 ## 2026-10-02 — v62.48 home map always returns to the owner's layout
 
 - Owner: after opening Creator & Social and going back, Social Launch in Japan sat over the Paid & UA lines. The home pull was scaled by alpha and faded before points arrived. It now keeps full strength while the layout runs, so every point gets home. Checked round trips via Paid & UA, Creator & Social, a case, AI, Information and HoYoverse: positions identical before and after. layout-check 0–2 (only ai-workbench when reached straight from an unrelated view).
+
+## 2026-10-02 — v63 Creative Work galleries: Photography and Design
+
+- Reviewed the owner's "Design & photography" folder (~400 photos, 3 X Mirror issues, ~28 posters). First cut: 99 photos in 6 series by place (Huangshi, Japan, Wuhan, Chicago, New York, Arizona) and 31 design images (X Mirror Issues 1–3, film screening posters). Owner removed the Antelope photo of herself and 10 alternates; she will cut more later.
+- Photography and Design are real pieces now (no longer "in preparation"). Desktop: the gallery takes the map's place, three-column masonry per set, "← Map" back to Creative Work; the card lists the sets and scrolls the grid to one. Phone: two columns inside the card. Lightbox steps through every picture with ← →, arrow keys or a swipe.
+- Web copies: 1600px long side + 900px grid thumbnails, EXIF (incl. GPS) stripped. List in `src/gallery-images.ts`, each row carries the owner's contact-sheet number.
+- 2026-10-03 finish: grid keeps the owner's order left to right (each picture into the shortest column) instead of filling one column top to bottom; gallery now reaches the card (it was measured while the card was sliding in, L42); `content.ts` imports with a `.ts` suffix so `check` runs (L41). Checked desktop wide and narrow, phone, English and Chinese, lightbox with arrow keys. layout-check 2.

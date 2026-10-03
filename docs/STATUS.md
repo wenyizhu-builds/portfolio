@@ -1,11 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-02 · v62.48 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-03 · v63 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v62.48）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v63）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -14,6 +14,11 @@
 - 用户不会用终端；需要她做的事只能是"双击某个文件"这种程度。
 
 ## 当前状态
+
+- **Creative Work 图库（v63）**：Photography 6 组 99 张（黄石 36 · 日本 16 · 武汉 13 · 芝加哥 15 · 纽约 12 · 亚利桑那 7），Design = X Mirror 三期各 7 页 + 10 张电影放映海报。用户说先这样放，之后告诉我删哪些：她会用联系表编号（如 p4-12、d1-18）点名，在 `src/gallery-images.ts` 删对应行和 `public/media/<组>/` 下的两个文件（`NN.jpg`、`NN-t.jpg`）。联系表和挑选表在 Mac 的 `portfolio-prototypes/_review/`（`index.tsv` = 编号 → 原文件路径），定稿后删掉这个文件夹。
+  - 原图在 Mac「~/Desktop/Design & photography」（只读用，不改）。生成网页版的脚本思路：PIL 读原图 → 长边 1600 / 900、去 EXIF、质量 82。
+  - 黄石：不要写 "home"（那是乡下，不是她住的地方），只写地点。X Mirror：她是主编，每期自己用 InDesign 排版。
+  - 未决："p six two"（她要删的一张，可能是 p6-12 或 p6-32），两张目前都在。
 
 - 案例分两大类，直接挂在 ✳ 下（v62.31，已去掉 Growth Marketing 节点）：**Paid & UA Growth**（Creator Ad Pipeline ★ · TikTok UGC Channel Test ★ · Xbox Launch Paid Campaign · Gamified Landing Page）和 **Creator & Social**（Zenless Zone Zero: Social Launch in Japan ★ · X Creator Campaign · Cross-Platform Community Giveaway · TikTok & Snapchat Branded Filter Campaign · English Social Channel Growth）。首页两组折叠，只露出 ★ 和批注；点开一组显示全部案例。v62.32：Branded Filter 也是 ★（首页带 600M+ 批注），首页间距重排。v62.33–34：手写批注缩小（字号 20、线 1.2px），五条批注文字到箭头的间距统一。截图要加载真实手写字体（L37）。v62.35：首页 Information 也折叠，Creative Work 挪到它旁边，AI Projects 往左下。
 - 9 个案例已按 JD 语言库润色（v62.29）：× / vs / benchmark 统一；英式拼写；Results 标签小写接在数字后。
@@ -37,6 +42,8 @@
 - 提到她所在团队时说 "the Genshin Impact brand team"，不要说 "my team"。
 
 ## 下一步
+
+- **先做**：等用户看完图库发来要删的编号，照删；Photography / Design 的 summary 还标着 [Draft]，待她确认。
 
 - 标题保持简短（用户偏好）：游戏名只放在卡片的身份行，不进标题（v62.46 已同步她改的三个标题）。
 
