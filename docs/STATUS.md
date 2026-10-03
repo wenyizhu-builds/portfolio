@@ -15,7 +15,7 @@
 
 ## 当前状态
 
-- **Creative Intelligence Dashboard（v64）**：点开 `ai-workbench`，电脑版地图折叠，左侧是可点击原型（`public/prototype/dashboard.html`，iframe，比例 1240×870），上方一条手写批注箭头指向原型侧栏（"click the sidebar to explore"）。用户要求：**卡片里不放屏幕列表**（她说太丑），只靠原型自身侧栏切换；原型内按钮不可用（展示用）；**没有 The Team**（她一个人做的）。手机版 = 8 张截图横滑（`public/media/ai-workbench/`，gallery set 'screens'）。原型源文件 + 风格样张在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 `public/prototype/dashboard.html` 和 8 张截图（截图要用本地字体，Google Fonts 在云端被墙）。
+- **Creative Intelligence Dashboard（v64）**：点开 `ai-workbench`，电脑版地图折叠，左侧是可点击原型（`public/demo/dashboard.html`，iframe，比例 1240×870），上方一条手写批注箭头指向原型侧栏（"click the sidebar to explore"）。用户要求：**卡片里不放屏幕列表**（她说太丑），只靠原型自身侧栏切换；原型内按钮不可用（展示用）；**没有 The Team**（她一个人做的）。手机版 = 8 张截图横滑（`public/media/ai-workbench/`，gallery set 'screens'）。原型源文件 + 风格样张在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 `public/demo/dashboard.html` 和 8 张截图（截图要用本地字体，Google Fonts 在云端被墙）。
   - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。英文用地道 UA 术语（用户强调）。
   - 下一步：宣传片（Voice B = Kokoro af_heart；用户要加背景音乐；Chatterbox 在线 demo 被用户否决）。视频做好后放在原型上方。
 

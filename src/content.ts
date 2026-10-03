@@ -574,7 +574,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'prototype/dashboard.html' },
+    prototype: { src: 'demo/dashboard.html' },
     gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
   },
