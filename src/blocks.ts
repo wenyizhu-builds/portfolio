@@ -137,25 +137,54 @@ export function setCount(g: GallerySet): string {
 const setLine = (g: GallerySet) => [g.meta ? tx(g.meta) : '', setCount(g)].filter(Boolean).join(' · ');
 
 /**
- * The grid of a gallery node, one block per set: a heading, then a masonry of thumbnails.
- * The desktop shows it beside the card (main.ts), the phone inside the card (mobile.ts).
- * Every picture is a button that opens the lightbox at that picture (main.ts listens for data-gal).
+ * Photo-book layout (v63.1, owner's pick from four previews): rows that change size and rhythm like
+ * spreads in a photo book. Each row shape gives every picture's width (% of the column), its vertical
+ * alignment, and how far the row is indented. Shapes repeat in order; the owner's photo order is kept.
+ * The phone uses fewer, wider shapes so nothing gets too small.
  */
-export function galleryGrid(n: SiteNode, cols: number): string {
+type RowShape = { w: number[]; align: ('start' | 'center' | 'end')[]; indent: number };
+export const BOOK_ROWS: Record<'desk' | 'phone', RowShape[]> = {
+  desk: [
+    { w: [58, 30], align: ['start', 'end'], indent: 0 },
+    { w: [28, 28, 28], align: ['start', 'center', 'end'], indent: 0 },
+    { w: [44], align: ['start'], indent: 28 },
+    { w: [30, 52], align: ['end', 'start'], indent: 6 },
+    { w: [36, 24], align: ['start', 'end'], indent: 14 },
+  ],
+  phone: [
+    { w: [62, 32], align: ['start', 'end'], indent: 0 },
+    { w: [47, 47], align: ['start', 'end'], indent: 0 },
+    { w: [76], align: ['start'], indent: 12 },
+    { w: [34, 60], align: ['end', 'start'], indent: 0 },
+  ],
+};
+/** A landscape picture gets at least this share of the row, so it is not shown smaller than the portraits. */
+const WIDE_MIN = { desk: 58, phone: 94 };
+
+/**
+ * The grid of a gallery node, one block per set: a heading, then the photo-book rows.
+ * The desktop shows it beside the card (main.ts), the phone inside the card (mobile.ts).
+ * Every picture is a button that opens the lightbox at that picture (main.ts listens for data-gal);
+ * its small number is the picture's place in the set, which the owner can use to name it.
+ */
+export function galleryGrid(n: SiteNode, mode: 'desk' | 'phone'): string {
   if (!n.gallery) return '';
+  const shapes = BOOK_ROWS[mode];
   return n.gallery.map((g, si) => {
-    // Masonry that keeps the owner's order reading left to right: each picture goes into the
-    // column that is currently shortest (heights measured as h / w, since all columns are equally wide).
-    const columns: string[][] = Array.from({ length: Math.max(1, cols) }, () => []);
-    const height = columns.map(() => 0);
-    g.items.forEach((p, i) => {
-      const c = height.indexOf(Math.min(...height));
-      height[c] += p.h / p.w;
-      columns[c].push(`<button class="g-item" type="button" data-gal="${esc(n.id)}" data-set="${si}" data-i="${i}" aria-label="${esc(t(g.title))} ${i + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/></button>`);
-    });
+    const rows: string[] = [];
+    for (let i = 0, r = 0; i < g.items.length; r++) {
+      const sh = shapes[r % shapes.length];
+      const row = g.items.slice(i, i + sh.w.length);
+      rows.push(`<div class="g-row" style="padding-left:${sh.indent}%">${row.map((p, j) => {
+        const k = i + j;
+        const w = p.w > p.h ? Math.max(sh.w[j], WIDE_MIN[mode]) : sh.w[j];
+        return `<button class="g-item" type="button" style="width:${w}%;align-self:${sh.align[j]}" data-gal="${esc(n.id)}" data-set="${si}" data-i="${k}" aria-label="${esc(t(g.title))} ${k + 1}/${g.items.length}"><img src="${esc(p.thumb)}" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async"/><span class="g-num" aria-hidden="true">${String(k + 1).padStart(2, '0')}</span></button>`;
+      }).join('')}</div>`);
+      i += row.length;
+    }
     return `<section class="g-set" id="g-${esc(g.id)}">
     <h3 class="g-head"><span class="g-title">${tx(g.title)}</span><span class="lab g-meta">${setLine(g)}</span></h3>
-    <div class="g-grid">${columns.map((c) => `<div class="g-col">${c.join('')}</div>`).join('')}</div>
+    <div class="g-book">${rows.join('')}</div>
   </section>`;
   }).join('');
 }

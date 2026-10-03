@@ -503,3 +503,7 @@
 - Photography and Design are real pieces now (no longer "in preparation"). Desktop: the gallery takes the map's place, three-column masonry per set, "← Map" back to Creative Work; the card lists the sets and scrolls the grid to one. Phone: two columns inside the card. Lightbox steps through every picture with ← →, arrow keys or a swipe.
 - Web copies: 1600px long side + 900px grid thumbnails, EXIF (incl. GPS) stripped. List in `src/gallery-images.ts`, each row carries the owner's contact-sheet number.
 - 2026-10-03 finish: grid keeps the owner's order left to right (each picture into the shortest column) instead of filling one column top to bottom; gallery now reaches the card (it was measured while the card was sliding in, L42); `content.ts` imports with a `.ts` suffix so `check` runs (L41). Checked desktop wide and narrow, phone, English and Chinese, lightbox with arrow keys. layout-check 2.
+
+## 2026-10-03 — v63.1 photo-book layout for the galleries
+
+- Owner found the even grid rigid and boring. Previewed four looser layouts (photo book, prints on a table, lead + contact sheet, filmstrip); she chose photo book. Rows now change size and rhythm (big + small, three staggered, one alone with space, small + big), with her order kept and a small number under each picture. Row shapes live in `BOOK_ROWS` (blocks.ts): five for desktop, four wider ones for the phone. Same layout for Design.

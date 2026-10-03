@@ -59,10 +59,11 @@
   --scrollbar-linger: 900ms; /* the card's scrollbar stays this long after scrolling stops */
   --spin: 24s; /* the ✳ rotation */
   /* Galleries (v63): Photography and Design. */
-  --g-cols: 3; /* desktop grid columns, in the map's place */
-  --g-cols-phone: 2; /* phone grid columns, inside the card */
-  --g-gap: 12px; /* between pictures */
-  --g-set-gap: 56px; /* between sets (series, issues) */
+  --g-gap: 12px; /* under a set's heading */
+  --g-row-x: 6%; /* between pictures in a photo-book row (blocks.ts BOOK_ROWS widths leave room for it) */
+  --g-row-y: 56px; /* between photo-book rows */
+  --g-row-y-phone: 22px;
+  --g-set-gap: 96px; /* between sets (series, issues) */
   --swipe: 40px; /* a horizontal drag this long in the lightbox moves to the next picture */
 
   /* Breakpoints: CSS @media cannot read variables, so the only copies of these
@@ -415,13 +416,12 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-set + .g-set { margin-top: var(--g-set-gap); }
 .g-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 0 0 var(--g-gap); font-size: var(--fs-text); font-weight: 400; line-height: 1.45; }
 .g-meta { color: var(--muted); }
-.g-grid { display: flex; align-items: flex-start; gap: var(--g-gap); } /* columns are built in blocks.ts (galleryGrid) */
-.g-col { flex: 1 1 0; min-width: 0; }
-.g-item { display: block; width: 100%; padding: 0; border: 0; margin: 0 0 var(--g-gap); background: var(--line-soft); cursor: zoom-in; }
-.g-item img { display: block; width: 100%; height: auto; transition: opacity 300ms; }
+.g-row { display: flex; justify-content: flex-start; gap: var(--g-row-x); margin-bottom: var(--g-row-y); } /* row shapes: blocks.ts BOOK_ROWS */
+.g-item { display: block; flex: none; padding: 0; border: 0; background: none; text-align: left; cursor: zoom-in; }
+.g-item img { display: block; width: 100%; height: auto; background: var(--line-soft); transition: opacity 300ms; }
 .g-item:hover img { opacity: 0.88; }
-.m-card .g-grid { gap: var(--side-gap); }
-.m-card .g-item { margin-bottom: var(--side-gap); }
+.g-num { display: block; margin-top: 6px; font-size: var(--fs-label); color: var(--muted); font-variant-numeric: tabular-nums; }
+.m-card .g-row { justify-content: space-between; margin-bottom: var(--g-row-y-phone); }
 .m-card .g-set { margin-top: var(--gutter); }
 .m-card .g-head { margin-bottom: var(--side-gap); }
 .g-jump { border: 0; background: none; text-align: left; font: inherit; cursor: pointer; }

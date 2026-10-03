@@ -162,7 +162,7 @@ function renderPanel(keep = false) {
   const showGallery = !!n?.gallery;
   if (showGallery) {
     const prevGalleryScroll = gallery.scrollTop;
-    gallery.innerHTML = `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n!, cssPx('--g-cols'))}`;
+    gallery.innerHTML = `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n!, 'desk')}`;
     gallery.scrollTop = keep && galleryOf === n!.id ? prevGalleryScroll : 0;
     gallery.setAttribute('aria-label', t(n!.label));
   }
