@@ -614,3 +614,7 @@
 - Owner: "AI tool · built with Claude Code" line replaced by two tags, Vibe Coding and Claude Code, in the same tag style as every case's markets and platforms.
 - "What it does" is unfolded when the card opens (new `open` flag on a section; every other section stays folded by default).
 - Summary removed (owner emptied it in the editor).
+
+## 2026-10-04 — v64.12 prototype: no notes squeezed beside buttons
+
+- Owner: footer notes next to buttons were cramped. Script cards: "Built on …" removed (it repeats "Insights applied"); Edit moves into the card header. Tagging: "Bars show AI confidence" removed (the column is already labelled); "12 of 61 fields" becomes "+ 49 more fields" at the end of the list. Phone screenshots re-shot.

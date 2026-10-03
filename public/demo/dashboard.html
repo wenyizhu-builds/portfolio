@@ -158,7 +158,8 @@ mark { background: var(--hi); color: inherit; padding: 0 2px; }
 .tv.edited { box-shadow: 0 0 0 1px var(--accent) inset; background: var(--accent-soft); }
 .why { margin: 0; padding: 10px 12px; border-radius: 8px; background: var(--bg); font-size: 12.5px; color: var(--muted); line-height: 1.45; }
 .why b { color: var(--fg); font-weight: 500; }
-.tags .tf { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+.tags .tf { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; align-items: center; }
+.tgroup .more { font-size: 12px; color: var(--accent); padding-top: 2px; }
 
 /* library */
 .lib { display: grid; gap: 14px; }
@@ -232,7 +233,7 @@ table.t { width: 100%; border-collapse: collapse; font-size: 12.5px; }
 .gen { display: grid; grid-template-rows: auto 1fr; gap: 12px; min-height: 0; }
 .genh { display: flex; justify-content: space-between; align-items: center; }
 .scripts { display: grid; grid-template-columns: 1.15fr 1fr; gap: 12px; min-height: 0; }
-.sc { display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+.sc { display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
 .sc .sh { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 .beats { padding: 4px 16px; overflow: hidden; }
 .beat { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
@@ -479,10 +480,10 @@ function tagging(){
     <div class="tgroups">
       <div class="tgroup"><div class="tghead"><h5>Hook · first 3 seconds</h5><span class="confh">AI confidence</span></div>${tr('Hook type','Twist',5)}${tr('Opening','Combat highlight',5)}${tr('Gameplay in first 6s','Yes',5)}</div>
       <div class="tgroup"><h5>Message</h5>${tr('Key selling point','New character',4)}${tr('Tone','Humour',4,1)}${tr('CTA','Download + offer',5)}</div>
-      <div class="tgroup"><h5>Edit</h5>${tr('Length','15–30s',5)}${tr('Pacing','Steady',4)}${tr('Voiceover','Creator voice',5)}${tr('Subtitles','On',5)}</div>
+      <div class="tgroup"><h5>Edit</h5>${tr('Length','15–30s',5)}${tr('Pacing','Steady',4)}${tr('Voiceover','Creator voice',5)}${tr('Subtitles','On',5)}<span class="more">+ 49 more fields</span></div>
       <div class="tgroup" style="border:0"><p class="why"><b>AI reasoning:</b> Opens on a calm sailing shot, then flips it ("Then I entered the Storm Eye") into combat with big damage numbers. The twist lands at 0:03.5, so the hook is a twist rather than a straight intro. You changed Tone to <b>Humour</b>.</p></div>
     </div>
-    <div class="tf"><span class="muted" style="font-size:12px">Bars show AI confidence · 12 of 61 fields</span><div class="topr"><span class="btn ghost">Edit fields</span><span class="btn">${ic('check')}Approve</span></div></div>
+    <div class="tf"><div class="topr"><span class="btn ghost">Edit fields</span><span class="btn">${ic('check')}Approve</span></div></div>
   </div>`;
   return shell('tagging', top, `<div class="tg">${queue}${player}${tags}</div>`);
 }
@@ -571,9 +572,8 @@ function scripts(){
               ['0:06–0:17','Gameplay demo','「受けて、全部返す。ボタンは2つだけ。」','Combo replay, slow motion on the counter.'],
               ['0:17–0:22','CTA','「今なら招集チケット20枚プレゼント！」','End card, store badges.']];
   const card = (lang, mk, beats, jp, score) => `<div class="card sc${jp?' jp':''}">
-    <div class="sh"><div style="display:flex;gap:8px;align-items:center"><span class="chip blue"><b style="color:inherit">${lang}</b></span><b>${mk}</b></div><span class="muted" style="font-size:12px">22s · acquisition</span></div>
-    <div class="beats">${beats.map(([t,l,v,s])=>`<div class="beat"><span class="tm">${t}<b>${l}</b></span><div><div class="vo">${v}</div><div class="vis">${s}</div></div></div>`).join('')}</div>
-    <div class="sf"><span>Built on: twist hook · combat opening · 15–30s · humour</span><span class="topr"><span class="btn ghost">Edit</span></span></div></div>`;
+    <div class="sh"><div style="display:flex;gap:8px;align-items:center"><span class="chip blue"><b style="color:inherit">${lang}</b></span><b>${mk}</b></div><span class="topr"><span class="muted" style="font-size:12px">22s · acquisition</span><span class="btn ghost">Edit</span></span></div>
+    <div class="beats">${beats.map(([t,l,v,s])=>`<div class="beat"><span class="tm">${t}<b>${l}</b></span><div><div class="vo">${v}</div><div class="vis">${s}</div></div></div>`).join('')}</div></div>`;
   const body = `<div class="ss">
     <div class="cfg">
       <div class="card"><h5>Start from a winner</h5><div class="ref">${thumb(0)}<div><b>RET_NA_V_HERO_v2.1_A</b><div class="muted" style="font-size:12px">NA · 24.8s · 2.08M impressions</div></div></div><span class="pill win" style="justify-self:start">Winner</span></div>
