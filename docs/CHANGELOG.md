@@ -604,3 +604,5 @@
 - Owner picked layout C from three previews: the video sits next to the card (48px, top level with INDEX, at most 960px wide), and an app bar under it (icon, name, "Clickable prototype · sample data", "Try the prototype") opens the prototype in the lightbox. The hand-written note and floating icon are gone.
 - Prototype: hovering a sidebar item no longer greys out the selected one.
 - Owner's editor edits: headline "40% less time on creative analysis & production"; shorter summary.
+
+- v64.9: the app bar moves above the video (owner: the bottom of the screen felt heavy).

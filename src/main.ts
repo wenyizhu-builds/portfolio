@@ -173,10 +173,10 @@ const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-
 /* v64.4 (owner): the promo video takes the gallery's place; an app icon beside it opens the clickable
    prototype in a pop-up window over a dimmed page. Until the video exists, a still of the Overview screen holds its place. */
 const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>';
-// layout C (owner's pick from three previews, v64.8): the video beside the card, an app bar under it
+// layout C (owner's pick from three previews, v64.8): the video beside the card; the app bar above it (v64.9, owner: the bottom felt heavy)
 const protoHtml = (n: SiteNode) => `<div class="proto-box">
-  <div class="proto-video"><img src="${esc(n.prototype!.poster)}" alt="" loading="lazy"/><span class="proto-soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>${L('videoSoon')}</span></div>
   <button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>
+  <div class="proto-video"><img src="${esc(n.prototype!.poster)}" alt="" loading="lazy"/><span class="proto-soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>${L('videoSoon')}</span></div>
 </div>`;
 
 /** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
@@ -190,7 +190,7 @@ function restingTop(el: HTMLElement, moving?: HTMLElement): number {
   const ro = new ResizeObserver(() => placeProto(side));
   [side, ...side.children].forEach((c) => ro.observe(c)); // the card's height eases (L16), which moves the centred column
 }
-/** The video sits next to the card, starts level with its INDEX bar, and fits the window height with the app bar under it (v64.8). */
+/** The app bar and video sit next to the card, starting level with its INDEX bar, and fit the window height (v64.9). */
 function placeProto(side: HTMLElement) {
   const box = gallery.querySelector<HTMLElement>('.proto-box');
   if (!box) return;
