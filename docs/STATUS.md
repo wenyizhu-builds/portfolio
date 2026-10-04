@@ -1,9 +1,12 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-04 · v64.17 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-04 · v64.18（交接）· 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
+
+- **下一个会话的重点（用户 2026-10-04 定）**：做 Creative Work 这一块。用户打算把 **Creative Work 改名为 Content Creation**，并把她的**中文社交媒体（小红书等）案例**加进这一部分。开工前先问清：新名字是否就用 "Content Creation"；中文社媒案例有哪些素材（账号、数据、截图）放在 Mac 哪里；原来的 Photography / Design 图库是否保留在这一块下面。改名要同时改地图、面板、手机版和 check 里用到的地方（L17：一个概念一个决定点）。
+- 上一个会话（v64.x）做完了：看板原型 + 宣传片（v7，已上线，自带控制条）。宣传片源文件在 Mac `portfolio-prototypes/dashboard-redesign/promo/source/`。
 
 - **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v64）。Mac 上连不到 GitHub，只能在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。

@@ -639,3 +639,7 @@
 ## 2026-10-04 — v64.17 promo video v7: real recorded sound effects
 
 - Owner: the synthesised sound effects did not sound high-end. v7 keeps the picture and music and uses real recordings from Kenney Interface Sounds and Kenney UI Audio (CC0, from GitHub): mouse press and release on every click, interface swooshes on screen changes, select clicks for tags, confirmation sounds, typing built from recorded switch clicks. OpenGameArt (keyboard pack) is blocked from both machines.
+
+## 2026-10-04 — v64.18 handoff
+
+- Session wrapped up at the owner's request (long conversation). Next session: Creative Work → Content Creation, adding her Chinese social media case. Handoff written at the top of STATUS.md.
