@@ -210,7 +210,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   // Area of the screen the map may use (excludes the reading panel).
   let area = { x: 0, y: 0, w: host.clientWidth, h: host.clientHeight }; // replaced by setViewport() at once
   let cam = { x: host.clientWidth / 2, y: host.clientHeight / 2, k: 1 };
-  let focus: string | null = null;
+  /* v64.20 (owner): two display modes. With no filter, the selection is also the map's focus: the map narrows
+     to it and what surrounds it. With a region filter on, the map stays the whole filtered map; a click only
+     marks the point (`picked`) and opens its card, so visitors keep their bearings in the filtered set. */
+  let picked: string | null = null; // the selected point (card, highlight)
+  let focus: string | null = null; // what the map is laid out around: picked, or nothing while a filter is on
+  const refocus = () => { focus = filtering() ? null : picked; };
   let near = new Set<string>();
   const atHome = () => !focus || focus === 'root'; // the home map can be reached as no focus or as the ✳
 
@@ -806,8 +811,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
     paintFar();
     els.forEach((el, id) => {
-      el.classList.toggle('is-current', id === (focus || 'root'));
-      el.classList.toggle('is-visited', id !== 'root' && isDone(id) && id !== focus);
+      el.classList.toggle('is-current', id === (picked || 'root'));
+      el.classList.toggle('is-visited', id !== 'root' && isDone(id) && id !== picked);
       const par = byId.get(id)?.parent;
       el.classList.toggle('show-kick', !!focus && (id === focus || par === focus || par === byId.get(focus)?.parent));
     });
@@ -1081,8 +1086,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   return {
     setFocus(id) {
-      focus = id && id !== 'root' ? id : null;
-      if (focus) state.visited.add(focus);
+      picked = id && id !== 'root' ? id : null;
+      if (picked) state.visited.add(picked);
+      refocus();
       update();
     },
     setViewport(a) {
@@ -1090,6 +1096,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       wake();
     },
     refilter() {
+      refocus();
       update(); // the set of points changes: matches unfold on the home map
     },
     rerenderLabels() {

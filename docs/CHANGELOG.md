@@ -648,3 +648,7 @@
 
 - Owner: with a region filter the map was cramped, lines running through labels. Two mechanisms: (1) a group a filter unfolds on the home map now fans its ends out on its open side, like an opened group (`filterFanned`, `filterFanSpread`); (2) when every line of a point comes from below, its label moves above the point (`sideLabels`, `labelFlip`), and lines from above end over the label. The hand-laid home map is unchanged.
 - layout-check now also visits the four region filters and counts a line crossing its own point's label: 17 → 1 over 37 views.
+
+## 2026-10-04 — v64.20 map: with a filter on, clicking keeps the whole filtered map
+
+- Owner: with a filter on, clicking a point used to narrow the map to it, so visitors lost the filtered overview. Now there are two modes: filter off, a click narrows the map as before; filter on, the map stays the full filtered view (same points, camera still) and the click only highlights the point and opens its card. In map.ts the selection (`picked`) is separate from the layout focus (`focus = filtering() ? null : picked`).
