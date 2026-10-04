@@ -631,3 +631,7 @@
 
 - The 21-second promo video (no voiceover, music and sound effects, sample data only) now plays in the video's place: muted, looping, with a sound button in the corner. It pauses while the prototype is open and carries on afterwards; with reduced motion it does not start on its own. WebM first, MP4 as fallback. The "Promo video coming soon" placeholder and its string are gone.
 - Video copy chosen by the owner: opening line "I built a tool to identify winning creatives and scale them."; small disclaimer "Display prototype. All data shown is sample data." away from "Built with Claude Code".
+
+## 2026-10-04 — v64.16 promo video: its own controls, no endless loop
+
+- Owner: the video could not be paused, had no progress bar and played non-stop. It now plays once (muted) and stops on a replay button. A control bar (src/video.ts) shows on hover, focus, pause or end: play/pause, a progress bar you can click or drag (arrow keys jump 5 s), the time, and the sound button. Clicking the video also pauses it. It pauses when the prototype opens and when the gallery is left.

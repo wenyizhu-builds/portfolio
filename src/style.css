@@ -26,7 +26,9 @@
   --bottom-h: 56px; /* legend band */
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
   --promo-w: 1600px; --promo-h: 900px; /* the promo video's frame (media/ai-workbench/promo.mp4) */
-  --sound-btn: 36px; /* round sound button on the video */
+  --pv-btn: 34px; --pv-pad: 8px 12px; --pv-gap: 10px; /* promo video controls: round buttons, bar padding and spacing */
+  --pv-track: 4px; --pv-knob: 12px; --pv-hit: 20px; /* progress track height, handle size, clickable height */
+  --pv-fade: 0.2s; /* controls fade in/out */
   --proto-share: 92; /* the video + app icon take at most this % of the gallery column (owner: more room around it) */
   --proto-max: 960px; /* the video is never wider than this, even on large screens (owner) */
   --proto-gap: 32px; /* extra space between the video and the card, on top of --map-gap (48px in all) */
@@ -424,12 +426,28 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .proto-box { margin-left: auto; margin-right: var(--proto-gap); display: grid; gap: var(--g-gap); }
 .proto-video { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-soft); background: var(--panel); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
 .proto-video video { display: block; width: 100%; height: auto; }
-.proto-sound { position: absolute; right: 12px; bottom: 12px; width: var(--sound-btn); height: var(--sound-btn); border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--scrim); cursor: pointer; padding: 0; }
-.proto-sound:hover { background: var(--ink); }
-.proto-sound svg { width: 18px; height: 18px; fill: none; stroke: var(--on-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.proto-sound .spk { fill: var(--on-ink); }
-.proto-sound .on, .proto-sound.is-on .off { display: none; }
-.proto-sound.is-on .on { display: inline; }
+/* v64.16 video controls (video.ts): a bar over the bottom of the video, shown on hover, focus, pause or end */
+.pv { position: relative; }
+.pv video { cursor: pointer; }
+.pv-ctl { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: var(--pv-gap); padding: var(--pv-pad); background: linear-gradient(transparent, var(--scrim)); color: var(--on-ink); opacity: 0; transition: opacity var(--pv-fade) ease; }
+.pv:hover .pv-ctl, .pv:focus-within .pv-ctl, .pv.is-paused .pv-ctl, .pv.is-ended .pv-ctl, .pv.is-seeking .pv-ctl { opacity: 1; }
+.pv-btn { flex: none; width: var(--pv-btn); height: var(--pv-btn); border: 0; border-radius: 50%; padding: 0; display: grid; place-items: center; background: transparent; cursor: pointer; }
+.pv-btn:hover { background: color-mix(in srgb, var(--on-ink) 16%, transparent); }
+.pv-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--on-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pv-btn .fill { fill: var(--on-ink); stroke: none; }
+.pv-sound .fill { stroke: none; }
+.pv-play svg, .pv-sound .on, .pv-sound.is-on .off { display: none; }
+.pv-play svg:nth-child(2), .pv.is-paused .pv-play svg:nth-child(1), .pv.is-ended .pv-play svg:nth-child(3), .pv-sound.is-on .on { display: block; }
+.pv.is-paused .pv-play svg:nth-child(2), .pv.is-ended .pv-play svg:nth-child(2) { display: none; }
+.pv-bar { position: relative; flex: 1; height: var(--pv-hit); cursor: pointer; touch-action: none; }
+.pv-bar::before, .pv-fill { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: var(--pv-track); margin-top: calc(var(--pv-track) / -2); border-radius: var(--pv-track); }
+.pv-bar::before { background: color-mix(in srgb, var(--on-ink) 30%, transparent); }
+.pv-fill { background: var(--accent); transform-origin: left; transform: scaleX(0); }
+.pv-knob { position: absolute; top: 50%; width: var(--pv-knob); height: var(--pv-knob); margin: calc(var(--pv-knob) / -2) 0 0 calc(var(--pv-knob) / -2); border-radius: 50%; background: var(--accent); transform: scale(0); transition: transform var(--pv-fade) ease; }
+.pv-bar:hover .pv-knob, .pv-bar:focus-visible .pv-knob, .pv.is-seeking .pv-knob { transform: scale(1); }
+.pv-bar:focus-visible { outline: none; }
+.pv-bar:focus-visible::before { box-shadow: 0 0 0 2px var(--on-ink); }
+.pv-time { flex: none; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
 .app-bar { justify-self: start; display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 10px; border: 1px solid var(--line-soft); border-radius: 16px; background: var(--panel); box-shadow: 0 6px 18px color-mix(in srgb, var(--ink) 6%, transparent); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
 .app-bar:hover { border-color: var(--line); }
 .app-bar:hover .btn { background: var(--bg); }
