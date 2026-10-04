@@ -626,3 +626,8 @@
 ## 2026-10-04 — v64.14 map: AI Projects shows the dashboard's link to the Creator Ad Pipeline
 
 - Owner: the dashboard should link to the Creator Ad Pipeline on the map. Opening AI Projects now also shows the Creator Ad Pipeline (faded) with a dotted line to the dashboard (`alwaysLinked` in content.ts). layout-check 0 over 33 views.
+
+## 2026-10-04 — v64.15 dashboard: the promo video replaces the placeholder
+
+- The 21-second promo video (no voiceover, music and sound effects, sample data only) now plays in the video's place: muted, looping, with a sound button in the corner. It pauses while the prototype is open and carries on afterwards; with reduced motion it does not start on its own. WebM first, MP4 as fallback. The "Promo video coming soon" placeholder and its string are gone.
+- Video copy chosen by the owner: opening line "I built a tool to identify winning creatives and scale them."; small disclaimer "Display prototype. All data shown is sample data." away from "Built with Claude Code".

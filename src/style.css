@@ -25,6 +25,8 @@
   --top-h: 72px; /* header band */
   --bottom-h: 56px; /* legend band */
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
+  --promo-w: 1600px; --promo-h: 900px; /* the promo video's frame (media/ai-workbench/promo.mp4) */
+  --sound-btn: 36px; /* round sound button on the video */
   --proto-share: 92; /* the video + app icon take at most this % of the gallery column (owner: more room around it) */
   --proto-max: 960px; /* the video is never wider than this, even on large screens (owner) */
   --proto-gap: 32px; /* extra space between the video and the card, on top of --map-gap (48px in all) */
@@ -418,12 +420,16 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .g-back { display: inline-flex; align-items: baseline; gap: 8px; border: 0; background: none; padding: 4px 0; margin: 0 0 var(--gutter); cursor: pointer; font-size: var(--fs-text); }
 .g-back:hover .lab { text-decoration: underline; text-underline-offset: 3px; }
 .g-set + .g-set { margin-top: var(--g-set-gap); }
-/* v64.8 (layout C): the promo video (a poster for now) right next to the card, an app bar under it that opens the prototype in the lightbox. */
+/* v64.8 (layout C): the promo video right next to the card, the app bar above it opens the prototype in the lightbox. v64.15: the real video (muted, looping) with a sound button. */
 .proto-box { margin-left: auto; margin-right: var(--proto-gap); display: grid; gap: var(--g-gap); }
 .proto-video { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-soft); background: var(--panel); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
-.proto-video img { display: block; width: 100%; height: auto; filter: saturate(0.85); opacity: 0.55; }
-.proto-soon { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px; background: var(--panel); box-shadow: 0 4px 16px color-mix(in srgb, var(--ink) 12%, transparent); font-size: var(--fs-text); color: var(--ink); white-space: nowrap; }
-.proto-soon svg { width: 34px; height: 34px; padding: 9px; border-radius: 50%; background: var(--ink); fill: var(--panel); }
+.proto-video video { display: block; width: 100%; height: auto; }
+.proto-sound { position: absolute; right: 12px; bottom: 12px; width: var(--sound-btn); height: var(--sound-btn); border: 0; border-radius: 50%; display: grid; place-items: center; background: var(--scrim); cursor: pointer; padding: 0; }
+.proto-sound:hover { background: var(--ink); }
+.proto-sound svg { width: 18px; height: 18px; fill: none; stroke: var(--on-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.proto-sound .spk { fill: var(--on-ink); }
+.proto-sound .on, .proto-sound.is-on .off { display: none; }
+.proto-sound.is-on .on { display: inline; }
 .app-bar { justify-self: start; display: flex; align-items: center; gap: 14px; padding: 10px 12px 10px 10px; border: 1px solid var(--line-soft); border-radius: 16px; background: var(--panel); box-shadow: 0 6px 18px color-mix(in srgb, var(--ink) 6%, transparent); font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
 .app-bar:hover { border-color: var(--line); }
 .app-bar:hover .btn { background: var(--bg); }

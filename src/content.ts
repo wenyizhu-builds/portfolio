@@ -73,7 +73,7 @@ export interface SiteNode {
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
-  prototype?: { src: string; poster: string }; // desktop: the promo video (poster until it exists) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
+  prototype?: { src: string; poster: string; video: string[] }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -574,7 +574,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'demo/dashboard.html', poster: 'media/ai-workbench/01.jpg' },
+    prototype: { src: 'demo/dashboard.html', poster: 'media/ai-workbench/promo-poster.jpg', video: ['media/ai-workbench/promo.webm', 'media/ai-workbench/promo.mp4'] },
     gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
     alwaysLinked: ['ua-creative-strategy'], // owner: opening AI Projects shows the Creator Ad Pipeline it grew out of
@@ -744,7 +744,8 @@ export const ui = {
   unitScreens: { en: 'screens', zh: '屏' },
   appBarSub: { en: 'Clickable prototype · sample data', zh: '可点击原型 · 示例数据' },
   tryApp: { en: 'Try the prototype', zh: '试用原型' },
-  videoSoon: { en: 'Promo video coming soon', zh: '宣传片制作中' },
+  soundOn: { en: 'Turn sound on', zh: '打开声音' },
+  soundOff: { en: 'Turn sound off', zh: '关闭声音' },
   openApp: { en: 'Open the dashboard prototype', zh: '打开看板原型' },
   protoNote: { en: 'This is a display prototype with sample data. For details on the full project, feel free to get in touch.', zh: '这是展示用原型，数据为示例。想了解完整项目，欢迎联系我。' },
   backToMap: { en: 'Back to the map', zh: '回到地图' },

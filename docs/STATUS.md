@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-03 · v64 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-04 · v64.15 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
@@ -15,9 +15,10 @@
 
 ## 当前状态
 
-- **Creative Intelligence Dashboard（v64.8，布局 C，用户从三个预览里选的）**：点开 `ai-workbench`，电脑版地图折叠；宣传片位置（现为 Overview 截图 + "Promo video coming soon"）紧挨卡片（间距 48px，顶边与 INDEX 条对齐，最宽 960px，main.ts `placeProto`），上方一条 app 栏（v64.9 移到视频上方，v64.10 视频顶边对齐 INDEX、app 栏在其上方；图标 · 名称 · "Clickable prototype · sample data" · "Try the prototype" 按钮），点击在站内唯一的灯箱里打开原型（lightbox.ts `openFrame`，L44），灯箱最大为原型原尺寸或屏宽 80%，下方一行说明。卡片里**不放屏幕列表、没有 The Team、Connections 只连 Creator Ad Pipeline**。用户在编辑器改的文案已同步：headline 40% … & production；**summary 被她删空（v64.11 已去掉）**；身份行改为两个标签 Vibe Coding · Claude Code（与案例标签同一样式）；What it does 默认展开（section `open: true`）。手机版 = 8 张截图横滑。原型页 `public/demo/dashboard.html`；源文件在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 demo 页和 8 张截图（截图用本地字体）。
+- **Creative Intelligence Dashboard（v64.8，布局 C，用户从三个预览里选的）**：点开 `ai-workbench`，电脑版地图折叠；宣传片（v64.15 已上线：`public/media/ai-workbench/promo.webm` + `promo.mp4`，静音自动循环，右下角声音按钮，打开原型时暂停、关掉后继续；减少动态效果时不自动播放）紧挨卡片（间距 48px，顶边与 INDEX 条对齐，最宽 960px，main.ts `placeProto`），上方一条 app 栏（v64.9 移到视频上方，v64.10 视频顶边对齐 INDEX、app 栏在其上方；图标 · 名称 · "Clickable prototype · sample data" · "Try the prototype" 按钮），点击在站内唯一的灯箱里打开原型（lightbox.ts `openFrame`，L44），灯箱最大为原型原尺寸或屏宽 80%，下方一行说明。卡片里**不放屏幕列表、没有 The Team、Connections 只连 Creator Ad Pipeline**。用户在编辑器改的文案已同步：headline 40% … & production；**summary 被她删空（v64.11 已去掉）**；身份行改为两个标签 Vibe Coding · Claude Code（与案例标签同一样式）；What it does 默认展开（section `open: true`）。手机版 = 8 张截图横滑。原型页 `public/demo/dashboard.html`；源文件在 Mac `portfolio-prototypes/dashboard-redesign/`；改原型后要重出 demo 页和 8 张截图（截图用本地字体）。
   - 文案（用户定）：从零独立用 Claude Code 搭建；"UA teams use it in their work"；headline 30–40% less time on creative analysis（用户确认准确）；明确写"display prototype with sample data… get in touch"。英文用地道 UA 术语（用户强调）。
-  - 下一步：宣传片（Voice B = Kokoro af_heart；用户要加背景音乐；Chatterbox 在线 demo 被用户否决）。视频做好后替换 `.proto-video` 里的占位图（content.ts `prototype.poster`）。
+  - 宣传片（v6，21 秒，用户：先这样）：无旁白；开场一句 "I built a tool to identify / winning creatives and scale them."（用户定，"winning creatives" 荧光绿），然后 5 个功能（AI breaks down every ad / Spot the winning formula / Turn it into scripts / Plan the next campaign / Learns from every round），结尾 Creative Intelligence Dashboard · Built with Claude Code；左下角极小一行 "Display prototype. All data shown is sample data."。画面是 v1 的平稳镜头（用户否决了 3D 运镜和动态图形版 v3）。音乐 = 电钢琴和弦 + 轻鼓（用户说比之前好）；音效为合成、与音乐同调。源文件：云端 `/home/claude/promo/video/`（film.html → render2.cjs 出帧，audio6.py 出声音），Mac 副本在 `portfolio-prototypes/dashboard-redesign/promo/`（各版 mp4 + 源文件）。
+  - 下一步（用户提出）：音效还不够"高级"，她要真实录音的音效（鼠标点击、键盘打字等，像广告片那样）。需要下载免版权（CC0）音效素材，下载前先问她。
 
 - **只做英文版**（v64，用户：没时间校对中文）。中文开关已从电脑版和手机版去掉，`readLang()` 固定返回 'en'；zh 文案留在 content.ts 不用，以后不必再写中文。
 

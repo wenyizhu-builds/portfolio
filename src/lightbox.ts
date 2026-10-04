@@ -60,7 +60,7 @@ function open(seq: Shot[], start: number, label: string) {
  * A clickable page (the dashboard prototype, v64.6) in the same overlay as the pictures: the same dark
  * background, the same × and Esc, a note underneath. Sized to the page's own window ratio (--proto-w / --proto-h).
  */
-export function openFrame(src: string, label: string, note: string) {
+export function openFrame(src: string, label: string, note: string, onClose?: () => void) {
   if (document.querySelector('.lightbox')) return;
   const previous = document.activeElement as HTMLElement | null;
   const lb = document.createElement('dialog');
@@ -79,7 +79,7 @@ export function openFrame(src: string, label: string, note: string) {
   };
   // Esc pressed inside the page arrives as a message (public/demo/dashboard.html)
   const onMessage = (e: MessageEvent) => { if ((e.data as { protoEsc?: boolean } | null)?.protoEsc) close(); };
-  const close = () => { removeEventListener('resize', fit); removeEventListener('message', onMessage); lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); };
+  const close = () => { removeEventListener('resize', fit); removeEventListener('message', onMessage); lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); onClose?.(); };
   lb.querySelector<HTMLButtonElement>('.lb-close')!.onclick = close;
   lb.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
   lb.onclick = (e) => { if (e.target === lb || e.target === lb.querySelector('.lb-fig')) close(); };

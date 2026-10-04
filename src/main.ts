@@ -172,11 +172,14 @@ const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-
 /* v64: a prototype node shows its clickable prototype (a page under public/) in the gallery's place. */
 /* v64.4 (owner): the promo video takes the gallery's place; an app icon beside it opens the clickable
    prototype in a pop-up window over a dimmed page. Until the video exists, a still of the Overview screen holds its place. */
+// one speaker; the waves show only when the sound is on (.is-on)
+const SOUND_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="on" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M16 9l6 6M22 9l-6 6"/></svg>';
 const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>';
 // layout C (owner's pick from three previews, v64.8): the video beside the card; the app bar above it (v64.9, owner: the bottom felt heavy)
 const protoHtml = (n: SiteNode) => `<div class="proto-box">
   <button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>
-  <div class="proto-video"><img src="${esc(n.prototype!.poster)}" alt="" loading="lazy"/><span class="proto-soon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>${L('videoSoon')}</span></div>
+  <div class="proto-video"><video poster="${esc(n.prototype!.poster)}" width="${cssPx('--promo-w')}" height="${cssPx('--promo-h')}" muted loop playsinline preload="metadata"${reducedMotion.matches ? '' : ' autoplay'}>${n.prototype!.video.map((s) => `<source src="${esc(s)}" type="video/${s.split('.').pop()}"/>`).join('')}</video>
+    <button class="proto-sound" type="button" data-act="vsound" aria-label="${esc(L('soundOn'))}">${SOUND_ICON}</button></div>
 </div>`;
 
 /** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
@@ -194,7 +197,7 @@ function restingTop(el: HTMLElement, moving?: HTMLElement): number {
 function placeProto(side: HTMLElement) {
   const box = gallery.querySelector<HTMLElement>('.proto-box');
   if (!box) return;
-  const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--proto-w') / cssPx('--proto-h');
+  const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--promo-w') / cssPx('--promo-h');
   const avail = window.innerHeight - sideTop - cssPx('--bottom-h') - cssPx('--gutter');
   const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, cssPx('--proto-max'), avail * ratio));
   box.style.width = `${w}px`;
@@ -206,7 +209,21 @@ function placeProto(side: HTMLElement) {
 /* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */
 function openApp() {
   const n = byId.get(currentNodeId() || '');
-  if (n?.prototype) openFrame(n.prototype.src, t(n.label), L('protoNote'));
+  if (!n?.prototype) return;
+  // the promo video pauses while the prototype is open, and carries on afterwards
+  const v = gallery.querySelector<HTMLVideoElement>('.proto-video video'), playing = !!v && !v.paused;
+  v?.pause();
+  openFrame(n.prototype.src, t(n.label), L('protoNote'), () => { if (playing) void v!.play().catch(() => {}); });
+}
+
+/** Sound button on the promo video: unmutes (and starts the video if it was paused, e.g. with reduced motion), or mutes again. */
+function toggleSound(btn: HTMLButtonElement) {
+  const v = btn.parentElement?.querySelector('video');
+  if (!v) return;
+  v.muted = !v.muted;
+  if (!v.muted && v.paused) void v.play().catch(() => {});
+  btn.classList.toggle('is-on', !v.muted);
+  btn.setAttribute('aria-label', L(v.muted ? 'soundOn' : 'soundOff'));
 }
 
 function placeAnchor() {
@@ -241,6 +258,8 @@ document.addEventListener('click', e => {
     if (target) gallery.scrollTo({ top: target.offsetTop, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
   }
   if (el.closest('[data-act="openapp"]')) openApp();
+  const snd = el.closest<HTMLButtonElement>('[data-act="vsound"]');
+  if (snd) toggleSound(snd);
   if (el.closest('[data-act="gback"]')) {
     const p = byId.get(currentNodeId() || '')?.parent;
     go(p && p !== 'root' ? p : '');
