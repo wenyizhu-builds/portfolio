@@ -643,3 +643,8 @@
 ## 2026-10-04 — v64.18 handoff
 
 - Session wrapped up at the owner's request (long conversation). Next session: Creative Work → Content Creation, adding her Chinese social media case. Handoff written at the top of STATUS.md.
+
+## 2026-10-04 — v64.19 map: no more crowding under a region filter
+
+- Owner: with a region filter the map was cramped, lines running through labels. Two mechanisms: (1) a group a filter unfolds on the home map now fans its ends out on its open side, like an opened group (`filterFanned`, `filterFanSpread`); (2) when every line of a point comes from below, its label moves above the point (`sideLabels`, `labelFlip`), and lines from above end over the label. The hand-laid home map is unchanged.
+- layout-check now also visits the four region filters and counts a line crossing its own point's label: 17 → 1 over 37 views.

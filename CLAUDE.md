@@ -59,7 +59,7 @@
 1. 运行 `npm run build:file`。它会依次跑 `check`、类型检查，再构建；任何一步失败都不能交付。
    - 构建命令不要接管道后再 `&& git commit`（管道会吞掉失败）；用 `set -o pipefail`。（L35）
 2. 批量替换时，先断言锚点恰好出现一次，替换后立即类型检查。（L12）
-3. 改了地图布局：运行 `node scripts/layout-check.cjs`，需要 Playwright。重叠超过 2 处不能交付。（L24）
+3. 改了地图布局：运行 `node scripts/layout-check.cjs`，需要 Playwright。重叠超过 2 处不能交付。（L24）它也查 4 个地区筛选和线穿过自己的标签（L46）。
 4. 用浏览器看过：
    - 电脑宽屏和窄屏、手机版
    - 仅英文（2026-10-03 起不做中文版；中文开关已去掉，zh 文案暂留在 content.ts 不用）

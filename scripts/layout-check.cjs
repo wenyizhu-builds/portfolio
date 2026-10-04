@@ -11,14 +11,17 @@ const settle=async(p)=>{await p.waitForTimeout(500);let prev='',same=0;for(let t
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1440,height:900}});
 await p.goto(URL);await p.waitForTimeout(1200);
 const ids=process.env.VIEWS?process.env.VIEWS.split(','):['','experience','education','hoyoverse','seminary-coop','nike','weber-shandwick','nowness','uchicago','xjtlu',...await p.evaluate(()=>[...new Set([...document.querySelectorAll('.mob [id^="m-"]')].map(e=>e.id.slice(2)))])];
+const REGIONS=process.env.VIEWS?[]:['na','eu','jp','cn'];
+const views=[...ids.map(id=>({id})),...REGIONS.map(r=>({id:'',region:r}))];
 let total=0;const rows=[];
-for(const id of ids){await p.evaluate(i=>location.hash='#/'+i,id);await settle(p);
+for(const vw of views){const id=vw.id;if(vw.region){await p.goto(URL+'?region='+vw.region+'#/');await p.waitForTimeout(800);}else{if(views.indexOf(vw)>0&&views[views.indexOf(vw)-1].region)await p.goto(URL);await p.evaluate(i=>location.hash='#/'+i,id);}await settle(p);
  const r=await p.evaluate((DBG)=>{
-  const nodes=[...document.querySelectorAll('.stage .node:not(.leaving)')].map(g=>{const s=g.querySelector('.shape').getBoundingClientRect();const l=g.querySelector('text.lbl').getBoundingClientRect();return {id:g.dataset.id,c:{x:(s.left+s.right)/2,y:(s.top+s.bottom)/2},box:{x0:Math.min(s.left,l.left),y0:s.top,x1:Math.max(s.right,l.right),y1:Math.max(s.bottom,l.bottom)}}});
+  const nodes=[...document.querySelectorAll('.stage .node:not(.leaving)')].map(g=>{const s=g.querySelector('.shape').getBoundingClientRect();const l=g.querySelector('text.lbl').getBoundingClientRect();return {id:g.dataset.id,lb:{x0:l.left,y0:l.top,x1:l.right,y1:l.bottom},c:{x:(s.left+s.right)/2,y:(s.top+s.bottom)/2},box:{x0:Math.min(s.left,l.left),y0:s.top,x1:Math.max(s.right,l.right),y1:Math.max(s.bottom,l.bottom)}}});
   const segs=[];document.querySelectorAll('.stage path.lk').forEach(pt=>{const L=pt.getTotalLength();const m=pt.getScreenCTM();const pts=[];for(let i=0;i<=40;i++){const q=pt.getPointAtLength(L*i/40);pts.push({x:q.x*m.a+q.y*m.c+m.e,y:q.x*m.b+q.y*m.d+m.f});}segs.push(pts)});
   // endpoints tell which nodes a link belongs to
   const near=(pt,n)=>Math.hypot(pt.x-n.c.x,pt.y-n.c.y)<14||(pt.x>n.box.x0-6&&pt.x<n.box.x1+6&&pt.y>n.box.y0-6&&pt.y<n.box.y1+6); // a line may start under its point's label
   let cross=[];for(const pts of segs){const own=nodes.filter(n=>near(pts[0],n)||near(pts[pts.length-1],n)).map(n=>n.id);
+    for(const n of nodes.filter(n=>own.includes(n.id))){const pad=3,b=n.lb;const away=pts.filter(q=>Math.hypot(q.x-pts[0].x,q.y-pts[0].y)>8&&Math.hypot(q.x-pts[pts.length-1].x,q.y-pts[pts.length-1].y)>8);if(away.some(q=>q.x>b.x0+pad&&q.x<b.x1-pad&&q.y>b.y0+pad&&q.y<b.y1-pad))cross.push('own:'+n.id);}
     for(const n of nodes){if(own.includes(n.id))continue;const pad=3;if(pts.slice(2,-2).some(q=>q.x>n.box.x0+pad&&q.x<n.box.x1-pad&&q.y>n.box.y0+pad&&q.y<n.box.y1-pad))cross.push(n.id+(DBG?'<'+own.join('-')+'>':''));}}
   let ov=[];for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i].box,c=nodes[j].box;if(a.x0<c.x1-2&&c.x0<a.x1-2&&a.y0<c.y1-2&&c.y0<a.y1-2)ov.push(nodes[i].id+'~'+nodes[j].id);}
   // (c) lines crossing or running on top of each other (not at a point they share)
@@ -32,5 +35,5 @@ for(const id of ids){await p.evaluate(i=>location.hash='#/'+i,id);await settle(p
     let cr=false;if(!shared){for(const s1 of segsOf(A))for(const s2 of segsOf(B))if(inter(s1[0],s1[1],s2[0],s2[1]))cr=true;}
     if(cr||close>3)lx++;}
   return {cross:[...new Set(cross)],ov,lx};},!!process.env.DEBUG);
- if(process.env.DEBUG)await p.screenshot({path:`${process.env.DEBUG}/${id||'home'}.png`});const n=r.cross.length+r.ov.length+r.lx;total+=n;if(n)rows.push(`${id||'home'}: lines-through=[${r.cross}] boxes=[${r.ov}] line-line=${r.lx}`);}
-console.log(rows.join('\n'));console.log('TOTAL',total,'over',ids.length,'views');await b.close();process.exit(total>BUDGET?1:0);})();
+ if(process.env.DEBUG)await p.screenshot({path:`${process.env.DEBUG}/${vw.region?'region-'+vw.region:id||'home'}.png`});const n=r.cross.length+r.ov.length+r.lx;total+=n;if(n)rows.push(`${vw.region?'region='+vw.region:id||'home'}: lines-through=[${r.cross}] boxes=[${r.ov}] line-line=${r.lx}`);}
+console.log(rows.join('\n'));console.log('TOTAL',total,'over',views.length,'views');await b.close();process.exit(total>BUDGET?1:0);})();

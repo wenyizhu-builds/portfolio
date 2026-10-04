@@ -25,6 +25,7 @@
   --top-h: 72px; /* header band */
   --bottom-h: 56px; /* legend band */
   --proto-w: 1240px; --proto-h: 870px; /* the dashboard prototype's window (public/demo/dashboard.html) */
+  --lbl-flip: 250ms; /* a map label moving above / below its point */
   --promo-w: 1600px; --promo-h: 900px; /* the promo video's frame (media/ai-workbench/promo.mp4) */
   --pv-btn: 34px; --pv-pad: 8px 12px; --pv-gap: 10px; /* promo video controls: round buttons, bar padding and spacing */
   --pv-track: 4px; --pv-knob: 12px; --pv-hit: 20px; /* progress track height, handle size, clickable height */
@@ -156,7 +157,7 @@ button { font: inherit; color: inherit; }
 .node.is-info.is-current .shp-solid { fill: var(--ink); }
 /* hover / focus: the shape grows a little (above); no colour change (owner, 2026-09-30) */
 
-.node .lbl, .node .lbl-halo { font-size: 13px; pointer-events: none; }
+.node .lbl, .node .lbl-halo { font-size: 13px; pointer-events: none; transition: transform var(--lbl-flip) ease; } /* v64.19: labels move above a point whose lines come from below */
 .node .lbl { fill: var(--ink); transition: fill 300ms; }
 .node .lbl-halo { fill: none; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
 .node .lbl-halo .kick { fill: none; }

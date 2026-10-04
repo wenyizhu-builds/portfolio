@@ -19,6 +19,9 @@ interface SimNode extends SimulationNodeDatum {
   rad: number;
   bend: number; // which way this node's link elbows
   box: { w: number; top: number; bottom: number }; // shape + label, around the node's centre (world units)
+  base: { w: number; top: number; bottom: number }; // the same with the label below the shape
+  up: boolean; // v64.19: label sits above the shape (its lines come from below)
+  shift: number; // how far the label moved up
 }
 interface SimLink extends SimulationLinkDatum<SimNode> {
   kind: 'tree' | 'related';
@@ -104,6 +107,7 @@ const LAYOUT = {
   crossGap: 16, crossPush: 0.35, // a line that crosses another is pulled back to one side, this far clear
   moveRelated: 1, moveTree: 0.3, // how readily a dotted-line end / a tree child moves to make room
   siblingRing: 150, siblingSpread: 1.0, // an end point's siblings (small groups) sit this far round their parent, this far apart (radians, ≈57°), v62.47
+  filterFanSpread: 0.62, // a group a region filter unfolded at home: its ends this far apart on the arc (radians, ≈35°), v64.19
   groupRing: 175, groupStagger: 35, groupMin: 4, groupSiblingSpread: 0.62, // an opened group of groupMin+ ends: a full radial fan, alternate ends a little further out (v62); with one of its ends open, a half fan (radians apart)
   relatedPull: 0.15, relatedSpread: 0.75, // connections gather on the far side of the selection from its chain, this far apart (radians)
   chainBend: 2.0, chainPull: 0.25, // the selection's chain (root → … → selection) never folds back sharper than this (radians, ≈115°)
@@ -112,6 +116,9 @@ const LAYOUT = {
   collide: { strength: 0.9, iterations: 2 },
   spawnJitter: 1.4, // radians of randomness when a child first appears
   elbow: { at: 0.42, max: 42, slope: 0.28, min: 16 }, // link shape: bend point, step size
+  // v64.19: a point whose lines all come from below puts its label above it, so no line runs through its own name.
+  // below / above: how far (world units) the other end must be below / above to count; gap: label to shape; ascent: text height above its baseline
+  labelFlip: { below: 40, above: -10, gap: 4, ascent: 11 },
 };
 
 const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
@@ -242,7 +249,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (focus) return;
       simNodes.forEach((n) => {
         const h = homeOf(n.id);
-        if (!h || n.fx != null) return;
+        if (!h || n.fx != null || fannedEnd(n.id)) return;
         // full strength until the layout stops (not scaled by alpha), so every point really gets home
         // after a group was open; the other forces fade with alpha and can't strand it halfway (v62.48)
         void alpha;
@@ -412,7 +419,16 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     .force('related', (alpha: number) => {
       // A selection's connections sit on its open side — away from the chain that leads
       // back to the ✳ — fanned out, so their dotted lines never have to cross the chain.
-      if (!focus || byId.get(focus)?.type === 'role') return; // roles: the career path decides
+      if (!focus) {
+        // a filter unfolded groups on the home map: each one's ends fan out on its open side
+        new Set([...simNodes.keys()].map((id) => byId.get(id)?.parent)).forEach((g) => {
+          if (!g || !filterFanned(g)) return;
+          const shown = childrenOf(g).map((c) => c.id).filter((id) => simNodes.has(id));
+          fanOut(g, shown, (id) => groupRadius(g, id), LAYOUT.filterFanSpread, alpha, movable);
+        });
+        return;
+      }
+      if (byId.get(focus)?.type === 'role') return; // roles: the career path decides
       fanOut(focus, relatedOf(focus), () => LAYOUT.relatedLink, LAYOUT.relatedSpread, alpha, movable);
       // an end point: it and its siblings fan out on the parent's open side too (v53), so the
       // line back to the ✳ never runs through one of them
@@ -473,8 +489,14 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   /** A point that may move to make room for a line: not held by a drag, not the centre, and not
       the selection's own chain (root → … → selection), which stays put so the view doesn't flip. */
+  /** v64.19: a group that a region filter unfolded on the home map: its shown ends are arranged on an
+      arc (like an opened group) instead of keeping their hand-placed spots, which crowded each other. */
+  function filterFanned(id: string | undefined): boolean {
+    return !!id && !focus && filtering() && isGroup(id) && childrenOf(id).some((c) => simNodes.has(c.id) && !homeOf(c.id));
+  }
+  const fannedEnd = (id: string) => filterFanned(byId.get(id)?.parent);
   function movable(n: SimNode): boolean {
-    if (!focus && homeOf(n.id)) return false; // the home map is laid out by hand (HOME_LAYOUT)
+    if (!focus && homeOf(n.id) && !fannedEnd(n.id)) return false; // the home map is laid out by hand (HOME_LAYOUT)
     return n.fx == null && n.id !== anchorId() && n.id !== 'root' && !isCtx(n);
   }
   function isCtx(n: SimNode): boolean {
@@ -577,7 +599,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const Rr = LAYOUT.radius;
     const rad = n.id === 'root' ? Rr.root : Math.max(Rr.min, Math.min(Rr.max, longest * Rr.perChar)) ;
     const held = ARRANGE && home ? { fx: x, fy: y } : {}; // arrange mode: home points stay where they are put
-    return { id: n.id, x, y, vx: 0, vy: 0, depth: d, rad, bend: hash(n.id + ':b') < 0.5 ? -1 : 1, box: boxOf(n), ...held };
+    return { id: n.id, x, y, vx: 0, vy: 0, depth: d, rad, bend: hash(n.id + ':b') < 0.5 ? -1 : 1, box: boxOf(n), base: boxOf(n), up: false, shift: 0, ...held };
   }
 
   function nodeEl(n: SiteNode): SVGGElement {
@@ -752,7 +774,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         const jitter = LAYOUT.linkJitter[0] + hash(n.id) * LAYOUT.linkJitter[1]; // some children sit close, some far
         const dist = n.type === 'role'
           ? LAYOUT.roleLink + hash(n.id) * LAYOUT.roleLinkVar
-          : (lp === focus || lp === anchorId()) && isGroupEnd(lp, n.id) ? groupRadius(lp, n.id)
+          : (lp === focus || lp === anchorId() || filterFanned(lp)) && isGroupEnd(lp, n.id) ? groupRadius(lp, n.id)
           : homeDist(lp, n.id) ?? (d === 1 ? LAYOUT.areaLink : (d === 2 ? LAYOUT.practiceLink : LAYOUT.leafLink) * jitter);
         next.push({ source: lp, target: n.id, kind: 'tree', dist, key: `t:${lp}>${n.id}` });
       }
@@ -803,15 +825,46 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     }
   }
 
+  /** v64.19: a label moves above its point when every line of that point comes from below, and back
+      when one comes from above (the thresholds keep it from flickering). The hand-laid home map is left as it is. */
+  function sideLabels() {
+    const free = !!focus || filtering(), F = LAYOUT.labelFlip;
+    const dirs = new Map<string, { below: number; above: number }>();
+    if (free)
+      for (const l of links) {
+        const s = l.source as unknown as SimNode, tg = l.target as unknown as SimNode;
+        if (typeof s !== 'object' || typeof tg !== 'object') continue;
+        for (const [n, o] of [[s, tg], [tg, s]] as const) {
+          const d = dirs.get(n.id) ?? { below: 0, above: 0 };
+          const dy = o.y! - n.y!;
+          if (dy > F.below) d.below++;
+          else if (dy < F.above) d.above++;
+          dirs.set(n.id, d);
+        }
+      }
+    simNodes.forEach((n, id) => {
+      const d = dirs.get(id);
+      const up = !free || id === 'root' || !d ? false : d.above ? false : d.below ? true : n.up;
+      if (up === n.up) return;
+      n.up = up;
+      n.shift = up ? -(LAYOUT.shapeHalf + F.gap) - n.base.bottom : 0;
+      n.box = up ? { w: n.base.w, top: LAYOUT.labelY.other - F.ascent + n.shift, bottom: LAYOUT.shapeHalf } : n.base;
+      els.get(id)?.querySelectorAll<SVGTextElement>('text.lbl, text.lbl-halo').forEach((t) => (t.style.transform = n.shift ? `translateY(${n.shift}px)` : ''));
+    });
+  }
+
   /* An elbowed link: a short straight run, a horizontal step, then on to the target. */
   function linkPath(s: SimNode, tg: SimNode, id: string): string {
     const f = (v: number) => v.toFixed(1);
     // A line leaving a point downward starts under that point's label, and one arriving from
     // below ends under it, so a line never runs through its own point's name.
-    const below = (n: SimNode, other: SimNode) => other.y! > n.y! + n.box.bottom;
+    // ...and with its label above (v64.19), a line arriving from above ends over the label
+    const port = (n: SimNode, o: SimNode) => n.up
+      ? (o.y! < n.y! + n.box.top ? n.y! + n.box.top : n.y!)
+      : (o.y! > n.y! + n.box.bottom ? n.y! + n.box.bottom : n.y!);
     const sx = s.x!, tx = tg.x!;
-    const sy = below(s, tg) ? s.y! + s.box.bottom : s.y!;
-    const ty = below(tg, s) ? tg.y! + tg.box.bottom : tg.y!;
+    const sy = port(s, tg);
+    const ty = port(tg, s);
     const dx = tx - sx, dy = ty - sy;
     void id;
     const E = LAYOUT.elbow;
@@ -879,6 +932,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     cam = moving ? { x: cam.x + (tc.x - cam.x) * e, y: cam.y + (tc.y - cam.y) * e, k: cam.k + (tc.k - cam.k) * e } : tc;
     world.setAttribute('transform', `translate(${cam.x.toFixed(1)},${cam.y.toFixed(1)}) scale(${cam.k.toFixed(3)})`);
     simNodes.forEach((n, id) => els.get(id)?.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`));
+    sideLabels();
     for (const l of links) {
       const s = l.source as unknown as SimNode;
       const tg = l.target as unknown as SimNode;
