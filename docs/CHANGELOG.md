@@ -635,3 +635,7 @@
 ## 2026-10-04 — v64.16 promo video: its own controls, no endless loop
 
 - Owner: the video could not be paused, had no progress bar and played non-stop. It now plays once (muted) and stops on a replay button. A control bar (src/video.ts) shows on hover, focus, pause or end: play/pause, a progress bar you can click or drag (arrow keys jump 5 s), the time, and the sound button. Clicking the video also pauses it. It pauses when the prototype opens and when the gallery is left.
+
+## 2026-10-04 — v64.17 promo video v7: real recorded sound effects
+
+- Owner: the synthesised sound effects did not sound high-end. v7 keeps the picture and music and uses real recordings from Kenney Interface Sounds and Kenney UI Audio (CC0, from GitHub): mouse press and release on every click, interface swooshes on screen changes, select clicks for tags, confirmation sounds, typing built from recorded switch clicks. OpenGameArt (keyboard pack) is blocked from both machines.
