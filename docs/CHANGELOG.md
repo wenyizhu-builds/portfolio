@@ -652,3 +652,7 @@
 ## 2026-10-04 — v64.20 map: with a filter on, clicking keeps the whole filtered map
 
 - Owner: with a filter on, clicking a point used to narrow the map to it, so visitors lost the filtered overview. Now there are two modes: filter off, a click narrows the map as before; filter on, the map stays the full filtered view (same points, camera still) and the click only highlights the point and opens its card. In map.ts the selection (`picked`) is separate from the layout focus (`focus = filtering() ? null : picked`).
+
+## 2026-10-05 — v65 Creator & Social: my own Xiaohongshu channel, marked Personal project
+
+- Owner decided not to rename Creative Work (old photos and design aren't content creation). Her Xiaohongshu AI tutorial channel (`xhs-ai-channel`) is the sixth case under Creator & Social: the identity line reads "Personal project" instead of an employer, `org: ''`, team "Just me", and a hand-written note "my own channel" beside the point while the group is open. Auto-placed notes now meet the point from the side (`NOTE.sideRise`) so the arrow never crosses the label below the shape. Group summary now names Xiaohongshu and Chinese audiences. Blue keywords for What I did added to published-copy.json and the editor archive. layout-check: 2 over 38 views (hoyoverse, known; ai, the known ai-workbench order effect).

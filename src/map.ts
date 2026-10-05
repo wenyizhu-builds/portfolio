@@ -80,7 +80,7 @@ const NOTES: Record<string, NotePlace> = {
   'interactive-filter': { text: [-64, 118], from: [-6, 92], via: [2, 82], to: [0, 70], rot: 2 },
   ai: { text: [42, -59], from: [34, -55], via: [22, -45], to: [18, -10], rot: -3 },
 };
-const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, outwardText: 14, edge: 12, size: 20, line: 1.1, head: 8, headAngle: 0.5 };
+const NOTE = { reaim: 80, tailGap: 8, bend: 14, tipGap: 22, outward: 70, sideRise: 0.25, outwardText: 14, edge: 12, size: 20, line: 1.1, head: 8, headAngle: 0.5 };
 
 /* Layout tuning — every other layout number lives here. */
 const LAYOUT = {
@@ -1029,16 +1029,18 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       let p = hand;
       let anchor = 'start';
       if (!p) {
-        // points here move, so the note sits outward from the parent: arrow beside the shape, words beyond
+        // points here move, so the note sits outward from the parent: arrow beside the shape, words beyond.
+        // The tip meets the shape from the side, level with it: labels sit under shapes, so an arrow
+        // coming in from above or below would run through the label (v65).
         const par = simNodes.get(byId.get(id)?.parent ?? '');
         if (!par) return;
-        const dx = n.x! - par.x!, dy = n.y! - par.y!, len = Math.hypot(dx, dy) || 1, ux = dx / len, uy = dy / len;
-        const to: [number, number] = [ux * NOTE.tipGap, uy * NOTE.tipGap];
-        const from: [number, number] = [to[0] + ux * NOTE.outward, to[1] + uy * NOTE.outward];
-        const via: [number, number] = [(to[0] + from[0]) / 2 - uy * 12, (to[1] + from[1]) / 2 + ux * 12];
-        const text: [number, number] = [from[0] + (ux >= 0 ? NOTE.outwardText : -NOTE.outwardText), from[1] + (uy >= 0 ? NOTE.size * 0.8 : 0)];
+        const sx = n.x! >= par.x! ? 1 : -1; // the side facing away from the parent
+        const to: [number, number] = [sx * NOTE.tipGap, 0];
+        const from: [number, number] = [to[0] + sx * NOTE.outward, -NOTE.outward * NOTE.sideRise]; // tail rises a little, away from the label
+        const via: [number, number] = [(to[0] + from[0]) / 2, from[1] - NOTE.bend * 0.5];
+        const text: [number, number] = [from[0] + sx * NOTE.outwardText, from[1] + NOTE.size * 0.35];
         p = { text, from, via, to, rot: -3 };
-        anchor = ux >= 0 ? 'start' : 'end';
+        anchor = sx > 0 ? 'start' : 'end';
       }
       placeNote(g, p, anchor);
     });

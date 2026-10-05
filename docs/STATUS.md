@@ -1,16 +1,22 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-04 · v64.20（交接）· 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-05 · v65 · 分支 `flagship-restructure`（未合并 main）· **v65 只在 Mac 上提交，还没推到 GitHub**（本会话云端连不上 GitHub）
 
 ## 新会话先看这里（交接）
 
-- **下一个会话的重点（用户 2026-10-04 定）**：做 Creative Work 这一块。用户打算把 **Creative Work 改名为 Content Creation**，并把她的**中文社交媒体（小红书等）案例**加进这一部分。开工前先问清：新名字是否就用 "Content Creation"；中文社媒案例有哪些素材（账号、数据、截图）放在 Mac 哪里；原来的 Photography / Design 图库是否保留在这一块下面。改名要同时改地图、面板、手机版和 check 里用到的地方（L17：一个概念一个决定点）。
+- **v65（2026-10-05）小红书个人账号案例上线（预览）**。用户定：**不改名**——Creative Work 保持原样（摄影、设计是多年前的作品，不算 Content Creation）；小红书案例作为 **Creator & Social 的第 6 个案例**（`xhs-ai-channel`，排最后），并且必须和工作案例区分开：
+  - 卡片身份行写 **Personal project**（工作案例这里是 "HoYoverse · Genshin Impact"），`org: ''` 所以不进 HoYoverse 经历；The Team = "Just me"。
+  - 地图：Creator & Social 展开时，点旁边有手写批注 "my own channel"。自动批注改为箭头从侧面水平指向点（map.ts drawNotes，`NOTE.sideRise`），不再穿过点下方的标签。
+  - Creator & Social 的一句话说明加了 Xiaohongshu 和 Chinese audiences（原句是用户定的，改动待她确认）。
+  - 数据来源：Mac `~/Desktop/CONTENT`（账号 Renee学不停）：8/10 7,125 粉，9/10 7,528；9/9 子弹时间教程视频 287K 播放、4.1K 涨粉（`50-data-pipeline/raw-assets/account-metrics/2026-09-24/xiaohongshu-export.json`）；14K 是用户口述的现在粉丝数。
+  - **待用户确认**：14K 是否准确；TikTok 约 2K 指的是抖音还是国际版 TikTok（卡片现写 Douyin）；"Just me"；"Data loop" 那条说的看板是不是她指的那个。
+  - 另一个会话曾做过「单独的 Content Creation 组」版本（未提交），已按用户新决定改掉。
 - v64.20：两套显示逻辑——开着地区筛选时点任何点，地图保持完整筛选视图（map.ts `picked` 与 `focus` 分开：`focus = filtering() ? null : picked`），只高亮并开卡片；不筛选时照旧收窄。
 - v64.19：地图防重叠——按地区筛选时展开的组排成扇形；线都从下方来的点，标签移到上方。layout-check 现在也查 4 个地区筛选和「线穿过自己的标签」，37 个视图共 1 处（HoYoverse 视图里 Seminary Co-op 到 Nike 的线擦过自己的标签，经历链条的拐角，低于上限 3）。删除线是「已看过」标记，不是线。
 - 上一个会话（v64.x）做完了：看板原型 + 宣传片（v7，已上线，自带控制条）。宣传片源文件在 Mac `portfolio-prototypes/dashboard-redesign/promo/source/`。
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v64）。Mac 上连不到 GitHub，只能在云端 push。
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v64）。Mac 能连上 GitHub（2026-10-05 测过），但 Mac 和云端默认都没有 GitHub 登录；推送要先在会话里加 repo（push 权限，需用户批准），再在云端 push。
 - **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
 - **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
 - **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
@@ -74,6 +80,6 @@
    - 系统图在 file:// 预览里显示不出来（相对路径），发布到 Artifact 时用 `files` 带上图片就正常。
 4. AI 案例（Dashboard 细节、"30–40% time saved" 放这里）。
 5. 中文手写字体（可选 ZCOOL KuaiLe，未定）。
-6. 暂缓：个人账号案例（小红书约 14k + TikTok 约 2k）。
+6. 个人账号案例已加（v65），见上方待确认项。之后英文账号做起来，也放进 Creator & Social，同样标 Personal project。
 7. layout-check 0–2 处（v62.48，仅 ai-workbench 在从无关视图直接跳入时）；回首页一定回到用户摆的布局（L40）；经历视图里 ✳ → Information → Experience 的链条会往回折（早已存在），待单独处理。
 8. 用户确认后再合并到 main。
