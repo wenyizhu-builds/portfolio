@@ -544,31 +544,24 @@ export const nodes: SiteNode[] = [
     }],
   },
 
-  /* Her own channel, not a job (v65, owner): last in Creator & Social, marked Personal project. */
+  /* Her side hustle, not a job (v67, owner): last in Creator & Social, marked Side hustle. No challenge or team: there wasn't one. */
   {
     id: 'xhs-ai-channel',
     type: 'case',
     parent: 'growth-social',
     org: '', // her own account, not done at a job
-    team: { en: 'Just me' }, // her own channel: no team, which also marks it as not a job
-    note: { en: 'my own channel', zh: '我自己的账号' }, // shows beside the point while Creator & Social is open
-    headline: { num: '7.5K → 14K', label: { en: 'followers in under a month' } },
+    note: { en: 'my side hustle', zh: '我的副业' }, // shows beside the point while Creator & Social is open
+    headline: { num: '1.8M+', label: { en: 'views across Xiaohongshu and Douyin' } },
     label: { en: 'AI Tutorial Channel' },
     kicker: { en: 'Xiaohongshu · Douyin' },
-    context: { en: 'Personal project' }, // stands where the employer goes on work cases
+    context: { en: 'Side hustle' }, // stands where the employer goes on work cases
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
     period: '2025 – now',
     markets: ['CN'],
     summary: {
-      en: "I started an AI tutorial channel on Xiaohongshu (RedNote), one of China’s biggest social platforms, and grew it from zero. Short videos show beginners how to make fun, useful things with AI. I paused it while working full-time and picked it back up this summer.",
+      en: "An AI tutorial channel I run on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn in public, sharing what I pick up about AI as I go. Short videos show beginners how to make fun, useful things with AI.",
     },
     sections: [
-      {
-        title: { en: 'The Challenge', zh: '项目挑战' },
-        items: [
-          { en: "Most AI content on Xiaohongshu explains tools in the abstract. My audience, mostly women in their 20s and early 30s who are new to AI, wanted something they could follow and use straight away. Views alone weren’t the goal: the channel needed content that turned viewers into followers." },
-        ],
-      },
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
@@ -580,9 +573,9 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { metric: '7.5K → 14K', en: 'followers in under a month' },
+      { metric: '1.8M+', en: 'views across Xiaohongshu and Douyin' },
+      { metric: '100K+', en: 'likes' },
       { metric: '287K', en: 'views on one tutorial video' },
-      { metric: '4.1K', en: 'new followers from that video' },
     ],
     links: [
       { label: { en: 'Xiaohongshu profile' }, href: 'https://www.xiaohongshu.com/user/profile/62a6b493000000001b02aa8d' },

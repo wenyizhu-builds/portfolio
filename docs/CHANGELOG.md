@@ -660,3 +660,7 @@
 ## 2026-10-05 — v66 map: points stay clickable when a filter zooms the map out
 
 - Owner: with a region filter on, points shrank to ~10px and were hard to click. Points and labels now keep at least `CAMERA.pointMin` (0.8) on-screen scale however far the camera zooms out (`pointScale()`, applied per node; boxes and the filter fan radius scale by the same `pScale` so nothing overlaps); labels are part of the click target. Filtered views: shapes 14px+ (was 10–11). Tested 0.95 (6 overlaps) and 0.85 (4) before settling on 0.8 (layout-check 2/38, both pre-existing).
+
+## 2026-10-05 — v67 Xiaohongshu case: a side hustle, with whole-account numbers
+
+- Owner: the channel is a side hustle, not a job. Identity line "Side hustle", map note "my side hustle". The Challenge and The Team removed (there was neither); a case with an empty team no longer shows The Team (blocks.ts). Summary now says why: learning in public. Headline and results use whole-account totals to 2026-09-24 (1.8M+ views across Xiaohongshu and Douyin, 100K+ likes, 287K on one video) instead of 7.5K → 14K followers. What I did moved to sections.0 (published-copy keys renamed).
