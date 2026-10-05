@@ -656,3 +656,7 @@
 ## 2026-10-05 — v65 Creator & Social: my own Xiaohongshu channel, marked Personal project
 
 - Owner decided not to rename Creative Work (old photos and design aren't content creation). Her Xiaohongshu AI tutorial channel (`xhs-ai-channel`) is the sixth case under Creator & Social: the identity line reads "Personal project" instead of an employer, `org: ''`, team "Just me", and a hand-written note "my own channel" beside the point while the group is open. Auto-placed notes now meet the point from the side (`NOTE.sideRise`) so the arrow never crosses the label below the shape. Group summary now names Xiaohongshu and Chinese audiences. Blue keywords for What I did added to published-copy.json and the editor archive. layout-check: 2 over 38 views (hoyoverse, known; ai, the known ai-workbench order effect).
+
+## 2026-10-05 — v66 map: points stay clickable when a filter zooms the map out
+
+- Owner: with a region filter on, points shrank to ~10px and were hard to click. Points and labels now keep at least `CAMERA.pointMin` (0.8) on-screen scale however far the camera zooms out (`pointScale()`, applied per node; boxes and the filter fan radius scale by the same `pScale` so nothing overlaps); labels are part of the click target. Filtered views: shapes 14px+ (was 10–11). Tested 0.95 (6 overlaps) and 0.85 (4) before settling on 0.8 (layout-check 2/38, both pre-existing).

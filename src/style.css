@@ -160,6 +160,7 @@ button { font: inherit; color: inherit; }
 .node .lbl, .node .lbl-halo { font-size: 13px; pointer-events: none; transition: transform var(--lbl-flip) ease; } /* v64.19: labels move above a point whose lines come from below */
 .node .lbl { fill: var(--ink); transition: fill 300ms; }
 .node .lbl-halo { fill: none; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.node .lbl, .node .lbl-halo { pointer-events: visiblePainted; } /* v66: the label is part of the click target, not only the shape */
 .node .lbl-halo .kick { fill: none; }
 .node.t-branch .lbl, .node.t-branch .lbl-halo { font-weight: 500; }
 .node:not(.show-kick):not(:hover) .kick { display: none; }

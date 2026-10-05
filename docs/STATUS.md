@@ -1,10 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-05 · v65 · 分支 `flagship-restructure`（未合并 main）· **v65 只在 Mac 上提交，还没推到 GitHub**（本会话云端连不上 GitHub）
+> 最后更新：2026-10-05 · v66 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
+- **v66（2026-10-05）筛选时点太小（用户反馈）**：点和标签在镜头缩小时保持 `CAMERA.pointMin` 0.8（筛选时约 14px，以前约 10px），标签也能点击；筛选扇形按比例放大。layout-check 2/38（与 v65 相同的两处老问题），四个筛选视图 0 处。用户要更大可调 `pointMin`（0.95 = 和首页一样大，但会有标签挤在一起，测过 6 处）。
 - **v65（2026-10-05）小红书个人账号案例上线（预览）**。用户定：**不改名**——Creative Work 保持原样（摄影、设计是多年前的作品，不算 Content Creation）；小红书案例作为 **Creator & Social 的第 6 个案例**（`xhs-ai-channel`，排最后），并且必须和工作案例区分开：
   - 卡片身份行写 **Personal project**（工作案例这里是 "HoYoverse · Genshin Impact"），`org: ''` 所以不进 HoYoverse 经历；The Team = "Just me"。
   - 地图：Creator & Social 展开时，点旁边有手写批注 "my own channel"。自动批注改为箭头从侧面水平指向点（map.ts drawNotes，`NOTE.sideRise`），不再穿过点下方的标签。

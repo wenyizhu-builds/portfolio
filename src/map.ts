@@ -67,7 +67,13 @@ const CAMERA = {
   pad: { x: 110, top: 40, bottom: 70 }, // room kept around the shown points for their labels
   ease: 0.06, // camera easing per frame
   still: 0.3, // px: closer than this counts as arrived, and drawing stops
+  // v66: when the map has to zoom out (a region filter shows many points), points and labels
+  // keep this on-screen scale instead of shrinking with it: only the lines get shorter, so every
+  // point stays as easy to read and click as on the home map.
+  pointMin: 0.8,
 };
+/** How much a point (shape + label) is enlarged in world units so it shows at `CAMERA.pointMin` on screen. */
+const pointScale = (k: number) => Math.max(1, CAMERA.pointMin / k);
 
 /* Hand-written notes (v55). Where each note sits beside its point, in world units from the
    point's centre: `text` is where the first line starts; the arrow runs from → via → to
@@ -210,6 +216,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   // Area of the screen the map may use (excludes the reading panel).
   let area = { x: 0, y: 0, w: host.clientWidth, h: host.clientHeight }; // replaced by setViewport() at once
   let cam = { x: host.clientWidth / 2, y: host.clientHeight / 2, k: 1 };
+  let pScale = 1; // how much points are enlarged so they keep CAMERA.pointMin on screen (v66)
   /* v64.20 (owner): two display modes. With no filter, the selection is also the map's focus: the map narrows
      to it and what surrounds it. With a region filter on, the map stays the whole filtered map; a click only
      marks the point (`picked`) and opens its card, so visitors keep their bearings in the filtered set. */
@@ -429,7 +436,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
         new Set([...simNodes.keys()].map((id) => byId.get(id)?.parent)).forEach((g) => {
           if (!g || !filterFanned(g)) return;
           const shown = childrenOf(g).map((c) => c.id).filter((id) => simNodes.has(id));
-          fanOut(g, shown, (id) => groupRadius(g, id), LAYOUT.filterFanSpread, alpha, movable);
+          fanOut(g, shown, (id) => groupRadius(g, id) * pScale, LAYOUT.filterFanSpread, alpha, movable); // enlarged points need a wider ring (v66)
         });
         return;
       }
@@ -832,6 +839,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
 
   /** v64.19: a label moves above its point when every line of that point comes from below, and back
       when one comes from above (the thresholds keep it from flickering). The hand-laid home map is left as it is. */
+  /** A point's box in world units: label below or above, enlarged by the current point scale (v66). */
+  function fitBox(n: SimNode) {
+    const F = LAYOUT.labelFlip;
+    const b = n.up ? { w: n.base.w, top: LAYOUT.labelY.other - F.ascent + n.shift, bottom: LAYOUT.shapeHalf } : n.base;
+    n.box = { w: b.w * pScale, top: b.top * pScale, bottom: b.bottom * pScale };
+  }
   function sideLabels() {
     const free = !!focus || filtering(), F = LAYOUT.labelFlip;
     const dirs = new Map<string, { below: number; above: number }>();
@@ -853,7 +866,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (up === n.up) return;
       n.up = up;
       n.shift = up ? -(LAYOUT.shapeHalf + F.gap) - n.base.bottom : 0;
-      n.box = up ? { w: n.base.w, top: LAYOUT.labelY.other - F.ascent + n.shift, bottom: LAYOUT.shapeHalf } : n.base;
+      fitBox(n);
       els.get(id)?.querySelectorAll<SVGTextElement>('text.lbl, text.lbl-halo').forEach((t) => (t.style.transform = n.shift ? `translateY(${n.shift}px)` : ''));
     });
   }
@@ -936,7 +949,11 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const moving = Math.abs(tc.x - cam.x) > CAMERA.still || Math.abs(tc.y - cam.y) > CAMERA.still || Math.abs(tc.k - cam.k) > CAMERA.still / 1000;
     cam = moving ? { x: cam.x + (tc.x - cam.x) * e, y: cam.y + (tc.y - cam.y) * e, k: cam.k + (tc.k - cam.k) * e } : tc;
     world.setAttribute('transform', `translate(${cam.x.toFixed(1)},${cam.y.toFixed(1)}) scale(${cam.k.toFixed(3)})`);
-    simNodes.forEach((n, id) => els.get(id)?.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)})`));
+    // points keep their size while the camera zooms out (v66): spacing follows the target scale, drawing the eased one
+    const ps = pointScale(tc.k);
+    if (Math.abs(ps - pScale) > 0.01) { pScale = ps; simNodes.forEach(fitBox); if (sim.alpha() < 0.1) sim.alpha(0.1); }
+    const vs = pointScale(cam.k).toFixed(3);
+    simNodes.forEach((n, id) => els.get(id)?.setAttribute('transform', `translate(${n.x!.toFixed(1)},${n.y!.toFixed(1)}) scale(${vs})`));
     sideLabels();
     for (const l of links) {
       const s = l.source as unknown as SimNode;
