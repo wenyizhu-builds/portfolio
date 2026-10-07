@@ -710,3 +710,8 @@
 - Owner: the case should tell an employer what she can do; a single video's views don't. Summary now: built from zero on Xiaohongshu and Douyin, a place to test growth ideas on a real audience with real data, and the creator side of brand deals with China's leading AI companies.
 - Results: "287K views and 4.1K followers from one video" → "6 paid partners among China's top AI brands". Brand partnerships item: "Won paid deals…", plus "After years of briefing creators, I now deliver for brands from the creator side." Order: Positioning · Content formula · Test and scale · Brand partnerships · Content operations system.
 - New lesson L48 and CLAUDE.md content rule: write for future employers.
+
+## 2026-10-07 — v69.8 Xiaohongshu AI Channel: no "side hustle", no process details
+
+- Owner: don't call it a side hustle (employers may read it as distraction); leave out details like how many posts were studied; no "team". Identity line removed, map note "my own channel".
+- Summary: built from zero; run like a growth project (find the audience, test, scale, turn reach into partnerships with China's leading AI companies). What I did rewritten short. New lesson L49.

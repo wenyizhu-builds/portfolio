@@ -551,26 +551,25 @@ export const nodes: SiteNode[] = [
     type: 'case',
     parent: 'growth-social',
     org: '', // her own account, not done at a job
-    note: { en: 'my side hustle', zh: '我的副业' }, // shows beside the point while Creator & Social is open
+    note: { en: 'my own channel', zh: '我自己的账号' }, // shows beside the point while Creator & Social is open
     headline: { num: '1.8M+', label: { en: 'views across Xiaohongshu and Douyin' } },
     label: { en: 'Xiaohongshu AI Channel' },
     kicker: { en: 'Xiaohongshu · Douyin' },
-    context: { en: 'Side hustle' }, // stands where the employer goes on work cases
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
     period: '2025 – now',
     markets: ['CN'],
     summary: {
-      en: "An AI channel I built from zero on Xiaohongshu (RedNote) and Douyin, two of China’s biggest social platforms. It’s where I test growth ideas on a real audience with real data, and it puts me on the creator side of brand deals with China’s leading AI companies.",
+      en: "An AI channel I built from zero on Xiaohongshu (RedNote) and Douyin, two of China’s biggest social platforms. I run it like a growth project: find the audience, test what works, scale it, and turn the reach into brand partnerships with China’s leading AI companies.",
     },
     sections: [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, with one promise: every video ends with something viewers can make themselves." },
-          { en: "Content formula: Compared my 73 posts with 35 viral posts from top AI creators. The winners led with the result, kept the barrier low and gave steps to follow, so that became the brief for every video." },
+          { en: "Positioning: Studied the top AI creators and aimed the channel at AI beginners, with one promise: every video ends with something viewers can make themselves." },
+          { en: "Content formula: Found what makes people save and follow, and built every video around it: result first, low barrier, clear steps." },
           { en: "Test and scale: Kept testing new formats and topics, cut what didn’t convert, and doubled down on what worked." },
-          { en: "Brand partnerships: Won paid deals with China’s leading AI companies, including Alibaba’s Qwen, ByteDance’s Jimeng, MiniMax, Moonshot AI’s Kimi, LiblibAI and Lovart. After years of briefing creators, I now deliver for brands from the creator side." },
-          { en: "Content operations system: Built my own AI system that researches the platform and competitors, drafts scripts and runs biweekly growth reviews, so I can run the channel as a team of one." },
+          { en: "Brand partnerships: Won paid partnerships with China’s leading AI companies, including Alibaba’s Qwen, ByteDance’s Jimeng, MiniMax, Moonshot AI’s Kimi, LiblibAI and Lovart." },
+          { en: "Content operations system: Built my own AI system for research, scripts and performance reviews, so I can run the whole channel on my own." },
         ],
       },
     ],

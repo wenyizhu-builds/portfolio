@@ -1,11 +1,13 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.7 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.8 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.8：Xiaohongshu AI Channel 去掉 "Side hustle"（身份行删掉，地图批注改 "my own channel"）；What I did 去掉过程细节（73/35、biweekly、team of one），只讲做法；summary：从零做起 + 像增长项目一样运营（找受众、测试、放大、变成品牌合作）。待她看。
 
 ### 注意（v69.7）：她的编辑器标签页若在我改文案前打开，保存时会把旧文案写回存档（10-07 发生过：Workbench 四条回到旧版、xhs 列表藏掉 Content formula）。我已合并修正（存档 rev 1080，备份 `.copy-editor/archive.backup-before-v69.7-merge.json`）。我改完文案后要提醒她：先刷新编辑器再改。开工比对存档时，看 history 时间戳区分她的有意修改和旧标签页的覆盖。
 
