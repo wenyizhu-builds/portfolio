@@ -730,3 +730,7 @@
 ## 2026-10-07 — Filter view experiments dropped
 
 - Owner rejected both versions on branch `filter-flyup` (cards flying out of a pile; the map's points lined up into a tree with a pile). The filter view stays as it was (v69.10). The branch is kept for reference only and is not merged.
+
+## 2026-10-07 — Home map: metro map "Rising" (draft, SPEC only)
+
+- Owner chose a metro-style home map: the career line rises on a 45° diagonal from XJTLU to Now; Education loops from XJTLU to Seminary Co-op; Paid & UA and Creator & Social branch from HoYoverse; AI runs from Now to the Xiaohongshu channel; Creative branches from XJTLU. Brand only colours. Key cases as big double rings, other work as small dots. Connections from `related` drawn as a dotted transfer only when one end is clicked. Written into SPEC as a draft; site code unchanged.

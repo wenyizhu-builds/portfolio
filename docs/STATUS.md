@@ -1,9 +1,14 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.10 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.10（网站未改）+ 首页地铁图草稿 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
+
+### 正在做：首页地图改为地铁图「Rising」（v70 草稿，只在 SPEC 和原型里，代码未动）
+- 用户选定形状 B「Rising」（她：「I am rising」）和「Brand only」配色。完整规则见 SPEC 最上面一条。原型 Artifact「Metro Map Plans」（`/home/claude/map-options/metro-plans.html`，云端，不在仓库里）。
+- 她否决过的（不要再提）：软曲线地铁、全部信息摊开（日期、所有名字）、她在中心、「next stop: your team」、孤立的 Education 线、冷色和多套暖色调色板。
+- **下一步**：她确认 SPEC 里的交互 → 在新分支做测试版（不直接改主站）→ 地区筛选和排版工具怎么适配地铁图，再问她。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 
