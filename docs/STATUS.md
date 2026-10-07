@@ -7,6 +7,8 @@
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 
+### 注意（v69.7）：她的编辑器标签页若在我改文案前打开，保存时会把旧文案写回存档（10-07 发生过：Workbench 四条回到旧版、xhs 列表藏掉 Content formula）。我已合并修正（存档 rev 1080，备份 `.copy-editor/archive.backup-before-v69.7-merge.json`）。我改完文案后要提醒她：先刷新编辑器再改。开工比对存档时，看 history 时间戳区分她的有意修改和旧标签页的覆盖。
+
 ### v69.7：Xiaohongshu AI Channel 按「写给未来雇主」重写（L48）。summary = 从零做起的 AI 账号 + 用真实受众和数据测增长想法 + 站在创作者一侧和中国头部 AI 公司合作；Results 第 3 条改为「6 paid partners among China’s top AI brands」（用户：单条 287K 说明不了她）。Brand partnerships 加「briefing creators 多年，现在从创作者一侧为品牌交付」。待她看。
 
 ### v69.5–69.6（本会话，用户 10-07 下午的决定）
