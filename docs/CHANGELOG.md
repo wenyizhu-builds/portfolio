@@ -691,3 +691,11 @@
 - New optional `headline.note` (one grey line under a card's headline figure, editable in the editor). Dashboard: "I built it from scratch while running creative strategy for Genshin Impact's creator ads." (owner picked version A and this placement.)
 - AI Creator Channel summary opens "An AI channel I run on Xiaohongshu" (was "AI tutorial channel"; owner confirmed).
 - Editor archive: headline label restored to the figure text only, note added; revision 1068.
+
+## 2026-10-07 — v69.5 Xiaohongshu AI Channel and Creator Workbench rewritten at strategy level
+
+- Renamed AI Creator Channel → Xiaohongshu AI Channel (owner). Summary: built from scratch, learn in public, now teaches beginners and earns from partnerships with China's leading AI companies.
+- What I did, from CONTENT sources (strategy.md; 07-23 review of 73 own vs 35 viral posts; 09-03 platform-fit retro; brief-library; 10-04 review): Positioning (kept) · Content formula (new: 73 vs 35 comparison) · Test and scale (owner's wording) · Content operations system · Brand partnerships (adds MiniMax and Moonshot AI's Kimi, drops Xiaoyunque, per owner; sponsored videos solve a real task).
+- Results: "287K views and 4.1K followers from one video" (4,109 attributed follows, 2026-09-24 export).
+- Creator Workbench: summary = the system behind the channel, turned into a product for other creators; What it does = Built on a proven workflow · End to end · Human in the loop · Built for other creators (from PRD v0.1).
+- The new items are written to content.ts and published-copy.json (blue keywords); the old per-item edits and the xhs list order are replaced.

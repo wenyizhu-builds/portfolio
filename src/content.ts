@@ -553,31 +553,31 @@ export const nodes: SiteNode[] = [
     org: '', // her own account, not done at a job
     note: { en: 'my side hustle', zh: '我的副业' }, // shows beside the point while Creator & Social is open
     headline: { num: '1.8M+', label: { en: 'views across Xiaohongshu and Douyin' } },
-    label: { en: 'AI Creator Channel' },
+    label: { en: 'Xiaohongshu AI Channel' },
     kicker: { en: 'Xiaohongshu · Douyin' },
     context: { en: 'Side hustle' }, // stands where the employer goes on work cases
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
     period: '2025 – now',
     markets: ['CN'],
     summary: {
-      en: "An AI channel I run on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn in public, sharing what I pick up about AI as I go. Short videos show beginners how to make fun, useful things with AI.",
+      en: "An AI channel I built from scratch on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn AI in public. Now it shows beginners how to make real things with AI, and earns from brand partnerships with China’s leading AI companies.",
     },
     sections: [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
           { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, promising that every video ends with something viewers can see and make themselves." },
-          { en: "Follower conversion over views: Tracked followers per 1K views on every post. A motion-capture tutorial converted 16× better than an illustration post with more views, so I doubled down on hands-on tutorials." },
-          { en: "Test and scale: Kept testing new formats and topics, cut what didn’t convert, like carousels and abstract AI concepts, and doubled down on what did." },
-          { en: "Content operations system: Built my own AI system that researches the platform and competitors, drafts scripts and iterates on post data, so I can run the channel as a team of one." },
-          { en: "Brand partnerships: Paid partnerships with leading Chinese AI products, including Alibaba’s Qwen, ByteDance’s Jimeng and Xiaoyunque, LiblibAI and Lovart." },
+          { en: "Content formula: Compared my 73 posts with 35 viral posts from top AI creators. The winners led with the result, kept the barrier low and gave steps to follow, so that became the brief for every video." },
+          { en: "Test and scale: Kept testing new formats and topics, cut what didn’t convert, and doubled down on what worked." },
+          { en: "Content operations system: Built my own AI system that researches the platform and competitors, drafts scripts and runs biweekly growth reviews, so I can run the channel as a team of one." },
+          { en: "Brand partnerships: Partnered with China’s leading AI companies, including Alibaba’s Qwen, ByteDance’s Jimeng, MiniMax, Moonshot AI’s Kimi, LiblibAI and Lovart. Each sponsored video uses the product to solve a real task, not to list features." },
         ],
       },
     ],
     results: [
       { metric: '1.8M+', en: 'views across Xiaohongshu and Douyin' },
       { metric: '100K+', en: 'likes' },
-      { metric: '287K', en: 'views on one tutorial video' },
+      { metric: '287K', en: 'views and 4.1K followers from one video' },
     ],
     related: ['creator-workbench'], // the system that runs it (v69)
     links: [
@@ -629,17 +629,16 @@ export const nodes: SiteNode[] = [
     label: { en: 'Creator Workbench' },
     context: { en: 'Personal project' },
     tags: [{ en: 'Vibe Coding' }, { en: 'Obsidian' }, { en: 'Claude Code' }, { en: 'Codex' }],
-    summary: { en: "The content operations system behind my Xiaohongshu channel: AI agents research, analyse, draft and review, and I make the calls." },
+    summary: { en: "The AI system that runs my Xiaohongshu channel, turned into a product for other creators. Agents do the research, analysis and drafting; the creator makes every call, without having to learn how agents work." },
     sections: [
       {
         title: { en: 'What it does', zh: '功能' },
         open: true,
         items: [
-          { en: "Research: Runs topic and competitor research on Xiaohongshu and Instagram, and reports what top posts have in common, with sources and gaps." },
-          { en: "Source analysis: Transcribes any post, tags its hook, format and structure, and files it as a searchable note." },
-          { en: "Idea scoring: Scores every idea on pain-point evidence, market proof and whether I can deliver it, before anything gets made." },
-          { en: "Production: Takes an idea from brief to script to draft, stops at each stage for my review, then reviews the results after launch." },
-          { en: "Knowledge base: Turns saved articles and videos into knowledge the agents cite when they write." },
+          { en: "Built on a proven workflow: Every module is a workflow I already run for my own channel, from research and viral-post breakdowns to scripts and growth reviews." },
+          { en: "End to end: Takes content from research to idea, script, review and post-launch analysis in one place, instead of across chats, docs and spreadsheets." },
+          { en: "Human in the loop: Agents research, analyse and draft, but nothing gets made until the creator picks the idea, and every draft stops for review." },
+          { en: "Built for other creators: Helps new users set up their own content tags from a few sample posts, runs on the AI subscription they already pay for, and works in Chinese and English." },
         ],
       },
     ],
