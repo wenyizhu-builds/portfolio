@@ -69,7 +69,7 @@ export interface SiteNode {
   diagram?: { src: string; alt: T }; // shown in the card as "How it worked"; click to enlarge
   related?: string[]; // dotted connections, drawn when one end is selected
   alwaysLinked?: string[]; // also shown (faded, with its dotted line) whenever this point's group is open (owner, v64.14)
-  headline?: { num: string; label: T; highlight?: string }; // the one result a recruiter should see first
+  headline?: { num: string; label: T; note?: T; highlight?: string }; // the one result a recruiter should see first
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
@@ -560,7 +560,7 @@ export const nodes: SiteNode[] = [
     period: '2025 – now',
     markets: ['CN'],
     summary: {
-      en: "An AI tutorial channel I run on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn in public, sharing what I pick up about AI as I go. Short videos show beginners how to make fun, useful things with AI.",
+      en: "An AI channel I run on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn in public, sharing what I pick up about AI as I go. Short videos show beginners how to make fun, useful things with AI.",
     },
     sections: [
       {
@@ -600,7 +600,7 @@ export const nodes: SiteNode[] = [
     id: 'ai-workbench',
     type: 'ai',
     parent: 'ai',
-    headline: { num: '40%', label: { en: 'less time on creative analysis & production' } },
+    headline: { num: '40%', label: { en: 'less time on creative analysis & production' }, note: { en: "I built it from scratch while running creative strategy for Genshin Impact's creator ads." } }, // note: owner's line under the figure
     label: { en: 'Creative Intelligence Dashboard' },
     tags: [{ en: 'Vibe Coding' }, { en: 'Claude Code' }], // same tag style as the cases' markets and platforms (owner)
     sections: [

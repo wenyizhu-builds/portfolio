@@ -75,7 +75,7 @@ function identity(n: SiteNode, title: string): string {
 
 /** The one figure a recruiter should see first, as a sentence: "80M+ views across 9 accounts…". */
 function figure(n: SiteNode): string {
-  return n.headline ? `<p class="p-fig"><b>${highlight(n.headline.num, n.headline.highlight || '')}</b> <span>${tx(n.headline.label)}</span></p>` : '';
+  return n.headline ? `<p class="p-fig"><b>${highlight(n.headline.num, n.headline.highlight || '')}</b> <span>${tx(n.headline.label)}</span>${n.headline.note ? `<span class="p-fig-note">${tx(n.headline.note)}</span>` : ''}</p>` : '';
 }
 
 export function summary(n: SiteNode): string {

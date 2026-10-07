@@ -1,11 +1,16 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.3 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.4 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.3–69.4（本会话）
+- 同步了她 10-07 上午在编辑器里的改动：AI tagging 去掉 "with a human review step"；Test and scale 缩短；删掉 "Follower conversion over views"。
+- Dashboard 的 40% 下面加一行灰字（她选的 A）："I built it from scratch while running creative strategy for Genshin Impact's creator ads."——字段 `headline.note`（content.ts 类型已加，blocks.ts `figure()` 渲染，样式 `.p-fig-note`），编辑器里可改；存档 revision 1068 已写入。
+- AI Creator Channel summary："An AI tutorial channel" → "An AI channel"（她确认）。
 
 ### 这几天做完的（都已推 GitHub、同步到 Mac、发布到预览 Artifact）
 - **AI Creator Channel**（`xhs-ai-channel`，Creator & Social 第 6 个案例，排最后）：她的小红书账号 Renee学不停，是**副业（Side hustle）**，不是工作。身份行 "Side hustle"，地图批注 "my side hustle"，没有 The Challenge、没有 The Team。数字是账号总量（截至 2026-09-24）：**1.8M+ 播放**（小红书 ~1.11M + 抖音 ~749K）、**100K+ 点赞**、单条 287K。What I did 5 条：Positioning · Follower conversion over views（16×：动捕教程 14,449 播放 115 粉 vs 插画 20,677 阅读 10 粉）· Test and scale · Content operations system · Brand partnerships（Alibaba 千问、ByteDance 即梦和小云雀、LiblibAI、Lovart，来源 `CONTENT/40-commercial/brief-library/`）。
@@ -14,7 +19,6 @@
 - **Creative Work 不改名**（用户定：老照片和设计不算 Content Creation）。
 
 ### 用户还没回答的问题
-0. （v69.3）她在编辑器的 Dashboard headline 字段里打了一句 "I vibe coded the dashboard from scratch to save time when I was the creative strategist for Genshin Impact creator ads."——还没上线，等她选润色版本和位置（headline 下第二行 / summary）。另外 AI Creator Channel 的 summary 仍写 "An AI tutorial channel"，与「不是 tutorial channel」的批评冲突，待她确认。
 1. 五个品牌是不是都是付费合作，要不要加 MiniMax、Kimi 等（帖子标签里出现过）。
 2. Creator Workbench 要不要做宣传片（像看板那样）。
 3. Creator & Social 的一句话说明加了 "Xiaohongshu" 和 "Chinese audiences"，原句是她定的，改动她还没确认。

@@ -241,6 +241,7 @@ button { font: inherit; color: inherit; }
 .p-fig { margin: 0 0 14px; }
 .p-fig b { font-weight: 400; color: var(--cobalt); font-variant-numeric: tabular-nums; }
 .p-fig b { font-size: var(--fs-figure); }
+.p-fig > .p-fig-note { display: block; margin-top: 4px; font-size: var(--fs-text); color: var(--muted); }
 .p-highlight { color: var(--ink); background: linear-gradient(transparent 30%, var(--accent) 30%, var(--accent) 92%, transparent 92%); }
 .p-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .p-tag { font-size: var(--fs-label); font-weight: 400; color: var(--cobalt); background: var(--panel); border: 1px solid var(--cobalt); border-radius: 6px; padding: 1px 5px; }

@@ -685,3 +685,9 @@
 
 - Synced three edits the user made in the editor at 08:29–08:56 that v69.2 missed: Dashboard "AI tagging" drops "with a human review step"; AI Creator Channel "Test and scale" shortened; AI Creator Channel "Follower conversion over views" removed.
 - Not synced yet: a sentence she typed into the Dashboard headline field ("I vibe coded the dashboard from scratch…"); waiting for her to pick a polished version and where it goes.
+
+## 2026-10-07 — v69.4 Dashboard line under the figure; "AI channel"
+
+- New optional `headline.note` (one grey line under a card's headline figure, editable in the editor). Dashboard: "I built it from scratch while running creative strategy for Genshin Impact's creator ads." (owner picked version A and this placement.)
+- AI Creator Channel summary opens "An AI channel I run on Xiaohongshu" (was "AI tutorial channel"; owner confirmed).
+- Editor archive: headline label restored to the figure text only, note added; revision 1068.
