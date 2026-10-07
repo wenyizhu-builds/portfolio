@@ -1,11 +1,13 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.6 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.7 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.7：Xiaohongshu AI Channel 按「写给未来雇主」重写（L48）。summary = 从零做起的 AI 账号 + 用真实受众和数据测增长想法 + 站在创作者一侧和中国头部 AI 公司合作；Results 第 3 条改为「6 paid partners among China’s top AI brands」（用户：单条 287K 说明不了她）。Brand partnerships 加「briefing creators 多年，现在从创作者一侧为品牌交付」。待她看。
 
 ### v69.5–69.6（本会话，用户 10-07 下午的决定）
 - 用户：MiniMax、Kimi 加入，去掉小云雀；改名 **Xiaohongshu AI Channel**；Creator & Social 一句话说明她确认了；Workbench 要宣传片。她说上一版文案"把她做的事缩成细节清单，没写出策略层的大图"——这两个案例已按 CONTENT 原始资料重写（见 CHANGELOG v69.5）。**AI Projects 就这两个**（Dashboard + Workbench）；作品集网站本身算 vibe coding，但她觉得单独成案偏弱，暂不加。

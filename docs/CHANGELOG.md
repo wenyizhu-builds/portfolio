@@ -704,3 +704,9 @@
 
 - 21 s promo in the dashboard film's style (same hook layout, 120 bpm soundtrack, Kenney CC0 UI sounds): hook "I turned my content workflow into an AI workbench", five scenes (research, source breakdown, idea scoring, draft + approve, knowledge), end card "Creator Workbench · Built with Claude Code and Codex".
 - `public/media/creator-workbench/promo.webm` (2.7 MB) + `promo.mp4` (3.4 MB), 1600×900; poster.jpg is now the end frame. Checked playing in the browser (L45).
+
+## 2026-10-07 — v69.7 Xiaohongshu AI Channel written for future employers
+
+- Owner: the case should tell an employer what she can do; a single video's views don't. Summary now: built from zero on Xiaohongshu and Douyin, a place to test growth ideas on a real audience with real data, and the creator side of brand deals with China's leading AI companies.
+- Results: "287K views and 4.1K followers from one video" → "6 paid partners among China's top AI brands". Brand partnerships item: "Won paid deals…", plus "After years of briefing creators, I now deliver for brands from the creator side." Order: Positioning · Content formula · Test and scale · Brand partnerships · Content operations system.
+- New lesson L48 and CLAUDE.md content rule: write for future employers.

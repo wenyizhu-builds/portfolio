@@ -560,24 +560,24 @@ export const nodes: SiteNode[] = [
     period: '2025 – now',
     markets: ['CN'],
     summary: {
-      en: "An AI channel I built from scratch on Xiaohongshu (RedNote), one of China’s biggest social platforms. I started it to learn AI in public. Now it shows beginners how to make real things with AI, and earns from brand partnerships with China’s leading AI companies.",
+      en: "An AI channel I built from zero on Xiaohongshu (RedNote) and Douyin, two of China’s biggest social platforms. It’s where I test growth ideas on a real audience with real data, and it puts me on the creator side of brand deals with China’s leading AI companies.",
     },
     sections: [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, promising that every video ends with something viewers can see and make themselves." },
+          { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, with one promise: every video ends with something viewers can make themselves." },
           { en: "Content formula: Compared my 73 posts with 35 viral posts from top AI creators. The winners led with the result, kept the barrier low and gave steps to follow, so that became the brief for every video." },
           { en: "Test and scale: Kept testing new formats and topics, cut what didn’t convert, and doubled down on what worked." },
+          { en: "Brand partnerships: Won paid deals with China’s leading AI companies, including Alibaba’s Qwen, ByteDance’s Jimeng, MiniMax, Moonshot AI’s Kimi, LiblibAI and Lovart. After years of briefing creators, I now deliver for brands from the creator side." },
           { en: "Content operations system: Built my own AI system that researches the platform and competitors, drafts scripts and runs biweekly growth reviews, so I can run the channel as a team of one." },
-          { en: "Brand partnerships: Partnered with China’s leading AI companies, including Alibaba’s Qwen, ByteDance’s Jimeng, MiniMax, Moonshot AI’s Kimi, LiblibAI and Lovart. Each sponsored video uses the product to solve a real task, not to list features." },
         ],
       },
     ],
     results: [
       { metric: '1.8M+', en: 'views across Xiaohongshu and Douyin' },
       { metric: '100K+', en: 'likes' },
-      { metric: '287K', en: 'views and 4.1K followers from one video' },
+      { metric: '6', en: 'paid partners among China’s top AI brands' },
     ],
     related: ['creator-workbench'], // the system that runs it (v69)
     links: [
