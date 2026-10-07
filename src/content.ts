@@ -552,7 +552,7 @@ export const nodes: SiteNode[] = [
     org: '', // her own account, not done at a job
     note: { en: 'my side hustle', zh: '我的副业' }, // shows beside the point while Creator & Social is open
     headline: { num: '1.8M+', label: { en: 'views across Xiaohongshu and Douyin' } },
-    label: { en: 'AI Tutorial Channel' },
+    label: { en: 'AI Creator Channel' },
     kicker: { en: 'Xiaohongshu · Douyin' },
     context: { en: 'Side hustle' }, // stands where the employer goes on work cases
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
@@ -565,10 +565,11 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Positioning: AI for beginners. Every video ends with something you can see and make yourself." },
-          { en: "Data loop: Tracked every post in a dashboard I built and ranked content by followers per 1K views, not just views." },
-          { en: "Format: Moved from carousels to short videos that show the finished result first, then teach it step by step." },
-          { en: "Monetisation: Paid partnerships with AI product brands." },
+          { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, promising that every video ends with something viewers can see and make themselves." },
+          { en: "Follower conversion over views: Tracked followers per 1K views on every post. A motion-capture tutorial converted 16× better than an illustration post with more views, so I doubled down on hands-on tutorials." },
+          { en: "Data-led pivots: Dropped formats and topics that weren’t converting, like carousels and abstract AI concepts, and refocused on short videos that open with a striking visual result." },
+          { en: "AI agent workflow: Built a team of AI agents that tracks trending posts and benchmark creators, turns viral videos into a searchable knowledge base, tags every post by hook and format, and runs biweekly growth reviews on the account data." },
+          { en: "Brand partnerships: Paid partnerships with leading Chinese AI products, including Alibaba’s Qwen, ByteDance’s Jimeng and Xiaoyunque, LiblibAI and Lovart." },
         ],
       },
     ],

@@ -1,10 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-05 · v67 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v68 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
+- **v68（2026-10-07）小红书案例重写（用户：原来的 What I did 太弱）**：标题改 **AI Creator Channel**（用户：不要叫 tutorial）。What I did 改为策略层面 5 条：Positioning（对标头部 AI 博主，定位 AI 小白、每条视频都有看得见的成品）· Follower conversion over views（每千次播放带粉；动捕教程 14,449 播放 115 粉 vs AI 插画 20,677 阅读 10 粉 ≈ 16×）· Data-led pivots（停图文和抽象 AI 话题，转向开头就给视觉成品的短视频）· AI agent workflow（Creator OS：Agent 追热门和对标账号、爆款视频转知识库、每条内容打 hook/形式标签、双周增长复盘）· Brand partnerships（Alibaba 千问、ByteDance 即梦和小云雀、LiblibAI、Lovart——来源 CONTENT/40-commercial/brief-library）。来源都在 CONTENT 的 strategy.md 和 2026-09-07 双周复盘。
 - **v67（2026-10-05）小红书案例按用户意见改**：定位为 **副业（Side hustle）**，不是工作；身份行 "Side hustle"，地图批注 "my side hustle"；删掉 The Challenge 和 The Team（用户：没有挑战也没有团队；空的 team 不再显示）；summary 写动机：learn in public、分享自己学 AI 的过程；不再写 7.5K → 14K（用户：不够亮眼）。数字改为账号总量（截至 2026-09-24，CONTENT 里的内容日历 + 9/24 小红书导出）：小红书 ~1.11M 播放 + 抖音 ~749K = **1.8M+ 播放**；点赞 ~103K = **100K+**；收藏 ~93K（未用）；单条 287K。日历有些帖子没填播放，实际只会更多。
 - **v66（2026-10-05）筛选时点太小（用户反馈）**：点和标签在镜头缩小时保持 `CAMERA.pointMin` 0.8（筛选时约 14px，以前约 10px），标签也能点击；筛选扇形按比例放大。layout-check 2/38（与 v65 相同的两处老问题），四个筛选视图 0 处。用户要更大可调 `pointMin`（0.95 = 和首页一样大，但会有标签挤在一起，测过 6 处）。
 - **v65（2026-10-05）小红书个人账号案例上线（预览）**。用户定：**不改名**——Creative Work 保持原样（摄影、设计是多年前的作品，不算 Content Creation）；小红书案例作为 **Creator & Social 的第 6 个案例**（`xhs-ai-channel`，排最后），并且必须和工作案例区分开：
@@ -12,7 +13,6 @@
   - 地图：Creator & Social 展开时，点旁边有手写批注 "my own channel"。自动批注改为箭头从侧面水平指向点（map.ts drawNotes，`NOTE.sideRise`），不再穿过点下方的标签。
   - Creator & Social 的一句话说明加了 Xiaohongshu 和 Chinese audiences（原句是用户定的，改动待她确认）。
   - 数据来源：Mac `~/Desktop/CONTENT`（账号 Renee学不停）：8/10 7,125 粉，9/10 7,528；9/9 子弹时间教程视频 287K 播放、4.1K 涨粉（`50-data-pipeline/raw-assets/account-metrics/2026-09-24/xiaohongshu-export.json`）；14K 是用户口述的现在粉丝数。
-  - **待用户确认**："Data loop" 那条说的看板是不是她指的那个。
   - 另一个会话曾做过「单独的 Content Creation 组」版本（未提交），已按用户新决定改掉。
 - v64.20：两套显示逻辑——开着地区筛选时点任何点，地图保持完整筛选视图（map.ts `picked` 与 `focus` 分开：`focus = filtering() ? null : picked`），只高亮并开卡片；不筛选时照旧收窄。
 - v64.19：地图防重叠——按地区筛选时展开的组排成扇形；线都从下方来的点，标签移到上方。layout-check 现在也查 4 个地区筛选和「线穿过自己的标签」，37 个视图共 1 处（HoYoverse 视图里 Seminary Co-op 到 Nike 的线擦过自己的标签，经历链条的拐角，低于上限 3）。删除线是「已看过」标记，不是线。

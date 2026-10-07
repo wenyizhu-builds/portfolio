@@ -664,3 +664,7 @@
 ## 2026-10-05 — v67 Xiaohongshu case: a side hustle, with whole-account numbers
 
 - Owner: the channel is a side hustle, not a job. Identity line "Side hustle", map note "my side hustle". The Challenge and The Team removed (there was neither); a case with an empty team no longer shows The Team (blocks.ts). Summary now says why: learning in public. Headline and results use whole-account totals to 2026-09-24 (1.8M+ views across Xiaohongshu and Douyin, 100K+ likes, 287K on one video) instead of 7.5K → 14K followers. What I did moved to sections.0 (published-copy keys renamed).
+
+## 2026-10-07 — v68 Xiaohongshu case: AI Creator Channel, strategic What I did
+
+- Owner: "tutorial channel" undersold it and What I did was too weak. Title is now AI Creator Channel. What I did rewritten at strategy level from CONTENT evidence: positioning against benchmark creators, follower conversion per 1K views (16× example), data-led pivots (dropped carousels and abstract topics), the AI agent workflow behind the channel, and brand partners (Alibaba's Qwen, ByteDance's Jimeng and Xiaoyunque, LiblibAI, Lovart).
