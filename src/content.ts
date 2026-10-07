@@ -82,7 +82,8 @@ const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 /** A gallery set from the image list in gallery-images.ts (`key` = its folder under public/media). */
 function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?: T): GallerySet {
   const rows = galleryImages[key] || [];
-  return { id, title, meta, unit, items: rows.map(([f, w, h, tag, lw]) => ({ src: `media/${key}/${f}.jpg`, thumb: `media/${key}/${f}-t.jpg`, w, h, tag, ...(lw ? { large: `media/${key}/${f}-l.jpg`, lw } : {}) })) };
+  // prototype screens have no separate small copy (v69): the 1600px screenshot is already light, and the preview's file limit is tight
+  return { id, title, meta, unit, items: rows.map(([f, w, h, tag, lw]) => ({ src: `media/${key}/${f}.jpg`, thumb: unit === 'screens' ? `media/${key}/${f}.jpg` : `media/${key}/${f}-t.jpg`, w, h, tag, ...(lw ? { large: `media/${key}/${f}-l.jpg`, lw } : {}) })) };
 }
 
 /* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */
