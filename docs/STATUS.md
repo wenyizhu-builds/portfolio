@@ -5,27 +5,34 @@
 
 ## 新会话先看这里（交接）
 
-- **v69（2026-10-07）第二个 AI 项目 Creator Workbench（用户：她的内容运营系统，Obsidian 工作台）**：替换了 ai-slot-1。来源 Mac `CONTENT/80-product-development/creator-workbench/`（PRD + 原型 v2，尚未开发完，用户：不用提）。展示方式同看板：电脑版 app 栏 + 灵箱里可点的原型（`public/demo/workbench.html`），**没有宣传片**，用 Home 屏的 16:9 静图（`poster.jpg`，点它也能打开原型；`prototype.video: []`）；手机版 8 张截图。原型英文版由 `scripts/workbench-en.py` 从 v2 生成：示例数据里的中文账号「AI 慢慢学」译为 "AI Made Easy"，帖子和内容契约译成英文；标题栏的语言切换隐藏（设置页的语言选项保留）。身份行 Personal project；与 AI Creator Channel 虚线相连（只在选中一端时显示，不用 alwaysLinked：试过，AI Projects 视图里线太长）。小红书案例 What I did：Data-led pivots → **Test and scale**；AI agent workflow → **Content operations system**（用户口述）。修了地图：一个点的组不在画面上时（相连的点），以前从 ✳ 出生、穿过别的线卡住，现在在选中点的外侧出生（map.ts spawn）。layout-check 1/38（只剩 hoyoverse 老问题）。
-- **v68（2026-10-07）小红书案例重写（用户：原来的 What I did 太弱）**：标题改 **AI Creator Channel**（用户：不要叫 tutorial）。What I did 改为策略层面 5 条：Positioning（对标头部 AI 博主，定位 AI 小白、每条视频都有看得见的成品）· Follower conversion over views（每千次播放带粉；动捕教程 14,449 播放 115 粉 vs AI 插画 20,677 阅读 10 粉 ≈ 16×）· Data-led pivots（停图文和抽象 AI 话题，转向开头就给视觉成品的短视频）· AI agent workflow（Creator OS：Agent 追热门和对标账号、爆款视频转知识库、每条内容打 hook/形式标签、双周增长复盘）· Brand partnerships（Alibaba 千问、ByteDance 即梦和小云雀、LiblibAI、Lovart——来源 CONTENT/40-commercial/brief-library）。来源都在 CONTENT 的 strategy.md 和 2026-09-07 双周复盘。
-- **v67（2026-10-05）小红书案例按用户意见改**：定位为 **副业（Side hustle）**，不是工作；身份行 "Side hustle"，地图批注 "my side hustle"；删掉 The Challenge 和 The Team（用户：没有挑战也没有团队；空的 team 不再显示）；summary 写动机：learn in public、分享自己学 AI 的过程；不再写 7.5K → 14K（用户：不够亮眼）。数字改为账号总量（截至 2026-09-24，CONTENT 里的内容日历 + 9/24 小红书导出）：小红书 ~1.11M 播放 + 抖音 ~749K = **1.8M+ 播放**；点赞 ~103K = **100K+**；收藏 ~93K（未用）；单条 287K。日历有些帖子没填播放，实际只会更多。
-- **v66（2026-10-05）筛选时点太小（用户反馈）**：点和标签在镜头缩小时保持 `CAMERA.pointMin` 0.8（筛选时约 14px，以前约 10px），标签也能点击；筛选扇形按比例放大。layout-check 2/38（与 v65 相同的两处老问题），四个筛选视图 0 处。用户要更大可调 `pointMin`（0.95 = 和首页一样大，但会有标签挤在一起，测过 6 处）。
-- **v65（2026-10-05）小红书个人账号案例上线（预览）**。用户定：**不改名**——Creative Work 保持原样（摄影、设计是多年前的作品，不算 Content Creation）；小红书案例作为 **Creator & Social 的第 6 个案例**（`xhs-ai-channel`，排最后），并且必须和工作案例区分开：
-  - 卡片身份行写 **Personal project**（工作案例这里是 "HoYoverse · Genshin Impact"），`org: ''` 所以不进 HoYoverse 经历；The Team = "Just me"。
-  - 地图：Creator & Social 展开时，点旁边有手写批注 "my own channel"。自动批注改为箭头从侧面水平指向点（map.ts drawNotes，`NOTE.sideRise`），不再穿过点下方的标签。
-  - Creator & Social 的一句话说明加了 Xiaohongshu 和 Chinese audiences（原句是用户定的，改动待她确认）。
-  - 数据来源：Mac `~/Desktop/CONTENT`（账号 Renee学不停）：8/10 7,125 粉，9/10 7,528；9/9 子弹时间教程视频 287K 播放、4.1K 涨粉（`50-data-pipeline/raw-assets/account-metrics/2026-09-24/xiaohongshu-export.json`）；14K 是用户口述的现在粉丝数。
-  - 另一个会话曾做过「单独的 Content Creation 组」版本（未提交），已按用户新决定改掉。
-- v64.20：两套显示逻辑——开着地区筛选时点任何点，地图保持完整筛选视图（map.ts `picked` 与 `focus` 分开：`focus = filtering() ? null : picked`），只高亮并开卡片；不筛选时照旧收窄。
-- v64.19：地图防重叠——按地区筛选时展开的组排成扇形；线都从下方来的点，标签移到上方。layout-check 现在也查 4 个地区筛选和「线穿过自己的标签」，37 个视图共 1 处（HoYoverse 视图里 Seminary Co-op 到 Nike 的线擦过自己的标签，经历链条的拐角，低于上限 3）。删除线是「已看过」标记，不是线。
-- 上一个会话（v64.x）做完了：看板原型 + 宣传片（v7，已上线，自带控制条）。宣传片源文件在 Mac `portfolio-prototypes/dashboard-redesign/promo/source/`。
+**2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 
-- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`。云端副本和 Mac 文件夹 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 树（`HEAD^{tree}`）一致（v64）。Mac 能连上 GitHub（2026-10-05 测过），但 Mac 和云端默认都没有 GitHub 登录；推送要先在会话里加 repo（push 权限，需用户批准），再在云端 push。
-- **Mac 上跑 git 之前**先申请删除权限（L36），否则 git 留下 `.git/index.lock` 删不掉。
-- **同步到 Mac 的做法**：云端 `git commit` + `git push` → `git format-patch [--binary] -1` → 传到 Mac 的 `portfolio-prototypes/` → 在 `claude/` 里 `git am --3way` → 比对 `git rev-parse HEAD^{tree}` 与云端一致。
-- **编辑器**：用户双击 `claude/Open Editor.command` 打开本地编辑器（localhost:5173）。用户在编辑器里的修改存在 `claude/.copy-editor/archive.json`（不进 git），**不会**自动进入 `src/published-copy.json`。每次开工先比对存档和 published-copy 的差异，把用户新改的内容同步过来（v62.8、v62.20 都这样做过）；我改了文案后，也把同样的 edits 写回存档（`revision + 1`，用临时文件 + `os.replace`）。
-- **预览**：`npm run build:file` 生成 `preview.html`，发布到 Artifact `https://claude.ai/artifact/K7QJV2bfsK5neKBpxHuzwX`；新图片要用 `files` 一起发布。一个版本最多 511 个文件（v69.1 起 508；原型截图不再做 -t 小图）：图片改名/删除后，用 `files` 里写 `null` 删掉旧路径；每次发布最多 255 个文件、64MB，大批要分两次。
-- **构建命令**：`set -o pipefail; npm run build:file 2>&1 | tail -1 && git commit …`（L35：不要让管道吞掉失败）。
+### 这几天做完的（都已推 GitHub、同步到 Mac、发布到预览 Artifact）
+- **AI Creator Channel**（`xhs-ai-channel`，Creator & Social 第 6 个案例，排最后）：她的小红书账号 Renee学不停，是**副业（Side hustle）**，不是工作。身份行 "Side hustle"，地图批注 "my side hustle"，没有 The Challenge、没有 The Team。数字是账号总量（截至 2026-09-24）：**1.8M+ 播放**（小红书 ~1.11M + 抖音 ~749K）、**100K+ 点赞**、单条 287K。What I did 5 条：Positioning · Follower conversion over views（16×：动捕教程 14,449 播放 115 粉 vs 插画 20,677 阅读 10 粉）· Test and scale · Content operations system · Brand partnerships（Alibaba 千问、ByteDance 即梦和小云雀、LiblibAI、Lovart，来源 `CONTENT/40-commercial/brief-library/`）。
+- **Creator Workbench**（`creator-workbench`，AI Projects 第 2 个，替换了第一个占位）：她的内容运营系统（Obsidian 工作台，Agent 做调研、素材解析、选题评分、制作、知识库）。还没开发完，**页面上不要提**。展示同看板：app 栏 + 灵箱里可点原型（`public/demo/workbench.html`，由 `scripts/workbench-en.py` 从 Mac `CONTENT/80-product-development/creator-workbench/prototypes/creator-workbench-v2.html` 生成英文版）；没有宣传片，视频位放 Home 屏 16:9 静图（点击打开原型）；手机版 8 张截图。与 AI Creator Channel 虚线相连。
+- **地图**：筛选时点不再缩到 10px（`CAMERA.pointMin` 0.8，约 14px），标签也能点；相连的点在选中点外侧出生（不再从 ✳ 出生卡在线中间）。layout-check 1/38（只剩 hoyoverse 老问题）。
+- **Creative Work 不改名**（用户定：老照片和设计不算 Content Creation）。
+
+### 用户还没回答的问题
+1. 五个品牌是不是都是付费合作，要不要加 MiniMax、Kimi 等（帖子标签里出现过）。
+2. Creator Workbench 要不要做宣传片（像看板那样）。
+3. Creator & Social 的一句话说明加了 "Xiaohongshu" 和 "Chinese audiences"，原句是她定的，改动她还没确认。
+4. AI Creator Channel 标题备选：Xiaohongshu AI Channel / AI Channel on RedNote。
+
+### 用户对文案的批评（这次会话，必须吸取）
+- What I did 不能写成任务清单（"Data loop""Format""Monetisation: Paid partnerships with AI product brands"）。要写**策略层**：怎么定位、怎么用数据调整策略、怎么测试再放大、怎么用 AI 把流程做得更好；有名有姓（品牌名、具体倍数）。
+- 不要缩小她的成就：她的账号不是 "tutorial channel"；7.5K → 14K 不够亮眼，用总量；品牌要说清是中国 AI 头部公司。
+- 她口述的意思要提炼成更概括、更专业的说法，例如 "test formats and content, stop what doesn't work, double down on what works" → "Test and scale"。
+- 先去 CONTENT 里找真材料（strategy.md、双周复盘、40-commercial、80-product-development），再写；不要凭第一份数据就写。
+
+### 工作方式（基础设施）
+- **版本源**：GitHub `wenyizhu-builds/portfolio`，分支 `flagship-restructure`（未合并 main）。云端要 push：先在会话里 add_repo（push 权限，需用户批准），clone 到 `/home/claude/portfolio`，commit + push。
+- **同步到 Mac**：Mac 能连 GitHub（2026-10-05 测过）。先申请 JS_workspace 的删除权限（L36），然后在 `~/Desktop/JS_workspace/portfolio-prototypes/claude` 里 `git fetch origin flagship-restructure && git merge --ff-only origin/flagship-restructure`。两边提交号一致。
+- **Mac 的 node_modules 是 macOS 的**，在 Mac 的 Linux shell 里跑不了构建；构建、截图、layout-check 都在云端做（`npm ci` 后 `npm run build:file`；Playwright 用 `/opt/pw-browsers/chromium`）。
+- **编辑器存档**：用户在编辑器（双击 `Open Editor.command`）的修改存在 `.copy-editor/archive.json`（不进 git）。开工先比对存档和 `src/published-copy.json`；我改了文案后，把同样的 edits 写回存档（`revision + 1`）。What I did 的蓝色关键词在 published-copy.json 的 `blueRanges`。
+- **预览**：`https://claude.ai/artifact/K7QJV2bfsK5neKBpxHuzwX`，发布 `preview.html`，新图片/页面用 `files` 带上。一个版本最多 511 个文件，现在 508，**几乎满了**：加图前先想办法腾位置（原型截图已不做 `-t` 小图）。
 - 用户不会用终端；需要她做的事只能是"双击某个文件"这种程度。
+- 资料位置：她的小红书账号和 Workbench 在 Mac `~/Desktop/CONTENT`（需申请文件夹权限）；JD 语言库在 `JS_workspace/career/job-targets/research-handoffs/2026/JDR-20260911-001__market-scan__independent-overseas-career-research/jd-language-bank-2026-09-28.md`。
 
 ## 当前状态
 
