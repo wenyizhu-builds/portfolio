@@ -699,3 +699,8 @@
 - Results: "287K views and 4.1K followers from one video" (4,109 attributed follows, 2026-09-24 export).
 - Creator Workbench: summary = the system behind the channel, turned into a product for other creators; What it does = Built on a proven workflow · End to end · Human in the loop · Built for other creators (from PRD v0.1).
 - The new items are written to content.ts and published-copy.json (blue keywords); the old per-item edits and the xhs list order are replaced.
+
+## 2026-10-07 — v69.6 Creator Workbench promo video
+
+- 21 s promo in the dashboard film's style (same hook layout, 120 bpm soundtrack, Kenney CC0 UI sounds): hook "I turned my content workflow into an AI workbench", five scenes (research, source breakdown, idea scoring, draft + approve, knowledge), end card "Creator Workbench · Built with Claude Code and Codex".
+- `public/media/creator-workbench/promo.webm` (2.7 MB) + `promo.mp4` (3.4 MB), 1600×900; poster.jpg is now the end frame. Checked playing in the browser (L45).

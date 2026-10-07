@@ -642,7 +642,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: [] }, // v69: no promo video yet, the still of Home holds its place
+    prototype: { src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: ['media/creator-workbench/promo.webm', 'media/creator-workbench/promo.mp4'] }, // v69.6: promo video, same style as the dashboard's; poster = its end frame
     gallery: [set('workbench', 'creator-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['xhs-ai-channel'],
   },

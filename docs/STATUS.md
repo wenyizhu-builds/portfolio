@@ -1,11 +1,16 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.4 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.6 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.5–69.6（本会话，用户 10-07 下午的决定）
+- 用户：MiniMax、Kimi 加入，去掉小云雀；改名 **Xiaohongshu AI Channel**；Creator & Social 一句话说明她确认了；Workbench 要宣传片。她说上一版文案"把她做的事缩成细节清单，没写出策略层的大图"——这两个案例已按 CONTENT 原始资料重写（见 CHANGELOG v69.5）。**AI Projects 就这两个**（Dashboard + Workbench）；作品集网站本身算 vibe coding，但她觉得单独成案偏弱，暂不加。
+- **下一步（她定的）：从 UX 角度整体审一遍网站，改 UI 和用户路径。**
+- Workbench 宣传片（v69.6）：21 秒，同看板的风格/节奏/音乐/音效；开场 "I turned my content workflow / into an **AI workbench**"，5 段：Research what’s working · Break down any post · Score every idea first · AI drafts, I approve · Learns what works；结尾 Creator Workbench · Built with Claude Code and Codex。海报 = 最后一帧（覆盖原 poster.jpg，不增加文件数）。Artifact 文件数 510/511。源文件：云端 `/home/claude/srv/video/film.html`（+ app.html = 原型副本，加了 `window.WB` 钩子、本地字体）、`/home/claude/promo-wb/`（render.cjs、audio7.py）；Mac 副本在 `portfolio-prototypes/creator-workbench-promo/`。
 
 ### v69.3–69.4（本会话）
 - 同步了她 10-07 上午在编辑器里的改动：AI tagging 去掉 "with a human review step"；Test and scale 缩短；删掉 "Follower conversion over views"。
