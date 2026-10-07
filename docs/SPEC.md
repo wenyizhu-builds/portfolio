@@ -5,14 +5,15 @@
 
 - **首页地图改为地铁图「Rising」（v70 草稿，2026-10-07，用户选定形状，交互待确认后再动代码）**。原型：Artifact「Metro Map Plans」。
   - **线路（每条线都在真实发生的地方接入网络，不能有孤立的线）**：
-    - Career line（灰 `#8a8a86`）：XJTLU → NOWNESS → Weber Shandwick → Nike → Seminary Co-op → HoYoverse → ✳ Now，沿 45° 从左下升到右上（用户：「I am rising」）。
+    - Career line（灰 `#8a8a86`）：XJTLU → NOWNESS → Weber Shandwick → Nike → Seminary Co-op → HoYoverse，沿 45° 从左下升到右上（用户：「I am rising」）。实线到 HoYoverse 为止，之后一段点状虚线继续往上，通到一个虚线空心站「Next stop · Open to growth marketing roles」（版本 1「Next stop」，用户选定）。
     - Education line（同灰色、空心线）：XJTLU → UChicago → Seminary Co-op。和 Career 在 XJTLU 同起点（实习在大学期间），在 Seminary Co-op 汇合（UChicago 旁的书店），两条线围成一个环。
     - Paid & UA line（钴蓝）、Creator & Social line（墨黑）：都从 HoYoverse 分出。
-    - AI line（lime `#b7e03a`）：从 ✳ Now 出发 → Dashboard → Workbench → Xiaohongshu AI Channel，与 Creator & Social 在小红书频道换乘。
-    - Creative line（淡紫 `#9aa0ff`）：从 XJTLU 分出（Design、Photography）。
+    - AI line（lime `#b7e03a`）：从 HoYoverse 出发（Dashboard 是在 HoYoverse 做的）→ Dashboard → Workbench → Xiaohongshu AI Channel，与 Creator & Social 在小红书频道换乘。
+    - Creative line（淡紫 `#9aa0ff`）：从 XJTLU 分出的一小段（Design、Photography）。试过加长成与 Career 平行的线，用户：更难看，保持短的。
+    - 线名暂用 Career / Education / Creative / Paid & UA / Creator & Social / AI line（另一套 Main / Campus / Studio 待用户选）。
     - 配色用「Brand only」，线色只用于地图（扩展 7 色规则，需在 `:root` 增加线色变量，待用户最终确认）。
   - **站点（两级，像真地铁图）**：重点案例 = 大双圈 + 粗体名字 + 手写批注；其他作品 = 小圆点，名字悬停或打开该线时才显示；换乘站（XJTLU、Seminary Co-op、HoYoverse、小红书频道）= 最大双圈。工作和学校名字常显、灰色小字。不显示日期。
-  - **✳ 不在中心**：✳ = Now，在 Career 线末端；之后一段虚线通向一个「?」站（下一站）。不写「next stop: your team」（用户否决）。
+  - **没有「Now」点、没有「?」站**（用户：Now 没有意义，? 像玩笑）。地图上不放 ✳。不写「next stop: your team」。也试过「AI 是最新一段」和「✳ = 名字在顶端」两种结尾，用户选 Next stop。
   - **交互**：悬停小点显示名字；点线、线名或 INDEX 一行 → 其他线淡出，该线所有站显示名字，卡片列出该线全部站（重点在前）；点任一站 → 卡片打开该案例；× / Esc 返回。
   - **连接（换乘虚线）**：沿用 `content.ts` 的 `related`：Creator Ad Pipeline ↔ Dashboard、Workbench ↔ 小红书频道。只在点开其中一端时画一条流动的点状弧线，两端点亮（荧光绿），卡片显示「Connected」及一句原因。平时不画。
   - **不变**：页头、地区筛选、右侧 INDEX 卡片位置、案例卡片内容。
