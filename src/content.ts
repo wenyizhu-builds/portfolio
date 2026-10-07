@@ -545,7 +545,7 @@ export const nodes: SiteNode[] = [
     }],
   },
 
-  /* Her side hustle, not a job (v67, owner): last in Creator & Social, marked Side hustle. No challenge or team: there wasn't one. */
+  /* Her own channel, not a job (v67, owner): last in Creator & Social. No challenge or team: there wasn't one. Never call it a side hustle (v69.8). */
   {
     id: 'xhs-ai-channel',
     type: 'case',
@@ -746,7 +746,7 @@ export const byId = new Map(nodes.map((n) => [n.id, n]));
 
 /* All Growth Marketing cases and the AI Workbench were done at HoYoverse (the Xiaohongshu channel is her own: org ''). */
 nodes.forEach((n) => {
-  if (['case', 'ai', 'creative'].includes(n.type)) n.team ??= { en: '' };
+  if (['case', 'ai', 'creative'].includes(n.type) && n.org !== '') n.team ??= { en: '' }; // her own projects (org: '') have no team, not even an empty one in the editor (L50)
   if ((n.type === 'case' || n.id === 'ai-workbench') && n.org === undefined) n.org = 'hoyoverse'; // org: '' = her own work, no employer
 });
 /** Work done in a role, grouped by practice. */

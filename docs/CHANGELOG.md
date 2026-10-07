@@ -715,3 +715,7 @@
 
 - Owner: don't call it a side hustle (employers may read it as distraction); leave out details like how many posts were studied; no "team". Identity line removed, map note "my own channel".
 - Summary: built from zero; run like a growth project (find the audience, test, scale, turn reach into partnerships with China's leading AI companies). What I did rewritten short. New lesson L49.
+
+## 2026-10-07 — v69.9 No Team section on her own projects
+
+- content.ts no longer gives projects with `org: ''` an empty `team`, so the copy editor stops showing an empty "The Team" on Xiaohongshu AI Channel (owner asked twice). Job cases unchanged. Lesson L50.

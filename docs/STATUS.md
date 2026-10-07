@@ -1,11 +1,13 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.8 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.9 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.9：她自己的项目（org: ''，即 Xiaohongshu AI Channel、Creator Workbench）不再有 team 字段，编辑器里的空 "The Team" 消失（L50）。
 
 ### v69.8：Xiaohongshu AI Channel 去掉 "Side hustle"（身份行删掉，地图批注改 "my own channel"）；What I did 去掉过程细节（73/35、biweekly、team of one），只讲做法；summary：从零做起 + 像增长项目一样运营（找受众、测试、放大、变成品牌合作）。待她看。
 

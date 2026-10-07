@@ -120,7 +120,7 @@ export function detailLists(n: SiteNode): DetailList[] {
   });
   if (n.results && (n.results.length || import.meta.env.DEV))
     head.push({ title: L('results'), body: `<ul class="results"${import.meta.env.DEV ? ` data-copy-list="nodes.${n.id}.results"` : ''}>${n.results.map((i) => `<li class="result-row"><span class="result-line${i.metric ? ' has-metric' : ''}">${i.metric || import.meta.env.DEV ? `<span class="result-num"${import.meta.env.DEV && copyFieldKey(i, 'metric') ? ` data-copy-field="${esc(copyFieldKey(i, 'metric')!)}"` : ''}>${publishedMarkup(i, 'metric', esc) ?? highlight(i.metric || '', i.highlight || '')}</span>` : ''}<span class="result-copy">${tx(i)}</span></span></li>`).join('')}</ul>` });
-  if (isWork(n) && n.team && (tx(n.team) || import.meta.env.DEV) && !n.gallery) out.push({ // a gallery has no team line; an empty team (her side hustle) none either
+  if (isWork(n) && n.team && (tx(n.team) || import.meta.env.DEV) && !n.gallery) out.push({ // a gallery has no team line; her own projects have no team field at all
     title: state.lang === 'zh' ? '项目团队' : 'The Team',
     body: `<div class="challenge-paragraph"><p>${tx(n.team)}</p></div>`,
     defaultOpen: false,
