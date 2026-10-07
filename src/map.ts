@@ -597,7 +597,15 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     const lp = layoutParent(n);
     const p = lp ? simNodes.get(lp) : undefined;
     const home = homeOf(n.id);
-    if (home) {
+    // v69.10: a point a child of the open group is always linked to (alwaysLinked) starts beside that child, away from the group
+    const linkKid = focus ? childrenOf(focus).find((c) => c.alwaysLinked?.includes(n.id)) : undefined;
+    const lk = linkKid ? simNodes.get(linkKid.id) : undefined;
+    const lf = focus ? simNodes.get(focus) : undefined;
+    if (lk && lf && n.parent !== focus) {
+      const ang = Math.atan2(lk.y! - lf.y!, lk.x! - lf.x!);
+      x = lk.x! + Math.cos(ang) * LAYOUT.spawnDist;
+      y = lk.y! + Math.sin(ang) * LAYOUT.spawnDist;
+    } else if (home) {
       [x, y] = home;
     } else if (p) {
       const gp = lp ? layoutParent(byId.get(lp)!) : undefined;
@@ -775,7 +783,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       }
     }
     // spawn parents before children
-    const ordered = nodes.filter((n) => vis.has(n.id)).sort((a, b) => depthOf(a.id) - depthOf(b.id));
+    const extras = new Set(focus && childrenOf(focus).length ? linkedOfChildren(focus) : []); // linked points last: they start beside their partner (v69.10)
+    const ordered = nodes.filter((n) => vis.has(n.id)).sort((a, b) => (+extras.has(a.id) - +extras.has(b.id)) || depthOf(a.id) - depthOf(b.id));
     const rolesFirst = ordered.filter((n) => n.type !== 'role').concat(rolesOrder.map((r) => byId.get(r)!).filter((n) => vis.has(n.id)));
     for (const n of rolesFirst) {
       if (!simNodes.has(n.id)) {

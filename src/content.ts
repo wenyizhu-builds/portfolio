@@ -77,7 +77,6 @@ export interface SiteNode {
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
-const prep: T = { en: 'Showcase in preparation', zh: '作品准备中' };
 
 /** A gallery set from the image list in gallery-images.ts (`key` = its folder under public/media). */
 function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?: T): GallerySet {
@@ -644,8 +643,8 @@ export const nodes: SiteNode[] = [
     prototype: { src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: ['media/creator-workbench/promo.webm', 'media/creator-workbench/promo.mp4'] }, // v69.6: promo video, same style as the dashboard's; poster = its end frame
     gallery: [set('workbench', 'creator-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['xhs-ai-channel'],
+    alwaysLinked: ['xhs-ai-channel'], // owner (v69.10): opening AI Projects shows the channel this system runs
   },
-  { id: 'ai-slot-2', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
 
   /* ---------------- Creative Work ---------------- */
   {

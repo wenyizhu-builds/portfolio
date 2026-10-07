@@ -1,11 +1,13 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.9 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.10 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
+
+### v69.10：AI Projects 只剩两个（删掉占位 ai-slot-2 和不再使用的 prep 常量）；Creator Workbench 加 alwaysLinked → Xiaohongshu AI Channel（打开 AI Projects 时像看板连 Creator Ad Pipeline 一样显示）。map.ts：这类关联点最后生成，起点在其伙伴外侧（不用它在别组的 home 位置）。xhs Results 按她 12:28 在编辑器里的删除只留两条（播放、点赞）。编辑器存档与发布版已逐条比对一致。AI Projects 分组的一句话说明还是 [Placeholder copy]。
 
 ### v69.9：她自己的项目（org: ''，即 Xiaohongshu AI Channel、Creator Workbench）不再有 team 字段，编辑器里的空 "The Team" 消失（L50）。
 

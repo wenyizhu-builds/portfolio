@@ -719,3 +719,10 @@
 ## 2026-10-07 — v69.9 No Team section on her own projects
 
 - content.ts no longer gives projects with `org: ''` an empty `team`, so the copy editor stops showing an empty "The Team" on Xiaohongshu AI Channel (owner asked twice). Job cases unchanged. Lesson L50.
+
+## 2026-10-07 — v69.10 AI Projects: two projects, Workbench linked to the channel
+
+- Removed the placeholder `ai-slot-2` (owner: only two AI projects) and the unused `prep` label.
+- Creator Workbench `alwaysLinked: ['xhs-ai-channel']`: opening AI Projects shows the channel beside it, like the Dashboard and Creator Ad Pipeline.
+- map.ts: points shown only as a group child's link spawn last, beside that child and away from the group, instead of at their home in another group (the channel had dragged the whole view sideways). layout-check back to 1/37 (old hoyoverse item).
+- Xiaohongshu AI Channel Results: two (views, likes), matching the owner's editor edit. Editor archive and published copy compared field by field: identical.
