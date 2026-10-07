@@ -726,3 +726,7 @@
 - Creator Workbench `alwaysLinked: ['xhs-ai-channel']`: opening AI Projects shows the channel beside it, like the Dashboard and Creator Ad Pipeline.
 - map.ts: points shown only as a group child's link spawn last, beside that child and away from the group, instead of at their home in another group (the channel had dragged the whole view sideways). layout-check back to 1/37 (old hoyoverse item).
 - Xiaohongshu AI Channel Results: two (views, likes), matching the owner's editor edit. Editor archive and published copy compared field by field: identical.
+
+## 2026-10-07 — v70 (branch filter-flyup, preview only) Desktop filter view: cases fly up out of a pile
+
+- New `src/flyup.ts` (matter-js 0.19): while a region is chosen on desktop, the map fades out; every case lies in a pile on the floor, matching ones rise into centred rows under the header with a count line, the rest stay faded. Click opens the case card (tile turns lime). Switching region swaps them; clearing drops them and the map returns. Runs only while something moves (L4). Phone unchanged. SPEC updated; not merged into flagship-restructure until the owner approves.

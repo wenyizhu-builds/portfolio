@@ -24,6 +24,7 @@
   - 点任意一张：灯箱，← → 按钮 / 方向键 / 左右滑动切换，跨组连续，下方写「组名 · 3 / 36」。灯箱仍是全站唯一的浮层。
   - 图片：从用户文件夹「Design & photography」生成网页版，长边 1600px（灯箱）和 900px（网格），去掉 EXIF（含位置信息）。清单在 `src/gallery-images.ts`，每行带用户看过的编号（如 p4-12），删一张 = 删一行 + 两个文件。
 
+- **电脑版筛选视图（v70，分支 `filter-flyup`，待用户确认后合并）**：首页仍是地图。选了地区后地图淡出，所有案例（只含 case，不含经历、AI、创意）平躺在底部一堆（matter-js 物理，可拖动）；匹配的案例飞起，在卡片左侧的空白区里排成居中的整齐几行，上方一行「N case studies in <地区>」；不匹配的留在堆里变淡。点飞起的案例 = 打开它的卡片，这个案例变成荧光绿（当前）。换地区：旧的落回堆里、新的飞起；再点同一个地区取消筛选，案例落回、地图回来。打开图库或原型时不显示（它们自己占地图的位置）。手机版不变（下拉菜单）。没有文字搜索框（用户同意：招聘方不会搜，空结果反而减分）。参数：`--fly-*`（style.css :root）。
 - **筛选只留地区（v62.42，用户确认）**：去掉 Platform（Global social / Chinese social / Paid ads）。原因：它和两个大类重复（Paid ads ≈ Paid & UA Growth，Global social ≈ Creator & Social），且「Chinese social」匹配不到任何案例。地区筛选照旧，网址只剩 `?region=`。X Creator Campaign 和 English Social Channel Growth 的市场从 EN 改为 NA（用户：EN 主要是北美）；`regionOfMarket` 去掉 EN。
 
 - **AI Projects 首页折叠（v62.39–40）**：首页 AI Projects 的三个作品全部收起（包括 Dashboard），点开 AI Projects 才出现。`ALSO_AT_HOME` 留作以后单独露出某个点用，现在为空。
