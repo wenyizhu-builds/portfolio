@@ -17,6 +17,13 @@
   --cobalt-faded: color-mix(in srgb, var(--cobalt) 40%, var(--bg));
   --scrim: color-mix(in srgb, var(--ink) 88%, transparent);
   --chip: color-mix(in srgb, var(--panel) 92%, transparent);
+  /* Metro map lines (v70): derived from the base colours, no new ones. */
+  --line-paid: var(--cobalt);
+  --line-social: var(--ink);
+  --line-ai: color-mix(in srgb, var(--accent) 86%, var(--ink));
+  --line-creative: color-mix(in srgb, var(--cobalt) 45%, var(--panel));
+  --line-career: color-mix(in srgb, var(--ink) 50%, var(--bg));
+  --line-campus: var(--line-career);
   /* Separators: one quiet solid rule everywhere. Dashed lines are kept only for things still in preparation. */
   --rule: 1px solid var(--line-soft);
   --rule-card: 1px dashed var(--line); /* separators inside the card, as in the reference */
@@ -57,6 +64,11 @@
   --leaf-indent: 16px; /* a dashed item's text sits this far right of its group */
   --map-min-w: 260px; /* the map never gets narrower than this */
   --map-gap: 16px; /* space between the map and the panel / intro strip */
+  --m-track: 8px; /* metro map: line width */
+  --m-core: 3.4px; /* the open middle of the Campus line */
+  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-note: 21px; /* metro map type */
+  --m-faded: 0.12; /* lines and stations not on the opened line */
+  --m-fade: 300ms;
   --edge-y: 20px; /* legend / footer distance from the bottom edge */
   --m-scroll: 64px; /* phone: anchor offset below the sticky header */
 
@@ -520,3 +532,40 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .m-fsel { display: grid; gap: 6px; }
 /* 16px stops iOS from zooming into the page when the menu opens */
 .m-fsel select { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
+
+/* ---------- Metro map (v70, metro.ts) ---------- */
+.metro { position: absolute; overflow: visible; }
+.metro text { font-family: inherit; }
+.mt-track { fill: none; stroke-width: var(--m-track); stroke-linecap: round; stroke-linejoin: round; }
+.mt-track.core { stroke: var(--bg); stroke-width: var(--m-core); }
+.mt-hit { fill: none; stroke: transparent; stroke-width: 26px; cursor: pointer; }
+.l-paid { stroke: var(--line-paid); } .l-social { stroke: var(--line-social); } .l-ai { stroke: var(--line-ai); }
+.l-creative { stroke: var(--line-creative); } .l-career { stroke: var(--line-career); } .l-campus { stroke: var(--line-campus); }
+.mt-lbl { font-size: var(--m-fs); fill: var(--ink); }
+.mt-lbl.b { font-weight: 600; }
+.mt-lbl.s { font-size: var(--m-fs-small); fill: var(--muted); }
+.mt-sub { font-size: var(--m-fs-small); fill: var(--muted); font-weight: 400; }
+.mt-halo { fill: none; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
+.mt-lname { font-size: var(--m-fs-line); letter-spacing: 0.09em; font-weight: 600; fill: var(--ink); text-transform: uppercase; cursor: pointer; }
+.mt-ring { fill: var(--panel); stroke: var(--ink); }
+.mt-inner { fill: none; stroke: var(--ink); }
+.mt-stn { cursor: pointer; }
+.mt-stn:focus { outline: none; }
+.mt-stn:focus-visible .mt-ring { stroke: var(--cobalt); }
+.mt-stn .mt-dot { transition: transform 0.2s var(--ease); transform-box: fill-box; transform-origin: center; }
+.mt-stn:hover .mt-dot { transform: scale(1.25); }
+.mt-stn.sel .mt-ring, .mt-stn.rel .mt-ring { fill: var(--accent); }
+.metro [data-l] { transition: opacity var(--m-fade) var(--ease); }
+.metro .faded { opacity: var(--m-faded); }
+.mt-more { opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.mt-stn:hover .mt-more, .mt-more.on { opacity: 1; }
+.mt-note text { font-family: var(--hand); fill: var(--note); font-size: var(--m-fs-note); }
+.mt-note path { fill: none; stroke: var(--note); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; }
+.mt-xf { fill: none; stroke: var(--ink); stroke-width: 2.4px; stroke-dasharray: 1 7; stroke-linecap: round; animation: mt-march 1.2s linear infinite; pointer-events: none; }
+@keyframes mt-march { to { stroke-dashoffset: -16; } }
+.mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }
+.mt-top { cursor: pointer; }
+.metro .mt-out { opacity: var(--m-faded); }
+.lg-key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid var(--ink); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 4px var(--ink); margin-right: 6px; vertical-align: -2px; }
+.lg-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 2.4px solid var(--ink); margin-right: 6px; vertical-align: -1px; }
+.lg-campus { display: inline-block; width: 24px; height: 5px; border-radius: 4px; border: 2.5px solid var(--line-campus); margin-right: 6px; vertical-align: 0; }

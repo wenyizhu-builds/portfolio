@@ -74,6 +74,7 @@ export interface SiteNode {
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
   prototype?: { src: string; poster: string; video: string[] }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
+  mapLabel?: T; // shorter name on the metro map (v70), e.g. XJTLU
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -705,13 +706,13 @@ export const nodes: SiteNode[] = [
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
   { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' } }, // no link to the dashboard: its one direct connection is the Creator Ad Pipeline (owner, v64)
-  { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
+  { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, mapLabel: { en: 'Seminary Co-op' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
   { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
   { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
   { id: 'nowness', type: 'role', parent: 'experience', label: { en: 'NOWNESS' }, kicker: { en: 'Social Media Content Strategy Intern' }, period: 'Sep – Nov 2020', markets: ['CN'], summary: { en: 'WeChat and Weibo content and publishing for art and culture pieces.' } },
 
-  { id: 'uchicago', type: 'school', parent: 'education', label: { en: 'University of Chicago' }, kicker: { en: 'MA, Humanities' }, period: '2022 – 2023' },
-  { id: 'xjtlu', type: 'school', parent: 'education', label: { en: "Xi'an Jiaotong-Liverpool University" }, kicker: { en: 'BA, Communication and Media Studies' }, period: '2017 – 2021' },
+  { id: 'uchicago', type: 'school', parent: 'education', label: { en: 'University of Chicago' }, mapLabel: { en: 'UChicago' }, kicker: { en: 'MA, Humanities' }, period: '2022 – 2023' },
+  { id: 'xjtlu', type: 'school', parent: 'education', label: { en: "Xi'an Jiaotong-Liverpool University" }, mapLabel: { en: 'XJTLU' }, kicker: { en: 'BA, Communication and Media Studies' }, period: '2017 – 2021' },
 
 ];
 
@@ -784,15 +785,9 @@ export const ui = {
   education: { en: 'Education', zh: '教育' },
   viewOnMap: { en: 'View on map', zh: '在地图中查看' },
   menu: { en: 'Menu', zh: '目录' },
-  legendCase: { en: 'Growth case', zh: '增长案例' },
-  legendAi: { en: 'AI project', zh: 'AI 项目' },
-  legendCreative: { en: 'Creative work', zh: '创意作品' },
-  legendPath: { en: 'Experience', zh: '经历' },
   more: { en: 'More', zh: '展开' },
   less: { en: 'Less', zh: '收起' },
   prototype: { en: 'Prototype · placeholder copy', zh: '原型 · 占位文案' },
-  legendNumSample: { en: '2', zh: '2' }, // sample digit drawn in the legend's hexagon
-  legendNum: { en: 'number = how many works inside', zh: '数字 = 里面有几个作品' },
   workHere: { en: 'Work from this role', zh: '这段经历中的作品' },
   viewWork: { en: 'View work', zh: '查看作品' },
   home: { en: 'home', zh: '首页' },
@@ -823,6 +818,17 @@ export const ui = {
   arrangeHint: { en: 'Arrange mode: drag points and notes, then copy the layout and send it to Claude', zh: '排版模式：拖动点和批注，然后复制布局发给 Claude' },
   arrangeCopy: { en: 'Copy layout', zh: '复制布局' },
   arrangeCopied: { en: 'Copied', zh: '已复制' },
+  // metro map (v70, branch metro-map): line names, the top station and the legend
+  lineCareer: { en: 'Career line' },
+  lineCampus: { en: 'Campus line' },
+  lineCreative: { en: 'Creative line' },
+  linePaid: { en: 'Paid & UA line' },
+  lineSocial: { en: 'Creator & Social line' },
+  lineAi: { en: 'AI line' },
+  nextStop: { en: 'Next stop' },
+  nextStopSub: { en: 'AI-powered growth marketing' },
+  legendKeyCase: { en: 'Key case' },
+  legendMoreWork: { en: 'More work · hover for the name' },
 } satisfies Record<string, T>;
 
 /** The small type line on a card. Experience and Education read as their own kind, not "Practice". */

@@ -737,3 +737,9 @@
 
 - Metro draft update: owner chose the "Next stop" ending (career line solid to HoYoverse, dotted track to an open station "Open to growth marketing roles"; AI line from HoYoverse). No "Now" dot, no "?". Creative line kept short (longer parallel version rejected). SPEC updated.
 - Metro draft update 2: final ending = "you at the top" shape with ✳ labelled "Next stop · AI-powered growth marketing"; AI line hangs from ✳. Education line renamed Campus line; other names unchanged.
+
+## 2026-10-07 — v70 (branch `metro-map`): metro map built into a test copy
+
+- New `src/metro.ts` (same MapApi as map.ts) draws the Rising metro map; main.ts uses it. Stations open the existing cards; lines (and their names) open their groups; ✳ Next stop opens "Let's talk". Connections (`related`) drawn as a dotted transfer when a connected case is opened. Region filter fades non-matching stations and names the matching ones.
+- Line colours derived from the base colours in `:root` (`--line-*`), no new colours. Legend: key case / more work / Campus line. `mapLabel` added for short map names (XJTLU, UChicago, Seminary Co-op). Old shape legend strings removed.
+- Not yet: INDEX rows still show the old shapes; arrange tool and layout-check don't cover the metro map; the phone is unchanged (no map).

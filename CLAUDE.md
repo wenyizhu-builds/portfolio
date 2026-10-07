@@ -23,6 +23,7 @@
 - **逻辑不解析文案**：用结构化字段（例如 `lead: true`），不用正则匹配展示文字。（L8）
 - **参数的归属**：
   - 地图和镜头参数只在 `src/map.ts` 顶部的 `LAYOUT` / `CAMERA` / `WEIGHT_BY_KIND`。
+  - 地铁图（分支 `metro-map`，v70）的站点、线路、批注位置只在 `src/metro.ts` 顶部的 `METRO`；线色在 `style.css` `:root` 的 `--line-*`（由基础色派生）。
   - 形状和 ✳ 尺寸只在 `src/shapes.ts`。
   - `index.html` 的头部由 `vite.config.ts` 生成。（L11）
 - **内容块只写一次**：电脑版面板和手机版都从 `src/blocks.ts` 取，不在 `panel.ts` / `mobile.ts` 里另写。（L3）

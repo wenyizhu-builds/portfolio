@@ -2,10 +2,10 @@ import { applyPublishedCopy } from './published-copy';
 import './style.css';
 import { createFloatingVisual } from './floating-visual';
 import { ancestors, byId, site, ui, type SiteNode } from './content';
-import { createMap, type MapApi } from './map';
+import { type MapApi } from './map';
+import { createMetro } from './metro';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
-import { icon } from './shapes';
 import { L, filterBar, galleryGrid, wireFilters } from './blocks';
 import { openFrame, openGallery, openLightbox } from './lightbox';
 import { pauseVideo, videoHtml, wireVideo } from './video';
@@ -100,10 +100,9 @@ function paintChrome() {
   wireFilters(fb, () => { if (filtering() && route.kind !== 'home') go(''); }); // the unfolded map lives on home
   const proto = document.getElementById('proto');
   if (proto) proto.textContent = t(ui.prototype);
-  const lg = (type: Parameters<typeof icon>[0], k: keyof typeof ui) =>
-    `<span>${icon(type, 12)}${esc(t(ui[k]))}</span>`;
+  // metro map legend (v70): key case, other work, the hollow Campus line
   document.getElementById('legend')!.innerHTML =
-    `<span><b class="lg-num">${esc(t(ui.legendNumSample))}</b>${esc(t(ui.legendNum))}</span>` + lg('case', 'legendCase') + lg('ai', 'legendAi') + lg('creative', 'legendCreative') + lg('role', 'legendPath') + lg('school', 'education');
+    `<span><i class="lg-key" aria-hidden="true"></i>${esc(t(ui.legendKeyCase))}</span><span><i class="lg-dot" aria-hidden="true"></i>${esc(t(ui.legendMoreWork))}</span><span><i class="lg-campus" aria-hidden="true"></i>${esc(t(ui.education))}</span>`;
 }
 
 
@@ -293,7 +292,7 @@ function resolveMobileTarget(id: string): string {
 
 function ensureMap() {
   if (map) return;
-  map = createMap(stage, (id) => {
+  map = createMetro(stage, (id) => {
     const cur = currentNodeId();
     if (id === 'root') {
       go('');
