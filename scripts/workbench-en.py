@@ -45,4 +45,7 @@ for a,b in M:
 # portfolio copy: English only, so the title bar's language switch is hidden (Settings keeps the option)
 a='<div class="seg" role="group" aria-label="Language"'
 assert s.count(a)==1; s=s.replace(a,'<div class="seg" role="group" aria-label="Language" style="display:none"')
+# the source is a fragment (it was written for a chat preview); as a page of its own it needs a doctype, or it renders in quirks mode
+if not s.lstrip().lower().startswith('<!doctype'):
+    s='<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n'+s
 open(dst,'w').write(s)

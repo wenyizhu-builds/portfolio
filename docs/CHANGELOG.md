@@ -676,3 +676,7 @@
 ## 2026-10-07 — v69.1 prototype screens use one image size
 
 - A `screens` gallery uses the 1600px screenshot as its thumbnail too (no `-t.jpg`), for both AI projects. The site needed 524 files with the Workbench added; the preview Artifact holds at most 511. Now 508.
+
+## 2026-10-07 — v69.2 Workbench prototype page renders in standards mode
+
+- `scripts/workbench-en.py` adds a doctype, charset and viewport to the prototype (its source is a chat-preview fragment, which rendered in quirks mode as a page of its own). Screens and poster re-shot from it.
