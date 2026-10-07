@@ -1,6 +1,7 @@
-import { ancestors, byId, childrenOf, featuredOrder, indexSections, kindOf, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
+import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
 import { esc, isDone, matches, t } from './state';
-import { AST, astSvg, icon, iconFor } from './shapes';
+import { AST, astSvg } from './shapes';
+import { markFor } from './metro';
 import { L, contactRows, detailLists, gallerySetList, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
@@ -69,7 +70,7 @@ export function indexPanel(): string {
   );
   const secs = indexSections.map((id) => {
     const n = byId.get(id)!;
-    return details(icon(kindOf(id), 11, false, true), isDone(id) ? `<s>${tx(n.label)}</s>` : tx(n.label), `${n.summary ? `<p class="p-sum p-def">${tx(n.summary)}</p>` : ''}${insideList(n)}`, false, 'ix');
+    return details(markFor(id), isDone(id) ? `<s>${tx(n.label)}</s>` : tx(n.label), `${n.summary ? `<p class="p-sum p-def">${tx(n.summary)}</p>` : ''}${insideList(n)}`, false, 'ix');
   });
   return `<div class="p-body ix-body">${bio}${secs.join('')}</div>`;
 }
@@ -111,7 +112,7 @@ export function nodePanel(n: SiteNode): string {
   const inside = insideList(n);
   if (inside) {
     // a group: what it is, then its items — no extra section headings
-    return head(label, iconFor(n, 11, true), upHtml) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
+    return head(label, markFor(n.id), upHtml) + `<div class="p-body">${lead}<div class="p-list">${inside}</div></div>`;
   }
 
   const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, d.defaultOpen ?? true));
@@ -127,12 +128,12 @@ export function nodePanel(n: SiteNode): string {
   byId.forEach((o) => o.related?.includes(n.id) && conn.add(o.id)); // reverse relations
   if (conn.size) secs.push(details(MARK.links, L('connections'), `<div class="nlist">${[...conn].map((c) => nodeLink(c, familyOf(c))).join('')}</div>`));
 
-  return head(label, iconFor(n, 11, true), upHtml) + `<div class="p-body">${lead}${gallerySetList(n)}${secs.join('')}</div>`;
+  return head(label, markFor(n.id), upHtml) + `<div class="p-body">${lead}${gallerySetList(n)}${secs.join('')}</div>`;
 }
 
 export function resumePanel(): string {
   return (
-    head(t(ui.resume), icon('role', 12)) +
+    head(t(ui.resume), markFor('experience')) +
     `<div class="p-body">
       <h2 class="p-title" tabindex="-1">${esc(site.name)}</h2>
       <p class="p-kicker">${tx(site.tag)}</p>
@@ -144,7 +145,7 @@ export function resumePanel(): string {
 
 export function contactPanel(): string {
   return (
-    head(t(ui.contact), icon('info', 12)) +
+    head(t(ui.contact), markFor('root')) +
     `<div class="p-body">
       <h2 class="p-title" tabindex="-1">${L('contact')}</h2>
       ${contactRows()}

@@ -2,8 +2,9 @@
    Same API as map.ts (MapApi), so main.ts only swaps one call. Everything about the drawing —
    where each station sits, the shape of each line, where the notes go — lives in METRO below.
    Colours and sizes come from style.css (:root); words from content.ts. */
-import { byId, ui, type SiteNode } from './content';
+import { ancestors, byId, ui, type SiteNode } from './content';
 import type { MapApi } from './map';
+import { lineMark } from './shapes';
 import { esc, filtering, go, matches, t } from './state';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
@@ -115,6 +116,22 @@ function lineOf(id: string): LineKey | null {
   const hit = (Object.keys(METRO.lines) as LineKey[]).find((k) => METRO.lines[k].group === id);
   if (hit) return hit;
   return id === 'info' ? 'career' : null;
+}
+
+/** The line a node belongs to, for the card's and the phone's marks (one decision point with the map, L17):
+    a station's first line, a group's line, or the line of the group it sits in. Information and ✳ have none. */
+export function lineKeyOf(id: string): LineKey | null {
+  for (const a of [id, ...ancestors(id)]) {
+    const k = lineOf(a);
+    if (k && a !== 'info') return k;
+  }
+  return null;
+}
+
+/** The mark a card or phone heading shows for a node: its line, with a station for a single item. */
+export function markFor(id: string, px = 14): string {
+  const n = byId.get(id);
+  return lineMark(lineKeyOf(id), !!n && !['branch', 'sub', 'root'].includes(n.type), px);
 }
 
 export function createMetro(host: HTMLElement, onSelect: (id: string) => void): MapApi {

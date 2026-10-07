@@ -106,3 +106,11 @@ export function icon(type: NodeType, px = 14, special = false, solid = false): s
   const vb = type === 'root' ? 36 : type === 'branch' ? 28 : 22;
   return `<svg class="ico ico-${type}" width="${px}" height="${px}" viewBox="${-vb / 2} ${-vb / 2} ${vb} ${vb}" aria-hidden="true">${shape(type, { special, solid })}</svg>`;
 }
+
+/** Metro-map mark for cards and the phone (v70): a short piece of a line in its colour (hollow for
+    Campus), with a station on it for a single piece of work, job or school. No line = the ✳.
+    Which line a node gets is decided once, in metro.ts (markFor). */
+export function lineMark(line: string | null, station: boolean, px = 14): string {
+  if (!line) return astSvg({ px, stroke: AST.index.stroke });
+  return `<svg class="ico ico-line" width="${px}" height="${px}" viewBox="-11 -11 22 22" aria-hidden="true"><path class="l-${line}" d="M-9,0H9"/>${line === 'campus' ? '<path class="core" d="M-9,0H9"/>' : ''}${station ? '<circle r="3.4"/>' : ''}</svg>`;
+}

@@ -1,6 +1,7 @@
-import { byId, childrenOf, featuredOrder, kindLabel, kindOf, site, type SiteNode } from './content';
+import { byId, childrenOf, featuredOrder, kindLabel, site, type SiteNode } from './content';
 import { esc, filtering, matches, reducedMotion, t } from './state';
-import { AST, astSvg, icon, iconFor } from './shapes';
+import { AST, astSvg } from './shapes';
+import { markFor } from './metro';
 import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
 /*
@@ -24,7 +25,7 @@ function card(n: SiteNode): string {
     ? `<button class="m-visual" data-visual-src="${esc(m.src)}"><img src="${esc(m.src)}" alt="${esc(t(m.alt))}" loading="lazy"/></button>`
     : `<div class="m-media">${L('visualsPrep')}</div>`).join('');
   return `<article class="m-card ${n.status ? 'is-prep' : ''}${matches(n.id) ? '' : ' is-off'}" id="m-${n.id}">
-    <div class="m-card-type">${iconFor(n, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
+    <div class="m-card-type">${markFor(n.id, 11)}<span>${esc(t(kindLabel(n.id)))}</span></div>
     ${intro(n, `<h3>${tx(n.label)}</h3>`)}
     ${n.type === 'creative' && n.gallery // owner: Photography and Design are the least important part on the phone, so their pictures start folded
       ? `<details class="m-more"><summary><span class="o">${L('more')}</span><span class="c">${L('less')}</span></summary>${galleryGrid(n, 'phone')}</details>`
@@ -44,14 +45,14 @@ function section(branchId: string): string {
     // flagship cases first (as on the map and in the INDEX), then each group with its cases
     const flags = featuredOrder.map((id) => byId.get(id)!).filter((k) => k.parent === branchId);
     const flagHtml = flags.length ? `<div class="m-sub" id="m-flagships">
-          <h3 class="m-sub-h">${icon('case', 10)}<span>${tx({ en: 'Flagship cases', zh: '重点案例' })}</span></h3>
+          <h3 class="m-sub-h">${markFor(branchId, 10)}<span>${tx({ en: 'Flagship cases', zh: '重点案例' })}</span></h3>
           ${flags.map(card).join('')}
         </div>` : '';
     inner = flagHtml + kids
       .filter((k) => k.type === 'sub')
       .map(
         (s) => `<div class="m-sub" id="m-${s.id}">
-          <h3 class="m-sub-h">${icon('sub', 10)}<span>${tx(s.label)}</span></h3>
+          <h3 class="m-sub-h">${markFor(s.id, 10)}<span>${tx(s.label)}</span></h3>
           ${childrenOf(s.id).map(card).join('')}
         </div>`,
       )
@@ -60,7 +61,7 @@ function section(branchId: string): string {
     inner = kids.map(card).join('');
   }
   return `<section class="m-sec" id="m-${b.id}">
-    <h2 class="m-sec-h">${icon(kindOf(b.id), 12, false, true)}<span>${tx(b.label)}</span></h2>
+    <h2 class="m-sec-h">${markFor(b.id, 12)}<span>${tx(b.label)}</span></h2>
     ${summary(b)}
     ${inner}
   </section>`;
@@ -68,7 +69,7 @@ function section(branchId: string): string {
 
 function menu(): string {
   const work = ['growth-paid', 'growth-social']
-    .map((id) => `<a href="#/${id}" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get(id)!.label)}</span></a>`)
+    .map((id) => `<a href="#/${id}" class="m-menu-item">${markFor(id, 11)}<span>${tx(byId.get(id)!.label)}</span></a>`)
     .join('');
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">
     <div class="m-menu-quick">
@@ -76,9 +77,9 @@ function menu(): string {
       <a href="#/contact" class="btn">${L('contact')} →</a>
     </div>
     ${work}
-    <a href="#/ai" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get('ai')!.label)}</span></a>
-    <a href="#/creative" class="m-menu-item">${icon('branch', 11)}<span>${tx(byId.get('creative')!.label)}</span></a>
-    <a href="#/info" class="m-menu-item">${icon('branch', 11, true)}<span>${tx(byId.get('info')!.label)}</span></a>
+    <a href="#/ai" class="m-menu-item">${markFor('ai', 11)}<span>${tx(byId.get('ai')!.label)}</span></a>
+    <a href="#/creative" class="m-menu-item">${markFor('creative', 11)}<span>${tx(byId.get('creative')!.label)}</span></a>
+    <a href="#/info" class="m-menu-item">${markFor('info', 11)}<span>${tx(byId.get('info')!.label)}</span></a>
   </nav>`;
 }
 
@@ -86,11 +87,11 @@ function menu(): string {
 function info(): string {
   const i = byId.get('info')!, ex = byId.get('experience')!;
   return `<section class="m-sec" id="m-info">
-    <h2 class="m-sec-h">${icon('branch', 12, true)}<span>${tx(i.label)}</span></h2>
+    <h2 class="m-sec-h">${markFor('info', 12)}<span>${tx(i.label)}</span></h2>
     ${summary(i)}
   </section>
   <section class="m-sec" id="m-resume">
-    <h2 class="m-sec-h">${icon('role', 12)}<span>${L('resume')}</span></h2>
+    <h2 class="m-sec-h">${markFor('experience', 12)}<span>${L('resume')}</span></h2>
     ${summary(ex)}
     <div class="cv-actions">${resumePdf()}</div>
     ${resumeLists(false)}
@@ -99,7 +100,7 @@ function info(): string {
 
 function contact(): string {
   return `<section class="m-sec" id="m-contact">
-    <h2 class="m-sec-h">${icon('info', 12)}<span>${L('contact')}</span></h2>
+    <h2 class="m-sec-h">${markFor('root', 12)}<span>${L('contact')}</span></h2>
     ${contactRows()}
   </section>`;
 }
