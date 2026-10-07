@@ -730,3 +730,8 @@
 ## 2026-10-07 — v70 (branch filter-flyup, preview only) Desktop filter view: cases fly up out of a pile
 
 - New `src/flyup.ts` (matter-js 0.19): while a region is chosen on desktop, the map fades out; every case lies in a pile on the floor, matching ones rise into centred rows under the header with a count line, the rest stay faded. Click opens the case card (tile turns lime). Switching region swaps them; clearing drops them and the map returns. Runs only while something moves (L4). Phone unchanged. SPEC updated; not merged into flagship-restructure until the owner approves.
+
+## 2026-10-07 — v70.1 (branch filter-flyup) Filter view made of the map's own points
+
+- Owner: no cards; the filter view must use the map's shapes and lines and feel like the same thing; experience must count too. Removed `flyup.ts`, matter-js and the card styles.
+- map.ts: with a region on, every point is shown and glides (own easing, the forces stop) to `tidyLayout()`: ✳ on top, a column per group with matches strung below it with the map's elbow lines (roles in career order), the rest drop with a bounce into a mound of faded shapes (names on hover, `.is-piled`). Camera frames the targets. Clearing the filter hands back to the forces, which bring every point home. No dragging in the filter view. Parameters: `LAYOUT.tidy`.

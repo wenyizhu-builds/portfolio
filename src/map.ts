@@ -125,6 +125,12 @@ const LAYOUT = {
   // v64.19: a point whose lines all come from below puts its label above it, so no line runs through its own name.
   // below / above: how far (world units) the other end must be below / above to count; gap: label to shape; ascent: text height above its baseline
   labelFlip: { below: 40, above: -10, gap: 4, ascent: 11 },
+  // v70 filter view (owner): with a region on, the same points line up. ✳ on top, one column per group that has
+  // matches, its matching work strung below it; everything else drops to a faded pile on the floor.
+  // colW: column spacing; rowGap: step down a column; rootGap: ✳ to the first row; zig: alternate sideways step,
+  // so each string keeps the map's elbow; pileGap: last row to the floor; pileRow / pileStep: row height and spacing in the pile
+  // (shapes only, names on hover), pileShrink: each row up holds this many fewer, so it forms a mound; rise / fall: glide and drop times (ms); stagger: delay between points (ms)
+  tidy: { colW: 270, rowGap: 78, rootGap: 120, zig: 30, pileGap: 165, pileRow: 30, pileStep: 46, pileShrink: 3, rise: 950, fall: 1150, stagger: 40 },
 };
 
 const KEY_AREAS = new Set(['growth-paid', 'growth-social']);
@@ -230,6 +236,12 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   const els = new Map<string, SVGGElement>();
   let links: SimLink[] = [];
   const linkEls = new Map<string, SVGPathElement>();
+  /* v70 filter view: while a region is on, points glide to fixed places (tidyPos) on their own easing instead of the forces. */
+  const tidyMode = () => filtering() && !ARRANGE;
+  let tidyPos: Map<string, [number, number]> | null = null;
+  let pile = new Set<string>(); // points in the filter view's pile
+  type Glide = { fx: number; fy: number; tx: number; ty: number; t0: number; dur: number; fall: boolean };
+  const glides = new Map<string, Glide>();
 
   /* The point held at the centre: the selection — except a single role, where holding
      it would fold the career path onto itself (there the path's start, Experience, holds),
@@ -555,6 +567,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       const par = byId.get(f)?.parent;
       if (!childrenOf(f).length && par && par !== 'root') childrenOf(par).forEach((c) => vis.add(c.id));
     }
+    // v70: the filter view shows every point: matches line up, the rest form the pile
+    if (!f && tidyMode()) { nodes.forEach((n) => vis.add(n.id)); return vis; }
     // a filter on the home map unfolds every matching piece of work and the way to it (v61)
     if (!f && filtering())
       for (const n of nodes)
@@ -741,7 +755,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       if (!start) return;
       const n = simNodes.get(id);
       if (!n) return;
-      if (!dragging && Math.hypot(e.clientX - start.x, e.clientY - start.y) > LAYOUT.dragSlop) {
+      if (!dragging && !tidyMode() && Math.hypot(e.clientX - start.x, e.clientY - start.y) > LAYOUT.dragSlop) {
         dragging = true;
         g.classList.add('dragging');
         sim.alphaTarget(LAYOUT.dragAlpha).restart();
@@ -755,6 +769,95 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     g.addEventListener('pointerup', () => end(true));
     g.addEventListener('pointercancel', () => end(false));
     g.addEventListener('lostpointercapture', () => end(false));
+  }
+
+  /* ---------- v70 filter view ---------- */
+  /** Where every point goes while a region is on: ✳ at the top, a column per group with matches
+      (its matching work strung below it, the career path in order), and the rest in a pile on the floor. */
+  function tidyLayout(vis: Set<string>) {
+    const T = LAYOUT.tidy;
+    const chain = new Set<string>();
+    nodes.forEach((n) => {
+      if (n.id === 'root' || !vis.has(n.id) || childrenOf(n.id).length || !matches(n.id)) return;
+      [n.id, ...ancestors(n.id)].forEach((a) => a !== 'root' && chain.add(a));
+    });
+    const cols = childrenOf('root').filter((c) => chain.has(c.id));
+    const pos = new Map<string, [number, number]>([['root', [0, 0]]]);
+    const out: SimLink[] = [];
+    const link = (a: string, b: string) => out.push({ source: a, target: b, kind: 'tree', dist: 0, key: `t:${a}>${b}` });
+    let maxY = 0;
+    cols.forEach((c, i) => {
+      const x0 = (i - (cols.length - 1) / 2) * T.colW;
+      const seq: string[] = [];
+      const walk = (id: string) => {
+        seq.push(id);
+        const kids = id === 'experience' ? rolesOrder.filter((r) => chain.has(r)) : childrenOf(id).map((k) => k.id).filter((k) => chain.has(k));
+        kids.forEach(walk);
+      };
+      walk(c.id);
+      seq.forEach((id, j) => {
+        const y = T.rootGap + j * T.rowGap;
+        pos.set(id, [x0 + (j ? (j % 2 ? T.zig : -T.zig) : 0), y]);
+        maxY = Math.max(maxY, y);
+      });
+      link('root', seq[0]);
+      for (let j = 1; j < seq.length; j++) link(seq[j - 1], seq[j]);
+    });
+    // the pile: a low mound of faded shapes on the floor (names show on hover), in a fixed shuffled order
+    const rest = nodes.filter((n) => vis.has(n.id) && !pos.has(n.id)).sort((a, b) => hash(a.id + ':p') - hash(b.id + ':p'));
+    let base = 1;
+    const fits = (b0: number) => { let c = 0; for (let r = b0; r > 0; r -= T.pileShrink) c += r; return c; };
+    while (fits(base) < rest.length) base++;
+    let i = 0;
+    for (let r = 0, size = base; i < rest.length; r++, size -= T.pileShrink) {
+      const row = rest.slice(i, i + size);
+      i += size;
+      row.forEach((n, j) => pos.set(n.id, [
+        (j - (row.length - 1) / 2) * T.pileStep + (hash(n.id + ':x') - 0.5) * T.pileStep * 0.3,
+        maxY + T.pileGap - r * T.pileRow + (hash(n.id + ':y') - 0.5) * 6,
+      ]));
+    }
+    pile = new Set(rest.map((n) => n.id));
+    return { pos, links: out, lit: chain };
+  }
+  /** Every point glides from where it is to its place: the chain rises with a soft overshoot, the rest drops and bounces. */
+  function startGlides(lit: Set<string>) {
+    const T = LAYOUT.tidy, now = performance.now();
+    let k = 0;
+    tidyPos!.forEach(([tx, ty], id) => {
+      const n = simNodes.get(id);
+      if (!n) return;
+      n.vx = 0; n.vy = 0;
+      const g = glides.get(id);
+      if (g && g.tx === tx && g.ty === ty) return;
+      if (!g && Math.hypot(n.x! - tx, n.y! - ty) < 0.5) return;
+      const fall = id !== 'root' && !lit.has(id);
+      glides.set(id, { fx: n.x!, fy: n.y!, tx, ty, dur: fall ? T.fall : T.rise, fall, t0: now + (fall ? hash(id + ':d') * 250 : k++ * T.stagger) });
+    });
+  }
+  const backOut = (x: number) => { const c1 = 1.3, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+  const bounceOut = (x: number) => {
+    const n1 = 7.5625, d1 = 2.75;
+    if (x < 1 / d1) return n1 * x * x;
+    if (x < 2 / d1) return n1 * (x -= 1.5 / d1) * x + 0.75;
+    if (x < 2.5 / d1) return n1 * (x -= 2.25 / d1) * x + 0.9375;
+    return n1 * (x -= 2.625 / d1) * x + 0.984375;
+  };
+  /** Move the gliding points for this frame; true while any is still moving. */
+  function stepGlides(): boolean {
+    if (!glides.size) return false;
+    const now = performance.now();
+    glides.forEach((g, id) => {
+      const n = simNodes.get(id);
+      if (!n) { glides.delete(id); return; }
+      const d = reducedMotion.matches ? 1 : Math.min(1, Math.max(0, (now - g.t0) / g.dur));
+      const ex = g.fall ? 1 - Math.pow(1 - d, 3) : backOut(d);
+      const ey = g.fall ? bounceOut(d) : backOut(d);
+      n.x = g.fx + (g.tx - g.fx) * ex;
+      n.y = g.fy + (g.ty - g.fy) * ey;
+      if (d >= 1) glides.delete(id);
+    });
+    return glides.size > 0;
   }
 
   /* ---------- update graph for a focus ---------- */
@@ -818,6 +921,8 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       });
     }
     links = next;
+    if (tidyMode()) { const t = tidyLayout(vis); links = t.links; tidyPos = t.pos; startGlides(t.lit); }
+    else { tidyPos = null; pile = new Set(); glides.clear(); simNodes.forEach((n) => { n.vx = 0; n.vy = 0; }); }
     const keys = new Set(links.map((l) => l.key));
     for (const l of links) {
       if (!linkEls.has(l.key)) {
@@ -838,6 +943,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     paintFar();
     els.forEach((el, id) => {
       el.classList.toggle('is-current', id === (picked || 'root'));
+      el.classList.toggle('is-piled', pile.has(id)); // v70: in the filter view's pile, names show on hover only
       el.classList.toggle('is-visited', id !== 'root' && isDone(id) && id !== picked);
       const par = byId.get(id)?.parent;
       el.classList.toggle('show-kick', !!focus && (id === focus || par === focus || par === byId.get(focus)?.parent));
@@ -846,7 +952,10 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
     firstEntrance = false;
     sim.nodes([...simNodes.values()]);
     (sim.force('link') as ReturnType<typeof forceLink<SimNode, SimLink>>).links(links);
-    if (reducedMotion.matches) {
+    if (tidyPos) {
+      sim.stop(); // the filter view moves on its own glides (stepGlides), not the forces
+      wake();
+    } else if (reducedMotion.matches) {
       sim.alpha(1).stop();
       for (let i = 0; i < LAYOUT.reducedTicks; i++) sim.tick();
       wake();
@@ -916,7 +1025,7 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
      itself to the middle through the centring force; the camera centres on the
      whole shown chain so both ends of every link stay in view. */
   function baseCamera() {
-    const pts = [...simNodes.values()];
+    const pts = tidyPos ? [...tidyPos.values()].map(([x, y]) => ({ x, y })) : [...simNodes.values()]; // filter view: frame where the points are going
     if (!pts.length) return cam;
     let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     pts.forEach((n) => {
@@ -945,8 +1054,9 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
   }
   function frame() {
     raf = 0;
+    const gliding = stepGlides();
     const moving = render();
-    if (moving || sim.alpha() >= sim.alphaMin()) wake();
+    if (gliding || moving || (!tidyPos && sim.alpha() >= sim.alphaMin())) wake();
   }
 
   /** Draw one frame; returns true while the camera is still easing. */

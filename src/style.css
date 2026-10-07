@@ -63,7 +63,6 @@
   /* Motion — map.ts reads --fade-node so removed nodes finish fading before they go. */
   --fade-node: 900ms;
   --dur-card: 800ms; /* the card grows / shrinks to its content (reference: 800ms, same curve) */
-  --fly-gap: 12px; --fly-top: 72px; --fly-row-max: 960px; --fly-rise: 620ms; --fly-stagger: 45px; --fly-tile-h: 44px; /* desktop filter view (v70): row gap, rows' distance below the header, row width, rise time, delay between tiles (ms), tile height */
   --side-gap: 10px; /* space between the INDEX bar, the image strip and the card */
   --media-h: 150px; /* height of the image strip above a card */
   --scrollbar-linger: 900ms; /* the card's scrollbar stays this long after scrolling stops */
@@ -522,18 +521,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 /* 16px stops iOS from zooming into the page when the menu opens */
 .m-fsel select { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
 
-/* ---------- Desktop filter view (v70): the map steps aside, matching cases fly up out of a pile ---------- */
-.flyup { position: absolute; inset: 0; z-index: 3; opacity: 0; visibility: hidden; transition: opacity var(--dur-card) var(--ease), visibility 0s linear var(--dur-card); touch-action: none; }
-.flyup.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur-card) var(--ease); }
-.desk.flying .stage { opacity: 0; pointer-events: none; transition: opacity var(--dur-card) var(--ease); }
-.desk .stage { transition: opacity var(--dur-card) var(--ease); }
-.fly-count { position: absolute; transform: translateX(-50%); margin: 0; color: var(--muted); white-space: nowrap; }
-.fly-count b { color: var(--ink); font-weight: 400; }
-.fly-tile { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 8px; height: var(--fly-tile-h); padding: 0 14px 0 12px; font: inherit; font-size: var(--fs-text); color: var(--ink); background: var(--panel); border: var(--rule); border-radius: 10px; white-space: nowrap; cursor: grab; user-select: none; will-change: transform; transition: opacity 350ms var(--ease), border-color 200ms var(--ease), background-color 200ms var(--ease), box-shadow 200ms var(--ease); }
-.fly-tile .ico .shp { fill: var(--panel); }
-.fly-num { font-size: var(--fs-label); color: var(--cobalt); font-variant-numeric: tabular-nums; }
-.fly-tile.is-dim { opacity: 0.35; }
-.fly-tile.is-up { border-color: var(--cobalt); box-shadow: 0 8px 24px var(--cobalt-tint); cursor: pointer; }
-.fly-tile.is-up:hover, .fly-tile.is-current { background: var(--accent); border-color: var(--ink); }
-.fly-tile.is-up:hover .ico .shp, .fly-tile.is-current .ico .shp { fill: var(--accent); }
-.fly-tile:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+
+/* v70 filter view: points in the pile show their shape only; the name appears on hover */
+.node.is-piled .lbl, .node.is-piled .lbl-halo { opacity: 0; transition: opacity 200ms var(--ease); }
+.node.is-piled:hover .lbl, .node.is-piled:hover .lbl-halo, .node.is-piled:focus-visible .lbl, .node.is-piled:focus-visible .lbl-halo { opacity: 1; }

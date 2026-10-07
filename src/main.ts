@@ -3,7 +3,6 @@ import './style.css';
 import { createFloatingVisual } from './floating-visual';
 import { ancestors, byId, site, ui, type SiteNode } from './content';
 import { createMap, type MapApi } from './map';
-import { createFlyup, type FlyupApi } from './flyup';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { icon } from './shapes';
@@ -90,18 +89,6 @@ const mq = window.matchMedia(cssVar('--mq-phone'));
 
 const floatingVisual = createFloatingVisual(stage, document.querySelector<HTMLElement>('.side')!, openLightbox);
 let map: MapApi | null = null;
-let fly: FlyupApi | null = null;
-/** Desktop filter view (v70): while a region is chosen, matching cases fly up in the map's place.
-    Not over a gallery or prototype, which use the map's place themselves. */
-function syncFly() {
-  if (mq.matches) return;
-  const id = currentNodeId();
-  const n = id ? byId.get(id) : undefined;
-  const on = filtering() && !(n && (n.gallery || n.prototype));
-  if (on && !fly) fly = createFlyup(document.querySelector<HTMLElement>('.desk')!, document.querySelector<HTMLElement>('.side')!, (cid) => go(cid));
-  document.querySelector('.desk')!.classList.toggle('flying', on);
-  fly?.update(on, id);
-}
 let route: Route = parseRoute();
 
 /* ---------- chrome text ---------- */
@@ -291,7 +278,6 @@ function applyRoute() {
   const id = currentNodeId();
   map!.setFocus(id);
   renderPanel();
-  syncFly();
   const title = panel.querySelector<HTMLElement>('.p-title');
   announce.textContent = title?.textContent || '';
   if (title && viaKeyboard) title.focus();
@@ -335,7 +321,6 @@ onChange(() => {
   paintChrome();
   map?.rerenderLabels();
   map?.refilter();
-  syncFly();
   renderMobile(document.getElementById('mob')!);
   if (!mq.matches) renderPanel(true);
 });

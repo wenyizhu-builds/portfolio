@@ -793,8 +793,6 @@ export const ui = {
   prototype: { en: 'Prototype · placeholder copy', zh: '原型 · 占位文案' },
   legendNumSample: { en: '2', zh: '2' }, // sample digit drawn in the legend's hexagon
   legendNum: { en: 'number = how many works inside', zh: '数字 = 里面有几个作品' },
-  flyOne: { en: 'case study in', zh: '个案例，地区：' }, // desktop filter view: "1 case study in Japan"
-  flyMany: { en: 'case studies in', zh: '个案例，地区：' },
   workHere: { en: 'Work from this role', zh: '这段经历中的作品' },
   viewWork: { en: 'View work', zh: '查看作品' },
   home: { en: 'home', zh: '首页' },
