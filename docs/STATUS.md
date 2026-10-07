@@ -1,15 +1,14 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.10（+ 分支 filter-flyup v70 待确认） · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.10 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 
-### 待她确认：电脑版筛选视图 v70（分支 `filter-flyup`，未合并）
-- 选地区后地图淡出，案例从底部一堆里飞起排成几行（matter-js）；SPEC 在分支上已写。测试版 Artifact：`https://claude.ai/artifact/SFY7zB11LTx6MExrgpdN1j`（只带了案例卡片用到的 15 张图）。她确认后：`git merge filter-flyup`，重新构建，发布到主预览。主预览文件数会 +0（JS 内联）。
-- 她和我达成一致：不做全站搜索（招聘方不会搜），地图仍是首页，只在筛选时用这个视图。
+### 已放弃：电脑版筛选视图（v70 / v70.1，分支 `filter-flyup`，不合并）
+- 试过两版：卡片从底部飞起（她：和地图风格不一致）；地图上的点排成整齐的树、其余堆成小土堆（她：太丑）。她决定**保持原来的筛选视图不变**。分支留作记录，不要再提这个方向，除非她主动说。主站从未改动（仍是 v69.10）。
 
 ### v69.10：AI Projects 只剩两个（删掉占位 ai-slot-2 和不再使用的 prep 常量）；Creator Workbench 加 alwaysLinked → Xiaohongshu AI Channel（打开 AI Projects 时像看板连 Creator Ad Pipeline 一样显示）。map.ts：这类关联点最后生成，起点在其伙伴外侧（不用它在别组的 home 位置）。xhs Results 按她 12:28 在编辑器里的删除只留两条（播放、点赞）。编辑器存档与发布版已逐条比对一致。AI Projects 分组的一句话说明还是 [Placeholder copy]。
 

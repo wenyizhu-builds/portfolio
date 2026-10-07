@@ -726,3 +726,7 @@
 - Creator Workbench `alwaysLinked: ['xhs-ai-channel']`: opening AI Projects shows the channel beside it, like the Dashboard and Creator Ad Pipeline.
 - map.ts: points shown only as a group child's link spawn last, beside that child and away from the group, instead of at their home in another group (the channel had dragged the whole view sideways). layout-check back to 1/37 (old hoyoverse item).
 - Xiaohongshu AI Channel Results: two (views, likes), matching the owner's editor edit. Editor archive and published copy compared field by field: identical.
+
+## 2026-10-07 — Filter view experiments dropped
+
+- Owner rejected both versions on branch `filter-flyup` (cards flying out of a pile; the map's points lined up into a tree with a pile). The filter view stays as it was (v69.10). The branch is kept for reference only and is not merged.
