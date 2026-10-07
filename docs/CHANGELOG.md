@@ -736,3 +736,4 @@
 - Owner chose a metro-style home map: the career line rises on a 45° diagonal from XJTLU to Now; Education loops from XJTLU to Seminary Co-op; Paid & UA and Creator & Social branch from HoYoverse; AI runs from Now to the Xiaohongshu channel; Creative branches from XJTLU. Brand only colours. Key cases as big double rings, other work as small dots. Connections from `related` drawn as a dotted transfer only when one end is clicked. Written into SPEC as a draft; site code unchanged.
 
 - Metro draft update: owner chose the "Next stop" ending (career line solid to HoYoverse, dotted track to an open station "Open to growth marketing roles"; AI line from HoYoverse). No "Now" dot, no "?". Creative line kept short (longer parallel version rejected). SPEC updated.
+- Metro draft update 2: final ending = "you at the top" shape with ✳ labelled "Next stop · AI-powered growth marketing"; AI line hangs from ✳. Education line renamed Campus line; other names unchanged.
