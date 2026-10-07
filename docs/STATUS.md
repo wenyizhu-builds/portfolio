@@ -1,10 +1,11 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v68 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
+- **v69（2026-10-07）第二个 AI 项目 Creator Workbench（用户：她的内容运营系统，Obsidian 工作台）**：替换了 ai-slot-1。来源 Mac `CONTENT/80-product-development/creator-workbench/`（PRD + 原型 v2，尚未开发完，用户：不用提）。展示方式同看板：电脑版 app 栏 + 灵箱里可点的原型（`public/demo/workbench.html`），**没有宣传片**，用 Home 屏的 16:9 静图（`poster.jpg`，点它也能打开原型；`prototype.video: []`）；手机版 8 张截图。原型英文版由 `scripts/workbench-en.py` 从 v2 生成：示例数据里的中文账号「AI 慢慢学」译为 "AI Made Easy"，帖子和内容契约译成英文；标题栏的语言切换隐藏（设置页的语言选项保留）。身份行 Personal project；与 AI Creator Channel 虚线相连（只在选中一端时显示，不用 alwaysLinked：试过，AI Projects 视图里线太长）。小红书案例 What I did：Data-led pivots → **Test and scale**；AI agent workflow → **Content operations system**（用户口述）。修了地图：一个点的组不在画面上时（相连的点），以前从 ✳ 出生、穿过别的线卡住，现在在选中点的外侧出生（map.ts spawn）。layout-check 1/38（只剩 hoyoverse 老问题）。
 - **v68（2026-10-07）小红书案例重写（用户：原来的 What I did 太弱）**：标题改 **AI Creator Channel**（用户：不要叫 tutorial）。What I did 改为策略层面 5 条：Positioning（对标头部 AI 博主，定位 AI 小白、每条视频都有看得见的成品）· Follower conversion over views（每千次播放带粉；动捕教程 14,449 播放 115 粉 vs AI 插画 20,677 阅读 10 粉 ≈ 16×）· Data-led pivots（停图文和抽象 AI 话题，转向开头就给视觉成品的短视频）· AI agent workflow（Creator OS：Agent 追热门和对标账号、爆款视频转知识库、每条内容打 hook/形式标签、双周增长复盘）· Brand partnerships（Alibaba 千问、ByteDance 即梦和小云雀、LiblibAI、Lovart——来源 CONTENT/40-commercial/brief-library）。来源都在 CONTENT 的 strategy.md 和 2026-09-07 双周复盘。
 - **v67（2026-10-05）小红书案例按用户意见改**：定位为 **副业（Side hustle）**，不是工作；身份行 "Side hustle"，地图批注 "my side hustle"；删掉 The Challenge 和 The Team（用户：没有挑战也没有团队；空的 team 不再显示）；summary 写动机：learn in public、分享自己学 AI 的过程；不再写 7.5K → 14K（用户：不够亮眼）。数字改为账号总量（截至 2026-09-24，CONTENT 里的内容日历 + 9/24 小红书导出）：小红书 ~1.11M 播放 + 抖音 ~749K = **1.8M+ 播放**；点赞 ~103K = **100K+**；收藏 ~93K（未用）；单条 287K。日历有些帖子没填播放，实际只会更多。
 - **v66（2026-10-05）筛选时点太小（用户反馈）**：点和标签在镜头缩小时保持 `CAMERA.pointMin` 0.8（筛选时约 14px，以前约 10px），标签也能点击；筛选扇形按比例放大。layout-check 2/38（与 v65 相同的两处老问题），四个筛选视图 0 处。用户要更大可调 `pointMin`（0.95 = 和首页一样大，但会有标签挤在一起，测过 6 处）。

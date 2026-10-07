@@ -428,6 +428,8 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .proto-box { margin-left: auto; margin-right: var(--proto-gap); display: grid; gap: var(--g-gap); }
 .proto-video { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-soft); background: var(--panel); box-shadow: 0 8px 24px color-mix(in srgb, var(--ink) 6%, transparent); }
 .proto-video video { display: block; width: 100%; height: auto; }
+.proto-still { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+.proto-still img { display: block; width: 100%; height: auto; }
 /* v64.16 video controls (video.ts): a bar over the bottom of the video, shown on hover, focus, pause or end */
 .pv { position: relative; }
 .pv video { cursor: pointer; }

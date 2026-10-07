@@ -179,8 +179,10 @@ const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M
 // layout C (owner's pick from three previews, v64.8): the video beside the card; the app bar above it (v64.9, owner: the bottom felt heavy)
 const protoHtml = (n: SiteNode) => `<div class="proto-box">
   <button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>
-  <div class="proto-video">${videoHtml(n.prototype!.video, n.prototype!.poster, cssPx('--promo-w'), cssPx('--promo-h'))}</div>
-</div>`;
+  <div class="proto-video">${n.prototype!.video.length
+    ? videoHtml(n.prototype!.video, n.prototype!.poster, cssPx('--promo-w'), cssPx('--promo-h'))
+    : `<button class="proto-still" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><img src="${esc(n.prototype!.poster)}" alt="" width="${cssPx('--promo-w')}" height="${cssPx('--promo-h')}"/></button>`}</div>
+</div>`; // v69: a project without a promo video shows a still of its first screen, which also opens the prototype
 
 /** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
 function restingTop(el: HTMLElement, moving?: HTMLElement): number {

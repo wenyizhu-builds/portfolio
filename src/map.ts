@@ -606,6 +606,16 @@ export function createMap(host: HTMLElement, onSelect: (id: string) => void): Ma
       const jitter = (hash(n.id + ':j') - 0.5) * LAYOUT.spawnJitter; // repeatable: same id, same place
       x = p.x! + Math.cos(ang + jitter) * LAYOUT.spawnDist;
       y = p.y! + Math.sin(ang + jitter) * LAYOUT.spawnDist;
+    } else {
+      // v69: a connection shown without its own group (e.g. Creator Workbench beside the AI Creator Channel)
+      // starts next to the selection, on its open side, instead of at the ✳ and having to cross every line
+      const f = focus ? simNodes.get(focus) : undefined;
+      const fp = focus ? simNodes.get(layoutParent(byId.get(focus)!) ?? '') : undefined;
+      if (f && relatedOf(focus!).includes(n.id)) {
+        const ang = fp ? Math.atan2(f.y! - fp.y!, f.x! - fp.x!) : 0;
+        x = f.x! + Math.cos(ang) * LAYOUT.spawnDist;
+        y = f.y! + Math.sin(ang) * LAYOUT.spawnDist;
+      }
     }
     const longest = Math.max(...wrap(n.label.en).map((l) => l.length));
     const Rr = LAYOUT.radius;

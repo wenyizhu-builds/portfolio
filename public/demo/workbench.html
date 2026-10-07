@@ -1,0 +1,898 @@
+<title>Creator Workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF;--side:#F7F7F5;--chrome:#EFEEEA;--ink:#1E1E1C;--ink2:#55534E;--muted:#8B8983;--line:#E8E6E1;--line2:#DDDBD5;--hover:#F0EFEB;
+  --btn:#1E1E1C;--on-btn:#FFFFFF;--link:#2563D9;
+  --amber:#9A5B05;--amber-bg:#FBF1E0;--red:#B8361F;--red-bg:#FBEAE5;--green:#2C7349;--green-bg:#E7F2EB;--blue:#2563D9;--blue-bg:#E9EFFC;
+  --shadow:0 1px 2px rgba(30,30,28,.05),0 12px 32px rgba(30,30,28,.08);
+  --sans:"Geist",-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --serif:"Newsreader","Songti SC","Noto Serif SC",Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#1B1B1A;--side:#212120;--chrome:#161615;--ink:#ECEBE8;--ink2:#BDBBB5;--muted:#8E8C86;--line:#2E2E2C;--line2:#3A3A37;--hover:#2A2A28;
+  --btn:#ECEBE8;--on-btn:#1B1B1A;--link:#86ABF6;
+  --amber:#E3A652;--amber-bg:#372B19;--red:#EF8E78;--red-bg:#3A221C;--green:#80C99D;--green-bg:#1E3025;--blue:#86ABF6;--blue-bg:#1E293D;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#1B1B1A;--side:#212120;--chrome:#161615;--ink:#ECEBE8;--ink2:#BDBBB5;--muted:#8E8C86;--line:#2E2E2C;--line2:#3A3A37;--hover:#2A2A28;
+  --btn:#ECEBE8;--on-btn:#1B1B1A;--link:#86ABF6;
+  --amber:#E3A652;--amber-bg:#372B19;--red:#EF8E78;--red-bg:#3A221C;--green:#80C99D;--green-bg:#1E3025;--blue:#86ABF6;--blue-bg:#1E293D;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.4)}
+html,body{height:100%}
+body{background:var(--chrome);color:var(--ink);font:14px/1.55 var(--sans);padding-block:16px;padding-inline:16px;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--link);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* window */
+.win{height:100%;max-width:1440px;margin:0 auto;display:grid;grid-template-rows:38px minmax(0,1fr) 26px;background:var(--bg);border:1px solid var(--line2);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+.titlebar{display:flex;align-items:stretch;background:var(--chrome);border-bottom:1px solid var(--line);min-width:0}
+.lights{display:flex;gap:7px;align-items:center;padding:0 14px}
+.lights i{width:11px;height:11px;border-radius:50%;background:var(--line2)}
+.tabs{display:flex;align-items:flex-end;gap:2px;min-width:0;flex:1;overflow:hidden;padding-left:4px}
+.tab{display:flex;align-items:center;gap:8px;height:31px;padding:0 14px;border-radius:8px 8px 0 0;font-size:12.5px;color:var(--ink2);background:transparent;border:0;white-space:nowrap;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+.tab.on{background:var(--bg);color:var(--ink);box-shadow:0 0 0 1px var(--line);clip-path:inset(-2px -2px 0 -2px)}
+.tab svg{flex:none}
+.tb-right{display:flex;align-items:center;gap:8px;padding:0 10px}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:7px;overflow:hidden;background:var(--bg)}
+.seg button{border:0;background:transparent;padding:3px 9px;font-size:12px;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--hover);color:var(--ink);font-weight:500}
+.demo-tag{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+
+.body{display:grid;grid-template-columns:44px 236px minmax(0,1fr) 296px;min-height:0}
+.body.ob{grid-template-columns:44px minmax(0,1fr)}
+.ribbon{border-right:1px solid var(--line);background:var(--side);display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:10px}
+.ribbon button{width:30px;height:30px;border:0;background:transparent;border-radius:7px;color:var(--muted);display:grid;place-items:center}
+.ribbon button.on,.ribbon button:hover{background:var(--hover);color:var(--ink)}
+
+.left{background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0;overflow:auto}
+.left-head{padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px}
+.acct{width:100%;appearance:none;border:1px solid var(--line2);background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238B8983' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 10px center;border-radius:7px;padding:6px 28px 6px 10px;font-size:13px}
+.newbtn{display:flex;align-items:center;gap:8px;justify-content:center;border:0;background:var(--btn);color:var(--on-btn);border-radius:7px;padding:7px 10px;font-weight:500;font-size:13px}
+.newbtn kbd{font:11px var(--mono);opacity:.6;margin-left:auto}
+.nav{display:flex;flex-direction:column;gap:1px;padding:6px 8px}
+.nav-label{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:14px 10px 4px}
+.nav button{display:flex;align-items:center;gap:10px;border:0;background:transparent;border-radius:6px;padding:5px 10px;text-align:left;color:var(--ink2);font-size:13.5px}
+.nav button:hover{background:var(--hover)}
+.nav button.on{background:var(--hover);color:var(--ink);font-weight:500}
+.nav .ct{margin-left:auto;font:11.5px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.nav .ct.hot{color:var(--amber)}
+.left-foot{margin-top:auto;padding:10px 12px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.runner{display:flex;align-items:center;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.dot.warn{background:var(--amber)}.dot.bad{background:var(--red)}.dot.run{background:var(--blue);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.35}}
+
+.main{overflow:auto;min-width:0;min-height:0}
+.page{max-width:820px;margin:0 auto;padding:44px 48px 80px}
+.crumb{font-size:12.5px;color:var(--muted);display:flex;gap:6px;align-items:center;margin-bottom:10px}
+.crumb button{border:0;background:none;padding:0;color:var(--muted)}
+.crumb button:hover{color:var(--ink);text-decoration:underline}
+h1{font:500 34px/1.15 var(--serif);letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0 0 28px}
+h2{font-size:12px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:36px 0 10px;display:flex;align-items:center;gap:8px}
+h2 .n{font:12px var(--mono);color:var(--ink2);letter-spacing:0}
+h3{font-size:15px;font-weight:500;margin:0}
+
+.rows{border-top:1px solid var(--line)}
+.row{display:flex;gap:14px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line);min-width:0;flex-wrap:wrap}
+.row.click{cursor:pointer}
+.row.click:hover{background:var(--hover)}
+.row .grow{flex:1;min-width:200px}
+.row .t{font-weight:500}
+.meta{font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.meta .sep::before{content:"·"}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+.mono{font-family:var(--mono);font-size:12px}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;padding:2px 8px;border-radius:5px;white-space:nowrap;background:var(--hover);color:var(--ink2)}
+.chip.red{background:var(--red-bg);color:var(--red)}
+.chip.amber{background:var(--amber-bg);color:var(--amber)}
+.chip.green{background:var(--green-bg);color:var(--green)}
+.chip.blue{background:var(--blue-bg);color:var(--blue)}
+.chip.ghost{background:transparent;border:1px solid var(--line2)}
+.who{font:11px var(--mono);color:var(--ink2);border:1px solid var(--line2);border-radius:4px;padding:0 5px}
+
+.btn{border:1px solid var(--line2);background:var(--bg);border-radius:7px;padding:5px 11px;font-size:13px;white-space:nowrap}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--btn);color:var(--on-btn);border-color:var(--btn)}
+.btn.pri:hover{opacity:.88}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--ink2)}
+.btn.quiet:hover{background:var(--hover);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{padding:3px 9px;font-size:12.5px}
+.link{border:0;background:none;padding:0;color:var(--link);font-size:inherit}
+.link:hover{text-decoration:underline}
+
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.pipe button{border:0;border-right:1px solid var(--line);background:var(--bg);text-align:left;padding:14px 14px 12px;display:flex;flex-direction:column;gap:2px}
+.pipe button:last-child{border-right:0}
+.pipe button:hover{background:var(--hover)}
+.pipe .k{font-size:12px;color:var(--muted)}
+.pipe .v{font:500 26px/1.1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pipe .d{font-size:11.5px;color:var(--ink2);min-height:1.5em}
+.arrow{color:var(--line2)}
+
+/* cards */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.card.sel{border-color:var(--ink2)}
+.card-top{display:flex;gap:10px;align-items:flex-start}
+.card-top input{margin-top:4px;accent-color:var(--ink)}
+.stat{font:12px var(--mono);color:var(--ink2)}
+.thumb{aspect-ratio:3/4;max-width:100%;border-radius:6px;background:linear-gradient(160deg,var(--hover),var(--line));display:grid;place-items:center;color:var(--muted);font-size:11px}
+
+.note{border-left:2px solid var(--line2);padding:2px 0 2px 14px;color:var(--ink2);margin:10px 0}
+.callout{border:1px solid var(--line);background:var(--side);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:13.5px}
+.callout.red{background:var(--red-bg);border-color:transparent;color:var(--red)}
+.callout.amber{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+dl.contract{display:grid;grid-template-columns:150px 1fr;gap:0;margin:0;border-top:1px solid var(--line)}
+dl.contract dt,dl.contract dd{margin:0;padding:10px 0;border-bottom:1px solid var(--line)}
+dl.contract dt{color:var(--muted);font-size:13px}
+.doc{border:1px solid transparent;border-radius:8px;padding:6px 10px;margin:0 -10px;outline:none;line-height:1.75}
+.doc:hover{border-color:var(--line)}
+.doc:focus{border-color:var(--line2);background:var(--side)}
+.doc p{margin:0 0 12px}
+.doc .pg{font:11px var(--mono);color:var(--muted);display:block;margin-top:14px}
+.skel{display:flex;flex-direction:column;gap:9px;padding:6px 0}
+.skel i{height:11px;border-radius:4px;background:var(--hover);animation:pulse 1.4s infinite}
+.pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.page-t{aspect-ratio:3/4;border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11.5px;display:flex;flex-direction:column;justify-content:space-between;background:var(--side)}
+.page-t b{font-weight:500;font-size:12.5px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line)}
+.check input{accent-color:var(--ink);margin-top:3px}
+
+/* inputs */
+.field{display:flex;flex-direction:column;gap:5px;margin:10px 0}
+.field label{font-size:12.5px;color:var(--ink2)}
+.inp{width:100%;border:1px solid var(--line2);background:var(--bg);border-radius:7px;padding:8px 10px}
+textarea.inp{min-height:76px;resize:vertical}
+.inp:focus{outline:none;border-color:var(--ink2)}
+.angle{border:1px solid transparent;background:transparent;border-radius:6px;padding:3px 6px;margin-left:-6px;width:100%;color:var(--ink2)}
+.angle:hover{border-color:var(--line)}
+.angle:focus{outline:none;border-color:var(--line2);background:var(--bg)}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.pills button{border:1px solid var(--line2);background:var(--bg);border-radius:20px;padding:3px 11px;font-size:12.5px;color:var(--ink2)}
+.pills button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pills .c{font:11px var(--mono);opacity:.7;margin-left:4px}
+
+/* score */
+.score{display:flex;align-items:baseline;gap:2px;font-variant-numeric:tabular-nums}
+.score b{font:500 20px var(--sans)}
+.score span{font-size:12px;color:var(--muted)}
+.reason{border:1px solid var(--line);border-radius:10px;padding:4px 14px 12px;margin:4px 0 6px;width:100%;background:var(--side)}
+.reason .r{display:grid;grid-template-columns:130px 70px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:baseline}
+.reason .r:last-of-type{border-bottom:0}
+.lv{font-size:11.5px;font-weight:500}
+.lv.s{color:var(--green)}.lv.m{color:var(--amber)}.lv.w{color:var(--red)}
+
+/* right */
+.right{border-left:1px solid var(--line);background:var(--side);overflow:auto;min-height:0}
+.rsec{padding:16px 16px 6px}
+.rsec h4{margin:0 0 10px;font-size:11.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stages{list-style:none;margin:0;padding:0;position:relative}
+.stages li{display:grid;grid-template-columns:18px 1fr auto;gap:10px;align-items:start;padding:6px 0;font-size:13px;color:var(--muted)}
+.stages .mk{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--line2);margin-top:3px;display:grid;place-items:center;font-size:9px;background:var(--side)}
+.stages li.done{color:var(--ink2)}
+.stages li.done .mk{background:var(--ink2);border-color:var(--ink2);color:var(--side)}
+.stages li.now{color:var(--ink);font-weight:500}
+.stages li.now .mk{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-bg)}
+.stages li.now.run .mk{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-bg)}
+.stages li.now.blk .mk{border-color:var(--red);box-shadow:0 0 0 3px var(--red-bg)}
+.own{font:10.5px var(--mono);color:var(--muted)}
+.gate{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;margin:6px 0 10px;display:flex;flex-direction:column;gap:10px}
+.gate p{margin:0;font-size:13px;color:var(--ink2)}
+.act{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:12.5px;padding:6px 0;border-bottom:1px solid var(--line)}
+.act:last-child{border-bottom:0}
+.act .tm{font:11px var(--mono);color:var(--muted);padding-top:2px}
+.props{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:12.5px}
+.props dt{color:var(--muted)}.props dd{margin:0;font-family:var(--mono);font-size:12px;word-break:break-word}
+
+.status{display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:0 14px;font-size:11.5px;color:var(--muted);background:var(--chrome);border-top:1px solid var(--line)}
+.status button{border:0;background:none;padding:0;font-size:11.5px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.status button:hover{color:var(--ink)}
+
+/* modal */
+.scrim{position:fixed;inset:0;background:rgba(20,20,18,.28);display:grid;place-items:start center;padding:12vh 16px 16px;z-index:20}
+.modal{width:min(560px,100%);background:var(--bg);border:1px solid var(--line2);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.modal-in{padding:18px 20px}
+.modal-big{border:0;border-bottom:1px solid var(--line);width:100%;padding:18px 20px;font-size:17px;background:transparent}
+.modal-big:focus{outline:none}
+.modal-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 20px;border-top:1px solid var(--line);background:var(--side);flex-wrap:wrap}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--ink2);background:var(--side)}
+.opt input{accent-color:var(--ink);margin-top:3px}
+.opts{display:grid;gap:8px}
+.opts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);background:var(--btn);color:var(--on-btn);padding:9px 14px;border-radius:8px;font-size:13px;box-shadow:var(--shadow);z-index:30;max-width:calc(100% - 32px)}
+
+/* onboarding */
+.ob-wrap{max-width:600px;margin:0 auto;padding:56px 32px 80px}
+.ob-steps{display:flex;gap:6px;margin-bottom:34px}
+.ob-steps i{height:3px;flex:1;border-radius:2px;background:var(--line)}
+.ob-steps i.on{background:var(--ink)}
+.ob-kicker{font:12px var(--mono);color:var(--muted);margin-bottom:8px}
+.ob-foot{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:10px;flex-wrap:wrap}
+.det{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.det .grow{flex:1}
+.runlog{font-size:13px;display:flex;flex-direction:column;gap:6px;margin:14px 0}
+.runlog div{display:flex;gap:8px;align-items:center;color:var(--muted)}
+.runlog div.ok{color:var(--ink2)}
+.tree{font:12px/1.8 var(--mono);color:var(--ink2);background:var(--side);border:1px solid var(--line);border-radius:8px;padding:10px 14px;overflow-x:auto;white-space:pre}
+
+/* responsive */
+@media (max-width:1180px){.body{grid-template-columns:44px 200px minmax(0,1fr) 260px}.page{padding:36px 32px 64px}}
+@media (max-width:960px){
+  body{padding-inline:0;padding-block:0}
+  .win{border-radius:0;border:0;height:auto;min-height:100%}
+  .body,.body.ob{grid-template-columns:minmax(0,1fr);display:flex;flex-direction:column}
+  .ribbon{display:none}
+  .left{border-right:0;border-bottom:1px solid var(--line);overflow:visible}
+  .nav{flex-direction:row;overflow-x:auto;padding:4px 8px 8px}
+  .nav-label,.left-foot{display:none}
+  .nav button{white-space:nowrap}
+  .main{overflow:visible}
+  .page{padding:24px 16px 48px}
+  .ob-wrap{padding:28px 16px 48px}
+  .right,.body.hasnote .right{display:block;border-left:0;border-top:1px solid var(--line)}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pipe button{border-bottom:1px solid var(--line)}
+  .grid2,.opts.three{grid-template-columns:minmax(0,1fr)}
+  dl.contract{grid-template-columns:minmax(0,1fr)}
+  dl.contract dt{border-bottom:0;padding-bottom:0}
+  .reason .r{grid-template-columns:1fr auto}
+  .reason .r .why{grid-column:1 / -1}
+  .tb-right .demo-tag,.lights{display:none}
+  .tabs .tab:not(.on){display:none}
+  h1{font-size:28px}
+}
+</style>
+
+<div class="win" id="app"></div>
+
+<script>
+(()=>{
+const app=document.getElementById('app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S;
+const T=(en,zh)=>S.lang==='en'?en:zh;
+const L=o=>o&&typeof o==='object'&&'en' in o?(S.lang==='en'?o.en:o.zh):o;
+
+/* ---------- icons ---------- */
+const P={
+ home:'<path d="M3 10.5 10 4l7 6.5V17H12.5v-4h-5v4H3z"/>',
+ search:'<circle cx="9" cy="9" r="5.5"/><path d="m13 13 4 4"/>',
+ file:'<path d="M5 3h7l4 4v10H5z"/><path d="M12 3v4h4"/>',
+ idea:'<path d="M7.5 14h5M8 17h4M10 3a5 5 0 0 0-3 9c.6.5 1 1.2 1 2h4c0-.8.4-1.5 1-2a5 5 0 0 0-3-9z"/>',
+ film:'<rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8h14M7 4v4M13 4v4"/>',
+ book:'<path d="M4 4h5a2 2 0 0 1 2 2v11a2 2 0 0 0-2-2H4zM16 4h-5a2 2 0 0 0-2 2v11a2 2 0 0 1 2-2h5z"/>',
+ list:'<path d="M7 5h10M7 10h10M7 15h10M3.5 5h.01M3.5 10h.01M3.5 15h.01"/>',
+ gear:'<circle cx="10" cy="10" r="2.5"/><path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.7 4.7l1.4 1.4M13.9 13.9l1.4 1.4M4.7 15.3l1.4-1.4M13.9 6.1l1.4-1.4"/>',
+ plus:'<path d="M10 4v12M4 10h12"/>',
+ folder:'<path d="M3 5h5l2 2h7v9H3z"/>',
+ graph:'<circle cx="5" cy="6" r="2"/><circle cx="15" cy="5" r="2"/><circle cx="11" cy="15" r="2"/><path d="m7 6.5 6-1M6 7.5l4 6M14 7l-2 6"/>',
+ bench:'<rect x="3" y="3" width="6" height="6" rx="1.5"/><rect x="11" y="3" width="6" height="6" rx="1.5"/><rect x="3" y="11" width="6" height="6" rx="1.5"/><rect x="11" y="11" width="6" height="6" rx="1.5"/>',
+ check:'<path d="m4.5 10.5 3.5 3.5 7.5-8"/>',
+ back:'<path d="M12 4 6 10l6 6"/>'
+};
+const I=(n,s=16)=>`<svg width="${s}" height="${s}" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+
+/* ---------- flows ---------- */
+const FLOWS={
+ carousel:[['direction','Direction','方向','agent'],['draft','Draft','文案初稿','agent'],['visuals','Page visuals','成图','agent'],['check','Pre-publish check','发布前检查','you'],['publish','Publish & log','发布并记录','you'],['retro','Results review','数据复盘','agent']],
+ video:[['direction','Direction','方向','agent'],['script','Script','脚本初稿','agent'],['shoot','Record footage','拍摄 / 录屏','you'],['edit','Edit','剪辑','you'],['package','Captions & cover','字幕与封面','agent'],['publish','Publish & log','发布并记录','you'],['retro','Results review','数据复盘','agent']],
+ text:[['direction','Direction','方向','agent'],['draft','Draft','文案初稿','agent'],['publish','Publish & log','发布并记录','you'],['retro','Results review','数据复盘','agent']]
+};
+const FMT={carousel:['Carousel','图文'],video:['Short video','短视频'],text:['Text post','文字帖']};
+const fmt=f=>T(...FMT[f]);
+
+/* ---------- data ---------- */
+function seed(){
+ return {
+ lang:'en',view:'home',acct:'all',note:null,ideaFilter:'new',taskFilter:'all',setTab:'agents',srcTab:'queue',
+ sel:new Set(),modal:null,toast:'',fbOpen:false,ob:null,seq:60,quotaClaude:true,
+ accounts:[
+  {id:'zh',name:'AI Made Easy',platform:'Xiaohongshu',lang:'Chinese',niche:'AI tutorials'},
+  {id:'en',name:'Quiet Prompts',platform:'Instagram',lang:'English',niche:'AI workflows'}],
+ runs:[
+  {id:'R-014',kind:'topic',q:'AI note organising',acct:'zh',platform:'Xiaohongshu',status:'ready',runner:'Claude',when:'09:12',read:12,triaged:false,
+   summary:'High-engagement posts cluster around one pain point: “I save everything but never use it”. The best samples open with an organised library, then give three steps. Posts that only review a tool get far fewer saves.',
+   gaps:['Only 3 of 12 posts give full steps, so evidence on method is thin','Engagement is a snapshot from Sep 25, not final performance','No before-and-after data from the same creator'],
+   samples:['S-201','S-202','S-203','S-204']},
+  {id:'R-013',kind:'account',q:'@maker.minimal',acct:'en',platform:'Instagram',status:'running',runner:'Claude',when:'10:05',step:{en:'Reading post 18 of 40',zh:'正在读第 18 / 40 条'}},
+  {id:'R-012',kind:'topic',q:'Claude Code for beginners',acct:'zh',platform:'Xiaohongshu',status:'blocked',runner:'Claude',when:'08:40',
+   block:{en:'Xiaohongshu signed out in the research browser. 5 of 12 posts were read before it stopped.',zh:'调研浏览器里的小红书登录失效了。停下前已读完 12 条中的 5 条。'}},
+  {id:'R-011',kind:'topic',q:'weekly planning prompts',acct:'en',platform:'Instagram',status:'ready',runner:'Codex',when:'Sep 23',read:10,triaged:true,summary:'Short reels that show a filled-in weekly plan in the first second outperform talking-head explainers.',gaps:[],samples:['S-190']}],
+ samples:{
+  'S-201':{title:'I saved 300 posts. Here’s how I actually use them',author:'Lin’s Notebook',format:'carousel',stat:'3.1k saves',note:'Opens with the organised library'},
+  'S-202':{title:'AI sorts my reading notes for me',author:'Mia Reads',format:'video',stat:'1.8k saves',note:'Mostly demo, no reusable prompt'},
+  'S-203':{title:'Stop just saving: build your own library in 3 steps',author:'Archie Makes Content',format:'carousel',stat:'5.6k saves',note:'Clear 3-step structure, template on the last page'},
+  'S-204':{title:'Testing Notion AI for note-taking',author:'Productivity Lab',format:'video',stat:'920 saves',note:'A tool review, no clear pain point'},
+  'S-190':{title:'How I plan my week with one prompt',author:'plannerdaily',format:'video',stat:'12k likes',note:'Shows the finished plan before any explanation'},
+  'S-188':{title:'My content system in Obsidian',author:'northdesk',format:'video',stat:'4.2k likes',note:''}},
+ sources:[
+  {id:'S-203',status:'ready',acct:'zh',platform:'Xiaohongshu',runner:'Codex',hook:{en:'Result first',zh:'结果先行'},type:{en:'Step-by-step tutorial',zh:'步骤教程'},tax:1,
+   transcript:'Page 1: You’ve saved 300 posts. How many have you used?\nPage 2: Step 1: make three folders by what you’ll do with them, not by topic.\nPage 3: Step 2: for every save, write one line on where you’ll use it.\nPage 4: Step 3: spend 15 minutes every Friday deleting what you won’t use.\nPage 5: Here’s the template. Copy it.'},
+  {id:'S-190',status:'ready',acct:'en',platform:'Instagram',runner:'Claude',hook:{en:'Result first',zh:'结果先行'},type:{en:'Workflow demo',zh:'工作流演示'},tax:1,
+   transcript:'[0:00] This is my whole week, planned in 40 seconds.\n[0:03] I paste one prompt with my calendar and three priorities.\n[0:11] It gives me blocks, not a to-do list.\n[0:24] The trick is telling it what I will not do this week.'},
+  {id:'S-201',status:'running',acct:'zh',platform:'Xiaohongshu',runner:'Claude',step:{en:'Reading 9 pages (OCR)',zh:'识别 9 页图片文字'}},
+  {id:'S-188',status:'needfile',acct:'en',platform:'Instagram',runner:'Claude',why:{en:'The video could not be downloaded. Upload the file to continue.',zh:'视频无法下载。上传本地文件后继续。'}}],
+ ideas:[
+  {id:'I-041',title:'AI notes: turn your saves into a content library',angle:'For new creators: 3 steps to turn saved posts into material you can write from',acct:'zh',src:['S-203','S-201'],status:'new',score:null},
+  {id:'I-040',title:'Turn saved reels into a content plan',angle:'One prompt that sorts your saved reels into next week’s posts',acct:'en',src:['S-190'],status:'new',score:null},
+  {id:'I-039',title:'3 mistakes beginners make writing weekly reports with Claude',angle:'The 3 most common mistakes new grads make the first time they use AI for a weekly report',acct:'zh',src:[],status:'new',score:{v:6,rows:[['Pain evidence','痛点证据','m','People ask about it in comments, but only 4 samples'],['Market proof','市场验证','s','2 carousels on this topic passed 2k saves'],['Can you deliver','你能兑现吗','w','No first-hand test yet, run one first']],ref:'S-203',fb:''}},
+  {id:'I-038',title:'Notion vs Obsidian for creators',angle:'Which one to pick if you publish three times a week',acct:'en',src:['S-188'],status:'new',score:null},
+  {id:'I-036',title:'3 ways to make AI write in your voice',angle:'For anyone who wants AI to sound more like them',acct:'zh',src:[],status:'shortlisted',score:null},
+  {id:'I-035',title:'Every AI tool I tried in September',angle:'Monthly roundup',acct:'en',src:[],status:'rejected',score:null},
+  {id:'I-033',title:'5 things to know before you first use Claude Code',angle:'',acct:'zh',src:['S-203'],status:'production',project:'P-022'},
+  {id:'I-031',title:'3 prompts I use to plan my week',angle:'',acct:'en',src:['S-190'],status:'production',project:'P-021'},
+  {id:'I-030',title:'3 steps to organise your saves with AI',angle:'',acct:'zh',src:['S-203'],status:'production',project:'P-020'},
+  {id:'I-029',title:'Why I stopped saving every AI tool I see',angle:'',acct:'en',src:[],status:'production',project:'P-023'}],
+ projects:[
+  {id:'P-022',title:'5 things to know before you first use Claude Code',acct:'zh',format:'carousel',idea:'I-033',i:1,st:'review',runner:'Codex',ver:2,edited:false,
+   log:[['09:50','Codex',{en:'Wrote draft v2 from your notes',zh:'根据你的意见写了初稿 v2'}],['09:31','You',{en:'Requested changes on v1',zh:'退回 v1 并留下意见'}],['09:02','Codex',{en:'Wrote draft v1 · read 6 notes',zh:'写了初稿 v1 · 读取 6 篇笔记'}],['Sep 24','You',{en:'Approved direction',zh:'通过方向'}]]},
+  {id:'P-021',title:'3 prompts I use to plan my week',acct:'en',format:'video',idea:'I-031',i:2,st:'todo',runner:'Claude',ver:1,
+   log:[['Sep 24','You',{en:'Approved script v1',zh:'通过脚本 v1'}],['Sep 24','Claude',{en:'Wrote script v1',zh:'写了脚本 v1'}]]},
+  {id:'P-020',title:'3 steps to organise your saves with AI',acct:'zh',format:'carousel',idea:'I-030',i:1,st:'blocked',runner:'Claude',ver:0,
+   log:[['10:14','Claude',{en:'Stopped: usage limit reached',zh:'已停止：额度用完'}],['10:02','You',{en:'Approved direction',zh:'通过方向'}]]},
+  {id:'P-023',title:'Why I stopped saving every AI tool I see',acct:'en',format:'text',idea:'I-029',i:0,st:'review',runner:'Claude',ver:1,
+   log:[['08:55','Claude',{en:'Wrote the content contract',zh:'写好了内容契约'}]]}],
+ knowledge:[
+  {id:'K-12',title:{en:'Hook: show the finished result first',zh:'Hook：先展示成品'},from:'S-190, S-203',status:'adopted'},
+  {id:'K-13',title:{en:'Carousel cover: big title names the reader and the result',zh:'图文首屏：大标题点明人群和结果'},from:'S-203',status:'extracted'},
+  {id:'K-14',title:{en:'Imported article (not processed yet)',zh:'导入的文章（尚未处理）'},from:'example.com/creator-systems',status:'saved'}],
+ log:[['10:14','Claude',{en:'Stopped P-020 draft: usage limit reached',zh:'P-020 初稿已停止：额度用完'}],['10:05','Claude',{en:'Started competitor research @maker.minimal',zh:'开始竞品调研 @maker.minimal'}],['09:50','Codex',{en:'Wrote P-022 draft v2',zh:'写好 P-022 初稿 v2'}],['09:12','Claude',{en:'Finished topic research “AI note organising”',zh:'完成选题调研「AI 笔记整理」'}],['08:40','Claude',{en:'Research paused: signed out',zh:'调研暂停：登录失效'}]],
+ tax:{name:{en:'AI & tech tutorials · starter',zh:'AI 与科技教程 · 起步模板'},v:1,analyzed:8}
+ };
+}
+S=seed();
+
+const CONTRACT={
+ 'P-022':[['Audience','目标人群','Creators who want to use Claude Code but have never coded'],['Situation','场景','Opening the terminal for the first time, not sure where to start'],['One question','唯一问题','What do I need before I start?'],['Promise','承诺与交付','Install it and finish a first task; includes a one-page checklist'],['Primary reference','唯一主对标','S-203 · 3-step structure, template on the last page'],['Hook & template','Hook 与模板','Result first · 5-step checklist']],
+ 'P-023':[['Audience','目标人群','Creators who bookmark every new AI tool'],['Situation','场景','Scrolling launch threads on a Monday'],['One question','唯一问题','How do I decide which tool is worth my time?'],['Promise','承诺与交付','A 3-question filter they can apply in a minute'],['Primary reference','唯一主对标','S-190 · result-first opening'],['Hook & template','Hook 与模板','Confession opener · list of 3']],
+ 'P-020':[['Audience','目标人群','New creators who save a lot but can’t find anything when writing'],['Situation','场景','About to write, 20 minutes lost scrolling saved posts'],['One question','唯一问题','How do I turn saves into material I can use?'],['Promise','承诺与交付','A 3-step method and a copyable folder template'],['Primary reference','唯一主对标','S-203'],['Hook & template','Hook 与模板','Pain-point question · 3-step tutorial']],
+ 'P-021':[['Audience','目标人群','Solo creators planning content on Sundays'],['Situation','场景','Too many ideas, no plan'],['One question','唯一问题','How do I turn a messy week into a plan fast?'],['Promise','承诺与交付','3 copy-paste prompts'],['Primary reference','唯一主对标','S-190'],['Hook & template','Hook 与模板','Result first · 3-part demo']]
+};
+const DRAFT={
+ 'P-022':[['p1','Cover','5 things to know before you first use Claude Code (checklist inside)'],['p2','Page 2','It isn’t a chat box. Claude Code reads and writes files on your computer, so start with a folder just for it.'],['p3','Page 3','Install Node.js first, then install it with one command. Type claude: if you see the welcome screen, you’re in.'],['p4','Page 4','Keep the first task small: ask it to tidy a folder and watch it ask for your OK at each step.'],['p5','Page 5','Before every task, say what “done” looks like. It checks its own work against that.'],['p6','Page 6','Checklist: a folder / Node.js / a subscription / one 15-minute task.']],
+ 'P-020':[],
+ 'P-023':[['p1','Post','I used to save every AI tool I saw. I had 214 bookmarks and used four.'],['p2','','Now I ask three questions before I save anything: Does it replace something I already do? Can I try it in 10 minutes? Would I pay for it next month?'],['p3','','If it fails two of three, I close the tab. My bookmarks folder is down to 19.']],
+ 'P-021':[['p1','0:00','Here is my whole week, planned in 40 seconds.'],['p2','0:04','Prompt 1: dump everything. Paste your calendar and every idea you have.'],['p3','0:15','Prompt 2: pick three. Ask it which three posts move your goal most.'],['p4','0:27','Prompt 3: block it. Turn the three into time blocks, with one day off.']]
+};
+
+/* ---------- helpers ---------- */
+const acctOf=id=>S.accounts.find(a=>a.id===id);
+const acctName=id=>{const a=acctOf(id);return a?a.name:''};
+const inAcct=x=>S.acct==='all'||x.acct===S.acct;
+const flowOf=p=>FLOWS[p.format];
+const stageOf=p=>flowOf(p)[p.i];
+const stName=s=>T(s[1],s[2]);
+const now=()=>{const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+const addLog=(who,en,zh,p)=>{const e=[now(),who,{en,zh}];S.log.unshift(e);if(p)p.log.unshift(e)};
+const nextId=pre=>pre+'-'+(++S.seq);
+function toast(en,zh){S.toast=T(en,zh);render();clearTimeout(toast.t);toast.t=setTimeout(()=>{S.toast='';render()},3200)}
+const chip=(cls,txt)=>`<span class="chip ${cls}">${txt}</span>`;
+const who=w=>`<span class="who">${esc(w)}</span>`;
+const btn=(label,act,id='',cls='',extra='')=>`<button class="btn ${cls}" data-act="${act}" data-id="${esc(id)}" ${extra}>${label}</button>`;
+const kindLabel=k=>k==='topic'?T('Topic research','选题调研'):T('Competitor research','竞品调研');
+
+function needs(){
+ const out=[];
+ S.runs.filter(inAcct).forEach(r=>{
+  if(r.status==='blocked')out.push({pr:0,kind:'blocked',title:T('Research paused: ','调研暂停：')+r.q,meta:[acctName(r.acct),r.runner,r.when],reason:L(r.block),acts:[btn(T('I signed in, resume','已重新登录，继续'),'resume-run',r.id,'pri sm')],open:['open-run',r.id]});
+  if(r.status==='ready'&&!r.triaged)out.push({pr:2,kind:'triage',title:T('New report: ','新报告：')+r.q,meta:[acctName(r.acct),r.samples.length+T(' samples',' 条样本'),r.when],acts:[btn(T('Open report','打开报告'),'open-run',r.id,'sm')],open:['open-run',r.id]});
+ });
+ S.sources.filter(inAcct).forEach(s=>{if(s.status==='needfile')out.push({pr:0,kind:'blocked',title:T('Source needs a file: ','素材缺文件：')+S.samples[s.id].title,meta:[acctName(s.acct),s.id],reason:L(s.why),acts:[btn(T('Upload file','上传文件'),'upload-src',s.id,'sm')],open:['open-src',s.id]})});
+ S.projects.filter(inAcct).forEach(p=>{
+  const s=stageOf(p);
+  if(p.st==='blocked')out.push({pr:0,kind:'blocked',title:p.title,meta:[acctName(p.acct),stName(s),p.runner],reason:T('Claude reached its usage limit. It resets at 18:00. Nothing was charged.','Claude 额度已用完，18:00 重置。没有产生任何额外费用。'),acts:[btn(T('Run with Codex','改用 Codex'),'switch-runner',p.id,'pri sm'),btn(T('Wait for reset','等待重置'),'wait-reset',p.id,'sm')],open:['open-proj',p.id]});
+  if(p.st==='review')out.push({pr:1,kind:'review',title:p.title,meta:[acctName(p.acct),fmt(p.format),stName(s)+(p.ver?' v'+p.ver:'')],acts:[btn(T('Review','去审核'),'open-proj',p.id,'sm')],open:['open-proj',p.id]});
+  if(p.st==='todo')out.push({pr:1,kind:'todo',title:p.title,meta:[acctName(p.acct),fmt(p.format),stName(s)],acts:[btn(T('Open','打开'),'open-proj',p.id,'sm')],open:['open-proj',p.id]});
+ });
+ const nNew=S.ideas.filter(inAcct).filter(i=>i.status==='new').length;
+ if(nNew)out.push({pr:3,kind:'screen',title:T(`${nNew} new ideas to screen`,`${nNew} 个新候选待筛选`),meta:[T('Shortlist, reject, or analyze','入选、淘汰或点分析')],acts:[btn(T('Open Ideas','打开选题库'),'go','ideas','sm')],open:['go','ideas']});
+ return out.sort((a,b)=>a.pr-b.pr);
+}
+const KIND={blocked:['red','Blocked','受阻'],review:['amber','Review','待审核'],todo:['amber','Your step','轮到你'],triage:['blue','New report','新报告'],screen:['','To screen','待筛选']};
+
+function counts(){
+ const n=needs();
+ return {needs:n.length,review:n.filter(x=>x.kind==='review'||x.kind==='todo').length,blocked:n.filter(x=>x.kind==='blocked').length,
+  running:S.runs.filter(r=>r.status==='running').length+S.sources.filter(s=>s.status==='running').length+S.projects.filter(p=>p.st==='running').length+S.ideas.filter(i=>i.analyzing).length};
+}
+
+/* ---------- views ---------- */
+function home(){
+ const n=needs();
+ const runs=S.runs.filter(inAcct),srcs=S.sources.filter(inAcct),ideas=S.ideas.filter(inAcct),projs=S.projects.filter(inAcct);
+ const running=[...runs.filter(r=>r.status==='running').map(r=>({t:kindLabel(r.kind)+' · '+r.q,step:L(r.step),w:r.runner,open:['open-run',r.id]})),
+  ...srcs.filter(s=>s.status==='running').map(s=>({t:T('Analyze · ','解析 · ')+S.samples[s.id].title,step:L(s.step),w:s.runner,open:['open-src',s.id]})),
+  ...projs.filter(p=>p.st==='running').map(p=>({t:p.title,step:T('Writing ','正在写 ')+stName(stageOf(p)),w:p.runner,open:['open-proj',p.id]})),
+  ...ideas.filter(i=>i.analyzing).map(i=>({t:T('Analyze idea · ','分析选题 · ')+i.title,step:T('Checking sources and your past posts','对照来源与你的历史内容'),w:'Claude',open:['go','ideas']}))];
+ const d=new Date(2026,8,25);
+ return `<div class="page">
+ <h1>${T('Home','首页')}</h1>
+ <p class="sub">${S.lang==='en'?d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}):'9 月 25 日 星期五'} · ${S.acct==='all'?T('All accounts','全部账号'):esc(acctName(S.acct))}</p>
+ <h2>${T('Needs you','待我处理')} <span class="n">${n.length}</span></h2>
+ ${n.length?`<div class="rows">${n.map(x=>`<div class="row click" data-act="${x.open[0]}" data-id="${x.open[1]}">
+   <div style="width:84px">${chip(KIND[x.kind][0],T(KIND[x.kind][1],KIND[x.kind][2]))}</div>
+   <div class="grow"><div class="t">${esc(x.title)}</div><div class="meta">${x.meta.filter(Boolean).map((m,i)=>(i?'<span class="sep"></span>':'')+`<span>${esc(m)}</span>`).join('')}</div>${x.reason?`<div class="meta" style="color:var(--ink2);margin-top:3px">${esc(x.reason)}</div>`:''}</div>
+   <div class="acts" data-stop>${x.acts.join('')}</div></div>`).join('')}</div>`
+ :`<div class="callout">${T('Nothing needs you right now. Start something new with','目前没有需要你处理的事。可以用')} <button class="link" data-act="new">+ New</button>${T('.','发起新工作。')}</div>`}
+ <h2>${T('Pipeline','流水线')}</h2>
+ <div class="pipe">
+  ${[['research',T('Research','调研'),runs.length,runs.filter(r=>r.status==='running').length?runs.filter(r=>r.status==='running').length+T(' running',' 个运行中'):''],
+     ['sources',T('Sources','素材'),srcs.length,srcs.filter(s=>s.status!=='ready').length+T(' in queue',' 个在队列')],
+     ['ideas',T('Ideas','选题'),ideas.filter(i=>i.status==='new'||i.status==='shortlisted').length,ideas.filter(i=>i.status==='shortlisted').length+T(' shortlisted',' 个已入选')],
+     ['production',T('Production','制作中'),projs.filter(p=>!p.done).length,projs.filter(p=>p.st==='review'||p.st==='todo').length+T(' waiting on you',' 个在等你')],
+     ['knowledge',T('Knowledge','知识'),S.knowledge.length,S.knowledge.filter(k=>k.status==='adopted').length+T(' adopted',' 条已采用')]]
+   .map(c=>`<button data-act="go" data-id="${c[0]}"><span class="k">${c[1]}</span><span class="v">${c[2]}</span><span class="d">${c[3]}</span></button>`).join('')}
+ </div>
+ <h2>${T('Running now','正在运行')} <span class="n">${running.length}</span></h2>
+ ${running.length?`<div class="rows">${running.map(r=>`<div class="row click" data-act="${r.open[0]}" data-id="${r.open[1]}"><span class="dot run"></span><div class="grow"><div>${esc(r.t)}</div><div class="meta">${esc(r.step)}</div></div>${who(r.w)}</div>`).join('')}</div>`:`<p class="meta">${T('No agent is running.','没有正在运行的 Agent。')}</p>`}
+ </div>`;
+}
+
+function research(){
+ const runs=S.runs.filter(inAcct);
+ return `<div class="page"><h1>${T('Research','调研')}</h1><p class="sub">${T('Every report keeps its sources, scope and gaps. Pick samples to send on.','每份报告都保留来源、范围和缺口。挑出样本送去下一步。')}</p>
+ <div class="acts" style="margin-bottom:18px">${btn(T('+ Topic research','+ 选题调研'),'new','keyword','pri')}${btn(T('+ Competitor research','+ 竞品调研'),'new','account')}</div>
+ <div class="rows">${runs.map(r=>`<div class="row click" data-act="open-run" data-id="${r.id}">
+  <div class="grow"><div class="t">${esc(r.q)}</div><div class="meta"><span>${kindLabel(r.kind)}</span><span class="sep"></span><span>${esc(r.platform)}</span><span class="sep"></span><span>${esc(acctName(r.acct))}</span><span class="sep"></span><span class="mono">${r.id}</span></div></div>
+  ${runChip(r)} ${who(r.runner)} <span class="meta mono">${r.when}</span></div>`).join('')}</div></div>`;
+}
+function runChip(r){
+ if(r.status==='running')return chip('blue',T('Running','运行中'));
+ if(r.status==='blocked')return chip('red',T('Blocked','受阻'));
+ if(!r.triaged)return chip('amber',T('To triage','待分流'));
+ return chip('green',T('Done','完成'));
+}
+function report(r){
+ const head=`<div class="crumb"><button data-act="go" data-id="research">${T('Research','调研')}</button> / <span class="mono">${r.id}</span></div>
+ <h1>${esc(r.q)}</h1><p class="sub">${kindLabel(r.kind)} · ${esc(r.platform)} · ${esc(acctName(r.acct))} · ${T('by','执行：')} ${r.runner} · ${r.when}</p>`;
+ if(r.status==='running')return `<div class="page">${head}<div class="callout"><span class="dot run" style="display:inline-block;margin-right:8px"></span>${esc(L(r.step))}. ${T('You can leave this page. It will show up in Needs you when the report is ready.','可以离开这个页面，报告完成后会出现在「待我处理」。')}</div></div>`;
+ if(r.status==='blocked')return `<div class="page">${head}<div class="callout red">${esc(L(r.block))}</div><p>${T('Sign in to Xiaohongshu in the research browser, then resume. The 5 posts already read are kept.','在调研浏览器里重新登录小红书后继续。已读完的 5 条会保留。')}</p>${btn(T('I signed in, resume','已重新登录，继续'),'resume-run',r.id,'pri')}</div>`;
+ const sel=[...S.sel].filter(id=>r.samples.includes(id));
+ return `<div class="page">${head}
+ <p style="font-size:15px;line-height:1.7">${esc(r.summary)}</p>
+ ${r.gaps.length?`<h2>${T('Gaps in this evidence','证据缺口')}</h2>${r.gaps.map(g=>`<div class="note">${esc(g)}</div>`).join('')}`:''}
+ <h2>${T('Samples','样本')} <span class="n">${r.read?r.samples.length+' / '+r.read+T(' read',' 已读'):r.samples.length}</span></h2>
+ <div class="acts" style="margin-bottom:12px;align-items:center"><span class="meta" style="margin-right:6px">${sel.length} ${T('selected','已选')}</span>
+  ${btn(T('Analyze selected','批量解析'),'batch','analyze','sm',sel.length?'':'disabled')}${btn(T('Save selected as ideas','批量加入选题'),'batch','idea','sm',sel.length?'':'disabled')}${btn(T('Add selected to knowledge','批量加入知识'),'batch','know','sm',sel.length?'':'disabled')}</div>
+ <div class="grid2">${r.samples.map(id=>{const s=S.samples[id];const inSrc=S.sources.some(x=>x.id===id);const inIdea=S.ideas.some(i=>i.src.includes(id));const on=S.sel.has(id);
+  return `<article class="card ${on?'sel':''}"><div class="card-top"><input type="checkbox" data-sel="${id}" ${on?'checked':''} aria-label="${esc(s.title)}"><div style="flex:1;min-width:0"><div class="meta"><span class="mono">${id}</span><span class="sep"></span><span>${esc(s.author)}</span><span class="sep"></span><span>${fmt(s.format)}</span></div><h3 style="margin-top:3px">${esc(s.title)}</h3></div></div>
+  <div class="stat">${esc(s.stat)} · ${T('snapshot Sep 25','9/25 快照')}</div>${s.note?`<div class="meta">${esc(s.note)}</div>`:''}
+  <div class="acts">${inSrc?btn(T('In Sources ✓','已在素材'),'open-src',id,'sm quiet'):btn(T('Analyze','解析'),'to-src',id,'sm')}${inIdea?btn(T('Idea saved ✓','已存为选题'),'go','ideas','sm quiet'):btn(T('Save as idea','存为选题'),'to-idea',id,'sm')}${btn(T('Add to knowledge','加入知识'),'to-know',id,'sm quiet')}</div></article>`}).join('')}</div>
+ ${!r.triaged?`<div class="callout" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:22px"><span>${T('Done sorting this report? It will leave Needs you.','这份报告分流完了吗？标记后会离开「待我处理」。')}</span>${btn(T('Mark as triaged','标记已分流'),'triage',r.id,'sm')}</div>`:''}
+ </div>`;
+}
+
+function sources(){
+ const list=S.sources.filter(inAcct);
+ const q=list.filter(s=>s.status!=='ready'),lib=list.filter(s=>s.status==='ready');
+ const cur=S.srcTab==='queue'?q:lib;
+ return `<div class="page"><h1>${T('Sources','素材')}</h1><p class="sub">${T('One note per source. Transcript, tags and structure stay linked to the original post.','每条来源一篇笔记。转写、标签和结构拆解都和原帖关联。')}</p>
+ <div class="pills">${[['queue',T('Queue','解析队列'),q.length],['library',T('Library','素材库'),lib.length]].map(t=>`<button data-act="src-tab" data-id="${t[0]}" aria-pressed="${S.srcTab===t[0]}">${t[1]}<span class="c">${t[2]}</span></button>`).join('')}</div>
+ <div class="rows">${cur.length?cur.map(s=>{const sm=S.samples[s.id];return `<div class="row click" data-act="open-src" data-id="${s.id}"><div class="grow"><div class="t">${esc(sm.title)}</div><div class="meta"><span class="mono">${s.id}</span><span class="sep"></span><span>${esc(s.platform)}</span><span class="sep"></span><span>${esc(acctName(s.acct))}</span>${s.status==='running'?`<span class="sep"></span><span>${esc(L(s.step))}</span>`:''}${s.status==='needfile'?`<span class="sep"></span><span>${esc(L(s.why))}</span>`:''}${s.status==='ready'?`<span class="sep"></span><span>${esc(L(s.hook))} · ${esc(L(s.type))}</span>`:''}</div></div>
+  ${s.status==='running'?chip('blue',T('Analyzing','解析中')):s.status==='needfile'?chip('red',T('Needs file','缺文件')):chip('green',T('Ready','已解析'))} ${who(s.runner)}
+  ${s.status==='needfile'?`<span data-stop>${btn(T('Upload file','上传文件'),'upload-src',s.id,'sm')}</span>`:''}</div>`}).join(''):`<p class="meta" style="padding:14px 4px">${T('Queue is empty. Send samples here from a research report or paste a link in + New.','队列是空的。可以从调研报告送来样本，或在 + New 里贴链接。')}</p>`}</div></div>`;
+}
+function sourceNote(s){
+ const sm=S.samples[s.id];
+ return `<div class="page"><div class="crumb"><button data-act="go" data-id="sources">${T('Sources','素材')}</button> / <span class="mono">${s.id}.md</span></div>
+ <h1>${esc(sm.title)}</h1><p class="sub">${esc(sm.author)} · ${esc(s.platform)} · ${esc(sm.stat)}</p>
+ ${s.status==='needfile'?`<div class="callout red">${esc(L(s.why))}</div>${btn(T('Upload file','上传文件'),'upload-src',s.id,'pri')}`:
+ s.status==='running'?`<div class="callout"><span class="dot run" style="display:inline-block;margin-right:8px"></span>${esc(L(s.step))}</div>`:
+ `<h2>${T('Structure','结构')}</h2><div class="acts">${chip('ghost',T('Hook','Hook')+' · '+esc(L(s.hook)))}${chip('ghost',esc(L(s.type)))}${chip('ghost',T('Taxonomy','标签版本')+' v'+s.tax)}</div>
+ <h2>${T('Reviewed transcript','校订转写')}</h2><div class="doc" contenteditable="true" spellcheck="false" aria-label="transcript">${esc(s.transcript).split('\n').map(l=>`<p>${l}</p>`).join('')}</div>
+ <p class="meta">${T('Edits are saved as a new transcript version. Ideas that already cite this source keep the version they used.','修改会存为新的转写版本。已经引用这条来源的选题，保留它当时用的版本。')}</p>
+ <div class="acts" style="margin-top:16px">${btn(T('Save as idea','存为选题'),'to-idea',s.id,'pri')}${btn(T('Add to knowledge','加入知识'),'to-know',s.id)}</div>`}
+ </div>`;
+}
+
+function ideas(){
+ const list=S.ideas.filter(inAcct);
+ const tabs=[['new',T('New','新候选')],['shortlisted',T('Shortlisted','已入选')],['production',T('In production','制作中')],['rejected',T('Rejected','已淘汰')]];
+ const cur=list.filter(i=>i.status===S.ideaFilter);
+ return `<div class="page"><h1>${T('Ideas','选题库')}</h1><p class="sub">${T('Saving an idea never starts work. Production starts only when you press Start production.','存为选题不会开工。只有点「开始制作」才会开工。')}</p>
+ <div class="pills">${tabs.map(t=>`<button data-act="idea-tab" data-id="${t[0]}" aria-pressed="${S.ideaFilter===t[0]}">${t[1]}<span class="c">${list.filter(i=>i.status===t[0]).length}</span></button>`).join('')}</div>
+ <div class="rows">${cur.length?cur.map(ideaRow).join(''):`<p class="meta" style="padding:14px 4px">${T('Nothing here yet.','这里还没有内容。')}</p>`}</div></div>`;
+}
+function ideaRow(i){
+ const sc=i.score;
+ let right='';
+ if(i.status==='production')right=btn(T('Open project','打开项目'),'open-proj',i.project,'sm');
+ else if(i.status==='rejected')right=btn(T('Restore','恢复'),'idea-status',i.id+'|new','sm');
+ else right=(i.status==='new'?btn(T('Shortlist','入选'),'idea-status',i.id+'|shortlisted','sm'):'')+btn(T('Reject','淘汰'),'idea-status',i.id+'|rejected','sm quiet')+btn(T('Start production','开始制作'),'start',i.id,'sm pri');
+ const scoreEl=i.status==='production'||i.status==='rejected'?'':i.analyzing?`<span class="meta"><span class="dot run" style="display:inline-block"></span> ${T('Analyzing','分析中')}</span>`:sc?`<button class="btn quiet sm" data-act="toggle-score" data-id="${i.id}" aria-expanded="${!!i.open}"><span class="score"><b>${sc.v}</b><span>/10</span></span></button>`:btn(T('Analyze','分析'),'analyze',i.id,'sm');
+ return `<div class="row" style="align-items:flex-start">
+  <div class="grow"><div class="t">${esc(i.title)}</div>
+  ${i.status==='production'?'':`<input class="angle" data-angle="${i.id}" value="${esc(i.angle)}" aria-label="${T('Your angle','你的角度')}" placeholder="${T('Your angle…','你的创作角度…')}">`}
+  <div class="meta"><span>${esc(acctName(i.acct))}</span>${i.src.length?`<span class="sep"></span><span>${T('from','来源')} ${i.src.map(s=>`<button class="link mono" data-act="open-src-any" data-id="${s}">${s}</button>`).join(', ')}</span>`:''}<span class="sep"></span><span class="mono">${i.id}</span></div></div>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${scoreEl}<div class="acts">${right}</div></div>
+  ${sc&&i.open?`<div class="reason"><div class="meta" style="padding:10px 0 4px">${T('Why this score','评分理由')} · ${T('by Claude','Claude 分析')}</div>
+   ${sc.rows.map(r=>`<div class="r"><span>${T(r[0],r[1])}</span><span class="lv ${r[2]}">${r[2]==='s'?T('Strong','强'):r[2]==='m'?T('Medium','中'):T('Weak','弱')}</span><span class="why">${esc(r[3])}</span></div>`).join('')}
+   <div class="meta" style="margin:8px 0">${T('Primary reference','主对标')}: <button class="link mono" data-act="open-src-any" data-id="${sc.ref}">${sc.ref}</button></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><input class="inp" style="flex:1;min-width:180px" data-fb="${i.id}" value="${esc(sc.fb)}" placeholder="${T('Disagree? Tell it why. This improves future scores.','不同意？写下原因，之后的评分会参考。')}">${btn(T('Re-analyze','重新分析'),'analyze',i.id,'sm')}</div></div>`:''}
+ </div>`;
+}
+
+function production(){
+ const list=S.projects.filter(inAcct);
+ return `<div class="page"><h1>${T('Production','内容制作')}</h1><p class="sub">${T('Every stage stops for you. The side panel shows who does each step.','每个阶段都会停下来等你。侧边栏标明每一步由谁来做。')}</p>
+ <div class="rows">${list.map(p=>{const s=stageOf(p);return `<div class="row click" data-act="open-proj" data-id="${p.id}">
+  <div class="grow"><div class="t">${esc(p.title)}</div><div class="meta"><span>${fmt(p.format)}</span><span class="sep"></span><span>${esc(acctName(p.acct))}</span><span class="sep"></span><span class="mono">${p.id}</span></div></div>
+  <span class="meta">${p.done?T('Complete','已完成'):(p.i+1)+'/'+flowOf(p).length+' · '+esc(stName(s))}</span> ${projChip(p)}</div>`}).join('')}</div></div>`;
+}
+function projChip(p){
+ if(p.done)return chip('green',T('Complete','已完成'));
+ return {review:chip('amber',T('Needs review','待审核')),todo:chip('amber',T('Your step','轮到你')),running:chip('blue',T('Agent working','Agent 进行中')),blocked:chip('red',T('Blocked','受阻')),waiting:chip('',T('Resumes 18:00','18:00 恢复'))}[p.st];
+}
+function projectNote(p){
+ const s=stageOf(p),k=s[0],c=CONTRACT[p.id]||[];
+ let body='';
+ if(p.done)body=`<div class="callout">${T('All stages are complete. The results review is saved in this note.','全部阶段已完成。数据复盘保存在这篇笔记里。')}</div>`;
+ else if(p.st==='running')body=`<div class="callout"><span class="dot run" style="display:inline-block;margin-right:8px"></span>${esc(p.runner)} ${T('is working on','正在做')} ${esc(stName(s))}. ${T('You will find it in Needs you when it is ready.','完成后会出现在「待我处理」。')}</div><div class="skel"><i style="width:92%"></i><i style="width:78%"></i><i style="width:85%"></i><i style="width:60%"></i></div>`;
+ else if(p.st==='blocked'||p.st==='waiting')body=`<div class="callout ${p.st==='blocked'?'red':''}">${p.st==='blocked'?T('Claude reached its usage limit while writing the draft. It resets at 18:00. The workbench never switches to a paid API on its own.','Claude 写初稿时额度用完，18:00 重置。工作台不会自动切到付费 API。'):T('Waiting for Claude to reset at 18:00. It will pick up from the approved direction.','等待 Claude 18:00 重置，之后从已通过的方向继续。')}</div>`;
+ else if(k==='direction')body=`<h2>${T('Content contract','内容契约')}</h2><dl class="contract">${c.map(r=>`<dt>${T(r[0],r[1])}</dt><dd>${esc(r[2])}</dd>`).join('')}</dl>`;
+ else if(k==='draft'||k==='script')body=`<div class="meta" style="margin-bottom:8px">${T('Draft','初稿')} v${p.ver} · ${T('written by','执行：')} ${esc(p.runner)}${p.edited?` · <span style="color:var(--amber)">${T('edited by you','你改过')}</span>`:''}</div>
+  <div class="doc" id="draft" contenteditable="true" spellcheck="false" data-draft="${p.id}">${(DRAFT[p.id]||[]).map(d=>`<span class="pg">${esc(d[1])}</span><p>${esc(d[2])}</p>`).join('')}</div>
+  <p class="meta">${T('Small changes: edit the text directly. Bigger changes: use Request changes in the side panel and the agent rewrites it. Both your version and the agent’s are kept.','小改：直接改文字。大改：在侧边栏点「退回修改」，Agent 按意见重写。你的版本和 Agent 的版本都会保留。')}</p>`;
+ else if(k==='visuals')body=`<h2>${T('Pages','页面')}</h2><div class="pages">${(DRAFT[p.id]||[]).map(d=>`<div class="page-t"><span class="mono">${esc(d[1])}</span><b>${esc(d[2].slice(0,34))}…</b></div>`).join('')}</div><p class="meta">${T('Generated from the approved draft. Open any page to regenerate it.','根据已通过的初稿生成。打开任意一页可以重新生成。')}</p>`;
+ else if(k==='check')body=`<h2>${T('Before you publish','发布前检查')}</h2>${[T('Cover names the reader and the result','封面点明人群和结果'),T('Every claim matches something you tested','每个说法都有你的实测支撑'),T('No private info in screenshots','截图里没有隐私信息'),T('Last page has the saveable checklist','最后一页有可收藏的清单')].map((t,j)=>`<label class="check"><input type="checkbox" data-chk="${j}"><span>${t}</span></label>`).join('')}`;
+ else if(k==='shoot'||k==='edit')body=`<h2>${k==='shoot'?T('Record the footage','拍摄 / 录屏'):T('Edit the video','剪辑')}</h2><p>${k==='shoot'?T('You do this step. Use the approved script. Screen-record each prompt on its own so it is easy to cut.','这一步由你来做。按通过的脚本拍；每个提示词单独录一段，方便剪辑。'):T('You do this step in your editor. Attach the exported file when it is done.','这一步在你的剪辑软件里完成，导出后上传。')}</p>
+  <div class="field"><label for="upl">${T('Attach files (optional)','上传文件（可选）')}</label><input id="upl" type="file" class="inp" multiple></div>
+  <h2>${T('Approved script','已通过的脚本')}</h2>${(DRAFT[p.id]||[]).map(d=>`<div class="note"><span class="mono">${esc(d[1])}</span> ${esc(d[2])}</div>`).join('')}`;
+ else if(k==='package')body=`<h2>${T('Captions & cover','字幕与封面')}</h2><div class="note">${T('Cover text','封面文字')}: Plan your week in 40 seconds</div><div class="note">${T('Caption','文案')}: Three prompts, one calm week. Save this for Sunday.</div>`;
+ else if(k==='publish')body=`<h2>${T('Log the post','记录发布')}</h2><p class="meta">${T('Publish it yourself on the platform. The workbench never posts for you.','请你自己在平台上发布。工作台不会替你发。')}</p><div class="field"><label for="purl">${T('Post URL','帖子链接')}</label><input id="purl" class="inp" placeholder="https://"></div>`;
+ else if(k==='retro')body=`<h2>${T('First 7 days','发布后 7 天')}</h2><div class="callout">${T('Saves came in above your last five posts. The cover worked; page 4 had the most drop-off.','收藏高于你最近 5 篇；封面有效，第 4 页流失最多。')}</div>`;
+ const done=flowOf(p).slice(0,p.i);
+ return `<div class="page"><div class="crumb"><button data-act="go" data-id="production">${T('Production','内容制作')}</button> / <span class="mono">${p.id}.md</span></div>
+ <h1>${esc(p.title)}</h1>
+ <p class="sub">${fmt(p.format)} · ${esc(acctName(p.acct))} · ${T('from idea','来自选题')} <span class="mono">${p.idea}</span></p>
+ ${body}
+ ${done.length&&!p.done?`<details style="margin-top:34px"><summary class="meta" style="cursor:pointer">${T('Earlier stages','前面的阶段')} (${done.length})</summary>${done.map(d=>`<div class="note">✓ ${esc(stName(d))}${d[0]==='direction'&&c.length?' · '+esc(c[2][2]):''}</div>`).join('')}</details>`:''}
+ </div>`;
+}
+
+function knowledge(){
+ return `<div class="page"><h1>${T('Knowledge','知识库')}</h1><p class="sub">${T('Saved, extracted and adopted are separate steps. Only adopted knowledge is used when writing.','保存、提炼、采用是三个独立步骤。写稿时只引用已采用的知识。')}</p>
+ <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap"><input class="inp" id="kurl" style="flex:1;min-width:200px" placeholder="${T('Paste an article or video link','贴一个文章或视频链接')}">${btn(T('Import','导入'),'import-know','','pri')}</div>
+ <div class="rows">${S.knowledge.map(k=>`<div class="row"><div class="grow"><div class="t">${esc(L(k.title))}</div><div class="meta"><span class="mono">${k.id}</span><span class="sep"></span><span>${T('from','来源')} ${esc(k.from)}</span></div></div>
+  ${k.status==='adopted'?chip('green',T('Adopted','已采用')):k.status==='extracted'?chip('amber',T('Review extraction','提炼待确认')):chip('',T('Saved','已保存'))}
+  ${k.status==='saved'?btn(T('Extract','提炼'),'know-step',k.id,'sm'):k.status==='extracted'?btn(T('Adopt','采用'),'know-step',k.id,'sm pri'):''}</div>`).join('')}</div></div>`;
+}
+
+function tasks(){
+ const rows=[];
+ S.runs.filter(inAcct).forEach(r=>rows.push({t:kindLabel(r.kind)+' · '+r.q,w:r.runner,st:r.status==='ready'?'done':r.status,open:['open-run',r.id],time:r.when,why:r.status==='blocked'?L(r.block):''}));
+ S.sources.filter(inAcct).forEach(s=>rows.push({t:T('Analyze · ','解析 · ')+S.samples[s.id].title,w:s.runner,st:s.status==='ready'?'done':s.status==='needfile'?'blocked':'running',open:['open-src',s.id],time:'',why:s.status==='needfile'?L(s.why):''}));
+ S.projects.filter(inAcct).forEach(p=>rows.push({t:stName(stageOf(p))+' · '+p.title,w:p.runner,st:p.done?'done':p.st==='review'||p.st==='todo'?'needs':p.st==='blocked'?'blocked':p.st==='waiting'?'blocked':'running',open:['open-proj',p.id],time:'',why:p.st==='blocked'?T('Usage limit reached · resets 18:00','额度用完 · 18:00 重置'):''}));
+ const f=S.taskFilter,cur=f==='all'?rows:rows.filter(r=>r.st===f);
+ const tabs=[['all',T('All','全部')],['needs',T('Needs me','待我处理')],['running',T('Running','运行中')],['blocked',T('Blocked','受阻')],['done',T('Done','完成')]];
+ const stc={needs:['amber',T('Needs me','待我处理')],running:['blue',T('Running','运行中')],blocked:['red',T('Blocked','受阻')],done:['green',T('Done','完成')]};
+ return `<div class="page"><h1>${T('Tasks','任务中心')}</h1><p class="sub">${T('Every agent run in one list. Opening a task takes you back to where the work lives.','所有 Agent 运行都在这里。打开任务会回到它所在的业务位置。')}</p>
+ <div class="pills">${tabs.map(t=>`<button data-act="task-tab" data-id="${t[0]}" aria-pressed="${f===t[0]}">${t[1]}<span class="c">${t[0]==='all'?rows.length:rows.filter(r=>r.st===t[0]).length}</span></button>`).join('')}</div>
+ <div class="rows">${cur.map(r=>`<div class="row click" data-act="${r.open[0]}" data-id="${r.open[1]}"><div class="grow"><div>${esc(r.t)}</div>${r.why?`<div class="meta">${esc(r.why)}</div>`:''}</div>${chip(stc[r.st][0],stc[r.st][1])} ${who(r.w)}</div>`).join('')}</div></div>`;
+}
+
+function settings(){
+ const tabs=[['agents',T('Agents','运行环境')],['accounts',T('Accounts','账号')],['tags',T('Fields & tags','字段与标签')],['lang',T('Language','语言')]];
+ let b='';
+ if(S.setTab==='agents')b=`<p class="meta">${T('The workbench picks an agent for each job. Every task shows which one ran it.','工作台会为每项工作自动分配 Agent，每条任务都会标明由谁执行。')}</p>
+  <div class="det"><span class="dot ${S.quotaClaude?'warn':''}"></span><div class="grow"><div class="t">Claude Code</div><div class="meta">${T('Signed in with your subscription','已用你的订阅登录')} · ${S.quotaClaude?T('Usage limit reached, resets 18:00','额度用完，18:00 重置'):T('Available','可用')}</div></div><span class="meta">${T('Browser research, analysis','浏览器调研、解析')}</span></div>
+  <div class="det"><span class="dot"></span><div class="grow"><div class="t">Codex</div><div class="meta">${T('Signed in with your subscription','已用你的订阅登录')} · ${T('Available','可用')}</div></div><span class="meta">${T('Drafts, scripts','初稿、脚本')}</span></div>
+  <div class="callout">${T('When an agent runs out of usage or can’t do a job, the task stops and asks you. It never falls back to a paid API.','Agent 额度用完或做不了时，任务会停下来问你，绝不会转到付费 API。')}</div>`;
+ if(S.setTab==='accounts')b=`<div class="rows">${S.accounts.map(a=>`<div class="row"><div class="grow"><div class="t">${esc(a.name)}</div><div class="meta"><span>${esc(a.platform)}</span><span class="sep"></span><span>${esc(a.lang)}</span><span class="sep"></span><span>${esc(a.niche)}</span></div></div>${chip('ghost',T('Demo','示例'))}</div>`).join('')}</div>`;
+ if(S.setTab==='tags'){const t=S.tax,ok=t.analyzed>=10;b=`<div class="row" style="border-top:1px solid var(--line)"><div class="grow"><div class="t">${esc(L(t.name))}</div><div class="meta">v${t.v} · ${T('used by new analyses','新解析使用此版本')}</div></div>${chip(ok?'amber':'',ok?T('Ready to calibrate','可以校准'):t.analyzed+' / 10 '+T('sources','条样本'))}</div>
+  <p class="meta" style="margin-top:12px">${ok?T('You have enough analyzed sources. Calibrating shows each tag next to its evidence so you can fix definitions.','已经有足够的解析样本。校准时会把每个标签和依据并排展示，方便你修改定义。'):T('Calibration opens after 10 analyzed sources, so it has real examples to check against.','解析满 10 条样本后开放校准，这样才有真实例子可以对照。')}</p>
+  <div class="acts">${btn(T('Calibrate tags','校准标签'),'calibrate','',ok?'pri':'',ok?'':'disabled')}${ok?'':btn(T('Demo: add 2 analyzed sources','演示：再解析 2 条'),'demo-add','','quiet')}</div>
+  <h2>${T('Fields','字段')}</h2><div class="rows">${[['content.opening_hook','Opening hook','开场 Hook','enum'],['topic.status','Idea status','选题状态','enum'],['project.stage','Production stage','制作阶段','enum'],['workspace.account','Account','账号','reference']].map(f=>`<div class="row"><div class="grow"><div>${T(f[1],f[2])}</div><div class="meta mono">${f[0]}</div></div><span class="meta mono">${f[3]}</span></div>`).join('')}</div>`;}
+ if(S.setTab==='lang')b=`<div class="field"><label>${T('Interface','界面语言')}</label><div class="seg" style="width:max-content"><button data-act="lang" data-id="en" aria-pressed="${S.lang==='en'}">English</button><button data-act="lang" data-id="zh" aria-pressed="${S.lang==='zh'}">中文</button></div></div><p class="meta">${T('Interface language is separate from each source’s language and each account’s writing language. Switching never changes your notes.','界面语言和来源语言、各账号的创作语言相互独立，切换不会改动任何笔记。')}</p>`;
+ return `<div class="page"><h1>${T('Settings','设置')}</h1><p class="sub">${T('Creator Workbench plugin','Creator Workbench 插件')}</p>
+ <div class="pills">${tabs.map(t=>`<button data-act="set-tab" data-id="${t[0]}" aria-pressed="${S.setTab===t[0]}">${t[1]}</button>`).join('')}</div>${b}
+ <h2>${T('Demo','演示')}</h2><div class="acts">${btn(T('Replay first-run setup','重新走一遍新用户引导'),'start-ob')}${btn(T('Reset demo data','重置演示数据'),'reset','','quiet')}</div></div>`;
+}
+
+/* ---------- right panel ---------- */
+function right(){
+ const n=S.note;
+ if(n&&n.type==='proj'){const p=S.projects.find(x=>x.id===n.id);return projPanel(p)}
+ if(n&&n.type==='src'){const s=S.sources.find(x=>x.id===n.id),sm=S.samples[s.id];
+  return `<div class="rsec"><h4>${T('Properties','属性')}</h4><dl class="props"><dt>id</dt><dd>${s.id}</dd><dt>platform</dt><dd>${esc(s.platform)}</dd><dt>author</dt><dd>${esc(sm.author)}</dd><dt>status</dt><dd>${s.status}</dd><dt>taxonomy</dt><dd>${s.tax?'v'+s.tax:'—'}</dd><dt>runner</dt><dd>${esc(s.runner)}</dd><dt>used_by</dt><dd>${S.ideas.filter(i=>i.src.includes(s.id)).map(i=>i.id).join(', ')||'—'}</dd></dl></div>`}
+ return `<div class="rsec"><h4>${T('Agents','Agent')}</h4>
+  <div class="runner" style="font-size:13px;margin-bottom:4px"><span class="dot ${S.quotaClaude?'warn':''}"></span>Claude <span class="meta" style="margin-left:auto">${S.quotaClaude?T('limit · 18:00','额度 · 18:00'):T('available','可用')}</span></div>
+  <div class="runner" style="font-size:13px"><span class="dot"></span>Codex <span class="meta" style="margin-left:auto">${T('available','可用')}</span></div></div>
+  <div class="rsec"><h4>${T('Activity','活动')}</h4>${S.log.slice(0,9).map(a=>`<div class="act"><span class="tm">${a[0]}</span><span>${who(a[1])} ${esc(L(a[2]))}</span></div>`).join('')}</div>`;
+}
+function projPanel(p){
+ const f=flowOf(p);
+ const stages=`<ol class="stages">${f.map((s,j)=>{const cls=p.done||j<p.i?'done':j===p.i?'now'+(p.st==='running'?' run':p.st==='blocked'||p.st==='waiting'?' blk':''):'';return `<li class="${cls}"><span class="mk">${p.done||j<p.i?'✓':''}</span><span>${esc(stName(s))}</span><span class="own">${s[3]==='agent'?(j===p.i?p.runner:'Agent'):T('You','你')}</span></li>`}).join('')}</ol>`;
+ let gate='';
+ const s=stageOf(p);
+ if(p.done)gate=`<div class="gate"><p>${T('This piece is complete.','这条内容已完成。')}</p></div>`;
+ else if(p.st==='review')gate=`<div class="gate"><p><b style="color:var(--ink);font-weight:500">${esc(stName(s))}${p.ver?' v'+p.ver:''}</b> ${T('is ready for your review.','已完成，等你审核。')}</p>
+  ${btn(T('Approve and continue','通过，进入下一步'),'approve',p.id,'pri')}
+  ${S.fbOpen?`<textarea class="inp" id="fb" placeholder="${T('What should change? Be specific.','需要改什么？尽量具体。')}"></textarea>${btn(T('Send back to ','退回给 ')+p.runner,'revise',p.id)}`:btn(T('Request changes','退回修改'),'open-fb',p.id)}</div>`;
+ else if(p.st==='todo'){const label=s[0]==='publish'?T('Log as published','记录为已发布'):T('Mark done','标记完成');gate=`<div class="gate"><p>${T('Your step. Mark it done when you finish.','这一步由你来做，做完后标记完成。')}</p>${btn(label,'you-done',p.id,'pri')}</div>`}
+ else if(p.st==='running')gate=`<div class="gate"><p><span class="dot run" style="display:inline-block;margin-right:6px"></span>${esc(p.runner)} ${T('is working. You can leave this note.','正在做，你可以离开这篇笔记。')}</p></div>`;
+ else if(p.st==='blocked')gate=`<div class="gate"><p style="color:var(--red)">${T('Claude hit its usage limit (resets 18:00).','Claude 额度用完（18:00 重置）。')}</p>${btn(T('Run with Codex','改用 Codex'),'switch-runner',p.id,'pri')}${btn(T('Wait for reset','等待重置'),'wait-reset',p.id)}</div>`;
+ else if(p.st==='waiting')gate=`<div class="gate"><p>${T('Resumes automatically at 18:00.','18:00 自动继续。')}</p>${btn(T('Run with Codex now','现在改用 Codex'),'switch-runner',p.id)}</div>`;
+ return `<div class="rsec"><h4>${T('Stages','阶段')} · ${fmt(p.format)}</h4>${stages}${gate}</div>
+ <div class="rsec"><h4>${T('Activity','活动')}</h4>${p.log.map(a=>`<div class="act"><span class="tm">${a[0]}</span><span>${who(a[1])} ${esc(L(a[2]))}</span></div>`).join('')}</div>`;
+}
+
+/* ---------- modals ---------- */
+function detect(v){
+ v=v.trim();if(!v)return null;
+ if(/^@\S+$/.test(v)||/xiaohongshu\.com\/user|instagram\.com\/[A-Za-z0-9._]+\/?$/.test(v))return 'account';
+ if(/^https?:\/\/\S+/i.test(v))return 'link';
+ return 'keyword';
+}
+function modal(){
+ const m=S.modal;if(!m)return '';
+ if(m.type==='new'){
+  const d=detect(m.v||'')||m.hint;
+  const dl=d==='account'?T('Account → Competitor research','账号 → 竞品调研'):d==='link'?T('Link','链接'):d==='keyword'?T('Keyword → Topic research','关键词 → 选题调研'):'';
+  const acc=m.acct||(S.acct==='all'?'zh':S.acct);
+  return `<div class="scrim" data-act="close-modal"><div class="modal" role="dialog" aria-modal="true" aria-label="New" data-stop>
+  <input class="modal-big" id="newin" value="${esc(m.v||'')}" placeholder="${T('Paste a link, type a keyword, or an @account','贴链接、输入关键词或 @账号')}" autocomplete="off">
+  <div class="modal-in">
+   <div class="meta" style="margin-bottom:12px">${d?`${T('Detected','识别为')}: <b style="color:var(--ink);font-weight:500">${dl}</b>`:T('Try: AI 笔记整理 · @maker.minimal · https://…','试试：AI 笔记整理 · @maker.minimal · https://…')}</div>
+   ${d==='link'?`<div class="opts"><label class="opt"><input type="radio" name="lk" value="src" ${m.lk!=='know'?'checked':''} data-lk="src"><span><b style="font-weight:500">${T('Analyze as a source','作为素材解析')}</b><br><span class="meta">${T('Transcript, tags and structure. Can become an idea.','转写、打标、结构拆解，之后可以变成选题。')}</span></span></label><label class="opt"><input type="radio" name="lk" value="know" ${m.lk==='know'?'checked':''} data-lk="know"><span><b style="font-weight:500">${T('Save to knowledge','存入知识库')}</b><br><span class="meta">${T('Keep it as reference. Extract the method later.','作为参考保存，之后再提炼方法。')}</span></span></label></div>`:''}
+   ${d?`<div class="field"><label for="nacct">${T('For account','账号')}</label><select class="inp" id="nacct">${S.accounts.map(a=>`<option value="${a.id}" ${a.id===acc?'selected':''}>${esc(a.name)} · ${esc(a.platform)}</option>`).join('')}</select></div>`:''}
+   ${d&&d!=='link'?`<div class="field"><label for="nscope">${T('Scope','范围')}</label><select class="inp" id="nscope"><option>${d==='account'?T('Last 40 posts','最近 40 条'):T('Top 12 posts from the last 30 days','近 30 天前 12 条高互动')}</option><option>${d==='account'?T('All posts','全部帖子'):T('Top 24 posts from the last 90 days','近 90 天前 24 条')}</option></select></div>`:''}
+  </div>
+  <div class="modal-foot"><span class="meta">${T('Runs with your own Claude or Codex subscription','使用你自己的 Claude / Codex 订阅运行')}</span><div class="acts">${btn(T('Cancel','取消'),'close-modal','','quiet')}${btn(d==='link'?(m.lk==='know'?T('Save','保存'):T('Analyze','开始解析')):T('Start research','开始调研'),'new-go','','pri',d?'':'disabled')}</div></div>
+  </div></div>`;
+ }
+ if(m.type==='start'){
+  const i=S.ideas.find(x=>x.id===m.id);
+  return `<div class="scrim" data-act="close-modal"><div class="modal" role="dialog" aria-modal="true" aria-label="Start production" data-stop><div class="modal-in">
+  <div class="meta mono">${i.id}</div><h3 style="font-size:18px;margin:4px 0 14px">${esc(i.title)}</h3>
+  <div class="field"><label>${T('Format','内容形式')}</label><div class="opts three">${Object.keys(FMT).map(f=>`<label class="opt"><input type="radio" name="fmt" value="${f}" ${(m.fmt||'carousel')===f?'checked':''} data-fmt="${f}"><span><b style="font-weight:500">${fmt(f)}</b><br><span class="meta">${FLOWS[f].length} ${T('stages','个阶段')}</span></span></label>`).join('')}</div></div>
+  <div class="field"><label for="sacct">${T('Account','账号')}</label><select class="inp" id="sacct">${S.accounts.map(a=>`<option value="${a.id}" ${a.id===i.acct?'selected':''}>${esc(a.name)} · ${esc(a.platform)}</option>`).join('')}</select></div>
+  <div class="field"><label for="sgoal">${T('Goal for this piece (optional)','这条内容的目标（可选）')}</label><input class="inp" id="sgoal" placeholder="${T('e.g. saves from beginners','例如：新手收藏')}"></div>
+  <p class="meta">${T('Creates one project note. The agent starts on Direction and stops for your review.','会建立一篇项目笔记。Agent 从「方向」开始，做完停下来等你审核。')}</p></div>
+  <div class="modal-foot"><span></span><div class="acts">${btn(T('Cancel','取消'),'close-modal','','quiet')}${btn(T('Start production','开始制作'),'start-go',i.id,'pri')}</div></div></div></div>`;
+ }
+ return '';
+}
+
+/* ---------- onboarding ---------- */
+function onboarding(){
+ const o=S.ob,n=6;
+ const bar=`<div class="ob-steps">${Array.from({length:n},(_,j)=>`<i class="${j<=o.step?'on':''}"></i>`).join('')}</div><div class="ob-kicker">${T('Step','第')} ${o.step+1}${T(' of 6',' / 6 步')}</div>`;
+ let b='',foot='';
+ const nextB=(dis)=>btn(T('Continue','继续'),'ob-next','','pri',dis?'disabled':'');
+ const backB=o.step?btn(T('Back','上一步'),'ob-back','','quiet'):btn(T('Skip setup','跳过'),'ob-skip','','quiet');
+ if(o.step===0){b=`<h1>${T('Welcome to Creator Workbench','欢迎使用 Creator Workbench')}</h1><p class="sub" style="font-size:15px">${T('Research, ideas and drafts become notes in this vault. Agents do the work; you make every decision.','调研、选题、初稿都会成为这个 Vault 里的笔记。Agent 负责干活，每个决定都由你来做。')}</p>
+  <div class="field"><label>${T('It will create this folder','将创建以下文件夹')}</label><div class="tree">Creator Workbench/
+├── Research/
+├── Sources/
+├── Ideas/
+├── Production/
+└── Knowledge/</div></div><p class="meta">${T('Everything is plain Markdown with standard properties. If you uninstall the plugin, your notes still work.','全部是普通 Markdown 和标准属性。卸载插件后，笔记依然可以正常使用。')}</p>`;foot=nextB()}
+ if(o.step===1){b=`<h1>${T('Connect your agents','连接 Agent')}</h1><p class="sub">${T('The workbench uses the subscriptions you already have. It never uses a paid API unless you add one.','工作台使用你已有的订阅。除非你自己添加，否则不会使用付费 API。')}</p>
+  ${o.checked?`<div class="det"><span class="dot"></span><div class="grow"><div class="t">Claude Code</div><div class="meta">${T('Found · signed in','已找到 · 已登录')}</div></div>${chip('green',T('Ready','就绪'))}</div>
+  <div class="det"><span class="dot"></span><div class="grow"><div class="t">Codex</div><div class="meta">${T('Found · signed in','已找到 · 已登录')}</div></div>${chip('green',T('Ready','就绪'))}</div>
+  <div class="det"><span class="dot"></span><div class="grow"><div class="t">${T('Research browser','调研浏览器')}</div><div class="meta">${T('Chrome with Claude extension','Chrome + Claude 扩展')}</div></div>${chip('green',T('Ready','就绪'))}</div>
+  <p class="meta" style="margin-top:12px">${T('Jobs are assigned automatically. Every task shows which agent ran it.','工作会自动分配，每条任务都会标明由哪个 Agent 执行。')}</p>`
+  :`<div class="runlog"><div><span class="dot run"></span>${T('Looking for Claude Code and Codex on this computer…','正在查找这台电脑上的 Claude Code 和 Codex…')}</div></div>`}`;foot=nextB(!o.checked)}
+ if(o.step===2){b=`<h1>${T('Add your first account','添加第一个账号')}</h1><p class="sub">${T('You can add more later. Sources and knowledge are shared across accounts.','之后可以再加。素材和知识在账号之间共享。')}</p>
+  <div class="field"><label for="oplat">${T('Platform','平台')}</label><select class="inp" id="oplat">${['Instagram','Xiaohongshu','TikTok','YouTube','X / Threads'].map(x=>`<option ${o.plat===x?'selected':''}>${x}</option>`).join('')}</select></div>
+  <div class="field"><label for="ohandle">${T('Account name','账号名称')}</label><input class="inp" id="ohandle" value="${esc(o.handle)}"></div>
+  <div class="field"><label for="olang">${T('Writes in','创作语言')}</label><select class="inp" id="olang"><option ${o.wl==='English'?'selected':''}>English</option><option ${o.wl==='中文'?'selected':''}>中文</option></select></div>`;foot=nextB()}
+ if(o.step===3){b=`<h1>${T('Pick a starter tag set','选一套起步标签')}</h1><p class="sub">${T('Tags describe how posts open, what they teach and how they are built. You will tune them after about 10 analyzed sources.','标签描述一条内容怎么开场、讲什么、怎么组织。解析约 10 条样本后再校准。')}</p>
+  <div class="opts">${[['ai',T('AI & tech tutorials','AI 与科技教程'),T('Hook type · tutorial type · tool shown','Hook 类型 · 教程类型 · 展示工具')],['life',T('Lifestyle & productivity','生活与效率'),T('Hook type · routine · outcome','Hook 类型 · 习惯 · 结果')],['blank',T('Start blank','从零开始'),T('Only the fields the workbench needs','只保留工作台必需的字段')]].map(t=>`<label class="opt"><input type="radio" name="tpl" data-tpl="${t[0]}" ${o.tpl===t[0]?'checked':''}><span><b style="font-weight:500">${t[1]}</b><br><span class="meta">${t[2]}</span></span></label>`).join('')}</div>`;foot=nextB()}
+ if(o.step===4){const logs=[T('Opening Instagram in the research browser','在调研浏览器中打开 Instagram'),T('Searching “','搜索「')+o.kw+T('”','」'),T('Reading the top 12 posts','读取前 12 条高互动内容'),T('Writing the report','撰写报告')];
+  b=`<h1>${T('Run your first research','跑第一次调研')}</h1><p class="sub">${T('Type a topic from your niche. Save one sample as an idea to finish setup.','输入你赛道里的一个话题。把 1 条样本存为选题，就完成设置了。')}</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><input class="inp" id="okw" style="flex:1;min-width:180px" value="${esc(o.kw)}" ${o.run?'disabled':''}>${btn(T('Run','开始'),'ob-run','','pri',o.run?'disabled':'')}</div>
+  ${o.run?`<div class="runlog">${logs.map((l,j)=>`<div class="${j<o.runStep?'ok':''}">${j<o.runStep?I('check',14):j===o.runStep?'<span class="dot run"></span>':'<span class="dot" style="background:var(--line2)"></span>'} ${esc(l)}</div>`).join('')}</div>`:''}
+  ${o.runStep>=4?`<h2>${T('Report','报告')} · ${T('3 of 12 shown','展示 12 条中的 3 条')}</h2><div class="rows">${[['Plan your week in 40 seconds','plannerdaily','12k likes'],['The Sunday reset prompt','calm.systems','6.1k likes'],['I let AI plan my week for 30 days','juno.makes','3.4k likes']].map((s,j)=>`<div class="row"><div class="grow"><div class="t">${s[0]}</div><div class="meta"><span>${s[1]}</span><span class="sep"></span><span class="mono">${s[2]}</span></div></div>${o.saved===j?chip('green',T('Saved as idea','已存为选题')):btn(T('Save as idea','存为选题'),'ob-save',String(j),'sm')}</div>`).join('')}</div>`:''}`;
+  foot=nextB(o.saved==null)}
+ if(o.step===5){b=`<h1>${T('You’re set up','设置完成')}</h1><p class="sub">${T('Your first idea is in the Ideas list. When you are ready, press Start production and the agent will write a direction for you to review.','第一个选题已经在选题库里。准备好后点「开始制作」，Agent 会先写一版方向给你审核。')}</p>
+  <div class="callout">${T('Tip: press ⌘N anywhere in Obsidian to start new work.','小技巧：在 Obsidian 任意位置按 ⌘N 就能发起新工作。')}</div>`;foot=btn(T('Go to Home','进入首页'),'ob-finish','','pri')}
+ return `<div class="ob-wrap">${bar}${b}<div class="ob-foot">${o.step<5?backB:'<span></span>'}${foot}</div></div>`;
+}
+
+/* ---------- shell ---------- */
+const NAV=[['home','home','Home','首页'],['research','search','Research','调研'],['sources','file','Sources','素材'],['ideas','idea','Ideas','选题库'],['production','film','Production','内容制作'],['knowledge','book','Knowledge','知识库']];
+function render(){
+ const c=counts();
+ const ob=!!S.ob;
+ const noteTab=S.note?(S.note.type==='proj'?S.note.id+' '+S.projects.find(p=>p.id===S.note.id).title:S.note.type==='src'?S.note.id+' '+S.samples[S.note.id].title:S.note.id):null;
+ const viewName=ob?T('Setup','设置向导'):(NAV.find(n=>n[0]===S.view)||[0,0,'Tasks','任务中心'])[S.lang==='en'?2:3];
+ const vn=S.view==='settings'?T('Settings','设置'):S.view==='tasks'?T('Tasks','任务中心'):viewName;
+ const main=ob?onboarding():S.note?(S.note.type==='proj'?projectNote(S.projects.find(p=>p.id===S.note.id)):S.note.type==='src'?sourceNote(S.sources.find(s=>s.id===S.note.id)):report(S.runs.find(r=>r.id===S.note.id))):{home,research,sources,ideas,production,knowledge,tasks,settings}[S.view]();
+ const hasRight=!ob;
+ app.innerHTML=`
+ <div class="titlebar"><div class="lights"><i></i><i></i><i></i></div>
+  <div class="tabs">
+   <button class="tab ${!S.note?'on':''}" data-act="tab-bench">${I('bench',14)} Workbench · ${esc(vn)}</button>
+   ${noteTab?`<button class="tab on">${I('file',14)} ${esc(noteTab)}${S.note.type!=='run'?'.md':''}</button>`:''}
+  </div>
+  <div class="tb-right"><span class="demo-tag">${T('Prototype · sample data','原型 · 示例数据')}</span>
+   <div class="seg" role="group" aria-label="Demo user"><button data-act="demo-user" data-id="ret" aria-pressed="${!ob}">${T('Returning','老用户')}</button><button data-act="demo-user" data-id="new" aria-pressed="${ob}">${T('New user','新用户')}</button></div>
+   <div class="seg" role="group" aria-label="Language" style="display:none"><button data-act="lang" data-id="en" aria-pressed="${S.lang==='en'}">EN</button><button data-act="lang" data-id="zh" aria-pressed="${S.lang==='zh'}">中</button></div></div>
+ </div>
+ <div class="body ${ob?'ob':''} ${S.note?'hasnote':''}">
+  <div class="ribbon">${['folder','search','graph'].map(x=>`<button aria-label="${x}" title="${T('Obsidian core','Obsidian 自带')}">${I(x,17)}</button>`).join('')}<button class="on" data-act="go" data-id="home" aria-label="Workbench">${I('bench',17)}</button></div>
+  ${ob?'':`<aside class="left" aria-label="Workbench">
+   <div class="left-head"><select class="acct" id="acctsel" aria-label="${T('Account','账号')}"><option value="all">${T('All accounts','全部账号')}</option>${S.accounts.map(a=>`<option value="${a.id}" ${S.acct===a.id?'selected':''}>${esc(a.name)} · ${esc(a.platform)}</option>`).join('')}</select>
+   <button class="newbtn" data-act="new">${I('plus',15)} ${T('New','新建')}<kbd>⌘N</kbd></button></div>
+   <nav class="nav">${NAV.map(n=>{const ct=n[0]==='home'?c.needs:n[0]==='ideas'?S.ideas.filter(inAcct).filter(i=>i.status==='new').length:n[0]==='production'?S.projects.filter(inAcct).filter(p=>!p.done).length:'';return `<button data-act="go" data-id="${n[0]}" class="${S.view===n[0]&&!S.note?'on':''}">${I(n[1])}${T(n[2],n[3])}${ct!==''?`<span class="ct ${n[0]==='home'&&ct?'hot':''}">${ct}</span>`:''}</button>`}).join('')}
+    <div class="nav-label">${T('Manage','管理')}</div>
+    <button data-act="go" data-id="tasks" class="${S.view==='tasks'&&!S.note?'on':''}">${I('list')}${T('Tasks','任务中心')}<span class="ct">${c.running}</span></button>
+    <button data-act="go" data-id="settings" class="${S.view==='settings'&&!S.note?'on':''}">${I('gear')}${T('Settings','设置')}</button></nav>
+   <div class="left-foot"><div class="runner"><span class="dot ${S.quotaClaude?'warn':''}"></span>Claude${S.quotaClaude?' · '+T('limit until 18:00','额度 18:00 重置'):''}</div><div class="runner"><span class="dot"></span>Codex</div></div>
+  </aside>`}
+  <main class="main" id="main">${main}</main>
+  ${hasRight?`<aside class="right" aria-label="${T('Side panel','侧边栏')}">${right()}</aside>`:''}
+ </div>
+ <div class="status">
+  <button data-act="go" data-id="home"><span class="dot warn"></span>${c.review} ${T('to review','待审核')}</button>
+  <button data-act="task-go" data-id="blocked"><span class="dot bad"></span>${c.blocked} ${T('blocked','受阻')}</button>
+  <button data-act="task-go" data-id="running"><span class="dot run"></span>${c.running} ${T('running','运行中')}</button>
+ </div>
+ ${modal()}${S.toast?`<div class="toast" role="status">${esc(S.toast)}</div>`:''}`;
+ if(S.modal&&S.modal.type==='new'){const el=document.getElementById('newin');if(el&&document.activeElement!==el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}}
+}
+
+/* ---------- actions ---------- */
+function go(v){S.view=v;S.note=null;S.fbOpen=false;const m=document.getElementById('main');render();if(m)document.getElementById('main').scrollTop=0}
+function openNote(type,id){S.note={type,id};S.fbOpen=false;render();document.getElementById('main').scrollTop=0}
+function later(ms,fn){setTimeout(()=>{fn();render()},ms)}
+function toSource(id,silent){
+ if(S.sources.some(s=>s.id===id)){if(!silent)toast('Already in Sources. Opened the existing note.','已在素材中，已打开原有笔记。');return 'reuse'}
+ const r=S.runs.find(r=>r.samples&&r.samples.includes(id));
+ const s={id,status:'running',acct:r?r.acct:'zh',platform:r?r.platform:'Xiaohongshu',runner:'Claude',step:{en:'Transcribing',zh:'转写中'}};
+ S.sources.unshift(s);addLog('Claude','Started analysis '+id,'开始解析 '+id);
+ later(2600,()=>{s.status='ready';s.hook={en:'Result first',zh:'结果先行'};s.type={en:'Step-by-step tutorial',zh:'步骤教程'};s.tax=S.tax.v;s.transcript=S.samples[id].title+'\n'+(S.samples[id].note||'');S.tax.analyzed++;addLog('Claude','Finished analysis '+id,'完成解析 '+id)});
+ if(!silent)toast('Added to the analysis queue.','已加入解析队列。');return 'added';
+}
+function toIdea(id,silent){
+ if(S.ideas.some(i=>i.src.includes(id)&&i.status!=='rejected')){if(!silent)toast('An idea already cites this source.','已有选题引用了这条来源。');return 'reuse'}
+ const r=S.runs.find(r=>r.samples&&r.samples.includes(id));const sm=S.samples[id];
+ S.ideas.unshift({id:nextId('I'),title:sm.title,angle:'',acct:r?r.acct:'zh',src:[id],status:'new',score:null});
+ if(!silent)toast('Saved as an idea. Production has not started.','已存为选题，尚未开工。');return 'added';
+}
+function toKnow(id,silent){
+ if(S.knowledge.some(k=>k.from===id)){if(!silent)toast('Already in Knowledge.','已在知识库中。');return 'reuse'}
+ S.knowledge.unshift({id:nextId('K'),title:{en:S.samples[id].title,zh:S.samples[id].title},from:id,status:'saved'});
+ if(!silent)toast('Saved to Knowledge.','已存入知识库。');return 'added';
+}
+function advance(p){
+ const f=flowOf(p);
+ if(p.i>=f.length-1){p.done=true;p.st='done';addLog('You','Completed '+p.id,'完成 '+p.id,p);return}
+ p.i++;p.edited=false;const s=f[p.i];
+ if(s[3]==='agent'){p.st='running';later(2200,()=>{p.st='review';p.ver=1;addLog(p.runner,'Finished '+s[1]+' for '+p.id,'完成 '+p.id+' 的'+s[2],p)})}
+ else p.st='todo';
+}
+
+app.addEventListener('click',e=>{
+ const el=e.target.closest('[data-act]');
+ if(!el)return;
+ if(el.classList.contains('scrim')&&e.target!==el)return;
+ const stop=e.target.closest('[data-stop]');
+ if(stop&&el.contains(stop)&&el!==stop&&!stop.contains(el))return;
+ const a=el.dataset.act,id=el.dataset.id;
+ const p=id&&S.projects.find(x=>x.id===id);
+ switch(a){
+ case 'go':go(id);break;
+ case 'tab-bench':S.note=null;render();break;
+ case 'task-go':S.taskFilter=id;go('tasks');break;
+ case 'lang':S.lang=id;render();break;
+ case 'demo-user':if(id==='new')startOb();else{S.ob=null;render()}break;
+ case 'start-ob':startOb();break;
+ case 'reset':{const l=S.lang;S=seed();S.lang=l;render();toast('Demo data reset.','演示数据已重置。');break}
+ case 'open-run':openNote('run',id);break;
+ case 'open-src':openNote('src',id);break;
+ case 'open-src-any':if(S.sources.some(s=>s.id===id))openNote('src',id);else toast('This source has not been analyzed yet.','这条来源还没有解析。');break;
+ case 'open-proj':openNote('proj',id);break;
+ case 'resume-run':{const r=S.runs.find(x=>x.id===id);r.status='running';r.step={en:'Reading post 6 of 12',zh:'正在读第 6 / 12 条'};addLog('Claude','Resumed '+r.q,'继续调研 '+r.q);render();
+  later(2400,()=>{r.status='ready';r.read=12;r.summary='“Claude Code 入门”相关内容里，收藏最高的是“开始前准备什么”的清单型图文；纯命令讲解的互动普遍偏低。';r.gaps=['前 5 条来自暂停前的采集，后 7 条为恢复后采集'];r.samples=['S-203','S-201'];r.triaged=false});break}
+ case 'triage':{const r=S.runs.find(x=>x.id===id);r.triaged=true;toast('Marked as triaged.','已标记为分流完成。');break}
+ case 'to-src':toSource(id);render();break;
+ case 'to-idea':toIdea(id);render();break;
+ case 'to-know':toKnow(id);render();break;
+ case 'batch':{const r=S.runs.find(x=>x.id===S.note.id);const ids=[...S.sel].filter(x=>r.samples.includes(x));const fn={analyze:toSource,idea:toIdea,know:toKnow}[id];let add=0,re=0;ids.forEach(x=>fn(x,true)==='added'?add++:re++);S.sel.clear();toast(`${add} added · ${re} already there`,`新增 ${add} 条 · ${re} 条已存在`);break}
+ case 'upload-src':{const s=S.sources.find(x=>x.id===id);s.status='running';s.step={en:'Transcribing your upload',zh:'正在转写你上传的文件'};render();later(2200,()=>{s.status='ready';s.hook={en:'Result first',zh:'结果先行'};s.type={en:'Workflow demo',zh:'工作流演示'};s.tax=S.tax.v;s.transcript='[0:00] This is every note I wrote this month, sorted in one view.\n[0:05] Three folders: to post, to test, to delete.';S.tax.analyzed++});break}
+ case 'src-tab':S.srcTab=id;render();break;
+ case 'idea-tab':S.ideaFilter=id;render();break;
+ case 'idea-status':{const [iid,st]=id.split('|');S.ideas.find(x=>x.id===iid).status=st;render();break}
+ case 'analyze':{const i=S.ideas.find(x=>x.id===id);i.analyzing=true;i.open=false;render();later(1800,()=>{i.analyzing=false;i.open=true;const zh=i.acct==='zh';
+  i.score={v:i.score?Math.min(10,i.score.v+(i.score.fb?1:0)):(zh?8:7),fb:i.score?i.score.fb:'',ref:i.src[0]||'S-203',rows:zh?[['Pain evidence','痛点证据','s','R-014 里 12 条中有 7 条评论在问“收藏了用不上怎么办”'],['Market proof','市场验证','s','主对标 S-203 收藏 5.6k，同结构图文表现稳定'],['Can you deliver','你能兑现吗','m','你有自己的整理流程，但还缺前后对比截图']]:[['Pain evidence','痛点证据','m','Comments ask for it, but only on 3 of 10 samples'],['Market proof','市场验证','s','S-190 reached 12k likes with a result-first reel'],['Can you deliver','你能兑现吗','s','You already run this prompt every Sunday']]};addLog('Claude','Analyzed idea '+i.id,'分析了选题 '+i.id)});break}
+ case 'toggle-score':{const i=S.ideas.find(x=>x.id===id);i.open=!i.open;render();break}
+ case 'start':{const i=S.ideas.find(x=>x.id===id);if(i.project){openNote('proj',i.project);break}S.modal={type:'start',id,fmt:'carousel'};render();break}
+ case 'start-go':{const i=S.ideas.find(x=>x.id===id);if(i.project){S.modal=null;openNote('proj',i.project);break}
+  const f=S.modal.fmt||'carousel',acct=document.getElementById('sacct').value;const np={id:nextId('P'),title:i.title,acct,format:f,idea:i.id,i:0,st:'running',runner:f==='carousel'?'Codex':'Claude',ver:0,log:[]};
+  CONTRACT[np.id]=[['Audience','目标人群',i.angle||'—'],['Situation','场景','—'],['One question','唯一问题',i.title],['Promise','承诺与交付','—'],['Primary reference','唯一主对标',i.src[0]||'—'],['Hook & template','Hook 与模板','—']];
+  S.projects.unshift(np);i.status='production';i.project=np.id;addLog('You','Started production '+np.id,'开始制作 '+np.id,np);S.modal=null;
+  later(2200,()=>{np.st='review';np.ver=1;addLog(np.runner,'Wrote the direction','写好了方向',np)});openNote('proj',np.id);break}
+ case 'approve':{const s=stageOf(p);let msg='';if(p.edited)msg=T(' Your edits and the agent version were saved as a pair.',' 你的修改和 Agent 版本已成对保存。');addLog('You','Approved '+s[1]+(p.ver?' v'+p.ver:''),'通过'+s[2]+(p.ver?' v'+p.ver:''),p);advance(p);S.fbOpen=false;S.toast='';render();toast('Approved.'+msg,'已通过。'+msg);break}
+ case 'open-fb':S.fbOpen=true;render();setTimeout(()=>{const f=document.getElementById('fb');if(f)f.focus()});break;
+ case 'revise':{const fb=document.getElementById('fb').value.trim();if(!fb){toast('Add a note so the agent knows what to change.','请写下修改意见，Agent 才知道改什么。');break}
+  addLog('You','Requested changes on v'+p.ver+': '+fb,'退回 v'+p.ver+'：'+fb,p);p.st='running';S.fbOpen=false;render();later(2200,()=>{p.ver++;p.st='review';addLog(p.runner,'Wrote v'+p.ver+' from your notes · v'+(p.ver-1)+' kept','根据意见写了 v'+p.ver+' · 保留 v'+(p.ver-1),p)});break}
+ case 'you-done':{const k=stageOf(p)[0];if(k==='check'&&[...document.querySelectorAll('[data-chk]')].some(c=>!c.checked)){toast('Tick every item before marking this done.','全部勾选后才能标记完成。');break}
+  if(k==='publish'){const u=document.getElementById('purl').value.trim();if(!/^https?:\/\/\S+/.test(u)){toast('Paste the post URL so results can be tracked.','请贴上帖子链接，方便之后复盘数据。');break}}
+  addLog('You','Finished '+stageOf(p)[1],'完成'+stageOf(p)[2],p);advance(p);render();break}
+ case 'switch-runner':p.runner='Codex';p.st='running';addLog('You','Switched '+p.id+' to Codex','把 '+p.id+' 改用 Codex',p);render();later(2200,()=>{p.st='review';p.ver=1;DRAFT[p.id]=[['p1','封面','收藏了 300 条，写稿时一条都找不到？3 步把收藏夹变成素材库'],['p2','第 2 页','第一步：按“以后要拿它做什么”分三类，而不是按主题。'],['p3','第 3 页','第二步：每存一条，写一句“我会在哪用它”。'],['p4','第 4 页','第三步：每周五 15 分钟清理一次。模板在最后一页。']];addLog('Codex','Wrote draft v1','写了初稿 v1',p)});break;
+ case 'wait-reset':p.st='waiting';addLog('You','Chose to wait for Claude reset','选择等待 Claude 重置',p);render();break;
+ case 'know-step':{const k=S.knowledge.find(x=>x.id===id);k.status=k.status==='saved'?'extracted':'adopted';render();break}
+ case 'import-know':{const v=document.getElementById('kurl').value.trim();if(!/^https?:\/\/\S+/.test(v)){toast('Paste a full link starting with https://','请贴完整链接（以 https:// 开头）');break}if(S.knowledge.some(k=>k.from===v)){toast('Already in Knowledge.','已在知识库中。');break}S.knowledge.unshift({id:nextId('K'),title:{en:'Imported link',zh:'导入的链接'},from:v.replace(/^https?:\/\//,''),status:'saved'});render();break}
+ case 'task-tab':S.taskFilter=id;render();break;
+ case 'set-tab':S.setTab=id;render();break;
+ case 'demo-add':S.tax.analyzed=Math.max(10,S.tax.analyzed+2);render();break;
+ case 'calibrate':toast('Calibration opens as a side-by-side review of tags and evidence (next prototype round).','校准会打开标签与依据的并排审核（下一轮原型再做）。');break;
+ case 'new':S.modal={type:'new',v:'',hint:id==='keyword'||id==='account'?id:null};render();break;
+ case 'close-modal':if(e.target===el||el.tagName==='BUTTON'){S.modal=null;render()}break;
+ case 'new-go':newGo();break;
+ case 'ob-next':obNext();break;
+ case 'ob-back':S.ob.step--;render();break;
+ case 'ob-skip':S.ob=null;render();break;
+ case 'ob-run':{const o=S.ob;o.kw=document.getElementById('okw').value.trim()||o.kw;o.run=true;o.runStep=0;render();const tick=()=>{o.runStep++;render();if(o.runStep<4)setTimeout(tick,750)};setTimeout(tick,750);break}
+ case 'ob-save':S.ob.saved=Number(id);render();break;
+ case 'ob-finish':{const o=S.ob;const aid='u'+(++S.seq);S.accounts.push({id:aid,name:o.handle,platform:o.plat,lang:o.wl,niche:'—'});
+  S.ideas.unshift({id:nextId('I'),title:['Plan your week in 40 seconds','The Sunday reset prompt','I let AI plan my week for 30 days'][o.saved],angle:'',acct:aid,src:[],status:'new',score:null});
+  S.ob=null;S.acct='all';S.ideaFilter='new';go('home');toast('Setup complete. Your first idea is in Ideas.','设置完成，第一个选题已在选题库。');break}
+ }
+});
+app.addEventListener('change',e=>{
+ const t=e.target;
+ if(t.id==='acctsel'){S.acct=t.value;render();return}
+ if(t.dataset.sel){t.checked?S.sel.add(t.dataset.sel):S.sel.delete(t.dataset.sel);render();return}
+ if(t.dataset.angle){S.ideas.find(i=>i.id===t.dataset.angle).angle=t.value;return}
+ if(t.dataset.fb){const i=S.ideas.find(x=>x.id===t.dataset.fb);i.score.fb=t.value;return}
+ if(t.dataset.lk){S.modal.lk=t.dataset.lk;S.modal.v=document.getElementById('newin').value;render();return}
+ if(t.dataset.fmt){S.modal.fmt=t.dataset.fmt;return}
+ if(t.id==='nacct'&&S.modal)S.modal.acct=t.value;
+ if(t.dataset.tpl)S.ob.tpl=t.dataset.tpl;
+ if(t.id==='oplat')S.ob.plat=t.value;if(t.id==='olang')S.ob.wl=t.value;
+});
+app.addEventListener('input',e=>{
+ const t=e.target;
+ if(t.id==='newin'){const before=detect(S.modal.v||'');S.modal.v=t.value;if(detect(t.value)!==before)render();return}
+ if(t.dataset&&t.dataset.draft){const p=S.projects.find(x=>x.id===t.dataset.draft);if(!p.edited){p.edited=true;const m=t.parentElement.querySelector('.meta');if(m&&!m.innerHTML.includes('var(--amber)'))m.insertAdjacentHTML('beforeend',` · <span style="color:var(--amber)">${T('edited by you','你改过')}</span>`)}}
+ if(t.id==='ohandle')S.ob.handle=t.value;
+ if(t.id==='okw')S.ob.kw=t.value;
+});
+document.addEventListener('keydown',e=>{
+ if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='n'&&!S.ob){e.preventDefault();S.modal={type:'new',v:''};render()}
+ if(e.key==='Escape'&&S.modal){S.modal=null;render()}
+ if(e.key==='Enter'&&S.modal&&S.modal.type==='new'&&e.target.id==='newin'&&detect(S.modal.v||'')){e.preventDefault();newGo()}
+});
+function newGo(){
+ const m=S.modal,v=(m.v||'').trim(),d=detect(v)||m.hint;if(!d||!v)return;
+ const acct=(document.getElementById('nacct')||{}).value||m.acct||'zh';const plat=acctOf(acct).platform;
+ S.modal=null;
+ if(d==='link'){
+  if(m.lk==='know'){S.knowledge.unshift({id:nextId('K'),title:{en:'Imported link',zh:'导入的链接'},from:v.replace(/^https?:\/\//,''),status:'saved'});toast('Saved to Knowledge.','已存入知识库。');go('knowledge');return}
+  const sid=nextId('S');S.samples[sid]={title:v.replace(/^https?:\/\//,'').slice(0,48),author:'—',format:'video',stat:'—',note:''};
+  const s={id:sid,status:'running',acct,platform:plat,runner:'Claude',step:{en:'Checking the link',zh:'检查链接'}};S.sources.unshift(s);S.srcTab='queue';addLog('Claude','Started analysis '+sid,'开始解析 '+sid);
+  later(1400,()=>{s.status='needfile';s.why={en:'This link needs a sign-in the research browser does not have. Upload the video file instead.',zh:'这个链接需要登录，调研浏览器没有权限。请改为上传视频文件。'}});
+  go('sources');toast('Added to the analysis queue.','已加入解析队列。');return;
+ }
+ const rid=nextId('R');const r={id:rid,kind:d==='account'?'account':'topic',q:v,acct,platform:plat,status:'running',runner:'Claude',when:now(),step:{en:'Searching '+plat,zh:'正在搜索'+plat}};
+ S.runs.unshift(r);addLog('Claude','Started '+(d==='account'?'competitor':'topic')+' research '+v,'开始'+(d==='account'?'竞品':'选题')+'调研 '+v);
+ later(1600,()=>{r.step={en:'Reading post 7 of 12',zh:'正在读第 7 / 12 条'}});
+ later(3600,()=>{r.status='ready';r.read=12;r.triaged=false;r.summary=S.lang==='en'?`Top posts about “${v}” lead with a finished result, then give three steps. Tool-only reviews get fewer saves.`:`「${v}」相关的高互动内容都先展示成品，再给 3 步做法；只讲工具的内容收藏更低。`;r.gaps=[T('Interaction counts are a snapshot from today.','互动数据为今天的快照。')];r.samples=acct==='en'?['S-190','S-188']:['S-203','S-201','S-204'];addLog('Claude','Finished research '+v,'完成调研 '+v)});
+ openNote('run',rid);
+}
+function startOb(){S.ob={step:0,checked:false,plat:'Instagram',handle:'studio.notes',wl:'English',tpl:'ai',kw:'weekly planning with AI',run:false,runStep:-1,saved:null};S.modal=null;render()}
+function obNext(){
+ const o=S.ob;o.step++;
+ if(o.step===1&&!o.checked){render();setTimeout(()=>{o.checked=true;render()},1300);return}
+ render();
+}
+
+render();
+})();
+</script>

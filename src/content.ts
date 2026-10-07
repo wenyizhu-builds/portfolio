@@ -567,8 +567,8 @@ export const nodes: SiteNode[] = [
         items: [
           { en: "Positioning: Benchmarked the top AI creators on Xiaohongshu and aimed the channel at AI beginners, promising that every video ends with something viewers can see and make themselves." },
           { en: "Follower conversion over views: Tracked followers per 1K views on every post. A motion-capture tutorial converted 16× better than an illustration post with more views, so I doubled down on hands-on tutorials." },
-          { en: "Data-led pivots: Dropped formats and topics that weren’t converting, like carousels and abstract AI concepts, and refocused on short videos that open with a striking visual result." },
-          { en: "AI agent workflow: Built a team of AI agents that tracks trending posts and benchmark creators, turns viral videos into a searchable knowledge base, tags every post by hook and format, and runs biweekly growth reviews on the account data." },
+          { en: "Test and scale: Kept testing new formats and topics, cut what didn’t convert, like carousels and abstract AI concepts, and doubled down on what did." },
+          { en: "Content operations system: Built my own AI system that researches the platform and competitors, drafts scripts and iterates on post data, so I can run the channel as a team of one." },
           { en: "Brand partnerships: Paid partnerships with leading Chinese AI products, including Alibaba’s Qwen, ByteDance’s Jimeng and Xiaoyunque, LiblibAI and Lovart." },
         ],
       },
@@ -578,6 +578,7 @@ export const nodes: SiteNode[] = [
       { metric: '100K+', en: 'likes' },
       { metric: '287K', en: 'views on one tutorial video' },
     ],
+    related: ['creator-workbench'], // the system that runs it (v69)
     links: [
       { label: { en: 'Xiaohongshu profile' }, href: 'https://www.xiaohongshu.com/user/profile/62a6b493000000001b02aa8d' },
       { label: { en: 'Breakout video' }, href: 'https://www.xiaohongshu.com/discovery/item/6aa17dcd0000000028029744' },
@@ -619,7 +620,32 @@ export const nodes: SiteNode[] = [
     related: ['ua-creative-strategy'],
     alwaysLinked: ['ua-creative-strategy'], // owner: opening AI Projects shows the Creator Ad Pipeline it grew out of
   },
-  { id: 'ai-slot-1', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
+  {
+    id: 'creator-workbench',
+    type: 'ai',
+    parent: 'ai',
+    org: '', // her own project, not done at a job
+    label: { en: 'Creator Workbench' },
+    context: { en: 'Personal project' },
+    tags: [{ en: 'Vibe Coding' }, { en: 'Obsidian' }, { en: 'Claude Code' }, { en: 'Codex' }],
+    summary: { en: "The content operations system behind my Xiaohongshu channel: AI agents research, analyse, draft and review, and I make the calls." },
+    sections: [
+      {
+        title: { en: 'What it does', zh: '功能' },
+        open: true,
+        items: [
+          { en: "Research: Runs topic and competitor research on Xiaohongshu and Instagram, and reports what top posts have in common, with sources and gaps." },
+          { en: "Source analysis: Transcribes any post, tags its hook, format and structure, and files it as a searchable note." },
+          { en: "Idea scoring: Scores every idea on pain-point evidence, market proof and whether I can deliver it, before anything gets made." },
+          { en: "Production: Takes an idea from brief to script to draft, stops at each stage for my review, then reviews the results after launch." },
+          { en: "Knowledge base: Turns saved articles and videos into knowledge the agents cite when they write." },
+        ],
+      },
+    ],
+    prototype: { src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: [] }, // v69: no promo video yet, the still of Home holds its place
+    gallery: [set('workbench', 'creator-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
+    related: ['xhs-ai-channel'],
+  },
   { id: 'ai-slot-2', type: 'ai', parent: 'ai', status: 'prep', label: { en: 'AI project', zh: 'AI 项目' }, kicker: prep },
 
   /* ---------------- Creative Work ---------------- */
@@ -790,7 +816,7 @@ export const ui = {
   replay: { en: 'Replay', zh: '重新播放' },
   videoProgress: { en: 'Video progress', zh: '播放进度' },
   soundOff: { en: 'Turn sound off', zh: '关闭声音' },
-  openApp: { en: 'Open the dashboard prototype', zh: '打开看板原型' },
+  openApp: { en: 'Open the clickable prototype', zh: '打开可点击原型' },
   protoNote: { en: 'This is a display prototype with sample data. For details on the full project, feel free to get in touch.', zh: '这是展示用原型，数据为示例。想了解完整项目，欢迎联系我。' },
   backToMap: { en: 'Back to the map', zh: '回到地图' },
   mapWord: { en: 'Map', zh: '地图' },
