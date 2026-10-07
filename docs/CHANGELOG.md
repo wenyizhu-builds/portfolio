@@ -680,3 +680,8 @@
 ## 2026-10-07 — v69.2 Workbench prototype page renders in standards mode
 
 - `scripts/workbench-en.py` adds a doctype, charset and viewport to the prototype (its source is a chat-preview fragment, which rendered in quirks mode as a page of its own). Screens and poster re-shot from it.
+
+## 2026-10-07 — v69.3 Editor edits from this morning
+
+- Synced three edits the user made in the editor at 08:29–08:56 that v69.2 missed: Dashboard "AI tagging" drops "with a human review step"; AI Creator Channel "Test and scale" shortened; AI Creator Channel "Follower conversion over views" removed.
+- Not synced yet: a sentence she typed into the Dashboard headline field ("I vibe coded the dashboard from scratch…"); waiting for her to pick a polished version and where it goes.

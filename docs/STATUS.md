@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.2 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-07 · v69.3 · 分支 `flagship-restructure`（未合并 main）
 
 ## 新会话先看这里（交接）
 
@@ -14,6 +14,7 @@
 - **Creative Work 不改名**（用户定：老照片和设计不算 Content Creation）。
 
 ### 用户还没回答的问题
+0. （v69.3）她在编辑器的 Dashboard headline 字段里打了一句 "I vibe coded the dashboard from scratch to save time when I was the creative strategist for Genshin Impact creator ads."——还没上线，等她选润色版本和位置（headline 下第二行 / summary）。另外 AI Creator Channel 的 summary 仍写 "An AI tutorial channel"，与「不是 tutorial channel」的批评冲突，待她确认。
 1. 五个品牌是不是都是付费合作，要不要加 MiniMax、Kimi 等（帖子标签里出现过）。
 2. Creator Workbench 要不要做宣传片（像看板那样）。
 3. Creator & Social 的一句话说明加了 "Xiaohongshu" 和 "Chinese audiences"，原句是她定的，改动她还没确认。
