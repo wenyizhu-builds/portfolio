@@ -73,7 +73,9 @@ function fitSide() {
   media.style.height = `${mdH}px`;
   const panelStyle = getComputedStyle(panel);
   const border = parseFloat(panelStyle.borderTopWidth) + parseFloat(panelStyle.borderBottomWidth);
-  panel.style.height = `${Math.max(0, Math.min(inner.offsetHeight + border, sideEl.clientHeight - ixH - mdH))}px`;
+  // the boxes inside the column are zoomed (--card-zoom): their own px are the column's px ÷ zoom
+  const room = sideEl.clientHeight / (parseFloat(cssVar('--card-zoom')) || 1);
+  panel.style.height = `${Math.max(0, Math.min(inner.offsetHeight + border, room - ixH - mdH))}px`;
 }
 /* The scrollbar only shows while the card is being scrolled (like an overlay scrollbar). */
 let scrollIdle = 0;
