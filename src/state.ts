@@ -39,6 +39,14 @@ try {
   /* malformed address: no filter */
 }
 
+/** A ready-made ride is a whole selection on its own (owner, v72.1): picking one clears target market and platform,
+    and picking either of those clears the ride. Target market and platform combine freely. */
+function exclusive(picked: FilterKind) {
+  const f = filters as Record<FilterKind, string | null>;
+  if (picked === 'ride') { f.region = null; f.platform = null; } else f.ride = null;
+}
+if (filters.ride) exclusive('ride'); // an address with both: the ride wins
+
 export const filtering = () => !!(filters.ride || filters.region || filters.platform);
 
 /** Pick an option, or clear it when it is picked again. */
@@ -48,6 +56,7 @@ export function toggleFilter(kind: FilterKind, key: string) {
 /** Set one filter (null = all) and keep the address in step. */
 export function setFilter(kind: FilterKind, key: string | null) {
   (filters as Record<FilterKind, string | null>)[kind] = key;
+  if (key) exclusive(kind);
   try {
     const q = new URLSearchParams(location.search);
     (Object.keys(filters) as FilterKind[]).forEach((k) => (filters[k] ? q.set(k, filters[k]!) : q.delete(k)));

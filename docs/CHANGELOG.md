@@ -763,3 +763,4 @@
 - v71.7（10-08）：卡片列表去掉重点案例的 ✳（用户：看着不对），只留圆点。两个 AI 应用各有图标（`prototype.icon`，图形在 shapes.ts `APP_ICONS`：Dashboard = 上升的柱状图，Workbench = 三栏看板）。「Try the prototype」条贴着站点放（站点和名字的左边 / 右边 / 下面 / 上面，间距 14px，取第一个不压住当前线和站的位置），找不到才退回最近空位。
 - v71.8（10-08）：Creator Workbench 的名字放到线右边，给左边的「Try the prototype」条腾出位置（条子现在紧贴站点）；AI LINE 线名移到线左边，不再被 Workbench ↔ Xiaohongshu 的连接虚线穿过。
 - v72（10-08）：地铁图站名重排（用户在 Artifact「Station Name Layouts」选 A · Calmer）：每条线的站名固定在一侧；名字与站圈的距离从圈外沿量起，统一 11（`labelGap`，替代按标记分的 `labelOff`）；顶部一排两站的名字 45° 斜写（`pos: 'rise'`），站点拉开；Creator & Social、AI 线名竖着沿线写，底部一排只剩站名；Campus 线名与 UChicago 分开（UChicago 移到 290）；画框上沿到 y 50。layout-check 0 处重叠。
+- v72.1（10-08）：Curate your ride 的路线与 Target market / Platform 互斥（选一边清掉另一边；市场 + 平台可组合）。`state.ts` `exclusive()`；手机下拉框选完后同步显示被清掉的项。

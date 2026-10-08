@@ -334,6 +334,8 @@ export function wireFilters(root: ParentNode, after?: () => void) {
   root.querySelectorAll<HTMLSelectElement>('[data-fsel]').forEach((s) => {
     s.onchange = () => {
       setFilter(s.dataset.fsel as FilterKind, s.value || null);
+      // a ride and the other two exclude each other: show what the pick switched off
+      root.querySelectorAll<HTMLSelectElement>('[data-fsel]').forEach((o) => (o.value = filters[o.dataset.fsel as FilterKind] ?? ''));
       after?.();
     };
   });
