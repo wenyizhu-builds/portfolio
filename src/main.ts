@@ -24,7 +24,6 @@ app.innerHTML = `
   <div class="desk">
     <header class="top">
       <div id="filters"></div>
-      <a href="#/" class="top-name" data-i="name"></a>
       <nav class="top-nav">
         <a href="#/resume" class="top-link"><span data-i="resume"></span> <i aria-hidden="true">↗</i></a>
         <a href="#/contact" class="top-link"><span data-i="contact"></span> <i aria-hidden="true">↗</i></a>
@@ -95,7 +94,6 @@ let route: Route = parseRoute();
 
 /* ---------- chrome text ---------- */
 function paintChrome() {
-  document.querySelector('[data-i="name"]')!.textContent = site.name; // v72.9 (owner): her name, centred in the top bar
   document.querySelector('[data-i="resume"]')!.textContent = t(ui.resume);
   document.querySelector('[data-i="contact"]')!.textContent = t(ui.contact);
   // Curate your ride (v71): built once, then kept in step so its open and grow animations run

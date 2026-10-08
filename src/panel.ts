@@ -63,7 +63,8 @@ export function indexPanel(): string {
   const bio = details(
     astSvg(AST.index, 'ix-ast'),
     L('index'),
-    `<h2 class="sr-only p-title" tabindex="-1">${esc(site.name)}</h2>
+    // v72.10 (owner, option C): her name and title head the INDEX, above the intro
+    `<h2 class="p-title ix-name" tabindex="-1">${esc(site.name)}</h2><p class="lab ix-role">${tx(site.tag)}</p>
      <p class="ix-bio">${highlight(t(site.intro), t(site.introHighlight))}</p><a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
     true,
     'ix',

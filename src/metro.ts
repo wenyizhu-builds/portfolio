@@ -336,14 +336,20 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   }
   bar.addEventListener('click', (e) => {
     const act = (e.target as Element).closest<HTMLElement>('[data-ride]')?.dataset.ride;
-    if (!act || !order.length) { if (act === 'exit') { clearFilters(); go(''); } return; }
-    if (act === 'exit') { clearFilters(); go(''); return; }
-    if (act === 'go' && bar.classList.contains('arrived')) { clearFilters(); go('contact'); return; } // the last stop's button is Let's talk
+    if (!act || !order.length) { if (act === 'exit') leaveRide(''); return; }
+    if (act === 'exit') { leaveRide(''); return; }
+    if (act === 'go' && bar.classList.contains('arrived')) { leaveRide('contact'); return; } // the last stop's button is Let's talk
     rideStep = Math.max(0, Math.min(order.length - 1, rideStep + (act === 'go' ? 1 : -1)));
     go(order[rideStep]); // the card opens the stop; setFocus brings us back to apply()
   });
 
   /* ---------- the end of the line ---------- */
+  /** Leave the ride for a page: the page opens first, then the ride is cleared. The other way round, the map
+      showed the last stop without the ride (its prototype bar jumping, its links drawn) for a moment (v72.10, L56). */
+  function leaveRide(path: string) {
+    window.addEventListener('hashchange', () => clearFilters(), { once: true });
+    go(path);
+  }
   function arrive(id: string) {
     const g = svg.querySelector<SVGGElement>(`.mt-stn[data-id="${CSS.escape(id)}"]`);
     if (!g) return;
