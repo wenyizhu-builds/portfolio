@@ -121,6 +121,7 @@
   --fv-beside: 14px; /* the prototype bar's gap to its station */
   --fv-upper-room: 90px; /* the upper half is tried first, leaving this much below it */
   --fv-bottom-room: 110px; /* kept free at the bottom (legend, ride bar) */
+  --fv-ride-gap: 28px; /* v72.13 (owner): the prototype bar keeps at least this far above the ride bar */
   --fv-step: 20px; /* search grid */
   --fv-widths: 260 220 180 150; /* picture widths tried, largest first */
   /* v72.7 (owner: no hard-coded style values): every size or time used in more than one rule lives here */
@@ -501,12 +502,14 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .pv-time { flex: none; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
 .floating-app { position: fixed; z-index: 3; }
 .floating-app[hidden] { display: none; }
-.app-bar { justify-self: start; display: flex; align-items: center; gap: var(--sp-10); padding: var(--sp-10) var(--sp-12) var(--sp-10) var(--sp-10); border: 0; border-radius: var(--r-16); background: var(--panel); white-space: nowrap; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
+.app-bar { justify-self: start; display: flex; align-items: center; gap: var(--sp-14); padding: var(--sp-10) var(--sp-12) var(--sp-10) var(--sp-10); border: 0; border-radius: var(--r-16); background: var(--panel); white-space: nowrap; font: inherit; color: var(--ink); text-align: left; cursor: pointer; }
 .app-bar:hover { background: color-mix(in srgb, var(--cobalt) 5%, var(--panel)); }
 .app-bar:hover .btn { background: var(--bg); }
 .app-tile { width: 44px; height: 44px; flex: none; border-radius: 11px; background: var(--ink); display: grid; place-items: center; }
 .app-tile svg { width: 22px; height: 22px; stroke: var(--panel); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-.app-bar .btn { margin-left: 0; }
+.app-bar-t { display: grid; gap: var(--sp-2); font-size: var(--fs-text); line-height: 1.3; }
+.app-bar-sub { font-size: var(--fs-label); color: var(--muted); }
+.app-bar .btn { margin-left: var(--sp-8); }
 /* the prototype in the lightbox (lightbox.ts openFrame): same dark overlay and × as the photos */
 dialog.lightbox.is-frame { cursor: default; }
 .lb-tabs { display: flex; gap: var(--sp-6); padding: var(--sp-4); border-radius: var(--r-20); background: color-mix(in srgb, var(--on-ink) 12%, transparent); }
