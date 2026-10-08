@@ -21,7 +21,7 @@ function nodeLink(id: string, sub = ''): string {
   const line = n.status ? t(n.kicker) : sub;
   // an item that can't be opened further (a single piece of work, a role) gets a dash; groups don't
   const leaf = !childrenOf(id).length;
-  // v71.5 (owner): no bullets; a key case carries a small turning blue ✳ after its name
+  // a key case carries a small turning blue ✳ after its name (owner, v71.5)
   const key = leaf && markKindOf(id) === 'key' ? `<span class="nkey" aria-hidden="true">${astSvg(AST.index)}</span>` : '';
   return `<a class="nlink${leaf ? ' is-leaf' : ''}${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}"><span class="nlink-t">${tx(n.label)}</span>${key}${line ? `<span class="lab">${esc(line)}</span>` : ''}</a>`;
 }

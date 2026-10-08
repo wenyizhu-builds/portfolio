@@ -212,6 +212,8 @@ function placeAnchor() {
 /* ---------- lightbox (lightbox.ts) and gallery clicks: one listener for desktop and phone ---------- */
 document.addEventListener('click', e => {
   const el = e.target as Element;
+  // a click on empty space around the map goes back to the default map, like a click on the map's own background (v71.6)
+  if ((el === stage || el.classList.contains('desk')) && route.kind !== 'home' && !mq.matches) { go(''); return; }
   const tile = el.closest<HTMLButtonElement>('[data-visual-src]');
   if (tile) openLightbox(tile.dataset.visualSrc!, tile.querySelector('img')?.alt);
   const pic = el.closest<HTMLButtonElement>('[data-gal]');

@@ -298,7 +298,7 @@ button { font: inherit; color: inherit; }
 .nlink .lab { display: block; color: var(--muted); }
 /* the last level — a single piece of work — carries a bullet, so a group and its items never read as one level */
 .nlink.is-leaf { position: relative; padding-left: var(--leaf-indent); }
-.nlink.is-leaf::before { content: none; } /* v71.5 (owner): no bullets */
+.nlink.is-leaf::before { content: '•'; position: absolute; left: 0; color: var(--muted); } /* bullets back (owner, v71.6); key cases add a ✳ after the name */
 .nlink:hover .nlink-t { text-decoration: underline; text-underline-offset: 3px; }
 
 .ico { flex: none; overflow: visible; }

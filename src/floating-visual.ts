@@ -79,7 +79,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     app.hidden = false;
     app.style.visibility = 'hidden';
     const w = app.offsetWidth, h = app.offsetHeight;
-    appPos = nearest([[w, h]], appPos, true);
+    // a fully clear spot first; only if there's none may it cover faded lines (it's solid white)
+    appPos = nearest([[w, h]], appPos) ?? nearest([[w, h]], undefined, true);
     if (appPos) Object.assign(app.style, { left: `${appPos.x}px`, top: `${appPos.y}px` });
     app.style.visibility = '';
     app.hidden = !appPos;
