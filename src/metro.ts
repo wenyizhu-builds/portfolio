@@ -18,7 +18,7 @@ export type MarkKind = 'interchange' | 'key' | 'dot';
 const METRO = {
   view: { x: 30, y: 50, w: 890, h: 715 }, // the drawing's frame, hugging its ink (the top row's rising names … Campus line) so the map sits centred; scaled to fit the free area left of the card
   topLabel: 30, // "Next stop" sits this far above its station
-  maxScale: 0.9, // never larger than this (v72.2, owner: at 1.1 the map looked giant next to the card on a laptop; 0.9 is the size she liked in the test site)
+  maxScale: 0.81, // never larger than this (v72.2: 1.1 → 0.9, giant on a laptop; v72.6: drawing 10% smaller again, words kept their size via --m-type)
   corner: 24, // rounded bends
   wrap: 24, // characters per label line: every map name fits on one line (v71.2, short map names)
   wrapAt: {} as Record<string, number>, // a station whose side name must wrap sooner (names above or below never wrap)
@@ -88,6 +88,10 @@ const el = <K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, 
   return e;
 };
 const cssVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+/** How much bigger the map's words are than its drawing (v72.6, `--m-type` in style.css): everything sized to fit
+    words (line height, tags, stop numbers, the gap to a name) grows with them, so names keep their size on screen
+    while the drawing itself got smaller. */
+const typeK = () => parseFloat(cssVar('--m-type')) || 1;
 const cssMs = (name: string) => parseFloat(cssVar(name)) || 0;
 function wrap(s: string, max = METRO.wrap): string[] {
   const out: string[] = [];
@@ -113,15 +117,15 @@ function trackPath(pts: Pt[]): string {
 /** A name beside a point, with a halo so it reads over lines. */
 function label(x: number, y: number, lines: string[], pos: Pos, cls: string, off: number, tag?: { text: string; line: LineKey; dx: number }): string {
   if (pos !== 'left' && pos !== 'right') lines = [lines.join(' ')]; // only names beside a line wrap
-  const lh = METRO.lineH, n = lines.length;
+  const K = typeK(), lh = METRO.lineH * K, n = lines.length, cap = 4.5 * K;
   const [tx, ty, a] = ({
-    right: [off, 4.5 - (n - 1) * lh / 2, 'start'], left: [-off, 4.5 - (n - 1) * lh / 2, 'end'],
-    above: [0, -off - (n - 1) * lh, 'middle'], below: [0, off + 9, 'middle'], rise: [off - 2, 4.5, 'start'],
+    right: [off, cap - (n - 1) * lh / 2, 'start'], left: [-off, cap - (n - 1) * lh / 2, 'end'],
+    above: [0, -off - (n - 1) * lh, 'middle'], below: [0, off + 2 * cap, 'middle'], rise: [off - 2, cap, 'start'],
   } as const)[pos];
   const tsp = lines.map((l, i) => `<tspan x="${tx}" dy="${i ? lh : 0}">${esc(l)}</tspan>`).join('');
   let pill = '';
   if (tag) { // a pill under the name, aligned with it
-    const T = METRO.tag, w = tag.text.length * T.charW + 2 * T.padX, top = ty + (n - 1) * lh + T.gap, x0 = (a === 'end' ? tx - w : a === 'middle' ? tx - w / 2 : tx) + tag.dx;
+    const T = Object.fromEntries(Object.entries(METRO.tag).map(([k, v]) => [k, v * K])) as typeof METRO.tag, w = tag.text.length * T.charW + 2 * T.padX, top = ty + (n - 1) * lh + T.gap, x0 = (a === 'end' ? tx - w : a === 'middle' ? tx - w / 2 : tx) + tag.dx;
     pill = `<g class="mt-tag tag-${tag.line}"><rect x="${f(x0)}" y="${f(top)}" width="${f(w)}" height="${T.h}" rx="${T.h / 2}"/><text x="${f(x0 + w / 2)}" y="${f(top + T.textY)}" text-anchor="middle">${esc(tag.text)}</text></g>`;
   }
   return `<g class="mt-name" transform="translate(${f(x)},${f(y)})${pos === 'rise' ? ' rotate(-45)' : ''}"><text class="mt-halo ${cls}" text-anchor="${a}" y="${ty}">${tsp}</text><text class="${cls}" text-anchor="${a}" y="${ty}">${tsp}</text>${pill}</g>`;
@@ -197,7 +201,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     // v71.1 (owner): just "Next stop", on a dotted ring — a station still being built
     const topText = esc(t(ui.nextStop));
     s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})">${arms}</g>`
-      + `<g transform="translate(${tx},${ty - METRO.topLabel})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`;
+      + `<g transform="translate(${tx},${ty - METRO.topLabel * typeK()})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`;
     s += '<g class="mt-xfer"></g>';
     // the ride's own track, in each line's colour, shown through two masks: the whole ride (pale ahead) and the part travelled
     const copies = keys.filter((k) => k !== 'campus').map((k) => `<path class="mt-track l-${k}" d="${trackPath(METRO.lines[k].track)}"/>`).join('');
@@ -222,7 +226,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     // the name follows the mark: key cases and interchanges bold, other stops regular; all ink (owner, v71)
     const cls = kind === 'dot' ? 'mt-lbl' : 'mt-lbl b';
     const tag = n.mapTag ? { text: t(n.mapTag), line: lines.split(' ')[0] as LineKey, dx: METRO.tagNudge[n.id] ?? 0 } : undefined;
-    const name = label(x, y, words, pos, cls, ro + so / 2 + METRO.labelGap, tag);
+    const name = label(x, y, words, pos, cls, ro + so / 2 + METRO.labelGap * typeK(), tag);
     const quiet = kind === 'dot' && !place; // other work: named on hover or when its line is open
     return `<g class="mt-stn" data-id="${n.id}" data-l="${lines}" tabindex="0" role="button" aria-label="${esc(t(n.label))}">${mark}${quiet ? `<g class="mt-more">${name}</g>` : name}</g>`;
   }
@@ -255,7 +259,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   /** Numbers beside the stations, popping in one after another. */
   function drawNumbers() {
     svg.querySelectorAll('.mt-no').forEach((e) => e.remove());
-    const N = METRO.stopNo;
+    const K = typeK(), N = Object.fromEntries(Object.entries(METRO.stopNo).map(([k, v]) => [k, k === 'pop' ? v : v * K])) as typeof METRO.stopNo;
     order.forEach((id, i) => {
       const [x, y, , pos] = METRO.stations[id], g = svg.querySelector(`.mt-stn[data-id="${CSS.escape(id)}"]`);
       if (!g) return;

@@ -73,10 +73,13 @@
   --m-confetti: 2400ms; /* the confetti's life */
   --m-board: 420ms; /* the ride bar's words roll over */
   --m-pop: 450ms; /* stop numbers pop in */
-  --ride-w: 480px; /* the Curate your ride panel */
+  --fs-nav: 14.5px; /* v72.6 (owner: 10% smaller): Curate your ride, Resume, Let's talk */
+  --fs-ride: 12.6px; /* the ride panel and the ride bar, 10% under the card's text */
+  --ride-w: 432px; /* the Curate your ride panel */
   --ride-band: 74px; /* v72.2: a band above the legend for the ride bar (owner: raise it from the very bottom); the map ends above it */
-  --bar-w: 520px; --bar-h: 54px; --bar-btn: 40px; --bar-go: 136px; /* the ride bar and its buttons: fixed, so nothing moves under the pointer */
-  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-tag: 11px; --m-fs-no: 9.5px; /* metro map type */
+  --bar-w: 468px; --bar-h: 49px; --bar-btn: 36px; --bar-go: 122px; /* the ride bar and its buttons: fixed, so nothing moves under the pointer */
+  --m-type: 1.111; /* v72.6 (owner): the drawing shrank 10% (maxScale 0.9 → 0.81) but the words stay their size on screen: 0.9 / 0.81 */
+  --m-fs: calc(13px * var(--m-type)); --m-fs-small: calc(11.5px * var(--m-type)); --m-fs-line: calc(10.5px * var(--m-type)); --m-fs-tag: calc(11px * var(--m-type)); --m-fs-no: calc(9.5px * var(--m-type)); /* metro map type */
   --m-faded: 0.12; /* lines and stations not on the opened line */
   --m-fade: 300ms;
   --edge-y: 20px; /* legend / footer distance from the bottom edge */
@@ -134,7 +137,7 @@ button { font: inherit; color: inherit; }
 .brand { display: flex; align-items: center; gap: 6px; text-decoration: none; }
 .brand-name { font-weight: 400; font-size: 17px; letter-spacing: -0.005em; }
 .top-nav { display: flex; align-items: center; gap: 36px; }
-.top-link { font-size: 16px; text-decoration: none; padding: 4px 0; display: inline-flex; gap: 6px; align-items: baseline; border: 0; background: none; cursor: pointer; }
+.top-link { font-size: var(--fs-nav); text-decoration: none; padding: 4px 0; display: inline-flex; gap: 6px; align-items: baseline; border: 0; background: none; cursor: pointer; }
 .top-link i { font-style: normal; transition: transform 200ms var(--ease); display: inline-block; }
 .top-link:hover i { transform: translate(2px, -2px); }
 .top-link:hover span { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
@@ -540,8 +543,8 @@ body.arranging .stage, body.arranging .side { animation: none; }
 /* Filters (v60): plain words in the header, sized and aligned like the nav on the right. */
 .fk { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 /* Curate your ride (v71): a white button that opens into its panel — one white shape, no outline, no shadow (owner) */
-.ride { position: relative; font-size: 16px; }
-.rbtn { display: inline-flex; align-items: center; gap: 9px; border: 0; border-radius: 26px; padding: 8px 15px 8px 13px; background: var(--panel); cursor: pointer; transition: border-radius 0.35s var(--ease), background 0.3s; }
+.ride { position: relative; font-size: var(--fs-nav); }
+.rbtn { display: inline-flex; align-items: center; gap: 9px; border: 0; border-radius: 26px; padding: 7px 13.5px 7px 11.5px; background: var(--panel); cursor: pointer; transition: border-radius 0.35s var(--ease), background 0.3s; }
 .rbtn[aria-expanded='true'] { border-radius: 26px 26px 0 0; }
 .rb-ast { display: block; transition: transform 0.6s var(--ease); }
 .rb-ast line { stroke: var(--cobalt); }
@@ -552,7 +555,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .rsum { display: inline-block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width 0.45s var(--ease), opacity 0.3s; }
 .rsum:not(:empty) { max-width: var(--ride-w); opacity: 1; margin-left: -5px; }
 .rsum:not(:empty)::before { content: '· '; }
-.rpanel { position: absolute; left: 0; top: 100%; width: var(--ride-w); background: var(--panel); border-radius: 0 12px 12px 12px; padding: 18px 20px; display: grid; gap: 14px; font-size: var(--fs-text);
+.rpanel { position: absolute; left: 0; top: 100%; width: var(--ride-w); background: var(--panel); border-radius: 0 12px 12px 12px; padding: 16px 18px; display: grid; gap: 12.5px; font-size: var(--fs-ride);
   visibility: hidden; opacity: 0; clip-path: inset(0 0 100% 0); transform-origin: top left; transform: scaleY(0.96);
   transition: opacity 0.2s, transform 0.35s var(--ease), clip-path 0.4s var(--ease), visibility 0s 0.4s; }
 .rpanel.open { visibility: visible; opacity: 1; clip-path: inset(0 0 0 0); transform: none; transition: opacity 0.2s, transform 0.35s var(--ease), clip-path 0.45s var(--ease), visibility 0s; }
@@ -643,7 +646,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 
 /* the ride bar: bottom left, one fixed size; only its words change */
 .mt-bar { position: absolute; z-index: 5; left: var(--map-inset); bottom: var(--bottom-h); /* raised above the legend (v72.2) */ width: var(--bar-w); height: var(--bar-h); display: flex; align-items: center; gap: 8px; padding: 0 7px; border-radius: calc(var(--bar-h) / 2);
-  background: var(--ink); color: var(--on-ink); font-size: var(--fs-text); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.3s, transform 0.45s var(--ease); }
+  background: var(--ink); color: var(--on-ink); font-size: var(--fs-ride); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.3s, transform 0.45s var(--ease); }
 .mt-bar.show { opacity: 1; transform: none; pointer-events: auto; }
 .mt-bar button { font: inherit; border: 0; cursor: pointer; flex: none; height: var(--bar-btn); border-radius: calc(var(--bar-btn) / 2); display: grid; place-items: center; padding: 0; color: inherit; }
 .mt-bar .pv { width: var(--bar-btn); overflow: hidden; background: color-mix(in srgb, var(--on-ink) 14%, transparent); transition: width 0.45s var(--ease), margin 0.45s var(--ease), opacity 0.3s, visibility 0s; }
