@@ -8,7 +8,7 @@ import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { L, galleryGrid, ridePanel, syncRide, wireFilters, wireRide } from './blocks';
 import { openFrame, openGallery, openLightbox } from './lightbox';
-import { pauseVideo, videoHtml, wireVideo } from './video';
+import { pauseVideo, wireVideo } from './video';
 import { esc, filtering, go, onChange, parseRoute, reducedMotion, state, t, type Route } from './state';
 
 if (import.meta.env.PROD) applyPublishedCopy();
@@ -144,6 +144,8 @@ function renderPanel(keep = false) {
   const n = id ? byId.get(id) : undefined;
   const visual = n?.media?.find(m => m.floating && m.src);
   floatingVisual.set(visual?.src, visual ? t(visual.alt) : '', visual?.thumbnail, id ?? '');
+  // v71.5: an AI project keeps the map; its "Try the prototype" bar floats beside its station
+  floatingVisual.setApp(n?.prototype ? appBar(n) : '', id ?? '');
   const items = (n?.media || []).filter(m => !m.floating);
   media.innerHTML = `<div class="media-row">${items
     .map((m) =>
@@ -159,7 +161,7 @@ function renderPanel(keep = false) {
   media.querySelectorAll<HTMLButtonElement>('.tile[data-src]').forEach((b) => (b.onclick = () => openLightbox(b.dataset.src!)));
 
   // the gallery takes the map's place; the same node in another language keeps its scroll
-  const showGallery = !!n?.gallery;
+  const showGallery = !!n?.gallery && !n.prototype; // a prototype's screens are for the phone; the desktop keeps the map (v71.5)
   if (showGallery) {
     const prevGalleryScroll = gallery.scrollTop;
     gallery.innerHTML = galleryHtml(n!);
@@ -175,50 +177,18 @@ function renderPanel(keep = false) {
   placeAnchor();
 }
 
-const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${n.prototype ? protoHtml(n) : galleryGrid(n, 'desk')}`;
-/* v64: a prototype node shows its clickable prototype (a page under public/) in the gallery's place. */
-/* v64.4 (owner): the promo video takes the gallery's place; an app icon beside it opens the clickable
-   prototype in a pop-up window over a dimmed page. Until the video exists, a still of the Overview screen holds its place. */
+const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk')}`;
+/* v64.4 → v71.5 (owner): an AI project no longer replaces the map with its video. A small app bar floats beside its
+   station; it opens one pop-up with the demo video first and the clickable prototype a click away. */
 const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>';
-// layout C (owner's pick from three previews, v64.8): the video beside the card; the app bar above it (v64.9, owner: the bottom felt heavy)
-const protoHtml = (n: SiteNode) => `<div class="proto-box">
-  <button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>
-  <div class="proto-video">${n.prototype!.video.length
-    ? videoHtml(n.prototype!.video, n.prototype!.poster, cssPx('--promo-w'), cssPx('--promo-h'))
-    : `<button class="proto-still" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><img src="${esc(n.prototype!.poster)}" alt="" width="${cssPx('--promo-w')}" height="${cssPx('--promo-h')}"/></button>`}</div>
-</div>`; // v69: a project without a promo video shows a still of its first screen, which also opens the prototype
-
-/** Top on screen without the card's rise-in animation (its translateY), so a measurement mid-entry is still right (L42). */
-function restingTop(el: HTMLElement, moving?: HTMLElement): number {
-  const shift = moving ? new DOMMatrixReadOnly(getComputedStyle(moving).transform === 'none' ? undefined : getComputedStyle(moving).transform).f : 0;
-  return el.getBoundingClientRect().top - shift;
-}
-// the card recentres when a section opens or closes; keep the video level with it
-{
-  const side = document.querySelector<HTMLElement>('.side')!;
-  const ro = new ResizeObserver(() => placeProto(side));
-  [side, ...side.children].forEach((c) => ro.observe(c)); // the card's height eases (L16), which moves the centred column
-}
-/** The app bar and video sit next to the card; the video's top is level with its INDEX bar; both fit the window height (v64.10). */
-function placeProto(side: HTMLElement) {
-  const box = gallery.querySelector<HTMLElement>('.proto-box');
-  if (!box) return;
-  const sideTop = restingTop(side.querySelector<HTMLElement>('.ixnav') ?? side, side), ratio = cssPx('--promo-w') / cssPx('--promo-h');
-  const avail = window.innerHeight - sideTop - cssPx('--bottom-h') - cssPx('--gutter');
-  const w = Math.round(Math.min(gallery.clientWidth * cssPx('--proto-share') / 100, cssPx('--proto-max'), avail * ratio));
-  box.style.width = `${w}px`;
-  box.style.marginTop = '0px';
-  // the video's top edge (not the app bar above it) lines up with the INDEX bar (owner, v64.10)
-  box.style.marginTop = `${Math.max(0, sideTop - restingTop(box.querySelector<HTMLElement>('.proto-video') ?? box))}px`;
-}
+const appBar = (n: SiteNode) => `<button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>`;
 
 /* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */
 function openApp() {
   const n = byId.get(currentNodeId() || '');
   if (!n?.prototype) return;
-  // the promo video pauses while the prototype is open, and carries on afterwards
-  const v = pauseVideo(gallery);
-  openFrame(n.prototype.src, t(n.label), L('protoNote'), () => { if (v) void v.play().catch(() => {}); });
+  const P = n.prototype;
+  openFrame(P.src, t(n.label), t(ui.protoNote), undefined, P.video.length ? { sources: P.video, poster: P.poster, tabs: [t(ui.demoVideo), t(ui.tryApp)] } : undefined);
 }
 
 function placeAnchor() {
@@ -237,7 +207,6 @@ function placeAnchor() {
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
-  placeProto(side);
 }
 
 /* ---------- lightbox (lightbox.ts) and gallery clicks: one listener for desktop and phone ---------- */

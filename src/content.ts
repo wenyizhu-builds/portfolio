@@ -844,6 +844,7 @@ export const ui = {
   unitScreens: { en: 'screens', zh: '屏' },
   appBarSub: { en: 'Clickable prototype · sample data', zh: '可点击原型 · 示例数据' },
   tryApp: { en: 'Try the prototype', zh: '试用原型' },
+  demoVideo: { en: 'Demo video' },
   soundOn: { en: 'Turn sound on', zh: '打开声音' },
   play: { en: 'Play', zh: '播放' },
   pause: { en: 'Pause', zh: '暂停' },

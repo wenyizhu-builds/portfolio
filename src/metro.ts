@@ -16,7 +16,7 @@ export type MarkKind = 'interchange' | 'key' | 'dot';
 
 /* Map units (≈ px at the normal size). The career line rises on a 45° diagonal to ✳ Next stop. */
 const METRO = {
-  view: { x: 30, y: 140, w: 860, h: 625 }, // the drawing's frame, hugging its ink (Next stop … Campus line) so the map sits centred; scaled to fit the free area left of the card
+  view: { x: 30, y: 140, w: 890, h: 625 }, // the drawing's frame, hugging its ink (Next stop … Campus line) so the map sits centred; scaled to fit the free area left of the card
   topLabel: 30, // "Next stop" sits this far above its station
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
@@ -51,7 +51,7 @@ const METRO = {
     'interactive-filter': [580, 545, 'social', 'left'],
     'genshin-en-accounts': [690, 660, 'social', 'above'],
     'xhs-ai-channel': [760, 660, 'social ai', 'below'],
-    'ai-workbench': [760, 420, 'ai', 'left'],
+    'ai-workbench': [760, 420, 'ai', 'right'], // right: away from Social Launch in Japan (v71.5)
     'creator-workbench': [760, 520, 'ai', 'left'],
     design: [104, 664, 'creative', 'left'],
     photography: [80, 600, 'creative', 'left'],
@@ -137,17 +137,12 @@ function lineOf(id: string): LineKey | null {
 export function markKindOf(id: string): MarkKind {
   return METRO.interchange.includes(id) ? 'interchange' : METRO.key.includes(id) ? 'key' : 'dot';
 }
-const isStation = (id: string) => !!METRO.stations[id];
 const isPlace = (n: SiteNode | undefined) => !!n && (n.type === 'role' || n.type === 'school');
 /** The station mark as a small standalone <svg>, for the legend and the card's lists. */
 export function stationMark(kind: MarkKind, px = 14): string {
   const [ro, ri, so, si] = METRO.radius[kind] as number[];
   const box = (METRO.radius.interchange as number[])[0] + (METRO.radius.interchange as number[])[2];
   return `<svg class="mt-mark" width="${px}" height="${px}" viewBox="${-box} ${-box} ${2 * box} ${2 * box}" aria-hidden="true"><circle class="mt-ring" r="${ro}" stroke-width="${so}"/>${ri ? `<circle class="mt-inner" r="${ri}" stroke-width="${si}"/>` : ''}</svg>`;
-}
-/** A list row's mark: the station mark for anything on the map, nothing otherwise. */
-export function listMark(id: string): string {
-  return isStation(id) ? stationMark(markKindOf(id)) : '';
 }
 
 /** The line a node belongs to, for the card's and the phone's marks (one decision point with the map, L17):
