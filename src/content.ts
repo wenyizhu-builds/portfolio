@@ -75,6 +75,7 @@ export interface SiteNode {
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
   prototype?: { src: string; poster: string; video: string[] }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
   mapLabel?: T; // shorter name on the metro map (v70), e.g. XJTLU
+  mapTag?: T; // v70.2: the result tag under a key station on the metro map (replaces the hand-written note there), in the line's colour
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -133,6 +134,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ua-creative-strategy',
+    mapTag: { en: '3.7× LTV' },
     
     note: { en: '~3.7× projected LTV\nvs benchmark', zh: '预估 LTV\n约为基准 3.7 倍' },
     team: { en: "UGC Creative Strategy (my role), UA Strategy x1, UA Execution x2, Agency Partners x4" },
@@ -321,6 +323,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'zzz-jp-accounts',
+    mapTag: { en: '80M+ views' },
     
     note: { en: '0 → 80M+\norganic views', zh: '0 → 8000 万+\n自然播放' },
     team: { en: "Me (social strategy), 2 Japanese-language content reviewers and 3 agency partners" },
@@ -372,6 +375,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
+    mapTag: { en: '600M+ views' },
     
     note: { en: '600M+ views', zh: '6 亿+ 播放' },
     team: { en: "Me (filter concepts and creator activation support), 1 campaign lead, 2 platform liaisons from TikTok and Snapchat, and 3 agency partners" },
@@ -597,6 +601,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
+    mapTag: { en: 'Built with AI' },
     type: 'ai',
     parent: 'ai',
     headline: { num: '40%', label: { en: 'less time on creative analysis & production' }, note: { en: "I built it from scratch while running creative strategy for Genshin Impact's creator ads." } }, // note: owner's line under the figure

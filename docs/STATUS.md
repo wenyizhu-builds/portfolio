@@ -9,6 +9,7 @@
 - 用户选定形状 B「Rising」（她：「I am rising」）和「Brand only」配色。完整规则见 SPEC 最上面一条。原型 Artifact「Metro Map Plans」（`/home/claude/map-options/metro-plans.html`，云端，不在仓库里）。
 - 她否决过的（不要再提）：软曲线地铁、全部信息摊开（日期、所有名字）、她在中心、「next stop: your team」、孤立的 Education 线、冷色和多套暖色调色板。
 - **v70 测试版已做（分支 `metro-map`，未合并）**：`src/metro.ts`；测试预览 Artifact `https://claude.ai/artifact/T8YZXJTXM9MhXRnxk2gRJ3`（主预览 K7QJV2… 没动）。v70.1：卡片和手机版的旧形状已换成线段标记。线名定了：保持原样（Career / Campus / Creative / Paid & UA / Creator & Social / AI line），她不要更花哨的名字。还没做：排版工具和 layout-check 不覆盖地铁图。
+- v70.2：手写批注换成线色结果标签（她选 C）。
 - **下一步**：她看测试版，再决定合并进主站或继续调。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**

@@ -66,7 +66,7 @@
   --map-gap: 16px; /* space between the map and the panel / intro strip */
   --m-track: 8px; /* metro map: line width */
   --m-core: 3.4px; /* the open middle of the Campus line */
-  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-note: 21px; /* metro map type */
+  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-tag: 11px; /* metro map type */
   --m-faded: 0.12; /* lines and stations not on the opened line */
   --m-fade: 300ms;
   --edge-y: 20px; /* legend / footer distance from the bottom edge */
@@ -559,8 +559,10 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .metro .faded { opacity: var(--m-faded); }
 .mt-more { opacity: 0; transition: opacity 0.25s; pointer-events: none; }
 .mt-stn:hover .mt-more, .mt-more.on { opacity: 1; }
-.mt-note text { font-family: var(--hand); fill: var(--note); font-size: var(--m-fs-note); }
-.mt-note path { fill: none; stroke: var(--note); stroke-width: 1.5px; stroke-linecap: round; stroke-linejoin: round; }
+.mt-tag text { font-size: var(--m-fs-tag); font-weight: 600; letter-spacing: 0.02em; }
+.tag-paid rect { fill: var(--line-paid); } .tag-paid text { fill: var(--on-ink); }
+.tag-social rect { fill: var(--line-social); } .tag-social text { fill: var(--on-ink); }
+.tag-ai rect { fill: var(--line-ai); } .tag-ai text { fill: var(--ink); }
 .mt-xf { fill: none; stroke: var(--ink); stroke-width: 2.4px; stroke-dasharray: 1 7; stroke-linecap: round; animation: mt-march 1.2s linear infinite; pointer-events: none; }
 @keyframes mt-march { to { stroke-dashoffset: -16; } }
 .mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }

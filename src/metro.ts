@@ -1,6 +1,6 @@
 /* The home map as a metro map (v70, branch metro-map; design in docs/SPEC.md, "Rising").
    Same API as map.ts (MapApi), so main.ts only swaps one call. Everything about the drawing —
-   where each station sits, the shape of each line, where the notes go — lives in METRO below.
+   where each station sits, the shape of each line, the result tags — lives in METRO below.
    Colours and sizes come from style.css (:root); words from content.ts. */
 import { ancestors, byId, ui, type SiteNode } from './content';
 import type { MapApi } from './map';
@@ -58,16 +58,11 @@ const METRO = {
   interchange: ['xjtlu', 'seminary-coop', 'hoyoverse', 'xhs-ai-channel'],
   /** ✳ at the top of the climb; the AI line starts here. Clicking it opens "Let's talk". */
   top: [640, 200] as Pt,
-  /** Hand-written notes: whose note (content.ts `note`), the line it belongs to, where the text starts, the arrow from → via → to, tilt. */
-  notes: [
-    ['ua-creative-strategy', 'paid', 252, 230, [404, 236], [468, 244], [488, 268], -4],
-    ['zzz-jp-accounts', 'social', 604, 316, [628, 344], [612, 360], [600, 368], 3],
-    ['interactive-filter', 'social', 432, 604, [520, 594], [556, 586], [570, 560], 2],
-    ['ai', 'ai', 612, 470, [706, 462], [732, 452], [748, 434], -3],
-  ] as [string, LineKey, number, number, Pt, Pt, Pt, number][],
-  noteLineH: 21,
+  /** Result tags under key stations (v70.2, owner's pick C): words from content.ts `mapTag`, colour from the station's line. */
+  tag: { h: 17, charW: 6.6, padX: 7, gap: 6, textY: 12.2 },
+  /** Nudge a tag sideways where a line runs right under it. */
+  tagNudge: { 'zzz-jp-accounts': 18 } as Record<string, number>,
   radius: { interchange: [13, 6.5, 3.2, 3], key: [10.5, 4.6, 3, 2.6], dot: [5.6, 0, 2.6, 0], star: 19 }, // outer, inner, outer stroke, inner stroke
-  arrowHead: 8,
   transferBow: 0.28, // a transfer arc bows out by this share of its length (at least transferMin)
   transferMin: 34,
 };
@@ -100,14 +95,19 @@ function trackPath(pts: Pt[]): string {
   return d + `L${f(e[0])},${f(e[1])}`;
 }
 /** A name beside a point, with a halo so it reads over lines. */
-function label(x: number, y: number, lines: string[], pos: Pos, cls: string, off: number): string {
+function label(x: number, y: number, lines: string[], pos: Pos, cls: string, off: number, tag?: { text: string; line: LineKey; dx: number }): string {
   const lh = METRO.lineH, n = lines.length;
   const [tx, ty, a] = ({
     right: [off, 4.5 - (n - 1) * lh / 2, 'start'], left: [-off, 4.5 - (n - 1) * lh / 2, 'end'],
     above: [0, -off - (n - 1) * lh, 'middle'], below: [0, off + 9, 'middle'],
   } as const)[pos];
   const tsp = lines.map((l, i) => `<tspan x="${tx}" dy="${i ? lh : 0}">${esc(l)}</tspan>`).join('');
-  return `<g transform="translate(${f(x)},${f(y)})"><text class="mt-halo ${cls}" text-anchor="${a}" y="${ty}">${tsp}</text><text class="${cls}" text-anchor="${a}" y="${ty}">${tsp}</text></g>`;
+  let pill = '';
+  if (tag) { // a pill under the name, aligned with it
+    const T = METRO.tag, w = tag.text.length * T.charW + 2 * T.padX, top = ty + (n - 1) * lh + T.gap, x0 = (a === 'end' ? tx - w : a === 'middle' ? tx - w / 2 : tx) + tag.dx;
+    pill = `<g class="mt-tag tag-${tag.line}"><rect x="${f(x0)}" y="${f(top)}" width="${f(w)}" height="${T.h}" rx="${T.h / 2}"/><text x="${f(x0 + w / 2)}" y="${f(top + T.textY)}" text-anchor="middle">${esc(tag.text)}</text></g>`;
+  }
+  return `<g transform="translate(${f(x)},${f(y)})"><text class="mt-halo ${cls}" text-anchor="${a}" y="${ty}">${tsp}</text><text class="${cls}" text-anchor="${a}" y="${ty}">${tsp}</text>${pill}</g>`;
 }
 /** Which line a node opens: its station's first line; groups map to their line. */
 function lineOf(id: string): LineKey | null {
@@ -154,14 +154,6 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       const [x, y, a, rot] = METRO.lines[k].label;
       s += `<text data-l="${k}" data-line="${k}" class="mt-lname" x="${x}" y="${y}" text-anchor="${a}"${rot ? ` transform="rotate(${rot} ${x} ${y})"` : ''}>${esc(t(METRO.lines[k].name))}</text>`;
     }
-    for (const [id, k, x, y, from, via, to, rot] of METRO.notes) {
-      const txt = t(byId.get(id)?.note);
-      if (!txt) continue;
-      const lines = txt.split('\n').map((l, i) => `<tspan x="${x}" dy="${i ? METRO.noteLineH : 0}">${esc(l)}</tspan>`).join('');
-      const ang = Math.atan2(to[1] - via[1], to[0] - via[0]), h = METRO.arrowHead;
-      const h1 = [to[0] - h * Math.cos(ang - 0.5), to[1] - h * Math.sin(ang - 0.5)], h2 = [to[0] - h * Math.cos(ang + 0.5), to[1] - h * Math.sin(ang + 0.5)];
-      s += `<g class="mt-note" data-l="${k}" aria-hidden="true"><text x="${x}" y="${y}" transform="rotate(${rot} ${x} ${y})">${lines}</text><path d="M${from[0]},${from[1]}Q${via[0]},${via[1]} ${to[0]},${to[1]}M${f(h1[0])},${f(h1[1])}L${to[0]},${to[1]}L${f(h2[0])},${f(h2[1])}"/></g>`;
-    }
     // ✳ Next stop
     const [tx, ty] = METRO.top, R = METRO.radius;
     const arms = [0, 1, 2, 3].map((i) => { const a = i * Math.PI / 4, X = 10 * Math.cos(a), Y = 10 * Math.sin(a); return `<line x1="${f(-X)}" y1="${f(-Y)}" x2="${f(X)}" y2="${f(Y)}"/>`; }).join('');
@@ -187,7 +179,8 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const off = kind === 'interchange' ? 19 : kind === 'key' ? 17 : 12;
     const words = place ? [t(n.mapLabel ?? n.label)] : wrap(t(n.mapLabel ?? n.label));
     const cls = n.id === 'hoyoverse' ? 'mt-lbl b' : place ? 'mt-lbl s' : kind === 'dot' ? 'mt-lbl' : 'mt-lbl b';
-    const name = label(x, y, words, pos, cls, off);
+    const tag = n.mapTag ? { text: t(n.mapTag), line: lines.split(' ')[0] as LineKey, dx: METRO.tagNudge[n.id] ?? 0 } : undefined;
+    const name = label(x, y, words, pos, cls, off, tag);
     const quiet = kind === 'dot' && !place; // other work: named on hover or when its line is open
     return `<g class="mt-stn" data-id="${n.id}" data-l="${lines}" tabindex="0" role="button" aria-label="${esc(t(n.label))}">${mark}${quiet ? `<g class="mt-more">${name}</g>` : name}</g>`;
   }
