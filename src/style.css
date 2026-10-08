@@ -74,7 +74,7 @@
   --m-board: 420ms; /* the ride bar's words roll over */
   --m-pop: 450ms; /* stop numbers pop in */
   --ride-w: 480px; /* the Curate your ride panel */
-  --ride-band: 74px; /* v72.2: a band under the header for the ride bar (owner: the bar was lost at the bottom); the map starts below it */
+  --ride-band: 74px; /* v72.2: a band above the legend for the ride bar (owner: raise it from the very bottom); the map ends above it */
   --bar-w: 520px; --bar-h: 54px; --bar-btn: 40px; --bar-go: 136px; /* the ride bar and its buttons: fixed, so nothing moves under the pointer */
   --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-tag: 11px; --m-fs-no: 9.5px; /* metro map type */
   --m-faded: 0.12; /* lines and stations not on the opened line */
@@ -642,8 +642,8 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .desk.riding .legend { opacity: 0; visibility: hidden; }
 
 /* the ride bar: bottom left, one fixed size; only its words change */
-.mt-bar { position: absolute; z-index: 5; left: var(--map-inset); top: var(--top-h); /* right under Curate your ride (v72.2) */ width: var(--bar-w); height: var(--bar-h); display: flex; align-items: center; gap: 8px; padding: 0 7px; border-radius: calc(var(--bar-h) / 2);
-  background: var(--ink); color: var(--on-ink); font-size: var(--fs-text); opacity: 0; transform: translateY(-12px); pointer-events: none; transition: opacity 0.3s, transform 0.45s var(--ease); }
+.mt-bar { position: absolute; z-index: 5; left: var(--map-inset); bottom: var(--bottom-h); /* raised above the legend (v72.2) */ width: var(--bar-w); height: var(--bar-h); display: flex; align-items: center; gap: 8px; padding: 0 7px; border-radius: calc(var(--bar-h) / 2);
+  background: var(--ink); color: var(--on-ink); font-size: var(--fs-text); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.3s, transform 0.45s var(--ease); }
 .mt-bar.show { opacity: 1; transform: none; pointer-events: auto; }
 .mt-bar button { font: inherit; border: 0; cursor: pointer; flex: none; height: var(--bar-btn); border-radius: calc(var(--bar-btn) / 2); display: grid; place-items: center; padding: 0; color: inherit; }
 .mt-bar .pv { width: var(--bar-btn); overflow: hidden; background: color-mix(in srgb, var(--on-ink) 14%, transparent); transition: width 0.45s var(--ease), margin 0.45s var(--ease), opacity 0.3s, visibility 0s; }

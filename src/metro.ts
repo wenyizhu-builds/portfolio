@@ -16,7 +16,7 @@ export type MarkKind = 'interchange' | 'key' | 'dot';
 
 /* Map units (≈ px at the normal size). The career line rises on a 45° diagonal to ✳ Next stop. */
 const METRO = {
-  view: { x: 30, y: 140, w: 890, h: 625 }, // the drawing's frame, hugging its ink (Next stop … Campus line); the top row's rising names, shown only when that line is open, reach up into the ride band above so the map sits centred; scaled to fit the free area left of the card
+  view: { x: 30, y: 50, w: 890, h: 715 }, // the drawing's frame, hugging its ink (the top row's rising names … Campus line) so the map sits centred; scaled to fit the free area left of the card
   topLabel: 30, // "Next stop" sits this far above its station
   maxScale: 0.9, // never larger than this (v72.2, owner: at 1.1 the map looked giant next to the card on a laptop; 0.9 is the size she liked in the test site)
   corner: 24, // rounded bends
