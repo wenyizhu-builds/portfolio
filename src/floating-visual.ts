@@ -32,11 +32,14 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
 
   /** Everything on the map a floating thing must keep clear of. A line's box is mostly empty, so lines are sampled along their length. */
   function obstacles(liveOnly = false, skip?: Element | null): DOMRect[] {
-    const live = (el: Element) => (!liveOnly || !el.closest('.faded')) && el !== skip; // the prototype bar may cover faded lines: it's solid white
+    // the prototype bar may cover faded lines (it's solid white) — and, on a ride, everything the ride doesn't use
+    const riding = !!stage.querySelector('.metro.riding');
+    const ghost = (el: Element) => el.closest('.faded') || (riding && el.closest('[data-l]') && !el.closest('.on-ride, .on-route'));
+    const live = (el: Element) => (!liveOnly || !ghost(el)) && el !== skip;
     const out = [...stage.querySelectorAll('.node, .lk, .mt-stn, .mt-lname, .mt-top')].filter(live).map(el => el.getBoundingClientRect());
     const bar = document.querySelector('.mt-bar.show'); // the ride bar under the header
     if (bar) out.push(bar.getBoundingClientRect());
-    stage.querySelectorAll<SVGPathElement>('path.mt-track[data-l]').forEach((path) => {
+    stage.querySelectorAll<SVGPathElement>('path.mt-track[data-l], path.mt-route').forEach((path) => { // mt-route: the ride's own track
       if (!live(path)) return;
       const m = path.getScreenCTM(), len = path.getTotalLength(), r = parseFloat(getComputedStyle(path).strokeWidth) || 4;
       if (!m || !len) return;
@@ -77,7 +80,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     const g = anchorId ? stage.querySelector(`.mt-stn[data-id="${CSS.escape(anchorId)}"]`) : null, dot = g?.querySelector('.mt-dot');
     if (!g || !dot) return undefined;
     const d = dot.getBoundingClientRect(), s = g.getBoundingClientRect(), cy = d.top + d.height / 2, gap = cssPx('--fv-beside');
-    const { edge, top, right, bottom } = bounds(), obs = obstacles(true, g), near = cssPx('--fv-near');
+    const { edge, top, bottom } = bounds(), obs = obstacles(true, g), near = cssPx('--fv-near');
+    const right = Math.min(side.getBoundingClientRect().left - near, innerWidth - edge); // beside its station it may come as close to the card as to a line
     const clear = (p: Pos) => p.x >= edge && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
       && !obs.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o, near));
     return [
@@ -85,6 +89,9 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
       { x: s.right + gap, y: cy - h / 2 },
       { x: d.left, y: s.bottom + gap },
       { x: d.left, y: s.top - gap - h },
+      // v72.13: the corners — clear of a line that runs straight through the station
+      { x: d.right + gap, y: s.bottom + gap }, { x: d.right + gap, y: s.top - gap - h },
+      { x: d.left - gap - w, y: s.bottom + gap }, { x: d.left - gap - w, y: s.top - gap - h },
     ].map((p) => ({ ...p, w, h })).find(clear);
   }
   /** The map is still arriving: its lines aren't where they'll end up (animationend reschedules). */
@@ -107,7 +114,7 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     const w = app.offsetWidth, h = app.offsetHeight;
     // v71.7 (owner: stay close to the dot): right beside its station — left of it, right of its name, below or above —
     // over faded lines if need be (it's solid white), never over the open line or its stations; else the nearest clear spot
-    appPos = beside(w, h) ?? nearest([[w, h]], appPos) ?? nearest([[w, h]], undefined, true);
+    appPos = beside(w, h) ?? nearest([[w, h]], appPos, true) ?? nearest([[w, h]], undefined); // v72.13: next best is the nearest spot over faded lines, not a far corner
     if (appPos) Object.assign(app.style, { left: `${appPos.x}px`, top: `${appPos.y}px` });
     app.style.visibility = '';
     app.hidden = !appPos;

@@ -183,7 +183,7 @@ function renderPanel(keep = false) {
 const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk')}`;
 /* v64.4 → v71.5 (owner): an AI project no longer replaces the map with its video. A small app bar floats beside its
    station; it opens one pop-up with the demo video first and the clickable prototype a click away. */
-const appBar = (n: SiteNode) => `<button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${appIcon(n.prototype!.icon)}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>`;
+const appBar = (n: SiteNode) => `<button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${appIcon(n.prototype!.icon)}</span><span class="btn">${L('tryApp')}</span></button>`; // v72.13: compact — the card already names the project, so it fits beside its station
 
 /* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */
 function openApp() {

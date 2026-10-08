@@ -845,7 +845,6 @@ export const ui = {
   unitPages: { en: 'pages', zh: '页' },
   unitPosters: { en: 'posters', zh: '张' },
   unitScreens: { en: 'screens', zh: '屏' },
-  appBarSub: { en: 'Clickable prototype · sample data', zh: '可点击原型 · 示例数据' },
   tryApp: { en: 'Try the prototype', zh: '试用原型' },
   demoVideo: { en: 'Demo video' },
   soundOn: { en: 'Turn sound on', zh: '打开声音' },
