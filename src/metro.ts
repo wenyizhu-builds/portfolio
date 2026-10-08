@@ -22,6 +22,7 @@ const METRO = {
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
   wrap: 24, // characters per label line: every map name fits on one line (v71.2, short map names)
+  wrapAt: { 'genshin-en-accounts': 14 } as Record<string, number>, // except where one line would run over the track
   lineH: 15, // label line height
   /** Each line: the group it opens in the card, its track (bends only), and where its name sits. */
   lines: {
@@ -89,11 +90,11 @@ const el = <K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, 
 };
 const cssVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const cssMs = (name: string) => parseFloat(cssVar(name)) || 0;
-function wrap(s: string): string[] {
+function wrap(s: string, max = METRO.wrap): string[] {
   const out: string[] = [];
   let cur = '';
   for (const w of s.split(' ')) {
-    if ((cur + ' ' + w).trim().length > METRO.wrap && cur) { out.push(cur); cur = w; } else cur = (cur + ' ' + w).trim();
+    if ((cur + ' ' + w).trim().length > max && cur) { out.push(cur); cur = w; } else cur = (cur + ' ' + w).trim();
   }
   if (cur) out.push(cur);
   return out;
@@ -222,7 +223,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const [ro, ri, so, si] = METRO.radius[kind] as number[];
     const mark = `<g class="mt-dot"><circle class="mt-ring" cx="${x}" cy="${y}" r="${ro}" stroke-width="${so}"/>${ri ? `<circle class="mt-inner" cx="${x}" cy="${y}" r="${ri}" stroke-width="${si}"/>` : ''}</g>`;
     const place = isPlace(n);
-    const words = place ? [t(n.mapLabel ?? n.label)] : wrap(t(n.mapLabel ?? n.label));
+    const words = place ? [t(n.mapLabel ?? n.label)] : wrap(t(n.mapLabel ?? n.label), METRO.wrapAt[n.id]);
     // the name follows the mark: key cases and interchanges bold, other stops regular; all ink (owner, v71)
     const cls = kind === 'dot' ? 'mt-lbl' : 'mt-lbl b';
     const tag = n.mapTag ? { text: t(n.mapTag), line: lines.split(' ')[0] as LineKey, dx: METRO.tagNudge[n.id] ?? 0 } : undefined;

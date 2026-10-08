@@ -14,22 +14,33 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   function place() {
     frame = 0;
     if (!source || !image.naturalWidth || !stage.clientWidth) { button.hidden = true; return; }
+    // wait until the map has finished arriving: mid-entrance its lines aren't where they'll end up (animationend reschedules)
+    if (stage.getAnimations().some((an) => an.playState === 'running')) { button.hidden = true; return; }
     const top = Math.max(100, document.querySelector('.top')!.getBoundingClientRect().bottom + 24);
     const right = Math.min(side.getBoundingClientRect().left - 28, innerWidth - 24);
-    const bottom = Math.min(innerHeight * 0.5, innerHeight - 90);
-    const obstacles = [...stage.querySelectorAll('.node, .lk')].map(el => el.getBoundingClientRect());
-    const safe = (p: NonNullable<typeof position>) => p.x >= 24 && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
+    const obstacles = [...stage.querySelectorAll('.node, .lk, .mt-stn, .mt-lname, .mt-top')].map(el => el.getBoundingClientRect());
+    // metro map (v71.3): a line's box is mostly empty, so sample along each track instead — faded lines count too
+    stage.querySelectorAll<SVGPathElement>('path.mt-track[data-l]').forEach((path) => {
+      const m = path.getScreenCTM(), len = path.getTotalLength(), r = parseFloat(getComputedStyle(path).strokeWidth) || 4;
+      if (!m || !len) return;
+      for (let s = 0; s <= len; s += 8) {
+        const q = path.getPointAtLength(s), x = m.a * q.x + m.c * q.y + m.e, y = m.b * q.x + m.d * q.y + m.f, h = r * m.a;
+        obstacles.push(new DOMRect(x - h, y - h, 2 * h, 2 * h));
+      }
+    });
+    const upper = Math.min(innerHeight * 0.5, innerHeight - 90), lower = innerHeight - 110;
+    const safe = (p: NonNullable<typeof position>, bottom = lower) => p.x >= 24 && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
       && !obstacles.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o));
     if (position && safe(position)) { button.hidden = false; return; }
-    // Reuse valid positions; sample only whitespace in the upper half.
+    // Reuse valid positions; sample whitespace in the upper half first, then anywhere above the legend.
     button.hidden = true;
     const candidates: NonNullable<typeof position>[] = [];
-    for (const w of [260, 220, 180, 150]) {
+    for (const [w, bottom] of [260, 220, 180, 150].flatMap((w) => [[w, upper], [w, lower]])) {
       const h = w * image.naturalHeight / image.naturalWidth;
       for (let y = top; y + h <= bottom; y += 20) {
         for (let x = 24; x + w <= right; x += 20) {
           const p = { x, y, w, h };
-          if (safe(p)) candidates.push(p);
+          if (safe(p, bottom)) candidates.push(p);
         }
       }
       if (candidates.length) break;
