@@ -177,7 +177,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   bar.className = 'mt-bar';
   desk.appendChild(bar);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';
-  let order: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
+  let order: string[] = [], through: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
   let trainAt: number | null = null, raf = 0, travelMs = 0, arriveT = 0;
 
   function render() {
@@ -240,7 +240,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   /** Lay the one-way route under the ride and number its stations by how far along it they sit. */
   function buildRoute(ids: string[]) {
     routeEl?.remove();
-    routeEl = null; order = []; at = {};
+    routeEl = null; order = []; through = []; at = {};
     if (!ids.length) return;
     const fromCareer = ids.some((id) => id !== 'hoyoverse' && METRO.stations[id][2].split(' ').includes('career'));
     const R = METRO.route, d = trackPath([...(fromCareer ? R.career : R.paid), ...R.tail]);
@@ -248,13 +248,17 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     svg.appendChild(routeEl);
     const len = routeEl.getTotalLength(), samples: [number, number, number][] = [];
     for (let s = 0; s <= len; s += METRO.routeStep) { const q = routeEl.getPointAtLength(s); samples.push([s, q.x, q.y]); }
-    for (const id of ids) {
-      const [x, y] = METRO.stations[id];
+    const along: Record<string, number> = {}; // every station the route runs through, and how far along
+    for (const [id, [x, y]] of Object.entries(METRO.stations)) {
       let best = [Infinity, 0];
       for (const [s, px, py] of samples) { const dd = Math.hypot(px - x, py - y); if (dd < best[0]) best = [dd, s]; }
-      if (best[0] < METRO.routeSnap) at[id] = best[1];
+      if (best[0] < METRO.routeSnap) along[id] = best[1];
     }
+    for (const id of ids) if (id in along) at[id] = along[id];
     order = ids.filter((id) => id in at).sort((a, b) => at[a] - at[b]);
+    // v72.12 (owner): stations the train passes without stopping stay drawn (a plain ring, no name) instead of a grey
+    // ghost on top of the coloured track — the ring also covers the spot where one line's colour meets the next
+    if (order.length) through = Object.keys(along).filter((id) => !order.includes(id) && along[id] > at[order[0]] && along[id] < at[order[order.length - 1]]);
   }
   /** Numbers beside the stations, popping in one after another. */
   function drawNumbers() {
@@ -420,6 +424,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       g.classList.toggle('sel', id === sel);
       g.classList.toggle('rel', rel.includes(id));
       g.classList.toggle('on-ride', riding && onRide);
+      g.classList.toggle('on-route', riding && through.includes(id));
       g.classList.toggle('cur', id === cur);
       g.querySelector('.mt-more')?.classList.toggle('on', (!!open && lines.includes(open)) || rel.includes(id) || (riding && onRide));
       const no = g.querySelector('.mt-no');

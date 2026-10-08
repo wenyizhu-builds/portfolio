@@ -642,7 +642,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 /* ---------- A ride (v71, metro.ts): the ride's track stays in colour, everything else ghosts ---------- */
 .metro.riding [data-l] { opacity: var(--m-ghost) !important; filter: grayscale(1); }
 .metro [data-l] { transition: opacity var(--m-fade) var(--ease), filter var(--m-fade) var(--ease); }
-.metro.riding .mt-stn.on-ride { opacity: 1 !important; filter: none; }
+.metro.riding .mt-stn.on-ride, .metro.riding .mt-stn.on-route { opacity: 1 !important; filter: none; }
 .metro text, .metro .mt-tag { transition: opacity var(--dur-400); }
 .metro .faded text, .metro .faded .mt-tag, .metro text.faded { opacity: 0 !important; } /* an open line: the others keep their track, lose their words */
 .metro.riding [data-l]:not(.on-ride) text, .metro.riding [data-l]:not(.on-ride) .mt-tag, .metro.riding text[data-l] { opacity: 0 !important; }
