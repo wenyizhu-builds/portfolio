@@ -1,4 +1,4 @@
-/** An image can occupy only verified whitespace to the left of the entire card column. */
+/** An image can occupy only verified whitespace to the left of the entire card column — the clear spot nearest its own station (v71.4: not random). */
 export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open: (src: string, alt: string) => void) {
   const button = document.createElement('button');
   button.className = 'floating-visual';
@@ -6,7 +6,7 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   const image = document.createElement('img');
   button.append(image);
   stage.parentElement!.append(button);
-  let source = '', frame = 0;
+  let source = '', frame = 0, anchorId = '';
   let position: { x: number; y: number; w: number; h: number } | undefined;
   button.onclick = () => open(source, image.alt);
   type Box = { left: number; top: number; right: number; bottom: number };
@@ -46,7 +46,11 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
       if (candidates.length) break;
     }
     if (!candidates.length) return;
-    position = candidates[Math.floor(Math.random() * candidates.length)];
+    // nearest to the case's station on the map (closest edge of the picture to the station's centre)
+    const st = anchorId ? stage.querySelector(`[data-id="${CSS.escape(anchorId)}"] .mt-dot`)?.getBoundingClientRect() : undefined;
+    const ax = st ? st.left + st.width / 2 : 0, ay = st ? st.top + st.height / 2 : top;
+    const dist = (p: NonNullable<typeof position>) => Math.hypot(Math.max(p.x - ax, 0, ax - p.x - p.w), Math.max(p.y - ay, 0, ay - p.y - p.h));
+    position = candidates.reduce((best, p) => (dist(p) < dist(best) ? p : best));
     Object.assign(button.style, { left: `${position.x}px`, top: `${position.y}px`, width: `${position.w}px` });
     button.hidden = false;
   }
@@ -57,7 +61,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   stage.addEventListener('animationend', schedule);
   image.onload = schedule;
   return {
-    set(src?: string, alt = '', thumbnail?: string) {
+    set(src?: string, alt = '', thumbnail?: string, anchor = '') {
+      anchorId = anchor;
       image.alt = alt;
       button.setAttribute('aria-label', `View image: ${alt}`);
       if (source === (src || '')) { schedule(); return; }

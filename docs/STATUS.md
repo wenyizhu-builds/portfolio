@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-08 · v71.3（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-08 · v71.4（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -14,6 +14,7 @@
 - v71.1：Next stop 只写名字，站圈点状虚线（她也提过可以放问号，未采用，等她看）。
 - v71.2：站名一行 + 地图短名（她选 B；规则：只省略、不改词序）。站名方案对比 Artifact `https://claude.ai/artifact/42RiV7EKRia42UAp65eAKg`。
 - v71.3：浮动图片避开地铁图（L52）。
+- v71.4：卡片和地图都垂直居中；案例图片放在离自己站点最近的空位。卡片列表的重点案例标记待她选（Artifact `https://claude.ai/artifact/` 见下一条回复里的 Key Case Marks：A 结果标签 / B 分两组 / C ✳ / D lime 高亮）；她不喜欢列表里的双圈大圈。
 - **下一步**：她在测试站上看 v71；确认后合并进主站（flagship-restructure → main）。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**

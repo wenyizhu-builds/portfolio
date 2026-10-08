@@ -16,9 +16,8 @@ export type MarkKind = 'interchange' | 'key' | 'dot';
 
 /* Map units (≈ px at the normal size). The career line rises on a 45° diagonal to ✳ Next stop. */
 const METRO = {
-  view: { x: 30, y: 100, w: 860, h: 670 }, // the drawing's frame; scaled to fit the free area left of the card
+  view: { x: 30, y: 140, w: 860, h: 625 }, // the drawing's frame, hugging its ink (Next stop … Campus line) so the map sits centred; scaled to fit the free area left of the card
   topLabel: 30, // "Next stop" sits this far above its station
-  inkTop: 158, // where the drawing visibly starts (top of the "Next stop" name); the card column lines up with it
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
   wrap: 24, // characters per label line: every map name fits on one line (v71.2, short map names)
@@ -179,7 +178,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   desk.appendChild(bar);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';
   let order: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
-  let trainAt: number | null = null, raf = 0, travelMs = 0, arriveT = 0, inkTop = 0;
+  let trainAt: number | null = null, raf = 0, travelMs = 0, arriveT = 0;
 
   function render() {
     svg.setAttribute('aria-label', t(ui.mapLabel));
@@ -494,9 +493,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       const V = METRO.view, k = Math.min(a.w / V.w, a.h / V.h, METRO.maxScale);
       const w = V.w * k, h = V.h * k;
       Object.assign(svg.style, { left: `${a.x + (a.w - w) / 2}px`, top: `${a.y + (a.h - h) / 2}px`, width: `${w}px`, height: `${h}px` });
-      inkTop = a.y + (a.h - h) / 2 + (METRO.inkTop - V.y) * k;
     },
-    topEdge: () => inkTop,
     refilter: apply,
     rerenderLabels: render,
   };

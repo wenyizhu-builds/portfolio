@@ -197,8 +197,6 @@ export interface MapApi {
   refilter(): void;
   setViewport(area: { x: number; y: number; w: number; h: number }): void;
   rerenderLabels(): void;
-  /** Where the drawing visibly starts (px from the stage top), so the card column can line up with it (metro map, v71). */
-  topEdge?(): number;
 }
 
 export function createMap(host: HTMLElement, onSelect: (id: string) => void): MapApi {

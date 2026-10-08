@@ -209,7 +209,7 @@ button { font: inherit; color: inherit; }
 .node.is-current .pulse { animation: none; fill: var(--ink); }
 
 /* reading column: media above the card, the pair centred vertically */
-.side { position: absolute; z-index: 4; top: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); bottom: max(var(--bottom-h), calc((100dvh - var(--side-max-h)) / 2)); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: flex-start; pointer-events: none; } /* v71: starts level with the map's top (main.ts placeAnchor) */
+.side { position: absolute; z-index: 4; top: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); bottom: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); /* same margin top and bottom: centred on the page */ left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; pointer-events: none; } /* centred on the page, whatever its height (owner, v71.4) */
 .panel {
   /* The card never pops: main.ts sets its height to the content's height and CSS
      eases between heights, so opening a point or a section grows / shrinks it smoothly. */

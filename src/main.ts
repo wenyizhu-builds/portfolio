@@ -143,7 +143,7 @@ function renderPanel(keep = false) {
   const id = currentNodeId();
   const n = id ? byId.get(id) : undefined;
   const visual = n?.media?.find(m => m.floating && m.src);
-  floatingVisual.set(visual?.src, visual ? t(visual.alt) : '', visual?.thumbnail);
+  floatingVisual.set(visual?.src, visual ? t(visual.alt) : '', visual?.thumbnail, id ?? '');
   const items = (n?.media || []).filter(m => !m.floating);
   media.innerHTML = `<div class="media-row">${items
     .map((m) =>
@@ -235,12 +235,6 @@ function placeAnchor() {
   const top = cssPx('--top-h');
   const w = side.offsetLeft - stage.offsetLeft - gap - inset;
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
-  // v71 (owner): the card column starts level with the top of the drawing instead of being centred
-  // …unless the card wouldn't fit below that line: then it starts as high as it may (CSS)
-  const edge = map.topEdge?.(), bar = ixnav.firstElementChild as HTMLElement | null;
-  const need = inner.offsetHeight + (bar ? bar.offsetHeight + cssPx('--side-gap') : 0) + cssPx('--side-gap');
-  side.style.top = edge && edge + need <= H - cssPx('--bottom-h') ? `${Math.max(top, edge)}px` : '';
-  fitSide(); // the column's height changed with its top
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
   placeProto(side);
