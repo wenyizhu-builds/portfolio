@@ -27,7 +27,7 @@
   - 形状和 ✳ 尺寸只在 `src/shapes.ts`。
   - `index.html` 的头部由 `vite.config.ts` 生成。（L11）
 - **内容块只写一次**：电脑版面板和手机版都从 `src/blocks.ts` 取，不在 `panel.ts` / `mobile.ts` 里另写。（L3）
-- **同一个值出现第二次**，就提取成变量或常量。
+- **同一个值出现第二次**，就提取成变量或常量。样式里的间距、圆角、时长、字号、线宽：两条以上规则用到同一个数，就放进 `:root` 做成变量（`--sp-*`、`--r-*`、`--dur-*`、`--fs-*`、`--hair` 等），`check` 会拦（`repeated-style-value`，v72.7，用户要求）；只用一次的可以留在原处。TS 里的样式数字也从 CSS 读（`cssPx`），`check` 现在也查 floating-visual.ts、lightbox.ts。
 
 ## 行为
 - **动画按需驱动**：有东西在动才请求下一帧，停了就什么都不跑。（L4）

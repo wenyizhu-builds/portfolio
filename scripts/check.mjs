@@ -27,6 +27,32 @@ for (const [f, text] of Object.entries(ts)) {
   });
 }
 
+/* 1b. Sizes and times (v72.7, owner): a spacing, radius, duration, font size or hairline written as a number in two
+   or more rules belongs in :root as one token. A value used in a single rule may stay where it is. */
+{
+  const groupOf = (p) =>
+    /^(margin|padding)/.test(p) || /^(row-|column-)?gap$/.test(p) ? 'space'
+    : /radius/.test(p) ? 'radius'
+    : /^(transition|animation)/.test(p) ? 'time'
+    : p === 'font-size' ? 'font size'
+    : /offset/.test(p) ? 'offset'
+    : p === 'stroke-width' ? 'stroke'
+    : /^(border|outline)/.test(p) || p === 'text-decoration-thickness' ? 'line'
+    : null;
+  const seen = new Map();
+  const rules = stripComments(css.slice(rootEnd)).replace(/:root[^{]*\{[^}]*\}/g, ''); // a breakpoint may restate tokens
+  for (const m of rules.matchAll(/(?:^|[{;\s])([a-z-]+)\s*:\s*([^;{}]+)/g)) {
+    const g = groupOf(m[1]);
+    if (!g) continue;
+    for (const v of m[2].matchAll(/(?<![\w.#-])(\d*\.?\d+)(px|ms|s)\b/g)) {
+      if (+v[1] === 0) continue;
+      const k = `${g} ${v[1]}${v[2]}`;
+      seen.set(k, (seen.get(k) ?? 0) + 1);
+    }
+  }
+  for (const [k, n] of seen) if (n > 1) fail('repeated-style-value', `${k} is written in ${n} rules: make it a token in :root`);
+}
+
 /* 2. Breakpoints: CSS @media can't use variables, so the phone query must match the token JS reads. */
 const mqPhone = css.match(/--mq-phone:\s*([^;]+);/)?.[1].trim();
 if (!mqPhone) fail('breakpoint', '--mq-phone token missing');
@@ -44,7 +70,7 @@ stripComments(css.slice(rootEnd)).split('\n').forEach((line) => {
 });
 
 /* 3. Layout numbers in TS come from CSS tokens, never literals like "72" or "380". */
-for (const f of ['main.ts', 'panel.ts', 'mobile.ts', 'blocks.ts']) {
+for (const f of ['main.ts', 'panel.ts', 'mobile.ts', 'blocks.ts', 'floating-visual.ts', 'lightbox.ts']) {
   if (!ts[f]) continue;
   stripComments(ts[f]).split('\n').forEach((line) => {
     if (/matchMedia\(\s*['"`]/.test(line)) fail('no-hardcoded-breakpoint', `${f}: ${line.trim()}`);

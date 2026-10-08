@@ -3,6 +3,9 @@
  * "Try the prototype" bar. Each takes the clear spot nearest its station — never over a line, a station or a name —
  * so the same case always puts it in the same place (v71.4: not random).
  */
+const cssVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const cssPx = (name: string) => parseFloat(cssVar(name)) || 0;
+
 export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open: (src: string, alt: string) => void) {
   const button = document.createElement('button');
   button.className = 'floating-visual';
@@ -18,7 +21,14 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   let position: Pos | undefined, appPos: Pos | undefined;
   button.onclick = () => open(source, image.alt);
   type Box = { left: number; top: number; right: number; bottom: number };
-  const overlaps = (a: Box, b: Box) => a.left < b.right + 22 && a.right > b.left - 22 && a.top < b.bottom + 22 && a.bottom > b.top - 22;
+  const overlaps = (a: Box, b: Box, m = cssPx('--fv-clear')) => a.left < b.right + m && a.right > b.left - m && a.top < b.bottom + m && a.bottom > b.top - m;
+  /** The area a floating thing may use: below the header, left of the card, above the legend. */
+  const bounds = () => ({
+    edge: cssPx('--fv-edge'),
+    top: Math.max(cssPx('--fv-top-min'), document.querySelector('.top')!.getBoundingClientRect().bottom + cssPx('--fv-edge')),
+    right: Math.min(side.getBoundingClientRect().left - cssPx('--fv-card-gap'), innerWidth - cssPx('--fv-edge')),
+    bottom: innerHeight - cssPx('--fv-bottom-room'),
+  });
 
   /** Everything on the map a floating thing must keep clear of. A line's box is mostly empty, so lines are sampled along their length. */
   function obstacles(liveOnly = false, skip?: Element | null): DOMRect[] {
@@ -39,11 +49,10 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   }
   /** The clear spot nearest the anchor station, trying each size in turn; the upper half first, then anywhere above the legend. */
   function nearest(sizes: [number, number][], cached: Pos | undefined, liveOnly = false): Pos | undefined {
-    const top = Math.max(100, document.querySelector('.top')!.getBoundingClientRect().bottom + 24);
-    const right = Math.min(side.getBoundingClientRect().left - 28, innerWidth - 24);
-    const upper = Math.min(innerHeight * 0.5, innerHeight - 90), lower = innerHeight - 110;
+    const { edge, top, right, bottom: lower } = bounds(), step = cssPx('--fv-step');
+    const upper = Math.min(innerHeight * 0.5, innerHeight - cssPx('--fv-upper-room'));
     const obs = obstacles(liveOnly);
-    const safe = (p: Pos, bottom = lower) => p.x >= 24 && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
+    const safe = (p: Pos, bottom = lower) => p.x >= edge && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
       && !obs.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o));
     if (cached && safe(cached)) return cached;
     const st = anchorId ? stage.querySelector(`[data-id="${CSS.escape(anchorId)}"] .mt-dot`)?.getBoundingClientRect() : undefined;
@@ -52,8 +61,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     for (const [w, h] of sizes) {
       for (const bottom of [upper, lower]) {
         let best: Pos | undefined;
-        for (let y = top; y + h <= bottom; y += 20) {
-          for (let x = 24; x + w <= right; x += 20) {
+        for (let y = top; y + h <= bottom; y += step) {
+          for (let x = edge; x + w <= right; x += step) {
             const p = { x, y, w, h };
             if (safe(p, bottom) && (!best || dist(p) < dist(best))) best = p;
           }
@@ -67,12 +76,10 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   function beside(w: number, h: number): Pos | undefined {
     const g = anchorId ? stage.querySelector(`.mt-stn[data-id="${CSS.escape(anchorId)}"]`) : null, dot = g?.querySelector('.mt-dot');
     if (!g || !dot) return undefined;
-    const d = dot.getBoundingClientRect(), s = g.getBoundingClientRect(), cy = d.top + d.height / 2, gap = 14;
-    const top = Math.max(100, document.querySelector('.top')!.getBoundingClientRect().bottom + 24);
-    const right = Math.min(side.getBoundingClientRect().left - 28, innerWidth - 24), bottom = innerHeight - 110;
-    const obs = obstacles(true, g), near = 8;
-    const clear = (p: Pos) => p.x >= 24 && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
-      && !obs.some(o => p.x < o.right + near && p.x + p.w > o.left - near && p.y < o.bottom + near && p.y + p.h > o.top - near);
+    const d = dot.getBoundingClientRect(), s = g.getBoundingClientRect(), cy = d.top + d.height / 2, gap = cssPx('--fv-beside');
+    const { edge, top, right, bottom } = bounds(), obs = obstacles(true, g), near = cssPx('--fv-near');
+    const clear = (p: Pos) => p.x >= edge && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
+      && !obs.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o, near));
     return [
       { x: s.left - gap - w, y: cy - h / 2 }, // s = the station with its name, so the bar never covers the name
       { x: s.right + gap, y: cy - h / 2 },
@@ -89,7 +96,7 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     // the picture
     if (!source || !image.naturalWidth || !ready) button.hidden = true;
     else {
-      position = nearest([260, 220, 180, 150].map((w) => [w, w * image.naturalHeight / image.naturalWidth]), position);
+      position = nearest(cssVar('--fv-widths').split(/\s+/).map(Number).map((w) => [w, w * image.naturalHeight / image.naturalWidth]), position);
       if (position) Object.assign(button.style, { left: `${position.x}px`, top: `${position.y}px`, width: `${position.w}px` });
       button.hidden = !position;
     }
