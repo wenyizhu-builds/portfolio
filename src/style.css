@@ -154,6 +154,7 @@ button { font: inherit; color: inherit; }
 .brand { display: flex; align-items: center; gap: var(--sp-6); text-decoration: none; }
 .brand-name { font-weight: 400; font-size: var(--fs-17); letter-spacing: -0.005em; }
 .top-nav { display: flex; align-items: center; gap: var(--sp-36); }
+.top-name { position: absolute; left: 50%; transform: translateX(-50%); font-size: var(--fs-nav); text-decoration: none; } /* v72.9: centred on the page, whatever sits left and right */
 .top-link { font-size: var(--fs-nav); text-decoration: none; padding: var(--sp-4) 0; display: inline-flex; gap: var(--sp-6); align-items: baseline; border: 0; background: none; cursor: pointer; }
 .top-link i { font-style: normal; transition: transform var(--dur-200) var(--ease); display: inline-block; }
 .top-link:hover i { transform: translate(2px, -2px); }
@@ -627,9 +628,6 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .mt-top:focus-visible .mt-ring { stroke: var(--cobalt); }
 .mt-top .mt-arms { transition: transform var(--dur-600) var(--ease); } /* turns about the ✳'s own centre */
 .mt-top:is(:hover, :focus-visible) .mt-arms { transform: rotate(45deg); }
-.mt-top .tl-a, .mt-top .tl-b { transition: opacity var(--dur-300); }
-.mt-top .tl-b, .mt-top:is(:hover, :focus-visible) .tl-a { opacity: 0; }
-.mt-top:is(:hover, :focus-visible) .tl-b { opacity: 1; }
 .mt-open { stroke-width: 3px; stroke-dasharray: 0.1 6.3; stroke-linecap: round; } /* Next stop: a dotted ring, still being built (v71.1) */
 .ico-line path { fill: none; stroke-linecap: round; stroke-width: var(--halo); }
 .ico-line path.core { stroke: var(--panel); stroke-width: 2px; }

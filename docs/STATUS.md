@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-08 · v72.8（分支 `metro-map`，未合并）· 本会话已收尾· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-08 · v72.9（分支 `metro-map`，未合并）· 本会话已收尾· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -24,7 +24,7 @@
 - v72.5：修复电脑版选路线后条子不出现（L55，v72.3 引入）。
 - v72.6：除卡片外整体小 10%（地图字号不变）。她在 Claude 应用里看测试站约是 90% 显示，Chrome 100% 看着更大——比较大小时以她 Chrome 100% 为准。
 - v72.7：样式写死的数全部变量化，check 会拦重复的数（她要求：所有样式都在 CSS 里定义）。
-- v72.8：Next stop 悬停提示 + 去掉点击蓝框。她的名字放哪：给了三个方案（Artifact「Name Placement」），待她选。
+- v72.8–72.9：Next stop 去掉点击蓝框、✳ 悬停转动（名字不换）；页头正中加「Wenyi Zhu」（她在 B / C 之间，我建议 B：每个页面都在、卡片保持两种字号；做成 B 给她看，她可能还会改主意）。
 - **下一步（新会话）：一起打磨全站文案。** 她 10-08 收尾时说：内容基本可以了，现在只打磨文案。地图和版式这一轮结束，不再动设计，除非她提。
   - 先读 CLAUDE.md「内容」一节和 LESSONS L29–L33、L47–L50（地道英文、写给雇主、策略不写任务、不写过程细节、Results ≤45 字符）。
   - 范围：`src/content.ts` 里的全部英文——首页介绍、INDEX 各线说明（AI Projects 一句话还是 [Placeholder copy]）、每个案例的 summary / What I did / Results、地图短名 `mapLabel` 和结果标签 `mapTag`、界面文字 `ui`（Curate your ride 等）。
