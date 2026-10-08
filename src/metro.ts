@@ -200,8 +200,9 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const arms = [0, 1, 2, 3].map((i) => { const a = i * Math.PI / 4, X = 10 * Math.cos(a), Y = 10 * Math.sin(a); return `<line x1="${f(-X)}" y1="${f(-Y)}" x2="${f(X)}" y2="${f(Y)}"/>`; }).join('');
     // v71.1 (owner): just "Next stop", on a dotted ring — a station still being built
     const topText = esc(t(ui.nextStop));
-    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})">${arms}</g>`
-      + `<g transform="translate(${tx},${ty - METRO.topLabel * typeK()})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`;
+    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})"><g class="mt-arms">${arms}</g></g>`
+      // v72.8 (owner): on hover the name turns into where it leads — "Let's talk ↗" — and the ✳ turns, like the ride button
+      + `<g transform="translate(${tx},${ty - METRO.topLabel * typeK()})">${[['tl-a', topText], ['tl-b', `${esc(t(ui.contact))} ↗`]].map(([c, w]) => `<g class="${c}"><text class="mt-halo mt-lbl b" text-anchor="middle">${w}</text><text class="mt-lbl b" text-anchor="middle">${w}</text></g>`).join('')}</g></g>`;
     s += '<g class="mt-xfer"></g>';
     // the ride's own track, in each line's colour, shown through two masks: the whole ride (pale ahead) and the part travelled
     const copies = keys.filter((k) => k !== 'campus').map((k) => `<path class="mt-track l-${k}" d="${trackPath(METRO.lines[k].track)}"/>`).join('');

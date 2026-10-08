@@ -623,7 +623,13 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .mt-xf { fill: none; stroke: var(--ink); stroke-width: 2.4px; stroke-dasharray: 1 7; stroke-linecap: round; animation: mt-march 1.2s linear infinite; pointer-events: none; }
 @keyframes mt-march { to { stroke-dashoffset: -16; } }
 .mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }
-.mt-top { cursor: pointer; }
+.mt-top { cursor: pointer; outline: none; } /* v72.8: no browser box on click (owner); keyboard focus colours the ring instead */
+.mt-top:focus-visible .mt-ring { stroke: var(--cobalt); }
+.mt-top .mt-arms { transition: transform var(--dur-600) var(--ease); } /* turns about the ✳'s own centre */
+.mt-top:is(:hover, :focus-visible) .mt-arms { transform: rotate(45deg); }
+.mt-top .tl-a, .mt-top .tl-b { transition: opacity var(--dur-300); }
+.mt-top .tl-b, .mt-top:is(:hover, :focus-visible) .tl-a { opacity: 0; }
+.mt-top:is(:hover, :focus-visible) .tl-b { opacity: 1; }
 .mt-open { stroke-width: 3px; stroke-dasharray: 0.1 6.3; stroke-linecap: round; } /* Next stop: a dotted ring, still being built (v71.1) */
 .ico-line path { fill: none; stroke-linecap: round; stroke-width: var(--halo); }
 .ico-line path.core { stroke: var(--panel); stroke-width: 2px; }
