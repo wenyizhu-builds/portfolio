@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-08 · v71.8（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-08 · v72（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -16,7 +16,8 @@
 - v71.3：浮动图片避开地铁图（L52）。
 - v71.4：卡片和地图都垂直居中；案例图片放在离自己站点最近的空位。卡片列表的重点案例标记待她选（Artifact `https://claude.ai/artifact/P2JGKeYJDMLspmW7D8j2hN`：A 结果标签 / B 分两组 / C ✳ / D lime 高亮）；她不喜欢列表里的双圈大圈。
 - v71.5–71.7：卡片列表最后决定不标重点案例，只留圆点（双圈、转动的 ✳ 都被否决）；地图站名全部加粗；AI 案例改为站点旁的「Try the prototype」条 + 弹窗（视频 + 原型）。`--proto-share/--proto-max/--proto-gap` 和 `.proto-box/.proto-video` 样式已不用，合并前可清理。
-- **下一步**：她在测试站上看 v71；确认后合并进主站（flagship-restructure → main）。
+- v72：站名重排（她在 Artifact「Station Name Layouts」`https://claude.ai/artifact/6SRVaieXozNkTj9srSa5ym` 选 A · Calmer，源文件云端 `/home/claude/map-options/names/tpl.html`）：每条线一侧、距圈外沿 11、顶排 45° 斜写、线名沿线竖写、Campus 线名与 UChicago 分开。她说过「不在乎规则，要好看」——以后调站名先出对比页给她看。站名粗体、线名样式她要求保持不变（否决了线名徽章 / 加色条）。
+- **下一步**：她说这是地图最后一项大改，接下来「打磨所有细节」；等她列出要打磨的地方。确认后合并进主站（flagship-restructure → main）。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 

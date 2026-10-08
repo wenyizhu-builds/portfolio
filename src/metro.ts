@@ -9,28 +9,28 @@ import { rideSummary } from './blocks';
 import { clearFilters, esc, filtering, filters, go, matches, reducedMotion, t } from './state';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
-type Pos = 'left' | 'right' | 'above' | 'below';
+type Pos = 'left' | 'right' | 'above' | 'below' | 'rise'; // rise: the name climbs at 45° from its stop (a flat stretch with several stops, v72)
 type Pt = [number, number];
 type LineKey = 'career' | 'campus' | 'creative' | 'paid' | 'social' | 'ai';
 export type MarkKind = 'interchange' | 'key' | 'dot';
 
 /* Map units (≈ px at the normal size). The career line rises on a 45° diagonal to ✳ Next stop. */
 const METRO = {
-  view: { x: 30, y: 140, w: 890, h: 625 }, // the drawing's frame, hugging its ink (Next stop … Campus line) so the map sits centred; scaled to fit the free area left of the card
+  view: { x: 30, y: 50, w: 890, h: 715 }, // the drawing's frame, hugging its ink (the top row's rising names … Campus line) so the map sits centred; scaled to fit the free area left of the card
   topLabel: 30, // "Next stop" sits this far above its station
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
   wrap: 24, // characters per label line: every map name fits on one line (v71.2, short map names)
-  wrapAt: { 'genshin-en-accounts': 14 } as Record<string, number>, // except where one line would run over the track
+  wrapAt: {} as Record<string, number>, // a station whose side name must wrap sooner (names above or below never wrap)
   lineH: 15, // label line height
   /** Each line: the group it opens in the card, its track (bends only), and where its name sits. */
   lines: {
     career: { group: 'experience', name: ui.lineCareer, track: [[140, 700], [640, 200]], label: [300, 610, 'middle', -45] },
-    campus: { group: 'education', name: ui.lineCampus, track: [[140, 700], [320, 700], [410, 610], [410, 430]], label: [230, 748, 'middle', 0] },
+    campus: { group: 'education', name: ui.lineCampus, track: [[140, 700], [320, 700], [410, 610], [410, 430]], label: [196, 727, 'middle', 0] },
     creative: { group: 'creative', name: ui.lineCreative, track: [[140, 700], [80, 640], [80, 560]], label: [80, 545, 'middle', 0] },
     paid: { group: 'growth-paid', name: ui.linePaid, track: [[500, 340], [500, 220], [440, 160], [200, 160]], label: [186, 164, 'end', 0] },
-    social: { group: 'growth-social', name: ui.lineSocial, track: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660]], label: [640, 700, 'end', 0] },
-    ai: { group: 'ai', name: ui.lineAi, track: [[640, 200], [760, 320], [760, 660]], label: [746, 600, 'end', 0] }, // left of the line: the dotted Workbench ↔ Xiaohongshu connection bows out to the right
+    social: { group: 'growth-social', name: ui.lineSocial, track: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660]], label: [557, 505, 'middle', -90] },
+    ai: { group: 'ai', name: ui.lineAi, track: [[640, 200], [760, 320], [760, 660]], label: [737, 592, 'middle', -90] }, // v72: line names run along their own line, beside a quiet stretch, so the bottom row carries station names only
   } as Record<LineKey, { group: string; name: typeof ui.lineAi; track: Pt[]; label: [number, number, 'start' | 'middle' | 'end', number] }>,
   /** Every station: node id → where, which lines stop there (first = the line it opens), where its name goes. */
   stations: {
@@ -38,19 +38,19 @@ const METRO = {
     nowness: [210, 630, 'career', 'left'],
     'weber-shandwick': [270, 570, 'career', 'left'],
     nike: [330, 510, 'career', 'left'],
-    uchicago: [250, 700, 'campus', 'below'],
+    uchicago: [290, 700, 'campus', 'below'], // v72: further along, so the Campus line name sits apart from it
     'seminary-coop': [410, 430, 'career campus', 'left'],
     hoyoverse: [500, 340, 'career paid social', 'left'],
     'ua-creative-strategy': [500, 280, 'paid', 'left'],
     'gip-testing': [470, 190, 'paid', 'left'], // left: away from Next stop (v71.2)
-    'xbox-launch': [340, 160, 'paid', 'above'],
-    'landing-page': [260, 160, 'paid', 'below'],
+    'xbox-launch': [365, 160, 'paid', 'rise'],
+    'landing-page': [225, 160, 'paid', 'rise'],
     'zzz-jp-accounts': [540, 380, 'social', 'right'],
     'giveaway-campaign': [580, 455, 'social', 'right'],
     'influencer-activation': [580, 500, 'social', 'right'],
-    'interactive-filter': [580, 545, 'social', 'left'],
-    'genshin-en-accounts': [690, 660, 'social', 'above'],
-    'xhs-ai-channel': [760, 660, 'social ai', 'below'],
+    'interactive-filter': [580, 545, 'social', 'right'],
+    'genshin-en-accounts': [690, 660, 'social', 'below'],
+    'xhs-ai-channel': [760, 660, 'social ai', 'right'],
     'ai-workbench': [760, 420, 'ai', 'right'], // right: away from Social Launch in Japan (v71.5)
     'creator-workbench': [760, 520, 'ai', 'right'], // right: leaves room for its prototype bar on the left (v71.8)
     design: [104, 664, 'creative', 'left'],
@@ -67,7 +67,7 @@ const METRO = {
   tagNudge: { 'zzz-jp-accounts': 18 } as Record<string, number>,
   // outer radius, inner radius, outer stroke, inner stroke — "Medium" weight (owner, v71)
   radius: { interchange: [11, 0, 3.1, 0], key: [9.7, 4.2, 2.6, 2.2], dot: [5.2, 0, 2.2, 0], star: 19 } as Record<MarkKind | 'star', number[] | number>,
-  labelOff: { interchange: 18, key: 16, dot: 12 } as Record<MarkKind, number>,
+  labelGap: 11, // v72: every name sits this far from the outer edge of its ring, whatever the ring's size
   transferBow: 0.28, // a transfer arc bows out by this share of its length (at least transferMin)
   transferMin: 34,
   /** A ride runs one way, like a train: down the Paid & UA line (or up the Career line) to HoYoverse,
@@ -112,10 +112,11 @@ function trackPath(pts: Pt[]): string {
 }
 /** A name beside a point, with a halo so it reads over lines. */
 function label(x: number, y: number, lines: string[], pos: Pos, cls: string, off: number, tag?: { text: string; line: LineKey; dx: number }): string {
+  if (pos !== 'left' && pos !== 'right') lines = [lines.join(' ')]; // only names beside a line wrap
   const lh = METRO.lineH, n = lines.length;
   const [tx, ty, a] = ({
     right: [off, 4.5 - (n - 1) * lh / 2, 'start'], left: [-off, 4.5 - (n - 1) * lh / 2, 'end'],
-    above: [0, -off - (n - 1) * lh, 'middle'], below: [0, off + 9, 'middle'],
+    above: [0, -off - (n - 1) * lh, 'middle'], below: [0, off + 9, 'middle'], rise: [off - 2, 4.5, 'start'],
   } as const)[pos];
   const tsp = lines.map((l, i) => `<tspan x="${tx}" dy="${i ? lh : 0}">${esc(l)}</tspan>`).join('');
   let pill = '';
@@ -123,7 +124,7 @@ function label(x: number, y: number, lines: string[], pos: Pos, cls: string, off
     const T = METRO.tag, w = tag.text.length * T.charW + 2 * T.padX, top = ty + (n - 1) * lh + T.gap, x0 = (a === 'end' ? tx - w : a === 'middle' ? tx - w / 2 : tx) + tag.dx;
     pill = `<g class="mt-tag tag-${tag.line}"><rect x="${f(x0)}" y="${f(top)}" width="${f(w)}" height="${T.h}" rx="${T.h / 2}"/><text x="${f(x0 + w / 2)}" y="${f(top + T.textY)}" text-anchor="middle">${esc(tag.text)}</text></g>`;
   }
-  return `<g class="mt-name" transform="translate(${f(x)},${f(y)})"><text class="mt-halo ${cls}" text-anchor="${a}" y="${ty}">${tsp}</text><text class="${cls}" text-anchor="${a}" y="${ty}">${tsp}</text>${pill}</g>`;
+  return `<g class="mt-name" transform="translate(${f(x)},${f(y)})${pos === 'rise' ? ' rotate(-45)' : ''}"><text class="mt-halo ${cls}" text-anchor="${a}" y="${ty}">${tsp}</text><text class="${cls}" text-anchor="${a}" y="${ty}">${tsp}</text>${pill}</g>`;
 }
 /** Which line a node opens: its station's first line; groups map to their line. */
 function lineOf(id: string): LineKey | null {
@@ -221,7 +222,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     // the name follows the mark: key cases and interchanges bold, other stops regular; all ink (owner, v71)
     const cls = kind === 'dot' ? 'mt-lbl' : 'mt-lbl b';
     const tag = n.mapTag ? { text: t(n.mapTag), line: lines.split(' ')[0] as LineKey, dx: METRO.tagNudge[n.id] ?? 0 } : undefined;
-    const name = label(x, y, words, pos, cls, METRO.labelOff[kind], tag);
+    const name = label(x, y, words, pos, cls, ro + so / 2 + METRO.labelGap, tag);
     const quiet = kind === 'dot' && !place; // other work: named on hover or when its line is open
     return `<g class="mt-stn" data-id="${n.id}" data-l="${lines}" tabindex="0" role="button" aria-label="${esc(t(n.label))}">${mark}${quiet ? `<g class="mt-more">${name}</g>` : name}</g>`;
   }
@@ -258,8 +259,8 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     order.forEach((id, i) => {
       const [x, y, , pos] = METRO.stations[id], g = svg.querySelector(`.mt-stn[data-id="${CSS.escape(id)}"]`);
       if (!g) return;
-      const vert = pos === 'above' || pos === 'below', w = i + 1 > 9 ? N.w2 : N.w;
-      const cx = vert ? x : x + (pos === 'left' ? N.side : -N.side), cy = vert ? y + (pos === 'above' ? N.below : -N.below) : y - N.rise;
+      const vert = pos === 'above' || pos === 'below' || pos === 'rise', w = i + 1 > 9 ? N.w2 : N.w;
+      const cx = vert ? x : x + (pos === 'left' ? N.side : -N.side), cy = vert ? y + (pos === 'below' ? -N.below : N.below) : y - N.rise;
       g.insertAdjacentHTML('beforeend', `<g class="mt-no pop" style="--d:${(i * N.pop).toFixed(3)}s"><rect x="${f(cx - w / 2)}" y="${f(cy - N.h / 2)}" width="${w}" height="${N.h}" rx="${N.rx}"/><text x="${f(cx)}" y="${f(cy + N.textY)}" text-anchor="middle">${i + 1}</text></g>`);
     });
   }
