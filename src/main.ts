@@ -137,7 +137,7 @@ function renderPanel(keep = false) {
     panel.scrollTop = prevScroll;
   } else panel.scrollTop = 0;
   if (html) {
-    wirePanel(panel, () => go(''));
+    wirePanel(panel, () => go(''), (sec) => { if (route.kind === 'home') map?.setFocus(sec); });
   }
 
   // media tiles beside the panel

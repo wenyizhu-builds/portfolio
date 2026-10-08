@@ -29,8 +29,8 @@ function groupLink(id: string): string {
   return n ? `<a class="ngroup-h${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}">${tx(n.label)}</a>` : '';
 }
 
-function details(mark: string, title: string, body: string, open = false, cls = ''): string {
-  return `<details class="sec${cls ? ` ${cls}` : ''}"${open ? ' open' : ''}><summary><span class="p-ico" aria-hidden="true">${mark}</span><span class="lab">${title}</span><i aria-hidden="true"></i></summary><div class="sec-body">${body}</div></details>`;
+function details(mark: string, title: string, body: string, open = false, cls = '', id = ''): string {
+  return `<details class="sec${cls ? ` ${cls}` : ''}"${open ? ' open' : ''}${id ? ` data-id="${id}"` : ''}><summary><span class="p-ico" aria-hidden="true">${mark}</span><span class="lab">${title}</span><i aria-hidden="true"></i></summary><div class="sec-body">${body}</div></details>`;
 }
 
 /** Everything inside a node, as links: grouped by practice for an area, in path order for Experience / Education. */
@@ -70,7 +70,7 @@ export function indexPanel(): string {
   );
   const secs = indexSections.map((id) => {
     const n = byId.get(id)!;
-    return details(markFor(id), isDone(id) ? `<s>${tx(n.label)}</s>` : tx(n.label), `${n.summary ? `<p class="p-sum p-def">${tx(n.summary)}</p>` : ''}${insideList(n)}`, false, 'ix');
+    return details(markFor(id), isDone(id) ? `<s>${tx(n.label)}</s>` : tx(n.label), `${n.summary ? `<p class="p-sum p-def">${tx(n.summary)}</p>` : ''}${insideList(n)}`, false, 'ix', id);
   });
   return `<div class="p-body ix-body">${bio}${secs.join('')}</div>`;
 }
@@ -155,13 +155,15 @@ export function contactPanel(): string {
 }
 
 /** Wire behaviour inside a freshly rendered panel. */
-export function wirePanel(root: HTMLElement, onClose: () => void) {
+export function wirePanel(root: HTMLElement, onClose: () => void, onSection?: (id: string | null) => void) {
   root.querySelectorAll<HTMLButtonElement>('[data-act="close"]').forEach((b) => (b.onclick = onClose));
   // Only the INDEX is an exclusive accordion; detail sections stay independently open.
   const secs = [...root.querySelectorAll<HTMLDetailsElement>('details.sec.ix')];
   secs.forEach((d) =>
     d.addEventListener('toggle', () => {
       if (d.open) secs.forEach((o) => o !== d && (o.open = false));
+      // v72.4 (owner): opening a section in the INDEX shows only its line on the map, like clicking the line itself
+      onSection?.(secs.find((o) => o.open && o.dataset.id)?.dataset.id ?? null);
     }),
   );
   wireCopy(root);
