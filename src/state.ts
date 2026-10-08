@@ -57,6 +57,16 @@ export function toggleFilter(kind: FilterKind, key: string) {
 export function setFilter(kind: FilterKind, key: string | null) {
   (filters as Record<FilterKind, string | null>)[kind] = key;
   if (key) exclusive(kind);
+  syncUrl();
+  listeners.forEach((l) => l());
+}
+/** The phone has no map, so no rides (owner, v72.3): a shared ride link opens with the ride dropped, quietly. */
+export function dropRide() {
+  if (!filters.ride) return;
+  filters.ride = null;
+  syncUrl();
+}
+function syncUrl() {
   try {
     const q = new URLSearchParams(location.search);
     (Object.keys(filters) as FilterKind[]).forEach((k) => (filters[k] ? q.set(k, filters[k]!) : q.delete(k)));
@@ -65,7 +75,6 @@ export function setFilter(kind: FilterKind, key: string | null) {
   } catch {
     /* address can't be updated: the filter still works on this page */
   }
-  listeners.forEach((l) => l());
 }
 
 /** One rule for the map, the INDEX and the phone list: a piece of work matches every chosen filter;

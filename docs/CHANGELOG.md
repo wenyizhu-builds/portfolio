@@ -765,3 +765,4 @@
 - v72（10-08）：地铁图站名重排（用户在 Artifact「Station Name Layouts」选 A · Calmer）：每条线的站名固定在一侧；名字与站圈的距离从圈外沿量起，统一 11（`labelGap`，替代按标记分的 `labelOff`）；顶部一排两站的名字 45° 斜写（`pos: 'rise'`），站点拉开；Creator & Social、AI 线名竖着沿线写，底部一排只剩站名；Campus 线名与 UChicago 分开（UChicago 移到 290）；画框上沿到 y 50。layout-check 0 处重叠。
 - v72.1（10-08）：Curate your ride 的路线与 Target market / Platform 互斥（选一边清掉另一边；市场 + 平台可组合）。`state.ts` `exclusive()`；手机下拉框选完后同步显示被清掉的项。
 - v72.2（10-08）：地图最大缩放 1.1 → 0.9（她笔记本 ≈1460×866 上地图显得巨大，测试站窗口小所以看着正常）；骑行条留在左下、抬到图例上方，地图下方为它留 `--ride-band`；浮动图片避开它。
+- v72.3（10-08）：手机版去掉 Rides 下拉框（没有地图就没有路线），只留 Target market 和 Platform；带 ride 的链接在手机上打开时去掉路线。

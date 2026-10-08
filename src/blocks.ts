@@ -311,7 +311,7 @@ export function wireRide(root: ParentNode) {
   root.querySelector<HTMLButtonElement>('[data-ride-clear]')!.onclick = () => { clearFilters(); setOpen(false); };
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
 }
-/** Phone: three plain drop-downs (ride, target market, platform) — easy to reach with a thumb, nothing to swipe. */
+/** Phone: two plain drop-downs (target market, platform) — no rides, since there is no map to ride (v72.3). */
 export function filterSelects(): string {
   const sel = (kind: FilterKind) => {
     const set = filterSets[kind];
@@ -320,7 +320,7 @@ export function filterSelects(): string {
       .join('');
     return `<label class="m-fsel"><span class="fk">${esc(t(set.label))}</span><select data-fsel="${kind}"><option value="">${esc(t(filterAll))}</option>${opts}</select></label>`;
   };
-  return `<div class="m-filters">${sel('ride')}${sel('region')}${sel('platform')}</div>`;
+  return `<div class="m-filters">${sel('region')}${sel('platform')}</div>`;
 }
 /** Both forms of the filters; `after` runs once a choice has been applied. */
 export function wireFilters(root: ParentNode, after?: () => void) {

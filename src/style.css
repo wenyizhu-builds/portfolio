@@ -568,7 +568,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .rgo:hover { background: var(--cobalt-hover); }
 .nlink.is-off, .ngroup-h.is-off { opacity: 0.35; }
 .m-card.is-off { opacity: 0.35; }
-.m-filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); padding: 12px 0 16px; border-bottom: 1px solid var(--line-soft); }
+.m-filters { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gutter); padding: 12px 0 16px; border-bottom: 1px solid var(--line-soft); }
 .m-fsel { display: grid; gap: 6px; }
 /* 16px stops iOS from zooming into the page when the menu opens */
 .m-fsel select { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }

@@ -1,5 +1,5 @@
 import { byId, childrenOf, featuredOrder, kindLabel, site, type SiteNode } from './content';
-import { esc, filtering, matches, reducedMotion, t } from './state';
+import { dropRide, esc, filtering, matches, reducedMotion, t } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
 import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
@@ -106,6 +106,7 @@ function contact(): string {
 }
 
 export function renderMobile(root: HTMLElement) {
+  dropRide();
   root.innerHTML = `
     <header class="m-top">
       <a href="#/" class="m-brand"><span>${esc(site.name.toLowerCase())}</span></a>
