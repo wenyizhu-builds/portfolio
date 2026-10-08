@@ -32,7 +32,10 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
 
   /** Everything on the map a floating thing must keep clear of. A line's box is mostly empty, so lines are sampled along their length. */
   function obstacles(liveOnly = false, skip?: Element | null): DOMRect[] {
-    const live = (el: Element) => (!liveOnly || !el.closest('.faded')) && el !== skip; // the prototype bar may cover faded lines: it's solid white
+    // the prototype bar may cover faded lines (it's solid white) — and, on a ride, everything the ride doesn't use
+    const riding = !!stage.querySelector('.metro.riding');
+    const ghost = (el: Element) => el.closest('.faded') || (riding && el.closest('[data-l]') && !el.closest('.on-ride, .on-route'));
+    const live = (el: Element) => (!liveOnly || !ghost(el)) && el !== skip;
     const out = [...stage.querySelectorAll('.node, .lk, .mt-stn, .mt-lname, .mt-top')].filter(live).map(el => el.getBoundingClientRect());
     const bar = document.querySelector('.mt-bar.show'); // the ride bar under the header
     if (bar) out.push(bar.getBoundingClientRect());
@@ -72,14 +75,16 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     }
     return undefined;
   }
-  /** A spot touching the anchor station (its dot and name): to the left, to the right, below, above — the first that's free. */
-  function beside(w: number, h: number): Pos | undefined {
+  /** A spot touching the anchor station (its dot and name): to the left, to the right, below, above — the first that's
+      free; with `force`, the first that fits on the page even if it covers part of the map (v72.14, owner: right by the dot). */
+  function beside(w: number, h: number, force = false): Pos | undefined {
     const g = anchorId ? stage.querySelector(`.mt-stn[data-id="${CSS.escape(anchorId)}"]`) : null, dot = g?.querySelector('.mt-dot');
     if (!g || !dot) return undefined;
     const d = dot.getBoundingClientRect(), s = g.getBoundingClientRect(), cy = d.top + d.height / 2, gap = cssPx('--fv-beside');
     const { edge, top, right, bottom } = bounds(), obs = obstacles(true, g), near = cssPx('--fv-near');
-    const clear = (p: Pos) => p.x >= edge && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
-      && !obs.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o, near));
+    const ride = document.querySelector('.mt-bar.show')?.getBoundingClientRect(), low = ride ? Math.min(bottom, ride.top - cssPx('--fv-ride-gap')) : bottom;
+    const clear = (p: Pos) => p.x >= edge && p.y >= top && p.x + p.w <= right && p.y + p.h <= low
+      && (force || !obs.some(o => overlaps({ left: p.x, top: p.y, right: p.x + p.w, bottom: p.y + p.h }, o, near)));
     return [
       { x: s.left - gap - w, y: cy - h / 2 }, // s = the station with its name, so the bar never covers the name
       { x: s.right + gap, y: cy - h / 2 },
@@ -107,7 +112,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     const w = app.offsetWidth, h = app.offsetHeight;
     // v71.7 (owner: stay close to the dot): right beside its station — left of it, right of its name, below or above —
     // over faded lines if need be (it's solid white), never over the open line or its stations; else the nearest clear spot
-    appPos = beside(w, h) ?? nearest([[w, h]], appPos) ?? nearest([[w, h]], undefined, true);
+    // v72.14 (owner): right by the dot even if it has to cover part of the map — never drifting to a far corner
+    appPos = beside(w, h) ?? beside(w, h, true) ?? nearest([[w, h]], appPos, true);
     // never hidden: with no free spot (a small screen on a ride), it sits at the left, just above the ride bar
     const rb = document.querySelector('.mt-bar.show')?.getBoundingClientRect();
     if (!appPos && rb) appPos = { x: rb.left, y: rb.top - cssPx('--fv-ride-gap') - h, w, h };
