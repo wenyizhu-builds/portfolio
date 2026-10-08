@@ -4,6 +4,7 @@ import { createFloatingVisual } from './floating-visual';
 import { ancestors, byId, site, ui, type SiteNode } from './content';
 import { type MapApi } from './map';
 import { createMetro, stationMark } from './metro';
+import { appIcon } from './shapes';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { L, galleryGrid, ridePanel, syncRide, wireFilters, wireRide } from './blocks';
@@ -180,8 +181,7 @@ function renderPanel(keep = false) {
 const galleryHtml = (n: SiteNode) => `<button class="g-back" type="button" data-act="gback" aria-label="${L('backToMap')}"><span aria-hidden="true">←</span><span class="lab">${L('mapWord')}</span></button>${galleryGrid(n, 'desk')}`;
 /* v64.4 → v71.5 (owner): an AI project no longer replaces the map with its video. A small app bar floats beside its
    station; it opens one pop-up with the demo video first and the clickable prototype a click away. */
-const APP_MARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>';
-const appBar = (n: SiteNode) => `<button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${APP_MARK}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>`;
+const appBar = (n: SiteNode) => `<button class="app-bar" type="button" data-act="openapp" aria-label="${esc(L('openApp'))}"><span class="app-tile">${appIcon(n.prototype!.icon)}</span><span class="app-bar-t"><span>${esc(t(n.label))}</span><span class="app-bar-sub">${L('appBarSub')}</span></span><span class="btn">${L('tryApp')}</span></button>`;
 
 /* the app icon opens the prototype in the site's one overlay (lightbox.ts), like the photos */
 function openApp() {

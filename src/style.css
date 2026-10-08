@@ -88,7 +88,6 @@
   --media-h: 150px; /* height of the image strip above a card */
   --scrollbar-linger: 900ms; /* the card's scrollbar stays this long after scrolling stops */
   --spin: 24s; /* the ✳ rotation */
-  --spin-key: 10s; /* the small ✳ after a key case in the card */
   /* Galleries (v63): Photography and Design. */
   --g-gap: 12px; /* under a set's heading */
   --g-row-x: 6%; /* between pictures in a photo-book row (blocks.ts BOOK_ROWS widths leave room for it) */
@@ -298,7 +297,7 @@ button { font: inherit; color: inherit; }
 .nlink .lab { display: block; color: var(--muted); }
 /* the last level — a single piece of work — carries a bullet, so a group and its items never read as one level */
 .nlink.is-leaf { position: relative; padding-left: var(--leaf-indent); }
-.nlink.is-leaf::before { content: '•'; position: absolute; left: 0; color: var(--muted); } /* bullets back (owner, v71.6); key cases add a ✳ after the name */
+.nlink.is-leaf::before { content: '•'; position: absolute; left: 0; color: var(--muted); } /* bullets back (owner, v71.6); no key-case mark in the card (owner, v71.7) */
 .nlink:hover .nlink-t { text-decoration: underline; text-underline-offset: 3px; }
 
 .ico { flex: none; overflow: visible; }
@@ -481,7 +480,7 @@ dialog.lightbox::backdrop { background: var(--ink); }
 .app-bar:hover { background: color-mix(in srgb, var(--cobalt) 5%, var(--panel)); }
 .app-bar:hover .btn { background: var(--bg); }
 .app-tile { width: 44px; height: 44px; flex: none; border-radius: 11px; background: var(--ink); display: grid; place-items: center; }
-.app-tile svg { width: 22px; height: 22px; stroke: var(--panel); stroke-width: 2.4; stroke-linecap: round; fill: none; }
+.app-tile svg { width: 22px; height: 22px; stroke: var(--panel); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
 .app-bar-t { display: grid; gap: 2px; font-size: var(--fs-text); line-height: 1.3; }
 .app-bar-sub { font-size: var(--fs-label); color: var(--muted); }
 .app-bar .btn { margin-left: 8px; }
@@ -610,9 +609,6 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .ico-line circle { fill: var(--panel); stroke: var(--ink); stroke-width: 1.8px; }
 .mt-mark { display: block; flex: none; overflow: visible; }
 .legend .mt-mark { margin-right: 6px; }
-.nkey { display: inline-block; margin-left: 7px; vertical-align: -1px; animation: spin var(--spin-key) linear infinite; } /* a key case: a small turning ✳ after its name */
-.nkey svg { display: block; }
-.nkey line { stroke: var(--cobalt); }
 .lg-campus { display: inline-block; width: 24px; height: 5px; border-radius: 4px; border: 2.5px solid var(--line-campus); margin-right: 6px; vertical-align: 0; }
 
 /* ---------- A ride (v71, metro.ts): the ride's track stays in colour, everything else ghosts ---------- */
@@ -675,5 +671,5 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .mt-bar.arrived .nx::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(105deg, transparent 30%, color-mix(in srgb, var(--panel) 55%, transparent) 50%, transparent 70%); transform: translateX(-120%); animation: mt-shine 1.1s 0.25s ease-out forwards; }
 @keyframes mt-shine { to { transform: translateX(120%); } }
 @media (prefers-reduced-motion: reduce) {
-  .mt-no.pop, .mt-stn.arrive .mt-dot, .mt-bar.arrived, .mt-bar.arrived .nx::after, .nkey { animation: none; }
+  .mt-no.pop, .mt-stn.arrive .mt-dot, .mt-bar.arrived, .mt-bar.arrived .nx::after { animation: none; }
 }

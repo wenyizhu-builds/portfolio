@@ -1,7 +1,7 @@
 import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
 import { esc, isDone, matches, t } from './state';
 import { AST, astSvg } from './shapes';
-import { markFor, markKindOf } from './metro';
+import { markFor } from './metro';
 import { L, contactRows, detailLists, gallerySetList, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
@@ -21,9 +21,7 @@ function nodeLink(id: string, sub = ''): string {
   const line = n.status ? t(n.kicker) : sub;
   // an item that can't be opened further (a single piece of work, a role) gets a dash; groups don't
   const leaf = !childrenOf(id).length;
-  // a key case carries a small turning blue ✳ after its name (owner, v71.5)
-  const key = leaf && markKindOf(id) === 'key' ? `<span class="nkey" aria-hidden="true">${astSvg(AST.index)}</span>` : '';
-  return `<a class="nlink${leaf ? ' is-leaf' : ''}${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}"><span class="nlink-t">${tx(n.label)}</span>${key}${line ? `<span class="lab">${esc(line)}</span>` : ''}</a>`;
+  return `<a class="nlink${leaf ? ' is-leaf' : ''}${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}"><span class="nlink-t">${tx(n.label)}</span>${line ? `<span class="lab">${esc(line)}</span>` : ''}</a>`;
 }
 
 function groupLink(id: string): string {

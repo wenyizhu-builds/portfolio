@@ -21,8 +21,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   const overlaps = (a: Box, b: Box) => a.left < b.right + 22 && a.right > b.left - 22 && a.top < b.bottom + 22 && a.bottom > b.top - 22;
 
   /** Everything on the map a floating thing must keep clear of. A line's box is mostly empty, so lines are sampled along their length. */
-  function obstacles(liveOnly = false): DOMRect[] {
-    const live = (el: Element) => !liveOnly || !el.closest('.faded'); // the prototype bar may cover faded lines: it's solid white
+  function obstacles(liveOnly = false, skip?: Element | null): DOMRect[] {
+    const live = (el: Element) => (!liveOnly || !el.closest('.faded')) && el !== skip; // the prototype bar may cover faded lines: it's solid white
     const out = [...stage.querySelectorAll('.node, .lk, .mt-stn, .mt-lname, .mt-top')].filter(live).map(el => el.getBoundingClientRect());
     stage.querySelectorAll<SVGPathElement>('path.mt-track[data-l]').forEach((path) => {
       if (!live(path)) return;
@@ -61,6 +61,23 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     }
     return undefined;
   }
+  /** A spot touching the anchor station (its dot and name): to the left, to the right, below, above — the first that's free. */
+  function beside(w: number, h: number): Pos | undefined {
+    const g = anchorId ? stage.querySelector(`.mt-stn[data-id="${CSS.escape(anchorId)}"]`) : null, dot = g?.querySelector('.mt-dot');
+    if (!g || !dot) return undefined;
+    const d = dot.getBoundingClientRect(), s = g.getBoundingClientRect(), cy = d.top + d.height / 2, gap = 14;
+    const top = Math.max(100, document.querySelector('.top')!.getBoundingClientRect().bottom + 24);
+    const right = Math.min(side.getBoundingClientRect().left - 28, innerWidth - 24), bottom = innerHeight - 110;
+    const obs = obstacles(true, g), near = 8;
+    const clear = (p: Pos) => p.x >= 24 && p.y >= top && p.x + p.w <= right && p.y + p.h <= bottom
+      && !obs.some(o => p.x < o.right + near && p.x + p.w > o.left - near && p.y < o.bottom + near && p.y + p.h > o.top - near);
+    return [
+      { x: s.left - gap - w, y: cy - h / 2 }, // s = the station with its name, so the bar never covers the name
+      { x: s.right + gap, y: cy - h / 2 },
+      { x: d.left, y: s.bottom + gap },
+      { x: d.left, y: s.top - gap - h },
+    ].map((p) => ({ ...p, w, h })).find(clear);
+  }
   /** The map is still arriving: its lines aren't where they'll end up (animationend reschedules). */
   const arriving = () => stage.getAnimations().some((an) => an.playState === 'running');
 
@@ -79,8 +96,9 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
     app.hidden = false;
     app.style.visibility = 'hidden';
     const w = app.offsetWidth, h = app.offsetHeight;
-    // a fully clear spot first; only if there's none may it cover faded lines (it's solid white)
-    appPos = nearest([[w, h]], appPos) ?? nearest([[w, h]], undefined, true);
+    // v71.7 (owner: stay close to the dot): right beside its station — left of it, right of its name, below or above —
+    // over faded lines if need be (it's solid white), never over the open line or its stations; else the nearest clear spot
+    appPos = beside(w, h) ?? nearest([[w, h]], appPos) ?? nearest([[w, h]], undefined, true);
     if (appPos) Object.assign(app.style, { left: `${appPos.x}px`, top: `${appPos.y}px` });
     app.style.visibility = '';
     app.hidden = !appPos;

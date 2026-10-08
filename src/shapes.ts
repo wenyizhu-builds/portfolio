@@ -114,3 +114,11 @@ export function lineMark(line: string | null, station: boolean, px = 14): string
   if (!line) return astSvg({ px, stroke: AST.index.stroke });
   return `<svg class="ico ico-line" width="${px}" height="${px}" viewBox="-11 -11 22 22" aria-hidden="true"><path class="l-${line}" d="M-9,0H9"/>${line === 'campus' ? '<path class="core" d="M-9,0H9"/>' : ''}${station ? '<circle r="3.4"/>' : ''}</svg>`;
 }
+
+/** App icons on the AI projects' "Try the prototype" bar (v71.7): a rising bar chart for the Creative Intelligence
+    Dashboard (finding the winning creatives), three board columns for the Creator Workbench (a content workflow). */
+export const APP_ICONS: Record<import('./content').AppIcon, string> = {
+  dashboard: '<path d="M4 20h16"/><path d="M7 16v-3M12 16V9M17 16V5"/>',
+  workbench: '<rect x="3.5" y="4" width="17" height="16" rx="2.5"/><path d="M9.2 4v16M14.8 4v16M5.6 8h1.8M11.1 8h1.8M11.1 11.5h1.8M16.6 8h1.8"/>',
+};
+export const appIcon = (k: import('./content').AppIcon) => `<svg viewBox="0 0 24 24" aria-hidden="true">${APP_ICONS[k]}</svg>`;

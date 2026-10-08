@@ -48,6 +48,9 @@ export interface Photo { src: string; thumb: string; w: number; h: number; tag: 
 /** A set inside a gallery (a photo series, a magazine issue). `unit` names what the count counts. */
 export interface GallerySet { id: string; title: T; meta?: T; unit: 'photos' | 'pages' | 'posters' | 'screens'; items: Photo[] }
 
+/** Each app's own icon (v71.7, owner: the two apps shouldn't look the same); drawings in shapes.ts APP_ICONS. */
+export type AppIcon = 'dashboard' | 'workbench';
+
 export interface SiteNode {
   id: string;
   type: NodeType;
@@ -74,7 +77,7 @@ export interface SiteNode {
   org?: string; // the role (experience node) this work was done in
   links?: { label: T; href: string }[]; // public pages a reader can open (event page, an example post)
   gallery?: GallerySet[]; // photos / pages shown as a grid: beside the card on desktop, inside it on the phone (v63)
-  prototype?: { src: string; poster: string; video: string[] }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
+  prototype?: { src: string; poster: string; video: string[]; icon: AppIcon }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
   mapLabel?: T; // shorter name on the metro map (v70), e.g. XJTLU
   mapTag?: T; // v70.2: the result tag under a key station on the metro map (replaces the hand-written note there), in the line's colour
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
@@ -656,7 +659,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'demo/dashboard.html', poster: 'media/ai-workbench/promo-poster.jpg', video: ['media/ai-workbench/promo.webm', 'media/ai-workbench/promo.mp4'] },
+    prototype: { icon: 'dashboard', src: 'demo/dashboard.html', poster: 'media/ai-workbench/promo-poster.jpg', video: ['media/ai-workbench/promo.webm', 'media/ai-workbench/promo.mp4'] },
     gallery: [set('dashboard', 'ai-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['ua-creative-strategy'],
     alwaysLinked: ['ua-creative-strategy'], // owner: opening AI Projects shows the Creator Ad Pipeline it grew out of
@@ -682,7 +685,7 @@ export const nodes: SiteNode[] = [
         ],
       },
     ],
-    prototype: { src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: ['media/creator-workbench/promo.webm', 'media/creator-workbench/promo.mp4'] }, // v69.6: promo video, same style as the dashboard's; poster = its end frame
+    prototype: { icon: 'workbench', src: 'demo/workbench.html', poster: 'media/creator-workbench/poster.jpg', video: ['media/creator-workbench/promo.webm', 'media/creator-workbench/promo.mp4'] }, // v69.6: promo video, same style as the dashboard's; poster = its end frame
     gallery: [set('workbench', 'creator-workbench', 'screens', { en: 'Prototype screens' }, { en: 'Sample data' })],
     related: ['xhs-ai-channel'],
     alwaysLinked: ['xhs-ai-channel'], // owner (v69.10): opening AI Projects shows the channel this system runs
