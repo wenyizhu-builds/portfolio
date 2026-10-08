@@ -106,7 +106,8 @@ function contact(): string {
 }
 
 export function renderMobile(root: HTMLElement) {
-  dropRide();
+  // this page is also built (hidden) on desktop: drop a ride only on an actual phone (L55)
+  if (matchMedia(getComputedStyle(document.documentElement).getPropertyValue('--mq-phone').trim()).matches) dropRide();
   root.innerHTML = `
     <header class="m-top">
       <a href="#/" class="m-brand"><span>${esc(site.name.toLowerCase())}</span></a>
