@@ -30,7 +30,7 @@ const METRO = {
     creative: { group: 'creative', name: ui.lineCreative, track: [[140, 700], [80, 640], [80, 560]], label: [80, 545, 'middle', 0] },
     paid: { group: 'growth-paid', name: ui.linePaid, track: [[500, 340], [500, 220], [440, 160], [200, 160]], label: [186, 164, 'end', 0] },
     social: { group: 'growth-social', name: ui.lineSocial, track: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660]], label: [640, 700, 'end', 0] },
-    ai: { group: 'ai', name: ui.lineAi, track: [[640, 200], [760, 320], [760, 660]], label: [774, 590, 'start', 0] },
+    ai: { group: 'ai', name: ui.lineAi, track: [[640, 200], [760, 320], [760, 660]], label: [746, 600, 'end', 0] }, // left of the line: the dotted Workbench ↔ Xiaohongshu connection bows out to the right
   } as Record<LineKey, { group: string; name: typeof ui.lineAi; track: Pt[]; label: [number, number, 'start' | 'middle' | 'end', number] }>,
   /** Every station: node id → where, which lines stop there (first = the line it opens), where its name goes. */
   stations: {
@@ -52,7 +52,7 @@ const METRO = {
     'genshin-en-accounts': [690, 660, 'social', 'above'],
     'xhs-ai-channel': [760, 660, 'social ai', 'below'],
     'ai-workbench': [760, 420, 'ai', 'right'], // right: away from Social Launch in Japan (v71.5)
-    'creator-workbench': [760, 520, 'ai', 'left'],
+    'creator-workbench': [760, 520, 'ai', 'right'], // right: leaves room for its prototype bar on the left (v71.8)
     design: [104, 664, 'creative', 'left'],
     photography: [80, 600, 'creative', 'left'],
   } as Record<string, [number, number, string, Pos]>,
