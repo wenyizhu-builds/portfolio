@@ -203,6 +203,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'gip-testing',
+    mapLabel: { en: 'UGC Channel Test' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     
     note: { en: 'my framework\nfor testing\nnew channels', zh: '我的\n新渠道测试框架' },
     team: { en: "Me (testing strategy and project lead) and 1 data operations specialist, working with 2 platform liaisons from TikTok" },
@@ -250,6 +251,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'xbox-launch',
+    mapLabel: { en: 'Xbox Launch' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     
     team: { en: "Me (creative strategy), 1 media strategist, 2 creative producers and 1 agency partner" },
     type: 'case',
@@ -399,6 +401,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'interactive-filter',
+    mapLabel: { en: 'Filter Campaign' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     mapTag: { en: '600M+ views' },
     
     note: { en: '600M+ views', zh: '6 亿+ 播放' },
@@ -489,6 +492,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'giveaway-campaign',
+    mapLabel: { en: 'Community Giveaway' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     
     team: { en: "Me (campaign lead and strategy), 2 execution support specialists and 4 agency partners" },
     type: 'case',
@@ -532,6 +536,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'genshin-en-accounts',
+    mapLabel: { en: 'English Social Growth' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     
     team: { en: "Me (growth strategy support and content review), 1 growth strategy lead and 1 agency partner" },
     type: 'case',
@@ -580,6 +585,7 @@ export const nodes: SiteNode[] = [
   /* Her own channel, not a job (v67, owner): last in Creator & Social. No challenge or team: there wasn't one. Never call it a side hustle (v69.8). */
   {
     id: 'xhs-ai-channel',
+    mapLabel: { en: 'Xiaohongshu Channel' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     type: 'case',
     parent: 'growth-social',
     org: '', // her own account, not done at a job
@@ -630,6 +636,7 @@ export const nodes: SiteNode[] = [
   },
   {
     id: 'ai-workbench',
+    mapLabel: { en: 'Creative Dashboard' }, // v71.2: short name on the metro map (words from the title, in order); the card shows the full title
     mapTag: { en: 'Built with AI' },
     type: 'ai',
     parent: 'ai',

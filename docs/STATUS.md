@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-08 · v71.1（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-08 · v71.2（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -12,6 +12,7 @@
 - 还没做：排版工具和 layout-check 不覆盖地铁图；手机版没有地图（只有三个下拉框）；彩屑和到站在 file:// 预览里正常，Dashboard 是终点时地图被视频挡住，彩屑从按钮喷出。
 - 她电脑上的项目文件夹（`portfolio-prototypes/claude`）现在在 `metro-map` 分支（10-08 切换，为了让本地预览显示 v71）；合并后要切回主分支。
 - v71.1：Next stop 只写名字，站圈点状虚线（她也提过可以放问号，未采用，等她看）。
+- v71.2：站名一行 + 地图短名（她选 B；规则：只省略、不改词序）。站名方案对比 Artifact `https://claude.ai/artifact/42RiV7EKRia42UAp65eAKg`。
 - **下一步**：她在测试站上看 v71；确认后合并进主站（flagship-restructure → main）。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**

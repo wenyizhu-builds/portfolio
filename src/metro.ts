@@ -21,7 +21,7 @@ const METRO = {
   inkTop: 158, // where the drawing visibly starts (top of the "Next stop" name); the card column lines up with it
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
-  wrap: 18, // characters per label line
+  wrap: 24, // characters per label line: every map name fits on one line (v71.2, short map names)
   lineH: 15, // label line height
   /** Each line: the group it opens in the card, its track (bends only), and where its name sits. */
   lines: {
@@ -42,7 +42,7 @@ const METRO = {
     'seminary-coop': [410, 430, 'career campus', 'left'],
     hoyoverse: [500, 340, 'career paid social', 'left'],
     'ua-creative-strategy': [500, 280, 'paid', 'left'],
-    'gip-testing': [470, 190, 'paid', 'right'],
+    'gip-testing': [470, 190, 'paid', 'left'], // left: away from Next stop (v71.2)
     'xbox-launch': [340, 160, 'paid', 'above'],
     'landing-page': [260, 160, 'paid', 'below'],
     'zzz-jp-accounts': [540, 380, 'social', 'right'],
