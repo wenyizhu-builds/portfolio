@@ -1,16 +1,16 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-07 · v69.10（网站未改）+ 首页地铁图草稿 · 分支 `flagship-restructure`（未合并 main）
+> 最后更新：2026-10-08 · v71（分支 `metro-map`，未合并）· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
-### 正在做：首页地图改为地铁图「Rising」（v70 草稿，只在 SPEC 和原型里，代码未动）
-- 用户选定形状 B「Rising」（她：「I am rising」）和「Brand only」配色。完整规则见 SPEC 最上面一条。原型 Artifact「Metro Map Plans」（`/home/claude/map-options/metro-plans.html`，云端，不在仓库里）。
-- 她否决过的（不要再提）：软曲线地铁、全部信息摊开（日期、所有名字）、她在中心、「next stop: your team」、孤立的 Education 线、冷色和多套暖色调色板。
-- **v70 测试版已做（分支 `metro-map`，未合并）**：`src/metro.ts`；测试预览 Artifact `https://claude.ai/artifact/T8YZXJTXM9MhXRnxk2gRJ3`（主预览 K7QJV2… 没动）。v70.1：卡片和手机版的旧形状已换成线段标记。线名定了：保持原样（Career / Campus / Creative / Paid & UA / Creator & Social / AI line），她不要更花哨的名字。还没做：排版工具和 layout-check 不覆盖地铁图。
-- v70.2：手写批注换成线色结果标签（她选 C）。
-- **下一步**：她看测试版，再决定合并进主站或继续调。
+### 正在做：地铁图 + Curate your ride（v71，分支 `metro-map`，未合并）
+- 设计全部在 SPEC 顶部「地铁图 v71」一条；用户在原型 Artifact「Metro Ride」（`https://claude.ai/artifact/BzzXJ33DMB9XspFiASjRbm`，源文件云端 `/home/claude/map-options/metro-ride.html`）里逐条确认过。测试站 Artifact `https://claude.ai/artifact/T8YZXJTXM9MhXRnxk2gRJ3`（主预览 K7QJV2… 没动）。
+- 用户定下的（不要再改回去）：线条 Medium；「你在哪里」= 线路生长（不要列车小点、不要闪烁）；Curate your ride 按钮 = 白色、展开成一块白色面板（否决黑色、蓝色、lime、纯文字、描边、阴影）；编号用小圆角方块；骑行中站名统一样式，平时地图保留层级；终点 = 按钮填充暖橙 → Let's talk ↗ + 轻量暖色彩屑；卡片往右、顶部与地图齐平。
+- 用户的视觉偏好（这次会话反复强调）：不要描边、不要阴影；不要同一处混用不同字号 / 粗细 / 颜色（但整张地图可以有层级）；动效要顺、不能像卡住；颜色要暖、不要冷；一个标记只表示一件事（L51）。
+- 还没做：排版工具和 layout-check 不覆盖地铁图；手机版没有地图（只有三个下拉框）；彩屑和到站在 file:// 预览里正常，Dashboard 是终点时地图被视频挡住，彩屑从按钮喷出。
+- **下一步**：她在测试站上看 v71；确认后合并进主站（flagship-restructure → main）。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 

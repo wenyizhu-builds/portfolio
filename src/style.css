@@ -5,7 +5,7 @@
   --on-ink: #f6f6f3; /* text on dark fills */
   --cobalt: #2c42f6; /* Winnie Lab electric blue: the name ✳ and links */
   --accent: #d5fd52; /* Winnie Lab acid lime: the current point */
-  --note: #f06a35; /* red-orange: hand-written notes on the map only */
+  --note: #f06a35; /* red-orange: hand-written map notes, and the end of a ride (arrival button, confetti; v71) */
 
   /* Derived colours — never hard-code these; change the base token above instead. */
   --ink-2: color-mix(in srgb, var(--ink) 82%, var(--panel)); /* secondary body text */
@@ -44,7 +44,7 @@
   --side-nav-gap: 32px; /* breathing room below the header */
   --side-w: 380px; /* right-hand panel column */
   --side-right: 20px; /* minimum gap to the window edge */
-  --side-at: 75vw; /* the panel column is centred on this line (as in the reference), never closer to the edge than --side-right */
+  --side-at: 80vw; /* v71: further right, more room beside the map (owner); the panel column is centred on this line (as in the reference), never closer to the edge than --side-right */
   --page-x: 40px; /* header and intro-strip side margin */
   --filter-gap: 56px; /* between the Platform and Region groups in the header */
   --filter-item-gap: 18px; /* between options */
@@ -64,9 +64,18 @@
   --leaf-indent: 16px; /* a dashed item's text sits this far right of its group */
   --map-min-w: 260px; /* the map never gets narrower than this */
   --map-gap: 16px; /* space between the map and the panel / intro strip */
-  --m-track: 8px; /* metro map: line width */
-  --m-core: 3.4px; /* the open middle of the Campus line */
-  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-tag: 11px; /* metro map type */
+  --m-track: 6px; /* metro map: line width ("Medium", owner v71) */
+  --m-core: 2.6px; /* the open middle of the Campus line */
+  --m-ghost: 0.08; /* a ride: everything not on it */
+  --m-ahead: 0.3; /* a ride: the stretch of track still ahead */
+  --m-ride-min: 420ms; --m-ride-max: 1100ms; --m-ride-per: 1.6; /* the travelled track grows: base + ms per map unit, capped */
+  --m-arrive-max: 800ms; /* the last stop: at most this long before the arrival */
+  --m-confetti: 2400ms; /* the confetti's life */
+  --m-board: 420ms; /* the ride bar's words roll over */
+  --m-pop: 450ms; /* stop numbers pop in */
+  --ride-w: 480px; /* the Curate your ride panel */
+  --bar-w: 520px; --bar-h: 54px; --bar-btn: 40px; --bar-go: 136px; /* the ride bar and its buttons: fixed, so nothing moves under the pointer */
+  --m-fs: 13px; --m-fs-small: 11.5px; --m-fs-line: 10.5px; --m-fs-tag: 11px; --m-fs-no: 9.5px; /* metro map type */
   --m-faded: 0.12; /* lines and stations not on the opened line */
   --m-fade: 300ms;
   --edge-y: 20px; /* legend / footer distance from the bottom edge */
@@ -200,7 +209,7 @@ button { font: inherit; color: inherit; }
 .node.is-current .pulse { animation: none; fill: var(--ink); }
 
 /* reading column: media above the card, the pair centred vertically */
-.side { position: absolute; z-index: 4; top: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); bottom: max(var(--bottom-h), calc((100dvh - var(--side-max-h)) / 2)); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: center; pointer-events: none; }
+.side { position: absolute; z-index: 4; top: max(calc(var(--top-h) + var(--side-nav-gap)), calc((100dvh - var(--side-max-h)) / 2)); bottom: max(var(--bottom-h), calc((100dvh - var(--side-max-h)) / 2)); left: min(calc(var(--side-at) - var(--side-w) / 2), calc(100vw - var(--side-w) - var(--side-right))); width: var(--side-w); display: flex; flex-direction: column; justify-content: flex-start; pointer-events: none; } /* v71: starts level with the map's top (main.ts placeAnchor) */
 .panel {
   /* The card never pops: main.ts sets its height to the content's height and CSS
      eases between heights, so opening a point or a section grows / shrinks it smoothly. */
@@ -288,6 +297,7 @@ button { font: inherit; color: inherit; }
 .nlink .lab { display: block; color: var(--muted); }
 /* the last level — a single piece of work — carries a bullet, so a group and its items never read as one level */
 .nlink.is-leaf { position: relative; padding-left: var(--leaf-indent); }
+.nlink.has-mark { padding-left: calc(var(--leaf-indent) + 4px); }
 .nlink.is-leaf::before { content: '•'; position: absolute; left: 0; color: var(--muted); }
 .nlink:hover .nlink-t { text-decoration: underline; text-underline-offset: 3px; }
 
@@ -520,15 +530,37 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .arrange-bar textarea { width: 100%; font: inherit; font-size: var(--fs-label); color: var(--muted); border: var(--rule); background: var(--bg); resize: none; }
 
 /* Filters (v60): plain words in the header, sized and aligned like the nav on the right. */
-.filters { display: flex; align-items: center; gap: var(--filter-gap); }
-.fgroup { display: flex; align-items: baseline; gap: var(--filter-item-gap); }
 .fk { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
-.fbtn { font: inherit; font-size: 16px; color: var(--ink); background: none; border: 0; padding: 4px 0; cursor: pointer; }
-.fbtn:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
-.fbtn[aria-pressed='true'] { color: var(--cobalt); text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+/* Curate your ride (v71): a white button that opens into its panel — one white shape, no outline, no shadow (owner) */
+.ride { position: relative; font-size: 16px; }
+.rbtn { display: inline-flex; align-items: center; gap: 9px; border: 0; border-radius: 26px; padding: 8px 15px 8px 13px; background: var(--panel); cursor: pointer; transition: border-radius 0.35s var(--ease), background 0.3s; }
+.rbtn[aria-expanded='true'] { border-radius: 26px 26px 0 0; }
+.rb-ast { display: block; transition: transform 0.6s var(--ease); }
+.rb-ast line { stroke: var(--cobalt); }
+.rbtn:hover .rb-ast, .rbtn[aria-expanded='true'] .rb-ast { transform: rotate(45deg); }
+.rchev { width: 9px; height: 9px; display: block; transition: transform 0.3s var(--ease); }
+.rchev path { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.rbtn[aria-expanded='true'] .rchev { transform: rotate(180deg); }
+.rsum { display: inline-block; max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width 0.45s var(--ease), opacity 0.3s; }
+.rsum:not(:empty) { max-width: var(--ride-w); opacity: 1; margin-left: -5px; }
+.rsum:not(:empty)::before { content: '· '; }
+.rpanel { position: absolute; left: 0; top: 100%; width: var(--ride-w); background: var(--panel); border-radius: 0 12px 12px 12px; padding: 18px 20px; display: grid; gap: 14px; font-size: var(--fs-text);
+  visibility: hidden; opacity: 0; clip-path: inset(0 0 100% 0); transform-origin: top left; transform: scaleY(0.96);
+  transition: opacity 0.2s, transform 0.35s var(--ease), clip-path 0.4s var(--ease), visibility 0s 0.4s; }
+.rpanel.open { visibility: visible; opacity: 1; clip-path: inset(0 0 0 0); transform: none; transition: opacity 0.2s, transform 0.35s var(--ease), clip-path 0.45s var(--ease), visibility 0s; }
+.rgroup { display: flex; flex-wrap: wrap; gap: 6px; }
+.rgroup .fk { flex-basis: 100%; color: var(--ink); margin-bottom: 2px; }
+.rchip { font: inherit; white-space: nowrap; text-align: left; border: 0; border-radius: 20px; padding: 5px 12px; background: color-mix(in srgb, var(--ink) 5%, transparent); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.rchip.big { flex: 1 1 45%; display: flex; justify-content: space-between; gap: 12px; border-radius: 8px; padding: 7px 12px; }
+.rchip:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.rchip[aria-pressed='true'] { background: var(--cobalt); color: var(--panel); }
+.rfoot { display: flex; justify-content: space-between; align-items: center; border-top: var(--rule-card); padding-top: 12px; }
+.rclear { font: inherit; background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.rgo { font: inherit; border: 0; border-radius: 20px; padding: 6px 14px; background: var(--cobalt); color: var(--panel); cursor: pointer; }
+.rgo:hover { background: var(--cobalt-hover); }
 .nlink.is-off, .ngroup-h.is-off { opacity: 0.35; }
 .m-card.is-off { opacity: 0.35; }
-.m-filters { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); padding: 12px 0 16px; border-bottom: 1px solid var(--line-soft); }
+.m-filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); padding: 12px 0 16px; border-bottom: 1px solid var(--line-soft); }
 .m-fsel { display: grid; gap: 6px; }
 /* 16px stops iOS from zooming into the page when the menu opens */
 .m-fsel select { font: inherit; font-size: 16px; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
@@ -543,7 +575,6 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .l-creative { stroke: var(--line-creative); } .l-career { stroke: var(--line-career); } .l-campus { stroke: var(--line-campus); }
 .mt-lbl { font-size: var(--m-fs); fill: var(--ink); }
 .mt-lbl.b { font-weight: 600; }
-.mt-lbl.s { font-size: var(--m-fs-small); fill: var(--muted); }
 .mt-sub { font-size: var(--m-fs-small); fill: var(--muted); font-weight: 400; }
 .mt-halo { fill: none; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
 .mt-lname { font-size: var(--m-fs-line); letter-spacing: 0.09em; font-weight: 600; fill: var(--ink); text-transform: uppercase; cursor: pointer; }
@@ -555,7 +586,6 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .mt-stn .mt-dot { transition: transform 0.2s var(--ease); transform-box: fill-box; transform-origin: center; }
 .mt-stn:hover .mt-dot { transform: scale(1.25); }
 .mt-stn.sel .mt-ring, .mt-stn.rel .mt-ring { fill: var(--accent); }
-.metro [data-l] { transition: opacity var(--m-fade) var(--ease); }
 .metro .faded { opacity: var(--m-faded); }
 .mt-more { opacity: 0; transition: opacity 0.25s; pointer-events: none; }
 .mt-stn:hover .mt-more, .mt-more.on { opacity: 1; }
@@ -567,10 +597,75 @@ body.arranging .stage, body.arranging .side { animation: none; }
 @keyframes mt-march { to { stroke-dashoffset: -16; } }
 .mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }
 .mt-top { cursor: pointer; }
-.metro .mt-out { opacity: var(--m-faded); }
 .ico-line path { fill: none; stroke-linecap: round; stroke-width: 5px; }
 .ico-line path.core { stroke: var(--panel); stroke-width: 2px; }
 .ico-line circle { fill: var(--panel); stroke: var(--ink); stroke-width: 1.8px; }
-.lg-key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 2.5px solid var(--ink); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 4px var(--ink); margin-right: 6px; vertical-align: -2px; }
-.lg-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 2.4px solid var(--ink); margin-right: 6px; vertical-align: -1px; }
+.mt-mark { display: block; flex: none; overflow: visible; }
+.legend .mt-mark { margin-right: 6px; }
+.nlink.has-mark::before { content: none; }
+.nmark { position: absolute; left: 0; top: 0.12em; }
+.nmark .mt-mark { width: 13px; height: 13px; }
 .lg-campus { display: inline-block; width: 24px; height: 5px; border-radius: 4px; border: 2.5px solid var(--line-campus); margin-right: 6px; vertical-align: 0; }
+
+/* ---------- A ride (v71, metro.ts): the ride's track stays in colour, everything else ghosts ---------- */
+.metro.riding [data-l] { opacity: var(--m-ghost) !important; filter: grayscale(1); }
+.metro [data-l] { transition: opacity var(--m-fade) var(--ease), filter var(--m-fade) var(--ease); }
+.metro.riding .mt-stn.on-ride { opacity: 1 !important; filter: none; }
+.metro text, .metro .mt-tag { transition: opacity 0.4s; }
+.metro .faded text, .metro .faded .mt-tag, .metro text.faded { opacity: 0 !important; } /* an open line: the others keep their track, lose their words */
+.metro.riding [data-l]:not(.on-ride) text, .metro.riding [data-l]:not(.on-ride) .mt-tag, .metro.riding text[data-l] { opacity: 0 !important; }
+.metro.started .mt-stn.on-ride:not(.cur):not(:hover) .mt-name { opacity: 0; } /* once moving, only the current stop is named */
+.metro.riding .mt-stn.on-ride .mt-lbl { font-size: var(--m-fs); font-weight: 600; fill: var(--ink); } /* every stop on a ride reads the same */
+.metro.riding .mt-stn.on-ride .mt-halo { fill: none; }
+.mt-ride { pointer-events: none; transition: opacity 0.45s; }
+.metro:not(.riding) .mt-ride { opacity: 0; }
+.mt-ahead { transition: opacity 0.5s; }
+.metro.started .mt-ahead { opacity: var(--m-ahead); }
+.mt-rmask { fill: none; stroke: var(--panel); stroke-width: calc(var(--m-track) + 4px); stroke-linecap: round; stroke-linejoin: round; }
+.mt-route { fill: none; stroke: none; pointer-events: none; }
+.metro.started .mt-stn.cur .mt-ring { fill: var(--accent); }
+/* stop numbers: small rounded squares (owner: fewer circles) */
+.mt-no rect { fill: color-mix(in srgb, var(--cobalt) 14%, var(--bg)); transition: fill 0.35s; }
+.mt-no text { font-size: var(--m-fs-no); fill: var(--cobalt); transition: fill 0.35s; }
+.mt-no.past rect { fill: var(--cobalt); } .mt-no.past text { fill: var(--panel); }
+.mt-no.now rect { fill: var(--ink); } .mt-no.now text { fill: var(--accent); }
+.mt-no.pop { animation: mt-pop var(--m-pop) var(--d, 0s) cubic-bezier(0.3, 1.4, 0.5, 1) both; transform-box: fill-box; transform-origin: center; }
+@keyframes mt-pop { from { opacity: 0; transform: scale(0.4); } }
+.mt-stn.arrive .mt-dot { animation: mt-arrive 0.6s cubic-bezier(0.3, 1.5, 0.5, 1); }
+@keyframes mt-arrive { 40% { transform: scale(1.45); } }
+.mt-confetti { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+.desk.riding .legend { opacity: 0; visibility: hidden; }
+
+/* the ride bar: bottom left, one fixed size; only its words change */
+.mt-bar { position: absolute; z-index: 5; left: var(--map-inset); bottom: var(--edge-y); width: var(--bar-w); height: var(--bar-h); display: flex; align-items: center; gap: 8px; padding: 0 7px; border-radius: calc(var(--bar-h) / 2);
+  background: var(--ink); color: var(--on-ink); font-size: var(--fs-text); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity 0.3s, transform 0.45s var(--ease); }
+.mt-bar.show { opacity: 1; transform: none; pointer-events: auto; }
+.mt-bar button { font: inherit; border: 0; cursor: pointer; flex: none; height: var(--bar-btn); border-radius: calc(var(--bar-btn) / 2); display: grid; place-items: center; padding: 0; color: inherit; }
+.mt-bar .pv { width: var(--bar-btn); overflow: hidden; background: color-mix(in srgb, var(--on-ink) 14%, transparent); transition: width 0.45s var(--ease), margin 0.45s var(--ease), opacity 0.3s, visibility 0s; }
+.mt-bar:not(.started) .pv { width: 0; margin-right: -8px; opacity: 0; visibility: hidden; transition: width 0.45s var(--ease), margin 0.45s var(--ease), opacity 0.2s, visibility 0s 0.45s; }
+.mt-bar .pv:disabled { opacity: 0.3; cursor: default; }
+.mt-bar .nx { position: relative; overflow: hidden; width: var(--bar-go); background: var(--accent); color: var(--ink); transition: transform 0.15s, filter 0.2s, opacity 0.3s, background 0.5s, color 0.5s; }
+.mt-bar .nx:hover { filter: brightness(1.04); }
+.mt-bar .nx:active, .mt-bar .pv:active { transform: scale(0.96); }
+.mt-bar .nx span { position: relative; z-index: 1; display: block; white-space: nowrap; }
+.mt-bar.empty .nx { opacity: 0.3; pointer-events: none; }
+.mt-bar .ex { width: var(--bar-btn); margin-left: auto; background: transparent; color: color-mix(in srgb, var(--on-ink) 70%, transparent); font-size: var(--fs-figure); transition: background 0.2s, color 0.2s; }
+.mt-bar .ex:hover { background: color-mix(in srgb, var(--on-ink) 14%, transparent); color: var(--on-ink); }
+.mt-bar .board { flex: 1; min-width: 0; height: 100%; position: relative; overflow: hidden; margin-left: 6px; }
+.mt-bar .row { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; line-height: 1.3; }
+.mt-bar .row > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* the last stop: the button fills with the arrival colour while the line pulls in, then lands as Let's talk */
+.mt-bar.ending .nx { pointer-events: none; }
+.mt-bar .nx::before { content: ''; position: absolute; inset: 0; background: var(--note); transform: scaleX(0); transform-origin: left; }
+.mt-bar.ending .nx::before { animation: mt-fill var(--arrive, 700ms) cubic-bezier(0.45, 0, 0.2, 1) forwards; }
+@keyframes mt-fill { to { transform: scaleX(1); } }
+.mt-bar.ending .nx span { color: var(--panel); transition: color var(--arrive, 700ms) ease-in; }
+.mt-bar.arrived .nx { color: var(--panel); }
+.mt-bar.arrived .nx::before { transform: scaleX(1); }
+.mt-bar.arrived { animation: mt-hop 0.7s cubic-bezier(0.3, 1.4, 0.5, 1); }
+@keyframes mt-hop { 35% { transform: translateY(-6px); } }
+.mt-bar.arrived .nx::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(105deg, transparent 30%, color-mix(in srgb, var(--panel) 55%, transparent) 50%, transparent 70%); transform: translateX(-120%); animation: mt-shine 1.1s 0.25s ease-out forwards; }
+@keyframes mt-shine { to { transform: translateX(120%); } }
+@media (prefers-reduced-motion: reduce) {
+  .mt-no.pop, .mt-stn.arrive .mt-dot, .mt-bar.arrived, .mt-bar.arrived .nx::after { animation: none; }
+}

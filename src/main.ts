@@ -3,10 +3,10 @@ import './style.css';
 import { createFloatingVisual } from './floating-visual';
 import { ancestors, byId, site, ui, type SiteNode } from './content';
 import { type MapApi } from './map';
-import { createMetro } from './metro';
+import { createMetro, stationMark } from './metro';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
-import { L, filterBar, galleryGrid, wireFilters } from './blocks';
+import { L, galleryGrid, ridePanel, syncRide, wireFilters, wireRide } from './blocks';
 import { openFrame, openGallery, openLightbox } from './lightbox';
 import { pauseVideo, videoHtml, wireVideo } from './video';
 import { esc, filtering, go, onChange, parseRoute, reducedMotion, state, t, type Route } from './state';
@@ -95,14 +95,19 @@ let route: Route = parseRoute();
 function paintChrome() {
   document.querySelector('[data-i="resume"]')!.textContent = t(ui.resume);
   document.querySelector('[data-i="contact"]')!.textContent = t(ui.contact);
+  // Curate your ride (v71): built once, then kept in step so its open and grow animations run
   const fb = document.getElementById('filters')!;
-  fb.innerHTML = filterBar('filters');
-  wireFilters(fb, () => { if (filtering() && route.kind !== 'home') go(''); }); // the unfolded map lives on home
+  if (!fb.querySelector('.ride')) {
+    fb.innerHTML = ridePanel();
+    wireRide(fb);
+    wireFilters(fb, () => { if (filtering() && route.kind !== 'home') go(''); }); // a new ride starts from the map
+  }
+  syncRide(fb);
   const proto = document.getElementById('proto');
   if (proto) proto.textContent = t(ui.prototype);
-  // metro map legend (v70): key case, other work, the hollow Campus line
+  // metro map legend (v71): one meaning per mark — key case, interchange, other stop — and the hollow Campus line
   document.getElementById('legend')!.innerHTML =
-    `<span><i class="lg-key" aria-hidden="true"></i>${esc(t(ui.legendKeyCase))}</span><span><i class="lg-dot" aria-hidden="true"></i>${esc(t(ui.legendMoreWork))}</span><span><i class="lg-campus" aria-hidden="true"></i>${esc(t(ui.education))}</span>`;
+    `<span>${stationMark('key')}${esc(t(ui.legendKeyCase))}</span><span>${stationMark('interchange')}${esc(t(ui.legendInterchange))}</span><span>${stationMark('dot')}${esc(t(ui.legendOtherStop))}</span><span><i class="lg-campus" aria-hidden="true"></i>${esc(t(ui.education))}</span>`;
 }
 
 
@@ -230,6 +235,12 @@ function placeAnchor() {
   const top = cssPx('--top-h');
   const w = side.offsetLeft - stage.offsetLeft - gap - inset;
   map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
+  // v71 (owner): the card column starts level with the top of the drawing instead of being centred
+  // …unless the card wouldn't fit below that line: then it starts as high as it may (CSS)
+  const edge = map.topEdge?.(), bar = ixnav.firstElementChild as HTMLElement | null;
+  const need = inner.offsetHeight + (bar ? bar.offsetHeight + cssPx('--side-gap') : 0) + cssPx('--side-gap');
+  side.style.top = edge && edge + need <= H - cssPx('--bottom-h') ? `${Math.max(top, edge)}px` : '';
+  fitSide(); // the column's height changed with its top
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
   placeProto(side);

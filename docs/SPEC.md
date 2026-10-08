@@ -3,6 +3,23 @@
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
 > 最后更新：2026-10-07 · 对应版本 v69.10（地铁图为草稿，待确认）
 
+- **地铁图 v71：线条变细、站点标记统一、「Curate your ride」（2026-10-08，用户在原型 Artifact「Metro Ride」里逐条确认）**。取代下面 v70 里的地区筛选、站点分级和字体规则。
+  - **粗细（用户选 Medium）**：线 8 → 6px，站圈描边 ×0.85、半径 ×0.92；只改 `:root` 的 `--m-*`。
+  - **一个标记一个意思（地图、图例、卡片列表一致）**：◎ 双圈 = 重点案例；◯ 大单圈 = 换乘站（XJTLU、Seminary Co-op、HoYoverse、Xiaohongshu AI Channel）；∘ 小圈 = 其他站（其他作品、工作、学校）。名字跟标记走：重点案例和换乘站粗体，其他站常规；全部黑色，不再有灰色小字。工作和学校的名字常显，其他作品悬停或打开线时显示。图例：KEY CASE · INTERCHANGE · OTHER STOP · EDUCATION。用户：标记不能一会儿表示重点、一会儿表示换乘。
+  - **打开一条线时**，其他线上的名字、标签、线名全部隐去（只留淡线和站点），避免重叠。
+  - **Curate your ride（取代页头的 Region）**：左上一个白色圆角按钮「✳ Curate your ride ⌄」，无描边无阴影；点开时按钮下沿变直，面板从按钮下方展开，两者连成一块白色（用户选 A；否决了黑色、蓝色、lime、纯文字）。已选内容写在按钮里同一行（「Curate your ride · Must-stops · Japan」），不另放。面板三组，选中项为钴蓝底白字：
+    - **Rides**（现成路线）：Must-stops（TikTok UGC Channel Test、Creator Ad Pipeline、Social Launch in Japan、Filter Campaign、Dashboard）· Creator marketing（UGC、Pipeline、Giveaway、X Creator、Filter）· Built with AI（Xiaohongshu、Workbench、Dashboard）· The whole journey（XJTLU → NOWNESS → Weber → Nike → Seminary Co-op → HoYoverse → Japan → Filter → Xiaohongshu → Workbench → Dashboard；不含 Paid & UA，因为单向行驶不能倒回 HoYoverse）。路线在 `content.ts` 的 `rides`。
+    - **Target market**（原 Region 改名）：North America / Europe / Japan / China。
+    - **Platform**：TikTok、YouTube、X、Instagram、Snapchat、Meta、Google Ads、Xiaohongshu；每个案例的 `platforms` 字段（不从标签文字里解析，L8）。
+    - 三组同时生效（取交集）。网址 `?ride=&region=&platform=` 可分享。手机版仍是下拉框（三个）。
+  - **骑行视图**：选了任何一项，所有不在路线上的线、站、文字淡成 8% 灰，路线经过的轨道（含站与站之间的线段）保持原色。站点按**列车单向行驶的顺序**编号（Paid & UA 从末端往 HoYoverse，或 Career 从 XJTLU 往上 → Creator & Social → 小红书 → AI 线往 ✳），编号在小圆角方块里（不用圆，用户：圆太多）；Rides 以外的筛选只编号作品，不编号工作和学校。
+  - **骑行条（左下，黑底，固定尺寸）**：开始前「Start ride → · Your ride / N stops · 名称 · ×」；骑行中「← · Next stop → · 站名 / 3 of 5 · next: 下一站 · ×」。按钮位置和大小固定，文字像到站牌一样上下滚动切换（后退时反向），按钮文字交叉淡入。每一站在卡片里打开对应案例。
+  - **你在哪里（用户选 A · Line fills）**：已走过的轨道从上一站平滑长到这一站，前方轨道为 30% 淡色；当前站 lime 填充、编号黑底 lime 字；已过站编号钴蓝底，未到站编号淡钴蓝底。开始后其他站名隐去（悬停可见），只显示当前站名；骑行中所有站名同一字号、同一粗细、同一颜色（平时的地图保留层级）。不画列车小点、不闪烁。骑行中不画换乘虚线。
+  - **终点**：点进最后一站时，按钮显示「Arriving…」并从左到右被暖橙填满，时长等于列车到站时间（≤0.8 秒，期间不可点，防止连点跳过）；到站瞬间：站点弹一下，骑行条轻跳，按钮变暖橙并扫过一道光，文字「Let’s talk ↗」（点击打开 Let’s talk），文字滚动为「End of the line ✳ / You rode all N stops. Thanks for riding!」，同时从站点喷出轻量彩屑。用户：不能像卡住了。
+  - **彩屑**：约 34 片，取自地图本身的形状（短轨道段、小圆圈、✳），颜色为暖色：`--note` 橙、lime、两者的混合及与底色的混合；慢速飘落带轻微摆动，约 2.4 秒淡出后移除画布（按需运行，L4）。减少动态效果时只有站点弹一下。**`--note` 的用途扩展为：地图手写批注 + 终点的到站提示和彩屑。**
+  - **右侧卡片**：比 v70 再往右、往上一些，和地图留出更大的间距、顶部和地图对齐（用户 10-08）。INDEX 的分组照旧是原地展开、其他分组仍可见。
+  - 所有动效按需运行（有东西在动才请求下一帧）；减少动态效果时直接跳到终态。
+
 - **首页地图改为地铁图「Rising」（v70 草稿，2026-10-07，用户选定形状，交互待确认后再动代码）**。原型：Artifact「Metro Map Plans」。
   - **线路（每条线都在真实发生的地方接入网络，不能有孤立的线）**：
     - Career line（灰 `#8a8a86`）：XJTLU → NOWNESS → Weber Shandwick → Nike → Seminary Co-op → HoYoverse → ✳，沿 45° 从左下升到右上（用户：「I am rising」）。顶端 ✳ 站名「Next stop」，副标题「AI-powered growth marketing」（用户 10-07 最终选：「you at the top」的形状 + 名字换成 Next stop + AI；副标题措辞待她确认）。

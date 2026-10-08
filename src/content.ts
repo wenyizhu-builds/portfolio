@@ -56,6 +56,7 @@ export interface SiteNode {
   kicker?: T; // small uppercase line under the title
   period?: string;
   markets?: string[];
+  platforms?: PlatformKey[]; // v71: for the Platform filter (structured, not read from the tag text, L8)
   tags?: T[];
   context?: T;
   role?: T;
@@ -87,13 +88,32 @@ function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?:
   return { id, title, meta, unit, items: rows.map(([f, w, h, tag, lw]) => ({ src: `media/${key}/${f}.jpg`, thumb: unit === 'screens' ? `media/${key}/${f}.jpg` : `media/${key}/${f}-t.jpg`, w, h, tag, ...(lw ? { large: `media/${key}/${f}-l.jpg`, lw } : {}) })) };
 }
 
-/* Filters (v60): two rows in the desktop header, a swipe row on the phone. Nothing selected = everything. */
+/* Curate your ride (v71, replaces the Region filter): ready-made rides, target market and platform.
+   Desktop: a panel under the ✳ button; phone: three drop-downs. Nothing selected = everything. */
 export type RegionKey = 'na' | 'eu' | 'jp' | 'cn';
+export type PlatformKey = 'tiktok' | 'youtube' | 'x' | 'instagram' | 'snapchat' | 'meta' | 'google' | 'xhs';
+export type RideKey = 'must' | 'creator' | 'ai' | 'journey';
+/** Ready-made rides: the stations a ride stops at. The order on the map comes from the track (metro.ts), not from this list. */
+export const rides: Record<RideKey, { label: T; stops: string[] }> = {
+  must: { label: { en: 'Must-stops' }, stops: ['gip-testing', 'ua-creative-strategy', 'zzz-jp-accounts', 'interactive-filter', 'ai-workbench'] },
+  creator: { label: { en: 'Creator marketing' }, stops: ['gip-testing', 'ua-creative-strategy', 'giveaway-campaign', 'influencer-activation', 'interactive-filter'] },
+  ai: { label: { en: 'Built with AI' }, stops: ['xhs-ai-channel', 'creator-workbench', 'ai-workbench'] },
+  // one way along the track, so no Paid & UA cases (the train can't turn back at HoYoverse)
+  journey: { label: { en: 'The whole journey' }, stops: ['xjtlu', 'nowness', 'weber-shandwick', 'nike', 'seminary-coop', 'hoyoverse', 'zzz-jp-accounts', 'interactive-filter', 'xhs-ai-channel', 'creator-workbench', 'ai-workbench'] },
+};
 export const filterAll: T = { en: 'All', zh: '全部' }; // the phone's drop-downs start here
 export const filterSets = {
+  ride: {
+    label: { en: 'Rides' } as T,
+    options: Object.fromEntries(Object.entries(rides).map(([k, r]) => [k, r.label])) as Record<RideKey, T>,
+  },
   region: {
-    label: { en: 'Region', zh: '地区' } as T,
+    label: { en: 'Target market', zh: '目标市场' } as T,
     options: { na: { en: 'North America', zh: '北美' }, eu: { en: 'Europe', zh: '欧洲' }, jp: { en: 'Japan', zh: '日本' }, cn: { en: 'China', zh: '中国' } } as Record<RegionKey, T>,
+  },
+  platform: {
+    label: { en: 'Platform' } as T,
+    options: { tiktok: { en: 'TikTok' }, youtube: { en: 'YouTube' }, x: { en: 'X' }, instagram: { en: 'Instagram' }, snapchat: { en: 'Snapchat' }, meta: { en: 'Meta' }, google: { en: 'Google Ads' }, xhs: { en: 'Xiaohongshu' } } as Record<PlatformKey, T>,
   },
 };
 /** Which region filter a market code counts towards (codes not listed belong to none). */
@@ -148,6 +168,7 @@ export const nodes: SiteNode[] = [
     markets: ['JP', 'NA', 'EU'],
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'Google Ads' }],
+    platforms: ['google'],
     summary: {
       en: 'Built a Brand-to-UA testing pipeline that turned creator videos into measurable user-acquisition performance for Genshin Impact.',
     },
@@ -194,6 +215,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · TikTok' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'UGC' }],
+    platforms: ['tiktok'],
     markets: ['US', 'JP', 'KR', 'TW'],
     summary: {
       en: "I designed and ran a three-round testing framework to see whether TikTok’s UGC incentive program could boost installs efficiently and supply videos that meet our standard for UA creative.",
@@ -238,6 +260,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · Meta, YouTube, TikTok, X' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'Meta' }, { en: 'YouTube' }, { en: 'TikTok' }, { en: 'X' }],
+    platforms: ['meta', 'youtube', 'tiktok', 'x'],
     markets: ['US', 'DE', 'FR'],
     summary: {
       en: 'Structured a localized creative test around four value propositions to move console players from interest to landing-page action.',
@@ -335,6 +358,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'YouTube, X' },
     context: { en: 'Zenless Zone Zero' },
     tags: [{ en: 'YouTube' }, { en: 'X' }],
+    platforms: ['youtube', 'x'],
     period: '2024 Q3 – 2025 Q2',
     markets: ['JP'],
     summary: {
@@ -388,6 +412,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · TikTok, Snapchat' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'Snapchat' }, { en: 'AR filters' }, { en: 'Creator marketing' }],
+    platforms: ['tiktok', 'snapchat'],
     markets: ['US', 'EU', 'JP'], // creators in Europe too (owner)
     summary: {
       en: "I helped create two AR filters for Lantern Rite, Genshin Impact’s annual Lunar New Year event, and activated 70+ creators to show players how to use them, as the campaign expanded from TikTok to Snapchat for the first time. It drew 600M+ views and 600K+ player videos, and the Snapchat Lens ranked #1 among sponsored Lenses.",
@@ -433,6 +458,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · X' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'X' }, { en: 'Creator marketing' }],
+    platforms: ['x'],
     markets: ['NA', 'JP'],
     summary: {
       en: "I rebuilt the creator strategy for a flagship Genshin Impact character launch on X, focusing on the creators core players actually follow. The campaign delivered 13M+ views at 8%+ engagement, about 3x the previous creator campaign at 39% lower CPM.",
@@ -473,6 +499,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · X, TikTok, Instagram' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'X' }, { en: 'TikTok' }, { en: 'Instagram' }, { en: 'Creator marketing' }],
+    platforms: ['x', 'tiktok', 'instagram'],
     markets: ['NA', 'JP'],
     summary: {
       en: "For a major Genshin Impact update, I led a giveaway with the biggest Genshin fan account on X, backed by 67 creators across X, TikTok and Instagram, to reach players beyond official channels. It drew 33M+ impressions and about 900K in-game code redemptions, roughly 4x the goal.",
@@ -514,6 +541,7 @@ export const nodes: SiteNode[] = [
     kicker: { en: 'Genshin Impact · TikTok, YouTube' },
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'YouTube' }],
+    platforms: ['tiktok', 'youtube'],
     period: 'Q4 2023',
     markets: ['NA'],
     summary: {
@@ -560,6 +588,7 @@ export const nodes: SiteNode[] = [
     label: { en: 'Xiaohongshu AI Channel' },
     kicker: { en: 'Xiaohongshu · Douyin' },
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
+    platforms: ['xhs'],
     period: '2025 – now',
     markets: ['CN'],
     summary: {
@@ -833,7 +862,28 @@ export const ui = {
   nextStop: { en: 'Next stop' },
   nextStopSub: { en: 'AI-powered growth marketing' },
   legendKeyCase: { en: 'Key case' },
-  legendMoreWork: { en: 'More work · hover for the name' },
+  legendInterchange: { en: 'Interchange' },
+  legendOtherStop: { en: 'Other stop' },
+  // Curate your ride (v71)
+  curateRide: { en: 'Curate your ride' },
+  rideClear: { en: 'Clear' },
+  rideShow: { en: 'Show my ride' },
+  yourRide: { en: 'Your ride' },
+  rideStops: { en: '{n} stops' },
+  rideStop1: { en: '1 stop' },
+  rideStart: { en: 'Start ride →' },
+  rideNext: { en: 'Next stop →' },
+  rideArriving: { en: 'Arriving…' },
+  rideTalk: { en: 'Let’s talk ↗' },
+  rideOf: { en: '{i} of {n}' },
+  rideNextUp: { en: 'next: {name}' },
+  rideLast: { en: 'last stop' },
+  rideEnd: { en: 'End of the line ✳' },
+  rideThanks: { en: 'You rode all {n} stops. Thanks for riding!' },
+  rideNone: { en: 'No stops match' },
+  rideNoneHint: { en: 'Try another market or platform' },
+  ridePrev: { en: 'Previous stop' },
+  rideExit: { en: 'End ride' },
 } satisfies Record<string, T>;
 
 /** The small type line on a card. Experience and Education read as their own kind, not "Practice". */

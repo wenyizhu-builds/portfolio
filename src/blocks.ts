@@ -4,9 +4,10 @@ import { publishedMarkup } from './published-copy';
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
-import { byId, childrenOf, filterAll, filterSets, rolesOrder, schoolsOrder, site, ui, workOf, type GallerySet, type SiteNode, type T } from './content';
+import { byId, childrenOf, filterAll, filterSets, rides, rolesOrder, schoolsOrder, site, ui, workOf, type GallerySet, type RideKey, type SiteNode, type T } from './content';
 import { copyFieldKey } from './copy-binding';
-import { filters, setFilter, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
+import { clearFilters, filters, setFilter, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
+import { AST, astSvg } from './shapes';
 
 export const L = (k: keyof typeof ui) => esc(t(ui[k]));
 
@@ -262,18 +263,55 @@ export function wireCopy(root: ParentNode) {
   });
 }
 
-/* ---------- Filters (v60): the same row in the desktop header and on the phone ---------- */
-export function filterBar(cls: string): string {
-  const group = (kind: FilterKind) => {
+/* ---------- Curate your ride (v71): desktop button + panel in the header; phone drop-downs below ---------- */
+/** The chosen options in words, for the button and the ride bar ("Must-stops · Japan"). */
+export function rideSummary(): string {
+  return (Object.keys(filters) as FilterKind[])
+    .filter((k) => filters[k])
+    .map((k) => t((filterSets[k].options as Record<string, T>)[filters[k]!]))
+    .join(' · ');
+}
+/** Desktop: a white button (✳ Curate your ride · choices ⌄) that opens into a panel of rides, markets and platforms.
+    Built once; `syncRide` keeps it in step, so its open / grow animations aren't cut by a rebuild. */
+export function ridePanel(): string {
+  const group = (kind: FilterKind, big = false) => {
     const set = filterSets[kind];
     const opts = Object.entries(set.options as Record<string, T>)
-      .map(([k, v]) => `<button type="button" class="fbtn" data-filter="${kind}:${k}" aria-pressed="${filters[kind] === k}">${esc(t(v))}</button>`)
+      .map(([k, v]) => `<button type="button" class="rchip${big ? ' big' : ''}" data-filter="${kind}:${k}" aria-pressed="false"><span>${esc(t(v))}</span>${big ? `<span>${esc(rideCount(k))}</span>` : ''}</button>`)
       .join('');
-    return `<div class="fgroup" role="group" aria-label="${esc(t(set.label))}"><span class="fk">${esc(t(set.label))}</span>${opts}</div>`;
+    return `<div class="rgroup" role="group" aria-label="${esc(t(set.label))}"><span class="fk">${esc(t(set.label))}</span>${opts}</div>`;
   };
-  return `<nav class="${cls}">${group('region')}</nav>`;
+  const chev = '<svg class="rchev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.8L5 6.6 8 3.8"/></svg>';
+  return `<div class="ride">
+    <button type="button" class="rbtn" data-ride-toggle aria-expanded="false" aria-controls="rpanel">${astSvg(AST.index, 'rb-ast')}<span>${L('curateRide')}</span><span class="rsum"></span>${chev}</button>
+    <div class="rpanel" id="rpanel">${group('ride', true)}${group('region')}${group('platform')}
+      <div class="rfoot"><button type="button" class="rclear" data-ride-clear>${L('rideClear')}</button><button type="button" class="rgo" data-ride-close>${L('rideShow')}</button></div>
+    </div></div>`;
 }
-/** Phone: two plain drop-downs — easy to reach with a thumb, nothing to swipe. */
+function rideCount(k: string): string {
+  const n = rides[k as RideKey].stops.length;
+  return n === 1 ? t(ui.rideStop1) : t(ui.rideStops).replace('{n}', String(n));
+}
+/** Pressed states and the summary inside the button. */
+export function syncRide(root: ParentNode) {
+  root.querySelectorAll<HTMLButtonElement>('.rchip').forEach((b) => {
+    const [kind, key] = b.dataset.filter!.split(':');
+    b.setAttribute('aria-pressed', String(filters[kind as FilterKind] === key));
+  });
+  const sum = root.querySelector('.rsum');
+  if (sum) sum.textContent = rideSummary();
+}
+/** Opening, closing and clearing; picking an option goes through wireFilters like everywhere else. */
+export function wireRide(root: ParentNode) {
+  const panel = root.querySelector<HTMLElement>('.rpanel'), btn = root.querySelector<HTMLButtonElement>('[data-ride-toggle]');
+  if (!panel || !btn) return;
+  const setOpen = (on: boolean) => { panel.classList.toggle('open', on); btn.setAttribute('aria-expanded', String(on)); };
+  btn.onclick = () => setOpen(!panel.classList.contains('open'));
+  root.querySelector<HTMLButtonElement>('[data-ride-close]')!.onclick = () => setOpen(false);
+  root.querySelector<HTMLButtonElement>('[data-ride-clear]')!.onclick = () => { clearFilters(); setOpen(false); };
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+}
+/** Phone: three plain drop-downs (ride, target market, platform) — easy to reach with a thumb, nothing to swipe. */
 export function filterSelects(): string {
   const sel = (kind: FilterKind) => {
     const set = filterSets[kind];
@@ -282,7 +320,7 @@ export function filterSelects(): string {
       .join('');
     return `<label class="m-fsel"><span class="fk">${esc(t(set.label))}</span><select data-fsel="${kind}"><option value="">${esc(t(filterAll))}</option>${opts}</select></label>`;
   };
-  return `<div class="m-filters">${sel('region')}</div>`;
+  return `<div class="m-filters">${sel('ride')}${sel('region')}${sel('platform')}</div>`;
 }
 /** Both forms of the filters; `after` runs once a choice has been applied. */
 export function wireFilters(root: ParentNode, after?: () => void) {

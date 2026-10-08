@@ -745,3 +745,12 @@
 - Not yet: INDEX rows still show the old shapes; arrange tool and layout-check don't cover the metro map; the phone is unchanged (no map).
 - v70.1 (metro-map): the card and the phone now use metro marks instead of the old shapes: a short piece of each line in its colour (hollow for Campus), with a station on it for a single case, job or school; Information and Let's talk keep the ✳. One decision point: `markFor()` in metro.ts (line from `lineKeyOf`), drawing in `lineMark()` in shapes.ts. Line names stay as they are (owner).
 - v70.2 (metro-map): hand-written notes removed from the metro map; key stations get a result tag in their line's colour (owner's pick C of ten looks). Words in `mapTag` (content.ts); sizes in `METRO.tag`. No key in the INDEX (owner: repetitive).
+
+## 2026-10-08 · v71（分支 metro-map）
+- 地铁图按原型 Artifact「Metro Ride」逐条确认后落地（SPEC 顶部 v71 一条）：
+  - 粗细 Medium：线 6px，站圈描边和半径缩小（`:root` `--m-*`，`METRO.radius`）。
+  - 一个标记一个意思：双圈 = 重点案例，大单圈 = 换乘站，小圈 = 其他站；名字跟标记走（粗 / 常规），全部黑色。图例改为 KEY CASE · INTERCHANGE · OTHER STOP · EDUCATION。卡片列表里地图上的条目带同样的标记（`listMark`）。打开一条线时其他线上的文字隐去。
+  - Curate your ride 取代 Region：白色按钮展开成面板（`ridePanel` / `syncRide` / `wireRide`，blocks.ts），Rides（`rides`，content.ts）、Target market、Platform（新字段 `platforms`）；网址 `?ride=&region=&platform=`；手机三个下拉框。
+  - 骑行：单向路线排序编号（`METRO.route`），轨道按线色点亮、已走部分平滑生长、前方淡色；骑行条固定尺寸，文字滚动切换；终点按钮填充 → 到站（Let's talk ↗ 打开 Let's talk）、轻量暖色彩屑（地图不可见时从按钮喷出）。
+  - 卡片列往右（`--side-at` 80vw）、顶部与地图的「Next stop」齐平；放不下时退回原来的位置。
+- `--note` 的用途扩展到到站提示和彩屑（CLAUDE.md 颜色规则已改）。
