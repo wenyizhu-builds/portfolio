@@ -575,7 +575,6 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .l-creative { stroke: var(--line-creative); } .l-career { stroke: var(--line-career); } .l-campus { stroke: var(--line-campus); }
 .mt-lbl { font-size: var(--m-fs); fill: var(--ink); }
 .mt-lbl.b { font-weight: 600; }
-.mt-sub { font-size: var(--m-fs-small); fill: var(--muted); font-weight: 400; }
 .mt-halo { fill: none; stroke: var(--bg); stroke-width: 5px; stroke-linejoin: round; }
 .mt-lname { font-size: var(--m-fs-line); letter-spacing: 0.09em; font-weight: 600; fill: var(--ink); text-transform: uppercase; cursor: pointer; }
 .mt-ring { fill: var(--panel); stroke: var(--ink); }
@@ -597,6 +596,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 @keyframes mt-march { to { stroke-dashoffset: -16; } }
 .mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }
 .mt-top { cursor: pointer; }
+.mt-open { stroke-width: 3px; stroke-dasharray: 0.1 6.3; stroke-linecap: round; } /* Next stop: a dotted ring, still being built (v71.1) */
 .ico-line path { fill: none; stroke-linecap: round; stroke-width: 5px; }
 .ico-line path.core { stroke: var(--panel); stroke-width: 2px; }
 .ico-line circle { fill: var(--panel); stroke: var(--ink); stroke-width: 1.8px; }

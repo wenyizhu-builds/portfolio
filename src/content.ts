@@ -860,7 +860,6 @@ export const ui = {
   lineSocial: { en: 'Creator & Social line' },
   lineAi: { en: 'AI line' },
   nextStop: { en: 'Next stop' },
-  nextStopSub: { en: 'AI-powered growth marketing' },
   legendKeyCase: { en: 'Key case' },
   legendInterchange: { en: 'Interchange' },
   legendOtherStop: { en: 'Other stop' },

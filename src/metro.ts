@@ -17,7 +17,8 @@ export type MarkKind = 'interchange' | 'key' | 'dot';
 /* Map units (≈ px at the normal size). The career line rises on a 45° diagonal to ✳ Next stop. */
 const METRO = {
   view: { x: 30, y: 100, w: 860, h: 670 }, // the drawing's frame; scaled to fit the free area left of the card
-  inkTop: 150, // where the drawing visibly starts (top of the "Next stop" name); the card column lines up with it
+  topLabel: 30, // "Next stop" sits this far above its station
+  inkTop: 158, // where the drawing visibly starts (top of the "Next stop" name); the card column lines up with it
   maxScale: 1.1, // never larger than this on wide screens
   corner: 24, // rounded bends
   wrap: 18, // characters per label line
@@ -197,9 +198,10 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     // ✳ Next stop
     const [tx, ty] = METRO.top;
     const arms = [0, 1, 2, 3].map((i) => { const a = i * Math.PI / 4, X = 10 * Math.cos(a), Y = 10 * Math.sin(a); return `<line x1="${f(-X)}" y1="${f(-Y)}" x2="${f(X)}" y2="${f(Y)}"/>`; }).join('');
-    const topText = `<tspan x="0">${esc(t(ui.nextStop))}</tspan><tspan x="0" dy="${METRO.lineH}" class="mt-sub">${esc(t(ui.nextStopSub))}</tspan>`;
-    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${esc(`${t(ui.nextStop)}: ${t(ui.nextStopSub)}`)}"><circle class="mt-ring" cx="${tx}" cy="${ty}" r="${METRO.radius.star}" stroke-width="3"/><g class="mt-star" transform="translate(${tx},${ty})">${arms}</g>`
-      + `<g transform="translate(${tx},${ty - 44})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`;
+    // v71.1 (owner): just "Next stop", on a dotted ring — a station still being built
+    const topText = esc(t(ui.nextStop));
+    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})">${arms}</g>`
+      + `<g transform="translate(${tx},${ty - METRO.topLabel})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`;
     s += '<g class="mt-xfer"></g>';
     // the ride's own track, in each line's colour, shown through two masks: the whole ride (pale ahead) and the part travelled
     const copies = keys.filter((k) => k !== 'campus').map((k) => `<path class="mt-track l-${k}" d="${trackPath(METRO.lines[k].track)}"/>`).join('');
