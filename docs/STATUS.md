@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-08 · v72.1（分支 `metro-map`，未合并）· 本会话已收尾· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-08 · v72.2（分支 `metro-map`，未合并）· 本会话已收尾· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -18,6 +18,7 @@
 - v71.5–71.7：卡片列表最后决定不标重点案例，只留圆点（双圈、转动的 ✳ 都被否决）；地图站名全部加粗；AI 案例改为站点旁的「Try the prototype」条 + 弹窗（视频 + 原型）。`--proto-share/--proto-max/--proto-gap` 和 `.proto-box/.proto-video` 样式已不用，合并前可清理。
 - v72：站名重排（她在 Artifact「Station Name Layouts」`https://claude.ai/artifact/6SRVaieXozNkTj9srSa5ym` 选 A · Calmer，源文件云端 `/home/claude/map-options/names/tpl.html`）：每条线一侧、距圈外沿 11、顶排 45° 斜写、线名沿线竖写、Campus 线名与 UChicago 分开。她说过「不在乎规则，要好看」——以后调站名先出对比页给她看。站名粗体、线名样式她要求保持不变（否决了线名徽章 / 加色条）。
 - v72.1：路线与市场 / 平台筛选互斥（她要求）；市场 + 平台可组合。
+- v72.2：地图最大 0.9 倍，骑行条移到左上角按钮下方（她笔记本上地图太大、条子找不到）。为什么本地和测试站不一样：地图随窗口放大，测试站窗口小。1280×720 的小屏上，打开 Paid 线时最长的斜写名字「Gamified Landing Page」尾巴会被顶部渐隐盖住一点——润色文案时可以考虑地图短名改「Landing Page」。
 - **下一步（新会话）：一起打磨全站文案。** 她 10-08 收尾时说：内容基本可以了，现在只打磨文案。地图和版式这一轮结束，不再动设计，除非她提。
   - 先读 CLAUDE.md「内容」一节和 LESSONS L29–L33、L47–L50（地道英文、写给雇主、策略不写任务、不写过程细节、Results ≤45 字符）。
   - 范围：`src/content.ts` 里的全部英文——首页介绍、INDEX 各线说明（AI Projects 一句话还是 [Placeholder copy]）、每个案例的 summary / What I did / Results、地图短名 `mapLabel` 和结果标签 `mapTag`、界面文字 `ui`（Curate your ride 等）。

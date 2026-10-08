@@ -204,7 +204,8 @@ function placeAnchor() {
   const inset = cssPx('--map-inset'), gap = cssPx('--map-gap');
   const top = cssPx('--top-h');
   const w = side.offsetLeft - stage.offsetLeft - gap - inset;
-  map.setViewport({ x: inset, y: top, w: Math.max(cssPx('--map-min-w'), w), h: H - top - cssPx('--bottom-h') });
+  const mapTop = top + cssPx('--ride-band'); // the ride bar has its own band under the header
+  map.setViewport({ x: inset, y: mapTop, w: Math.max(cssPx('--map-min-w'), w), h: H - mapTop - cssPx('--bottom-h') });
   // the gallery covers exactly the map's area and scrolls to the bottom of the window
   Object.assign(gallery.style, { left: `${inset}px`, top: `${top}px`, width: `${Math.max(cssPx('--map-min-w'), w)}px` });
 }

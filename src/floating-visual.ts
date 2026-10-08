@@ -24,6 +24,8 @@ export function createFloatingVisual(stage: HTMLElement, side: HTMLElement, open
   function obstacles(liveOnly = false, skip?: Element | null): DOMRect[] {
     const live = (el: Element) => (!liveOnly || !el.closest('.faded')) && el !== skip; // the prototype bar may cover faded lines: it's solid white
     const out = [...stage.querySelectorAll('.node, .lk, .mt-stn, .mt-lname, .mt-top')].filter(live).map(el => el.getBoundingClientRect());
+    const bar = document.querySelector('.mt-bar.show'); // the ride bar under the header
+    if (bar) out.push(bar.getBoundingClientRect());
     stage.querySelectorAll<SVGPathElement>('path.mt-track[data-l]').forEach((path) => {
       if (!live(path)) return;
       const m = path.getScreenCTM(), len = path.getTotalLength(), r = parseFloat(getComputedStyle(path).strokeWidth) || 4;
