@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-09 · v72.14（分支 `metro-map`，未合并）· 本会话已收尾· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-09 · v72.14（分支 `metro-map`，未合并）· 10-09 收尾，下一会话：文案润色· 主站 v69.10（分支 `flagship-restructure`）未改
 
 ## 新会话先看这里（交接）
 
@@ -33,6 +33,8 @@
   - 先读 CLAUDE.md「内容」一节和 LESSONS L29–L33、L47–L50（地道英文、写给雇主、策略不写任务、不写过程细节、Results ≤45 字符）。
   - 范围：`src/content.ts` 里的全部英文——首页介绍、INDEX 各线说明（AI Projects 一句话还是 [Placeholder copy]）、每个案例的 summary / What I did / Results、地图短名 `mapLabel` 和结果标签 `mapTag`、界面文字 `ui`（Curate your ride 等）。
   - 做法建议：一次一个区块，给她「原文 → 改后」对照，她确认再写进去；存疑的词标出来。
+  - 本轮设计改动带出的文案点：卡片变窄后长标题会折行（如「TikTok & Snapchat Filter Campaign」），可考虑更短的标题；地图短名「Gamified Landing Page」斜写最长，缩短（如「Landing Page」）能让小屏地图更大；INDEX 卡片顶部现在有名字 + 职位（`site.tag`），职位措辞可一起定。
+  - 设计这一轮已收尾，不要再改版式，除非她提：地图站名排法（v72）、整体 90%（v72.6、v72.11）、名字在 INDEX（v72.10）、骑行条保持黑色样式、原型条贴站点（v72.14）。
   - 文案定稿、她在测试站看过后，再合并进主站（flagship-restructure → main），她电脑上的文件夹切回主分支。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
