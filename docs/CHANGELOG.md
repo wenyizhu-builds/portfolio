@@ -797,3 +797,4 @@
 - v75.12（10-10）：CV 终稿语法检查：Won…while running（时态统一）；Drew 9.5M+ visitors… with 3× the benchmark conversion rate；Dashboard (built with Claude Code) that tags；the creators that core players follow。她确认 CV 定稿。
 - v75.13（10-10）：CV 自己频道两条重组（她）：第一条 = 数字 + 付费合作；第二条 = Creator OS（一人运营整个频道）。
 - v75.14（10-10）：CV Nike 改成和其他经历一样的两行（公司 + 地点 / 职位 + 日期）；11.4pt 一页。
+- v75.15（10-10）：骑行终点文字改为「End of the line ✳ / Thanks for riding.」（去掉 That’s the line）；筛选结果只有一站时，点 Start my ride 直接打开那一站、清掉筛选，不出现骑行条（她：一站不算骑行，别复杂化）。

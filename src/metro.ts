@@ -359,6 +359,8 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       : two(t(byId.get(order[rideStep])!.label), `${fill(t(ui.rideOf), { i: rideStep + 1, n })} · ${last ? t(ui.rideLast) : fill(t(ui.rideNextUp), { name: t(byId.get(order[rideStep + 1])!.label) })}`), dir);
   }
   document.addEventListener('ride-start', () => {
+    // v75.15 (owner): one stop is not a ride — open that stop and drop the filters (go first, then clear: L56)
+    if (order.length === 1) { leaveRide(order[0]); return; }
     armed = true;
     if (order.length && rideStep < 0) bar.querySelector<HTMLButtonElement>('.nx')!.click(); // straight to the first stop
     else paintBar(1);

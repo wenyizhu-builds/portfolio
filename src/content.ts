@@ -915,7 +915,7 @@ export const ui = {
   rideNextUp: { en: 'next: {name}' },
   rideLast: { en: 'last stop' },
   rideEnd: { en: 'End of the line ✳' },
-  rideThanks: { en: 'That’s the line. Thanks for riding.' },
+  rideThanks: { en: 'Thanks for riding.' }, // v75.15 (owner): just the thanks
   rideNone: { en: 'No stops match' },
   rideNoneHint: { en: 'Try another market or platform' },
   ridePrev: { en: 'Previous stop' },
