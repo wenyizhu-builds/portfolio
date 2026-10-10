@@ -796,3 +796,4 @@
 - v75.11（10-10）：CV 去重复（她：scale / cut 太多）：每个标志性说法只出现一次（scaling what worked, cutting what didn’t 只在日本频道；translates performance data into creative insights 只在看板）；四个 Grew 开头换成不同动词。11.6pt 一页。
 - v75.12（10-10）：CV 终稿语法检查：Won…while running（时态统一）；Drew 9.5M+ visitors… with 3× the benchmark conversion rate；Dashboard (built with Claude Code) that tags；the creators that core players follow。她确认 CV 定稿。
 - v75.13（10-10）：CV 自己频道两条重组（她）：第一条 = 数字 + 付费合作；第二条 = Creator OS（一人运营整个频道）。
+- v75.14（10-10）：CV Nike 改成和其他经历一样的两行（公司 + 地点 / 职位 + 日期）；11.4pt 一页。
