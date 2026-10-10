@@ -143,10 +143,14 @@
   --tc-rule: color-mix(in srgb, var(--panel) 28%, transparent);
   --tc-light: color-mix(in srgb, var(--panel) 34%, transparent); /* the light sliding across */
   --tc-tilt-x: 14; --tc-tilt-y: 20; /* degrees the card leans toward the cursor */
-  --tc-drag: 0.5; --tc-flick: 140; --tc-slop: 6; /* degrees per pixel dragged; how far a flick carries; pixels before a press becomes a drag */
+  --tc-drag: 0.75; --tc-flick: 160; --tc-slop: 5; --tc-turn: 45; /* degrees per pixel dragged; how far a flick carries; pixels before a press becomes a drag; degrees of drag that turn it over (v76.1, owner: too hard to drag) */
   --tc-peek: 32; --tc-peek-at: 1300ms; --tc-peek-hold: 420ms; /* the one peek at the back */
   --tc-swing: 760ms; --tc-spring: cubic-bezier(0.2, 0.9, 0.25, 1.15); --tc-enter: translateY(60px) rotateY(-70deg) scale(0.88);
   --tc-pulse: 2.2s;
+  --tc-blur: 6px; --tc-veil: color-mix(in srgb, var(--bg) 45%, transparent); /* the page behind the open card stays visible, softened (v76.3, owner: no dark screen) */
+  --tc-shade: color-mix(in srgb, var(--cobalt) 32%, transparent); /* the card's soft blue shadow on the page */
+  --tc-nudge: 700ms; /* "Take my card" nudges once when it appears (v76.1) */
+  --mini-w: 22px; --mini-h: 15px; /* the little card in every "Take my card" */
 }
 
 * { box-sizing: border-box; }
@@ -292,6 +296,10 @@ button { font: inherit; color: inherit; }
 .ix-k:hover, .ix-k:focus-visible { text-decoration-style: solid; text-decoration-color: var(--ink); }
 .panel .ix-name { font-size: var(--fs-case-title); letter-spacing: -0.01em; } /* the same size as a case title: no new size in the card */
 .ix-role { color: var(--muted); margin: var(--sp-2) 0 var(--sp-12); }
+/* v76.4 (owner): the four career numbers, two by two, in the case-figure style (cobalt number, grey words) */
+.ix-figs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-10) var(--sp-16); margin: 0 0 var(--sp-16); padding: var(--sp-12) 0; border-top: var(--rule-card); border-bottom: var(--rule-card); }
+.ix-figs .p-fig { margin: 0; display: grid; }
+.ix-figs .p-fig span { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 /* key figures: a clean 2×2 grid, spacing only — no rules */
 .ix-more { display: inline-block; margin: 0 0 var(--sp-14); text-underline-offset: var(--ul-off); }
 /* ---- card: the whole system lives in these rules ---- */
@@ -571,12 +579,24 @@ dialog.lightbox.is-frame { cursor: default; }
 .g-jump { border: 0; background: none; text-align: left; font: inherit; cursor: pointer; }
 .g-jump:hover .nlink-t { text-decoration: underline; text-underline-offset: var(--ul-off); }
 /* The travel card (v76): in the lightbox; everything inside is in card-width units (cqw), so it looks the same at any size */
-dialog.lightbox.is-card { cursor: default; }
+dialog.lightbox.is-card { cursor: grab; touch-action: none; } /* v76.1: drag anywhere to turn the card */
+/* v76.3 (owner): no dark screen — the card floats over the page itself; the page only softens a little behind it */
+dialog.lightbox.is-card { background: var(--tc-veil); backdrop-filter: blur(var(--tc-blur)); -webkit-backdrop-filter: blur(var(--tc-blur)); }
+dialog.lightbox.is-card::backdrop { background: transparent; }
+dialog.lightbox.is-card .p-btn { color: var(--ink); }
+.tc-holder { position: relative; }
+dialog.lightbox.is-card .tc-holder > .lb-close { top: auto; bottom: calc(100% + var(--sp-10)); right: 0; } /* the × sits just above the card's corner, clear of the page's own header */
+dialog.lightbox.is-card .p-btn:focus-visible { outline-color: var(--ink); }
+dialog.lightbox.is-card .lb-note { color: var(--ink-2); background: var(--chip); padding: var(--sp-4) var(--sp-10); border-radius: var(--r-999); }
+.tc-f { box-shadow: 0 3cqw 9cqw var(--tc-shade); }
+.tc-b { box-shadow: 0 3cqw 9cqw var(--line-soft), 0 0 0 var(--hair) var(--line-soft); }
+dialog.lightbox.is-card:active { cursor: grabbing; }
+dialog.lightbox.is-card .btn, dialog.lightbox.is-card .lb-close { cursor: pointer; }
 .tc-holder { width: min(var(--tc-w), 100%); perspective: 1000px; }
 .tc-lift { transform-style: preserve-3d; }
-.tc-flip { position: relative; transform-style: preserve-3d; cursor: grab; touch-action: pan-y; outline: none; --gx: 30%; --gy: 20%; --go: 0; }
+.tc-flip { position: relative; transform-style: preserve-3d; cursor: grab; outline: none; --gx: 30%; --gy: 20%; --go: 0; }
 .tc-flip:active { cursor: grabbing; }
-.tc-flip:focus-visible .tc-f { outline: var(--focus-w) solid var(--on-ink); outline-offset: var(--sp-4); }
+.tc-flip:focus-visible .tc-f { outline: var(--focus-w) solid var(--cobalt); outline-offset: var(--sp-4); }
 .tc-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .tc-back { position: absolute; inset: 0; transform: rotateY(180deg); }
 .tc-box { container-type: inline-size; }
@@ -766,7 +786,17 @@ body.arranging .stage, body.arranging .side { animation: none; }
 /* v76 (owner): "Take my card" slides out from behind the ride bar's right end once the ride has arrived */
 .mt-take { position: absolute; z-index: 4; left: calc(var(--map-inset) + var(--bar-w) + var(--sp-10)); bottom: var(--bottom-h); height: var(--bar-h); display: flex; align-items: center; opacity: 0; transform: translateX(calc(-1 * var(--sp-30))); pointer-events: none; transition: opacity var(--dur-300), transform var(--dur-450) var(--ease); }
 .mt-take.show { opacity: 1; transform: none; pointer-events: auto; transition-delay: var(--dur-600); }
-.mt-take i { font-style: normal; color: var(--cobalt); }
+/* v76.1 (owner: "I can't even see it"): a cobalt pill as tall as the ride bar, with a little card in it; it springs out, then the card waves once */
+.mt-take .btn { height: var(--bar-h); padding: 0 var(--sp-20) 0 var(--sp-16); gap: var(--sp-10); font-size: var(--fs-text); }
+.mt-take.show .btn { animation: take-nudge var(--tc-nudge) var(--ease) calc(var(--dur-600) + var(--dur-450)) 1 both; }
+.mt-take.show .tc-mini { animation: mini-wave var(--tc-nudge) var(--ease) calc(var(--dur-600) + var(--dur-700)) 2 both; }
+@keyframes take-nudge { 0%, 100% { transform: none; } 30% { transform: translateX(var(--sp-6)) scale(1.04); } 60% { transform: translateX(calc(-1 * var(--sp-2))); } }
+@keyframes mini-wave { 0%, 100% { transform: none; } 40% { transform: rotate(-14deg) translateY(calc(-1 * var(--sp-2))); } 70% { transform: rotate(8deg); } }
+/* the little card: the travel card in miniature, for every "Take my card" */
+.tc-mini { position: relative; flex: none; width: var(--mini-w); height: var(--mini-h); border-radius: var(--r-3); background: radial-gradient(130% 110% at 85% 0%, var(--tc-hi), var(--cobalt)); box-shadow: 0 0 0 var(--focus-w) var(--on-ink); }
+.tc-mini i { position: absolute; right: var(--sp-4); top: var(--sp-4); width: var(--sp-4); height: var(--sp-4); border-radius: 50%; background: var(--accent); }
+.ct-link { border: 0; background: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; } /* v76.2: opens the card; looks like the other rows' links */
+@media (prefers-reduced-motion: reduce) { .mt-take.show .btn, .mt-take.show .tc-mini { animation: none; } }
 .mt-bar button { font: inherit; border: 0; cursor: pointer; flex: none; height: var(--bar-btn); border-radius: calc(var(--bar-btn) / 2); display: grid; place-items: center; padding: 0; color: inherit; }
 .mt-bar .pv { width: var(--bar-btn); overflow: hidden; background: color-mix(in srgb, var(--on-ink) 14%, transparent); transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-300), visibility 0s; }
 .mt-bar:not(.started) .pv { width: 0; margin-right: -8px; opacity: 0; visibility: hidden; transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-200), visibility 0s var(--dur-450); }

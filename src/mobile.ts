@@ -2,8 +2,7 @@ import { byId, childrenOf, featuredOrder, kindLabel, site, type SiteNode } from 
 import { dropRide, esc, filtering, matches, reducedMotion, t } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
-import { openCard } from './lightbox';
-import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
+import { L, contactRows, keyFigures, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
 /*
  * Phone layout: one scrolling page. The map becomes a menu (owner decision
@@ -75,7 +74,6 @@ function menu(): string {
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">
     <div class="m-menu-quick">
       <a href="#/resume" class="btn">${L('resume')} →</a>
-      <button type="button" class="btn" data-card>${L('takeCard')} ✳</button>
       <a href="#/contact" class="btn">${L('contact')} →</a>
     </div>
     ${work}
@@ -119,6 +117,7 @@ export function renderMobile(root: HTMLElement) {
       ${astSvg(AST.phoneHero, 'm-hero-ast')}
       <h1>${esc(site.name)}</h1>
       <p class="p-kicker">${tx(site.tag)}</p>
+      ${keyFigures()}
       ${site.introLines.map((l) => `<p class="m-intro"><span class="ix-lead">${esc(t(l.lead))}</span> ${esc(t(l))}</p>`).join('')}
     </div>
     ${menu()}
@@ -131,7 +130,6 @@ export function renderMobile(root: HTMLElement) {
     <footer class="m-foot"><span>${L('credit')}</span></footer>
     <a href="#m-menu" class="m-fab" data-menu>${L('menu')}</a>
   `;
-  root.querySelector<HTMLButtonElement>('[data-card]')!.onclick = openCard; // v76 (owner)
   root.querySelector<HTMLAnchorElement>('[data-menu]')!.onclick = (e) => {
     e.preventDefault();
     document.getElementById('m-menu')?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });

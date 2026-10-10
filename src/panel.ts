@@ -2,7 +2,7 @@ import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, 
 import { clearFilters, esc, filtering, isDone, matches, reducedMotion, t, toggleFilter, type FilterKind } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
-import { L, contactRows, detailLists, gallerySetList, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
+import { L, contactRows, keyFigures, detailLists, gallerySetList, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
 /* Section marks sit in the gutter, left of the text column (as in the reference). */
@@ -94,7 +94,7 @@ export function indexPanel(): string {
     astSvg(AST.index, 'ix-ast'),
     L('index'),
     // v72.10 (owner, option C): her name and title head the INDEX, above the intro
-    `<h2 class="p-title ix-name" tabindex="-1">${esc(site.name)}</h2><p class="lab ix-role">${tx(site.tag)}</p>
+    `<h2 class="p-title ix-name" tabindex="-1">${esc(site.name)}</h2><p class="lab ix-role">${tx(site.tag)}</p>${keyFigures()}
      ${site.introLines.map((l) => `<p class="ix-bio"><span class="ix-lead">${esc(t(l.lead))}</span> ${linked(l.en, l.links)}</p>`).join('')}<a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
     true,
     'ix',

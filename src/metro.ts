@@ -190,7 +190,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   desk.appendChild(note);
   const take = document.createElement('div'); // v76 (owner): at the end of a ride, "Take my card" slides out beside the bar
   take.className = 'mt-take';
-  take.innerHTML = `<button type="button" class="btn">${esc(t(ui.takeCard))} <i aria-hidden="true">✳</i></button>`;
+  take.innerHTML = `<button type="button" class="btn btn-primary"><span class="tc-mini" aria-hidden="true"><i></i></span>${esc(t(ui.takeCard))}</button>`;
   take.querySelector('button')!.onclick = openCard;
   desk.appendChild(take);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';

@@ -4,7 +4,8 @@ import { publishedMarkup } from './published-copy';
  * both build from these, so a node reads the same on every screen and a change here
  * reaches both. Never re-create one of these inline in panel.ts or mobile.ts.
  */
-import { byId, childrenOf, filterAll, filterSets, rides, rolesOrder, schoolsOrder, site, ui, workOf, type GallerySet, type RideKey, type SiteNode, type T } from './content';
+import { card, byId, childrenOf, filterAll, filterSets, rides, rolesOrder, schoolsOrder, site, ui, workOf, type GallerySet, type RideKey, type SiteNode, type T } from './content';
+import { openCard } from './lightbox';
 import { copyFieldKey } from './copy-binding';
 import { clearFilters, filters, setFilter, toggleFilter, type FilterKind, esc, missingZh, state, t } from './state';
 import { AST, astSvg } from './shapes';
@@ -78,6 +79,11 @@ function identity(n: SiteNode, title: string): string {
 /** The one figure a recruiter should see first, as a sentence: "80M+ views across 9 accounts…". */
 function figure(n: SiteNode): string {
   return n.headline ? `<p class="p-fig"><b>${highlight(n.headline.num, n.headline.highlight || '')}</b> <span>${tx(n.headline.label)}</span>${n.headline.note ? `<span class="p-fig-note">${tx(n.headline.note)}</span>` : ''}</p>` : '';
+}
+
+/** v76.4 (owner): the card's four career numbers, also at the top of the INDEX and the phone page (one list: content.ts card.stats). */
+export function keyFigures(): string {
+  return `<div class="ix-figs">${card.stats.map((s) => `<p class="p-fig"><b>${esc(s.big)}</b><span>${esc(t(s.label))}</span></p>`).join('')}</div>`;
 }
 
 export function summary(n: SiteNode): string {
@@ -248,6 +254,7 @@ const ctRow = (k: string, value: string, action = '') =>
   `<div class="sec ct-row"><div class="ct-h"><span class="p-ico" aria-hidden="true">↳</span><span class="lab">${k}</span>${action}</div><div class="sec-body">${value}</div></div>`;
 // v73.13 (owner, option A): a copy icon in the right-hand column, where × and + sit; a tick once copied
 const ICON_COPY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M7 5.5h5A1.5 1.5 0 0 1 13.5 7v5a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 12V7A1.5 1.5 0 0 1 7 5.5z"/><path d="M10.5 3.5v-.5A1.5 1.5 0 0 0 9 1.5H3A1.5 1.5 0 0 0 1.5 3v6A1.5 1.5 0 0 0 3 10.5h.5"/></svg>';
+const ICON_SAVE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8"/><path d="M4.5 7.5L8 11l3.5-3.5"/><path d="M2.5 13.5h11"/></svg>';
 const ICON_TICK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>';
 const ctCopy = (text: string, label: string) => `<button class="ct-act" data-copy="${esc(text)}" aria-label="${label}" title="${label}">${ICON_COPY}</button>`;
 
@@ -258,11 +265,14 @@ export function contactRows(): string {
   const linkedin = ctRow(L('linkedin'), `<a href="${esc(site.linkedin)}" target="_blank" rel="noopener">${esc(linkedinHandle())} ↗</a>`);
   // v73.9 (owner): a plain-text version for a recruiter's AI assistant
   const ai = ctRow(L('forAi'), `<a href="wenyi.md" target="_blank" rel="noopener">wenyi.md ↗</a>`, ctCopy(new URL('wenyi.md', location.href).href, L('copyLink')));
-  return `${email}${linkedin}${ai}`;
+  // v76.2 (owner): the travel card lives here, as its own row of Let's talk: open it, or save the picture straight away
+  const mine = ctRow(L('myCard'), `<button type="button" class="ct-link" data-card>${L('takeCard')} ↗</button>`, `<a class="ct-act" href="${esc(card.png)}" download aria-label="${L('saveCard')}" title="${L('saveCard')}">${ICON_SAVE}</a>`);
+  return `${email}${linkedin}${ai}${mine}`;
 }
 
 /** Copy-to-clipboard buttons inside any freshly rendered block. */
 export function wireCopy(root: ParentNode) {
+  root.querySelectorAll<HTMLButtonElement>('[data-card]').forEach((b) => (b.onclick = openCard)); // the travel card, in Let's talk (v76.2)
   root.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
     b.onclick = async () => {
       try {

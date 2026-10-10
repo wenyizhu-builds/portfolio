@@ -9,6 +9,11 @@
   - **正面 = Night line，配色 Bright blue（N2）**：一条发光的地铁线从 Creative 升到 Data 再到 Growth（Growth 用 Instrument Serif 斜体、柠檬绿，终点柠檬绿圆点脉动）；左上「Growth line」，右上 ✳；底部名字 + 职位。颜色全部由钴蓝 / 白 / 柠檬绿派生（`--tc-*`）。她看过的其他正面（Glow、Holo、Poster、Frosted、Transit、深色 Night）都不用。
   - **背面 = Pocket summary**：800M+ views / 130K+ followers grown / 190+ creators briefed / 4 · 3 markets · languages（语言一行不换行），右侧二维码（`dev/card/qr.cjs` 生成，网址为上线地址）+「Scan to ride again」，底部邮箱和 LinkedIn。数字在 `content.ts` 的 `card.stats`，算法写在注释里；800M+ 含她参与支持的活动（她 10-11 确认可以）。
   - 卡片上没有编号（试过「No. 0009」，她看不懂，删掉）。
+  - **v76.1–76.4（10-11，她试用后）**：
+    - 入口改为 Let's talk 卡片里单独一行「MY CARD · Take my card ↗」（右侧下载图标 = 直接保存图片）；页头和手机菜单里的「Take my card」去掉（她：不重要，不要放页头）。骑行终点的「Take my card」保留，改成和骑行条同高的钴蓝按钮，里面一张小卡片，出现时轻推一下（她：之前太弱看不见）。
+    - 打开时不要黑底（她）：卡片直接浮在当前页面上，页面淡化 + 轻微模糊（`--tc-veil`、`--tc-blur`）；× 在卡片右上角上方。
+    - 拖动（她：几乎拖不动）：整个遮罩任何地方都能拖，卡片紧跟手指；拖过 45°（`--tc-turn`）或轻甩就翻面；拖完松手不会关闭。
+    - INDEX 和手机首页：名字、职位下面放卡片背面的四个数字（2×2，钴蓝数字 + 灰色小号大写标签，`keyFigures()`，与 `card.stats` 同一来源）。
 - **地铁图 v71：线条变细、站点标记统一、「Curate your ride」（2026-10-08，用户在原型 Artifact「Metro Ride」里逐条确认）**。取代下面 v70 里的地区筛选、站点分级和字体规则。
   - **粗细（用户选 Medium）**：线 8 → 6px，站圈描边 ×0.85、半径 ×0.92；只改 `:root` 的 `--m-*`。
   - **一个标记一个意思（地图、图例、卡片列表一致）**：◎ 双圈 = 重点案例；◯ 大单圈 = 换乘站（XJTLU、Seminary Co-op、HoYoverse、Xiaohongshu AI Channel）；∘ 小圈 = 其他站（其他作品、工作、学校）。名字跟标记走：重点案例和换乘站粗体，其他站常规；全部黑色，不再有灰色小字。工作和学校的名字常显，其他作品悬停或打开线时显示。图例：KEY CASE · INTERCHANGE · OTHER STOP · EDUCATION。用户：标记不能一会儿表示重点、一会儿表示换乘。

@@ -943,6 +943,7 @@ export const ui = {
   ridePrev: { en: 'Previous stop' },
   rideExit: { en: 'End ride' },
   takeCard: { en: 'Take my card' }, // v76 (owner)
+  myCard: { en: 'My card' }, // v76.2 (owner): a row of Let's talk
   saveCard: { en: 'Save card' },
   cardHint: { en: 'Click or drag the card to turn it over' },
   cardHintTouch: { en: 'Tap or swipe the card to turn it over' },

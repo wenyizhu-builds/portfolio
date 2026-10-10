@@ -55,12 +55,12 @@ export function wireCard(root: HTMLElement): () => void {
   const tiltX = cssNum('--tc-tilt-x'), tiltY = cssNum('--tc-tilt-y'), dragK = cssNum('--tc-drag'), flick = cssNum('--tc-flick'), peek = cssNum('--tc-peek');
   const s = { rx: 0, ry: 0, trx: 0, try: 0, base: 0, go: 0, tgo: 0 };
   let raf = 0, touched = false, alive = true;
-  let drag: { x0: number; y0: number; t: number; lastX: number; v: number; moved: boolean } | null = null;
+  let drag: { x0: number; y0: number; t: number; lastX: number; v: number; moved: boolean; onCard: boolean } | null = null;
   const timers: number[] = [];
   const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(() => alive && fn(), ms));
 
   function frame() {
-    const k = drag ? 0.35 : 0.12;
+    const k = drag ? 0.6 : 0.14;
     s.rx += (s.trx - s.rx) * k; s.ry += (s.try - s.ry) * k; s.go += (s.tgo - s.go) * 0.15;
     flip.style.transform = `rotateX(${s.rx.toFixed(2)}deg) rotateY(${s.ry.toFixed(2)}deg)`;
     flip.style.setProperty('--go', s.go.toFixed(3));
@@ -81,15 +81,18 @@ export function wireCard(root: HTMLElement): () => void {
   root.addEventListener('pointermove', hover);
   root.addEventListener('pointerleave', rest);
 
-  flip.addEventListener('pointerdown', (e) => {
+  // v76.1 (owner: "almost impossible to drag"): a drag can start anywhere in the overlay, not only on the card;
+  // the card follows the pointer closely; half a turn needs only --tc-turn degrees of drag (or a flick).
+  let justDragged = false;
+  root.addEventListener('pointerdown', (e) => {
+    if ((e.target as Element).closest('button, a') || e.button > 0) return;
     touched = true;
-    drag = { x0: e.clientX, y0: e.clientY, t: performance.now(), lastX: e.clientX, v: 0, moved: false };
-    flip.setPointerCapture(e.pointerId);
+    drag = { x0: e.clientX, y0: e.clientY, t: performance.now(), lastX: e.clientX, v: 0, moved: false, onCard: flip.contains(e.target as Node) };
   });
-  flip.addEventListener('pointermove', (e) => {
+  root.addEventListener('pointermove', (e) => {
     if (!drag) return;
     const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
-    if (!drag.moved && Math.hypot(dx, dy) > cssNum('--tc-slop')) drag.moved = true;
+    if (!drag.moved && Math.hypot(dx, dy) > cssNum('--tc-slop')) { drag.moved = true; root.setPointerCapture(e.pointerId); } // capture only a real drag, so a plain click stays a click
     if (!drag.moved) return;
     const now = performance.now();
     drag.v = (e.clientX - drag.lastX) / Math.max(1, now - drag.t); drag.lastX = e.clientX; drag.t = now;
@@ -100,10 +103,15 @@ export function wireCard(root: HTMLElement): () => void {
   const end = (e: PointerEvent) => {
     if (!drag) return;
     const d = drag; drag = null;
-    if (!d.moved) { if (e.type === 'pointerup') turn(1); return; } // a plain click turns it over
-    s.base = Math.round((s.try + d.v * flick) / 180) * 180; s.try = s.base; s.trx = 0; s.tgo = e.pointerType === 'mouse' ? 1 : 0; kick();
+    if (!d.moved) { if (e.type === 'pointerup' && d.onCard) turn(1); return; } // a plain click on the card turns it over; elsewhere it closes (lightbox.ts)
+    justDragged = true; setTimeout(() => (justDragged = false));
+    const pushed = s.try - s.base + d.v * flick, sign = Math.sign(pushed);
+    s.base += sign * 180 * Math.floor((Math.abs(pushed) + 180 - cssNum('--tc-turn')) / 180);
+    s.try = s.base; s.trx = 0; s.tgo = e.pointerType === 'mouse' ? 1 : 0; kick();
   };
-  (['pointerup', 'pointercancel', 'lostpointercapture'] as const).forEach((type) => flip.addEventListener(type, end));
+  (['pointerup', 'pointercancel', 'lostpointercapture'] as const).forEach((type) => root.addEventListener(type, end));
+  // a drag that ends off the card is not a click on the backdrop
+  root.addEventListener('click', (e) => { if (justDragged) e.stopImmediatePropagation(); }, true);
   flip.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); turn(1); }
     if (e.key === 'ArrowLeft') { e.preventDefault(); turn(-1); }
