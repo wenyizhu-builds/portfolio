@@ -795,3 +795,4 @@
 - v75.10（10-10）：CV 按 JD 原词库补关键词（不改事实）：performance creative / user acquisition (UA) / creative testing roadmap / translate performance data into creative insights / codify winning patterns into playbooks / scale what worked, cut what didn’t, document / not just reach / creator lifecycle / viral loop；Skills 加 paid social、experimentation、Meta (Facebook, Instagram)。不用 CAC、ROAS、投放工具名（她没负责）。11.5pt 一页。
 - v75.11（10-10）：CV 去重复（她：scale / cut 太多）：每个标志性说法只出现一次（scaling what worked, cutting what didn’t 只在日本频道；translates performance data into creative insights 只在看板）；四个 Grew 开头换成不同动词。11.6pt 一页。
 - v75.12（10-10）：CV 终稿语法检查：Won…while running（时态统一）；Drew 9.5M+ visitors… with 3× the benchmark conversion rate；Dashboard (built with Claude Code) that tags；the creators that core players follow。她确认 CV 定稿。
+- v75.13（10-10）：CV 自己频道两条重组（她）：第一条 = 数字 + 付费合作；第二条 = Creator OS（一人运营整个频道）。
