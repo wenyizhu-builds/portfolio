@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v75.2（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-10 · v75.3（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
@@ -16,7 +16,7 @@
 ### v75（10-10）：编辑审稿已完成并上线到分支
 - 两位审稿人（资深营销、英国招聘方）的意见她逐条确认，55 处修改已写进三处（见 CHANGELOG v75）。她定的：用 CV 不用 Resume；市场顺序 Japan → North America → Europe；Paid Growth 保留 "improving spend efficiency"（涉及 CPI、CPA 等多个指标）；允许适度重复（from scratch、brand team）；Xbox 统一 100+；职位行必须一行。
 - HoYoverse 职位：她的合同职位是 Marketing Specialist，网站写 Global Marketing Specialist（部门即 Global Marketing）。
-- 骑行改名「My career in five minutes」（她：原名不够成熟）。v75.2：站点叙述全部删掉（她：多余、尴尬），不要再加回来，除非她主动提。站点顺序未调（Creator Ad Pipeline 在 Japan Channel Launch 之前，与时间相反）：路线是地图几何决定的，改顺序要重画 `METRO.route.me`；叙述已去掉 "first"。
+- 骑行改名「My path so far」（v75.3；她：原名不够成熟，"career" 又不含学校和自己的项目）。v75.2：站点叙述全部删掉（她：多余、尴尬），不要再加回来，除非她主动提。站点顺序未调（Creator Ad Pipeline 在 Japan Channel Launch 之前，与时间相反）：路线是地图几何决定的，改顺序要重画 `METRO.route.me`；叙述已去掉 "first"。
 
 ### v75.1：地图开场闪图已修（见 CHANGELOG / L61）；发布版此前开场、骑行动画时长都失效，已一并修好。
 
