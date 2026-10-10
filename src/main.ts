@@ -1,7 +1,7 @@
 import { applyPublishedCopy } from './published-copy';
 import './style.css';
 import { createFloatingVisual } from './floating-visual';
-import { ancestors, byId, site, ui, type SiteNode } from './content';
+import { ancestors, byId, ui, type SiteNode } from './content';
 import { type MapApi } from './map';
 import { createMetro, stationMark } from './metro';
 import { appIcon } from './shapes';
@@ -37,7 +37,7 @@ app.innerHTML = `
       <aside class="panel" id="panel"><div class="panel-inner" id="panel-inner"></div></aside>
     </div>
     <div class="legend" id="legend"></div>
-    ${site.launched ? '' : '<p class="proto" id="proto"></p>'}
+    <p class="proto" id="proto"></p>
     <p class="sr-only" id="announce" aria-live="polite"></p>
   </div>
   <div class="mob" id="mob"></div>
@@ -108,7 +108,7 @@ function paintChrome() {
   }
   syncRide(fb);
   const proto = document.getElementById('proto');
-  if (proto) proto.textContent = t(ui.prototype);
+  if (proto) proto.textContent = t(ui.credit);
   // metro map legend (v71): one meaning per mark — key case, interchange, other stop — and the hollow Campus line
   document.getElementById('legend')!.innerHTML =
     `<span>${stationMark('key')}${esc(t(ui.legendKeyCase))}</span><span>${stationMark('interchange')}${esc(t(ui.legendInterchange))}</span><span>${stationMark('dot')}${esc(t(ui.legendOtherStop))}</span><span><i class="lg-campus" aria-hidden="true"></i>${esc(t(ui.education))}</span>`;

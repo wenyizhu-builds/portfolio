@@ -126,7 +126,7 @@ export function renderMobile(root: HTMLElement) {
     ${section('creative')}
     ${info()}
     ${contact()}
-    ${site.launched ? '' : `<footer class="m-foot"><span>${L('prototype')}</span></footer>`}
+    <footer class="m-foot"><span>${L('credit')}</span></footer>
     <a href="#m-menu" class="m-fab" data-menu>${L('menu')}</a>
   `;
   root.querySelector<HTMLAnchorElement>('[data-menu]')!.onclick = (e) => {

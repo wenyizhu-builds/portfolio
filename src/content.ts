@@ -859,7 +859,7 @@ export const ui = {
   menu: { en: 'Menu', zh: '目录' },
   more: { en: 'More', zh: '展开' },
   less: { en: 'Less', zh: '收起' },
-  prototype: { en: 'Prototype · placeholder copy', zh: '原型 · 占位文案' },
+  credit: { en: 'Designed and vibe coded by me with Claude Code' }, // v75.23 (owner): the corner credit, shown before and after launch
   workHere: { en: 'Work from this role', zh: '这段经历中的作品' },
   viewWork: { en: 'View work', zh: '查看作品' },
   home: { en: 'home', zh: '首页' },
