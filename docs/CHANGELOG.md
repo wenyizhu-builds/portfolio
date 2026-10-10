@@ -802,3 +802,4 @@
 - v75.17（10-10）：How it worked 图全部重画（她：太长太多字）：竖排步骤，每步 2–3 词标题 + 一行 ≤6 词，不写 UA、不写分工（Team 区有）；站内字体 Schibsted Grotesk、站内色（一步柠檬绿 = 关键一步，蓝色虚线 = 循环）；在卡片宽度下不放大也能读。新增 Landing Page 图（病毒循环）。源文件 `dev/diagrams/diagrams.html`，`node dev/diagrams/shot.cjs` 出图（需 `npm i @fontsource/schibsted-grotesk` 到 dev/diagrams）。
 - v75.18（10-10）：手机 INDEX 简介改为和电脑一样的三行 + 柠檬绿关键词（原来拼成一段）；Experience 简介改为「From PR and social internships to global marketing at HoYoverse, each role raised the stakes: new markets, new channels, and growth systems built from scratch.」（她：工作从来不是一样的，不能写 the job has stayed the same）。
 - v75.19（10-10）：日本频道图第 4、5 步改为「Review against KPIs: Track every channel’s growth」「Diagnose and fix: Find bottlenecks, bring in solutions」（她：不只是 adapt winners，还有诊断瓶颈、给出解决方案）。
+- v75.20（10-10）：修复 INDEX 点分类时卡片跳动（她）：分区用 800ms、卡片同一条缓动曲线折叠展开，折叠期间卡片逐帧跟随（`.panel.tracking` 关掉卡片自己的高度过渡），+/– 在开始时就换；INDEX 分区内容区 overflow: hidden（量到的高度和最终高度一致）。逐帧量：内容和卡片同步移动，结束时没有回弹。

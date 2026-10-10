@@ -1,5 +1,5 @@
 import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
-import { clearFilters, esc, filtering, isDone, matches, t, toggleFilter, type FilterKind } from './state';
+import { clearFilters, esc, filtering, isDone, matches, reducedMotion, t, toggleFilter, type FilterKind } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
 import { L, contactRows, detailLists, gallerySetList, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
@@ -29,6 +29,9 @@ function groupLink(id: string): string {
   return n ? `<a class="ngroup-h${isDone(id) ? ' is-visited' : ''}${matches(id) ? '' : ' is-off'}" href="#/${id}">${tx(n.label)}</a>` : '';
 }
 
+const cssVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+/** A CSS time in ms; the build minifies times (2000ms → 2s), so read the unit (L61). */
+const cssMs = (name: string) => { const v = cssVar(name), n = parseFloat(v) || 0; return /\ds$/.test(v) ? n * 1000 : n; };
 function details(mark: string, title: string, body: string, open = false, cls = '', id = ''): string {
   return `<details class="sec${cls ? ` ${cls}` : ''}"${open ? ' open' : ''}${id ? ` data-id="${id}"` : ''}><summary><span class="p-ico" aria-hidden="true">${mark}</span><span class="lab">${title}</span><i aria-hidden="true"></i></summary><div class="sec-body">${body}</div></details>`;
 }
@@ -185,13 +188,32 @@ export function contactPanel(): string {
 export function wirePanel(root: HTMLElement, onClose: () => void, onSection?: (id: string | null) => void) {
   root.querySelectorAll<HTMLButtonElement>('[data-act="close"]').forEach((b) => (b.onclick = onClose));
   // Only the INDEX is an exclusive accordion; detail sections stay independently open.
+  // v75.20 (owner, bug: the card jumped): sections fold open and shut over the card's own time and easing, and the
+  // card follows them frame by frame, so the text and the card's outline move together instead of snapping.
   const secs = [...root.querySelectorAll<HTMLDetailsElement>('details.sec.ix')];
+  const D = cssMs('--dur-card'), E = cssVar('--ease');
+  let track = 0;
+  const fold = (d: HTMLDetailsElement, open: boolean) => {
+    const body = d.querySelector<HTMLElement>('.sec-body');
+    if (!body || reducedMotion.matches || !D) { d.open = open; return; }
+    body.getAnimations().forEach((a) => a.cancel());
+    if (open) d.open = true;
+    const pb = getComputedStyle(body).paddingBottom, full = body.scrollHeight; // border-box: the height includes the padding
+    const shut = { height: '0px', paddingBottom: '0px', opacity: 0 }, shown = { height: `${full}px`, paddingBottom: pb, opacity: 1 };
+    const a = body.animate(open ? [shut, shown] : [shown, shut], { duration: D, easing: E });
+    a.onfinish = () => { if (!open) d.open = false; };
+  };
   secs.forEach((d) =>
-    d.addEventListener('toggle', () => {
-      if (d.open) secs.forEach((o) => o !== d && (o.open = false));
+    d.querySelector('summary')!.addEventListener('click', (e) => {
+      e.preventDefault();
+      const opening = !d.classList.contains('is-open'); // the folding state, not d.open (which stays true until a fold ends)
+      secs.forEach((o) => { if (o !== d && o.classList.contains('is-open')) { o.classList.remove('is-open'); fold(o, false); } });
+      d.classList.toggle('is-open', opening); fold(d, opening);
+      root.classList.add('tracking'); clearTimeout(track); track = window.setTimeout(() => root.classList.remove('tracking'), D);
       // v72.4 (owner): opening a section in the INDEX shows only its line on the map, like clicking the line itself
-      onSection?.(secs.find((o) => o.open && o.dataset.id)?.dataset.id ?? null);
+      onSection?.(opening ? d.dataset.id ?? null : null);
     }),
   );
+  secs.forEach((d) => d.classList.toggle('is-open', d.open));
   wireCopy(root);
 }

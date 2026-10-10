@@ -256,6 +256,7 @@ button { font: inherit; color: inherit; }
    below it, and new card content swaps in place — no fade, which read as a flash. */
 .ixnav, .media { flex: 0 0 auto; height: 0; overflow: hidden; transition: height var(--dur-card) var(--ease); pointer-events: auto; }
 .panel:not(.open) { display: none; }
+.panel.tracking { transition: none; } /* v75.20: while an INDEX section folds, the card follows it frame by frame */
 
 /* INDEX: the bar above every card, and the index card itself */
 .ixbar {
@@ -320,7 +321,9 @@ button { font: inherit; color: inherit; }
 .sec summary::-webkit-details-marker { display: none; }
 .sec summary i::after { content: '+'; font-style: normal; font-size: var(--fs-text); }
 .sec[open] summary i::after { content: '–'; }
+.sec.ix:not(.is-open) summary i::after { content: '+'; } /* v75.20: the INDEX sign flips when the fold starts, not when it ends */
 .sec-body { padding: 0 0 var(--sp-12); }
+.sec.ix > .sec-body { overflow: hidden; } /* v75.20: folds by height; also holds its children's margins, so the measured and final heights agree */
 .sec-body ul { margin: 0; padding-left: var(--leaf-indent); list-style: disc; }
 .sec-body li { margin: 0 0 var(--sp-6); }
 .sec-body li::marker, .m-more li::marker { color: var(--muted); }
