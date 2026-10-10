@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
 import { copyStore } from './dev/copy-store';
+import { llmsTxt, wenyiMd } from './dev/readable';
 import { site } from './src/content';
 import { astIcon } from './src/shapes';
 
@@ -38,6 +39,7 @@ function headFromContent(): Plugin {
         `<meta name="twitter:card" content="summary" />`,
         `<meta name="theme-color" content="${escAttr(token('bg'))}" />`,
         `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(icon)}" />`,
+        `<link rel="alternate" type="text/markdown" href="wenyi.md" title="${escAttr(site.name)}: plain-text portfolio" />`, // v73.9: for AI agents
         // the web font is the first family in --sans: change the font in one place (style.css)
         `<link rel="preconnect" href="https://fonts.googleapis.com" />`,
         `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
@@ -51,8 +53,26 @@ function headFromContent(): Plugin {
   };
 }
 
+/** v73.9 (owner): /wenyi.md and /llms.txt, generated from the content (dev/readable.ts). */
+function aiReadable(): Plugin {
+  const files: Record<string, () => string> = { 'wenyi.md': wenyiMd, 'llms.txt': llmsTxt };
+  return {
+    name: 'ai-readable',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const f = files[(req.url || '').split('?')[0].replace(/^\//, '')];
+        if (!f) return next();
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8'); res.end(f());
+      });
+    },
+    generateBundle() {
+      for (const [fileName, f] of Object.entries(files)) this.emitFile({ type: 'asset', fileName, source: f() });
+    },
+  };
+}
+
 // Relative base so the built site works on GitHub Pages under any repo name.
 export default defineConfig({
   base: './',
-  plugins: [headFromContent(), copyStore()],
+  plugins: [headFromContent(), copyStore(), aiReadable()],
 });

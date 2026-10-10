@@ -80,6 +80,7 @@ export interface SiteNode {
   prototype?: { src: string; poster: string; video: string[]; icon: AppIcon }; // desktop: the promo video (sources in order of preference, with its poster frame) in the map's place, and an app icon that opens the clickable prototype `src` in a pop-up (v64.4); the phone shows `gallery` instead
   mapLabel?: T; // shorter name on the metro map (v70), e.g. XJTLU
   mapTag?: T; // v70.2: the result tag under a key station on the metro map (replaces the hand-written note there), in the line's colour
+  place?: T; // v73.7: where a school is, shown after its dates
   note?: T; // hand-written note beside the point on the map; a line break starts a new line. Placement: NOTES in map.ts
 }
 
@@ -95,14 +96,26 @@ function set(id: string, key: string, unit: GallerySet['unit'], title: T, meta?:
    Desktop: a panel under the ✳ button; phone: three drop-downs. Nothing selected = everything. */
 export type RegionKey = 'na' | 'eu' | 'jp' | 'cn';
 export type PlatformKey = 'tiktok' | 'youtube' | 'x' | 'instagram' | 'snapchat' | 'meta' | 'google' | 'xhs';
-export type RideKey = 'must' | 'creator' | 'ai' | 'journey';
-/** Ready-made rides: the stations a ride stops at. The order on the map comes from the track (metro.ts), not from this list. */
-export const rides: Record<RideKey, { label: T; stops: string[] }> = {
-  must: { label: { en: 'Must-stops' }, stops: ['gip-testing', 'ua-creative-strategy', 'zzz-jp-accounts', 'interactive-filter', 'ai-workbench'] },
-  creator: { label: { en: 'Creator marketing' }, stops: ['gip-testing', 'ua-creative-strategy', 'giveaway-campaign', 'influencer-activation', 'interactive-filter'] },
-  ai: { label: { en: 'Built with AI' }, stops: ['xhs-ai-channel', 'creator-workbench', 'ai-workbench'] },
-  // one way along the track, so no Paid & UA cases (the train can't turn back at HoYoverse)
-  journey: { label: { en: 'The whole journey' }, stops: ['xjtlu', 'nowness', 'weber-shandwick', 'nike', 'seminary-coop', 'hoyoverse', 'zzz-jp-accounts', 'interactive-filter', 'xhs-ai-channel', 'creator-workbench', 'ai-workbench'] },
+export type RideKey = 'me' | 'paid' | 'campaigns' | 'social' | 'ai';
+/** Ready-made rides (v73.5, owner): named the way a hiring brief is written, one per job family, plus the biography and the whole line.
+    The order on the map comes from the track (metro.ts), not from this list. */
+export const rides: Record<RideKey, { label: T; stops: string[]; story?: boolean; notes?: Record<string, T> }> = {
+  me: { label: { en: 'My story in five minutes' }, story: true, stops: ['xjtlu', 'nowness', 'nike', 'uchicago', 'hoyoverse', 'ua-creative-strategy', 'zzz-jp-accounts', 'xhs-ai-channel', 'ai-workbench'],
+    notes: {
+      'xjtlu': { en: "I studied communication at university, where I learnt how media is constructed and the power dynamics behind it. The lesson that stayed with me is how much influence media has: it shapes how people see the world and changes how they behave." },
+      'nowness': { en: "My first role in content, at an arts and culture platform. Interviewing artists and editing their work for a wider audience taught me how to make a complex idea accessible without diluting it." },
+      'nike': { en: "This is where I began to see marketing as a system. Every launch rests on a chain of decisions: the audience, the lead message, the partners and creators, the channels and formats, and the timing. Building momentum on social across a run of product launches depends on getting each one right." },
+      'uchicago': { en: "A master’s in the humanities at the University of Chicago. The programme was grounded in philosophy and critical theory. It deepened my understanding of culture, power and identity, and taught me to look at any question from several angles." },
+      'hoyoverse': { en: "Three years in global marketing at HoYoverse, on titles with audiences across Japan, North America and Europe, covering the full funnel: integrated digital campaigns and creator partnerships at the top, and creator ads built for conversion and ROI at the bottom." },
+      'ua-creative-strategy': { en: "This is where I first learnt to build a growth system: turning performance data into creative insights, codifying what worked into playbooks, and using AI to make the whole loop repeatable." },
+      'zzz-jp-accounts': { en: "Launching social channels in a new market taught me how to break a market down from zero: research the audience, define the metrics that matter, and translate the data into creative decisions that drive real growth." },
+      'xhs-ai-channel': { en: "After years of briefing creators, I built my own channel to test my methods from the creator’s side. Growing and monetising it has given me first-hand knowledge of what makes content perform, from writing the hooks myself to delivering paid partnerships for brands." },
+      'ai-workbench': { en: "AI is now central to how I work. My focus for the next stage is applying it where it creates measurable value: faster testing, sharper creative decisions, and growth that ties directly to ROI." },
+    } }, // v73.6 (owner): the biography ride; runs its own route (metro.ts R.me), one short step back for UChicago and the Creator Ad Pipeline
+  paid: { label: { en: 'Paid acquisition & creative testing' }, stops: ['ua-creative-strategy', 'gip-testing', 'xbox-launch', 'ai-workbench'] },
+  campaigns: { label: { en: 'Creator marketing & campaigns' }, stops: ['interactive-filter', 'influencer-activation', 'giveaway-campaign', 'landing-page'] },
+  social: { label: { en: 'Social channel growth' }, stops: ['zzz-jp-accounts', 'genshin-en-accounts', 'xhs-ai-channel'] },
+  ai: { label: { en: 'AI in marketing' }, stops: ['ai-workbench', 'creator-workbench', 'xhs-ai-channel'] },
 };
 export const filterAll: T = { en: 'All', zh: '全部' }; // the phone's drop-downs start here
 export const filterSets = {
@@ -124,15 +137,17 @@ export const regionOfMarket: Record<string, RegionKey> = { NA: 'na', US: 'na', E
 
 export const site = {
   name: 'Wenyi Zhu',
-  tag: { en: 'Growth Marketer · Creative Strategist', zh: '增长营销 · 创意策略' } as T,
-  // One-line intro at the top of the sticky note (and the phone hero). [Draft]
-  intro: {
-    en: "I'm a growth marketer on the creative side: I find out which ads and content actually drive installs and engagement, then scale them. I spent three years at HoYoverse, the studio behind Genshin Impact, running campaigns across North America, Europe and Japan. Lately I've been building my own AI tools to do it faster.", // [Draft] final bio written last (owner)
-    zh: '',
-  } as T,
-  introHighlight: { en: 'drive installs and engagement' } as T,
+  tag: { en: 'Creative Strategist · Growth Marketing', zh: '创意策略 · 增长营销' } as T, // v73.1 (owner): one line on the card
+  // Intro at the top of the INDEX card: three lines, one idea each, with a lead word in cobalt (v73.1, owner's option 3).
+  // The phone hero and the share preview use `intro`, the same three lines joined as one paragraph.
+  introLines: [
+    { lead: { en: 'Creative + data.' }, en: 'I shape creator content and ad creative, test it against performance data, and scale what drives conversion and growth.' },
+    { lead: { en: 'Global.' }, en: 'I’ve run campaigns for audiences in North America, Europe, Japan and China, including three years at HoYoverse, the studio behind Genshin Impact.', links: { 'North America': 'region:na', Europe: 'region:eu', Japan: 'region:jp', China: 'region:cn' } }, // v73.7 (owner): China added; HoYoverse itself was NA/EU/JP, so China sits at career level
+    { lead: { en: 'AI.' }, en: 'I build my own AI tools that turn campaign data into creative decisions and make marketing faster and sharper.', links: { 'AI tools': '#/ai' } },
+  ] as { lead: T; en: string; zh?: string; links?: Record<string, string> }[], // links (v73.8, owner): a phrase → a filter (kind:key) or a page (#/id)
+  get intro(): T { return { en: this.introLines.map((l) => `${l.lead.en} ${l.en}`).join(' '), zh: '' }; },
   linkedin: 'https://www.linkedin.com/in/wenyi-zhu-mktg/',
-  email: '', // PLACEHOLDER: owner will provide a public email
+  email: 'wenyi.mktg@gmail.com',
   resumePdf: '', // PLACEHOLDER: put the file in public/ and use a relative path, e.g. 'wenyi-zhu-resume.pdf'
   // false = still a prototype: shows the PROTOTYPE label. `npm run check -- --launch` refuses to pass
   // while this is false or any [Placeholder]/[Draft] text, empty email or empty résumé remains.
@@ -151,9 +166,9 @@ export const nodes: SiteNode[] = [
     id: 'growth-paid',
     type: 'branch',
     parent: 'root',
-    label: { en: 'Paid & UA Growth', zh: '付费与 UA 增长' },
+    label: { en: 'Paid Growth', zh: '付费增长' }, // v73.2 (owner): no 'UA' for readers outside gaming
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Data-backed creative testing for user acquisition: finding what drives installs, scaling what works and improving ROI.' },
+    summary: { en: 'Creative strategy for paid acquisition: building the testing frameworks for UGC ads, codifying what wins into playbooks, and improving spend efficiency across markets.' }, // v73.2 (owner, option 3): Quince / Aperture JD language
   },
   {
     id: 'ua-creative-strategy',
@@ -220,7 +235,7 @@ export const nodes: SiteNode[] = [
     context: { en: 'Genshin Impact' },
     tags: [{ en: 'TikTok' }, { en: 'UGC' }],
     platforms: ['tiktok'],
-    markets: ['US', 'JP', 'KR', 'TW'],
+    markets: ['US', 'JP'], // v73.3 (owner): only the markets the results are about; KR/TW were a smaller round
     summary: {
       en: "I designed and ran a three-round testing framework to see whether TikTok’s UGC incentive program could boost installs efficiently and supply videos that meet our standard for UA creative.",
     },
@@ -234,7 +249,7 @@ export const nodes: SiteNode[] = [
       {
         title: { en: 'What I did', zh: '我做了什么' },
         items: [
-          { en: "Designed the test framework: Built a three-round roadmap, setting each round’s payout model (CPM or CPA), markets, themes, budgets and success metrics against our UA benchmarks." },
+          { en: "Designed the test framework: Built a three-round roadmap, setting each round’s payout model (CPM or CPA), markets, themes, budgets and success metrics against our acquisition benchmarks." },
           { en: "Led campaign execution: Owned all three rounds end to end, from task setup and creator briefs to progress tracking, submission reviews and recaps." },
           { en: "Raised content quality: Rewrote task pages with clearer requirements and official reference videos, and flagged off-brief videos to free up the prize pool for better ones." },
           { en: "Evaluated performance and drove the decision: Measured reach, CPI, user quality and content relevance against our UA benchmarks, then recommended stopping the program and shifting budget to creator ads for UA." },
@@ -290,7 +305,7 @@ export const nodes: SiteNode[] = [
     results: [
       { metric: '+338%', en: 'CTR versus the earlier benchmark.' },
       { metric: '66%', en: 'lower CPC versus the earlier benchmark.' },
-      { metric: '120M+', en: 'impressions across the campaign.' },
+      { metric: '120M+', en: 'impressions' },
       { metric: '~700K', en: 'landing-page clicks across the campaign.' },
     ],
     media: [{ src: 'media/xbox-launch/genshin-xbox-banner-en-qr-blurred.jpg',
@@ -307,7 +322,7 @@ export const nodes: SiteNode[] = [
     label: { en: 'Gamified Landing Page' },
     kicker: { en: 'Genshin Impact · Web' },
     context: { en: 'Genshin Impact' },
-    tags: [{ en: 'Web' }, { en: 'Landing page' }, { en: 'Gamification' }],
+    tags: [{ en: 'Landing page' }, { en: 'Gamification' }], // v73.3 (owner): 'Web' dropped, same thing as the landing page
     markets: ['NA', 'EU', 'JP'], // global launch page in every language (owner)
     summary: {
       en: "For a major Genshin Impact update, I helped turn the launch landing page from an information page into a game: a short personality quiz with shareable results and a reward draw. It drew 9.5M+ unique visitors and 1.8M+ players into the draw, and converted 3x better than benchmark.",
@@ -347,10 +362,11 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'Creator & Social', zh: '创作者与社媒' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'Creator campaigns and always-on social channels across X, TikTok, YouTube, Instagram, Snapchat and Xiaohongshu, for English-speaking, Japanese and Chinese audiences.' },
+    summary: { en: 'Creator marketing as a growth channel: launching channels from zero, owning campaigns end to end, and turning reach into measurable impact across English, Japanese and Chinese markets.' }, // v73.2: JD language (Triple Whale, 2K, Hotwire)
   },
   {
     id: 'zzz-jp-accounts',
+    mapLabel: { en: 'Japan Channel Launch' }, // v73.3 (owner): title now parallel with 'English Social Channel Growth'
     mapTag: { en: '80M+ views' },
     
     note: { en: '0 → 80M+\norganic views', zh: '0 → 8000 万+\n自然播放' },
@@ -568,7 +584,7 @@ export const nodes: SiteNode[] = [
           { en: "Diagnosed what stalled growth: Used Tubular and monthly reports to compare TikTok trends, competitor channels and each channel’s performance, and pinpointed the gaps: too few evergreen topics, stale formats and weak follower conversion." },
           { en: "Refreshed the content mix: Turned the findings into changes for each channel. Guide channels that leaned on time-sensitive patch tutorials added short, entertaining gameplay tips and varied their covers, so views no longer depended on update days." },
           { en: "Built strategy for the new channels: Defined each channel’s audience, positioning, content pillars, formats and posting cadence from platform research and competitor benchmarks, then refined them on early performance data before scaling production." },
-          { en: "Ran monthly reviews: Tracked KPIs, reviewed English content and kept the agency’s output aligned with each channel’s growth goals." },
+          { en: "Ran monthly reviews: Tracked KPIs and kept the agency’s output on each channel’s growth goals." },
         ],
       },
     ],
@@ -593,8 +609,8 @@ export const nodes: SiteNode[] = [
     parent: 'growth-social',
     org: '', // her own account, not done at a job
     note: { en: 'my own channel', zh: '我自己的账号' }, // shows beside the point while Creator & Social is open
-    headline: { num: '1.8M+', label: { en: 'views across Xiaohongshu and Douyin' } },
-    label: { en: 'Xiaohongshu AI Channel' },
+    headline: { num: '2M+', label: { en: 'views across Xiaohongshu and Douyin' } },
+    label: { en: 'Xiaohongshu AI Tutorial Channel' }, // v73.4 (owner): says what the channel is
     kicker: { en: 'Xiaohongshu · Douyin' },
     tags: [{ en: 'Xiaohongshu' }, { en: 'Douyin' }],
     platforms: ['xhs'],
@@ -616,9 +632,10 @@ export const nodes: SiteNode[] = [
       },
     ],
     results: [
-      { metric: '1.8M+', en: 'views across Xiaohongshu and Douyin' },
-      { metric: '100K+', en: 'likes' },
-      { metric: '6', en: 'paid partners among China’s top AI brands' },
+      { metric: '2M+', en: 'views across Xiaohongshu and Douyin' }, // v73.4 (owner, 2026-10-10)
+      { metric: '16K+', en: 'followers' },
+      { metric: '170K+', en: 'likes' },
+      { metric: '6', en: 'paid partners among China’s top AI brands' }, // hidden by the published list until the owner confirms the count
     ],
     related: ['creator-workbench'], // the system that runs it (v69)
     links: [
@@ -635,7 +652,7 @@ export const nodes: SiteNode[] = [
     parent: 'root',
     label: { en: 'AI Projects', zh: 'AI 项目' },
     kicker: { en: 'Area of work', zh: '工作领域' },
-    summary: { en: 'How I use AI to work faster and think better — tools I build and use myself. [Placeholder copy]' },
+    summary: { en: 'AI tools I built for real marketing problems: translating performance data into creative insights, surfacing what wins, and turning it into the next brief.' }, // v73.2 (owner, option 1): Inkitt JD language
   },
   {
     id: 'ai-workbench',
@@ -646,6 +663,9 @@ export const nodes: SiteNode[] = [
     headline: { num: '40%', label: { en: 'less time on creative analysis & production' }, note: { en: "I built it from scratch while running creative strategy for Genshin Impact's creator ads." } }, // note: owner's line under the figure
     label: { en: 'Creative Intelligence Dashboard' },
     tags: [{ en: 'Vibe Coding' }, { en: 'Claude Code' }], // same tag style as the cases' markets and platforms (owner)
+    // v73.4 (owner): same shape as the cases — summary, Results, then What it does
+    summary: { en: "A dashboard I built with AI coding tools while running creative strategy for Genshin Impact’s creator ads. It breaks down and tags every ad, links the tags to performance data, and turns the winning patterns into the next scripts and campaign plan." },
+    results: [{ metric: '40%', en: 'less time on analysis and production' }],
     sections: [
       {
         title: { en: 'What it does', zh: '功能' },
@@ -669,10 +689,11 @@ export const nodes: SiteNode[] = [
     type: 'ai',
     parent: 'ai',
     org: '', // her own project, not done at a job
-    label: { en: 'Creator Workbench' },
+    label: { en: 'Creator Operating System' }, // v73.4 (owner): 'workbench' is not a word readers know; the promo video end card still needs re-rendering
+    mapLabel: { en: 'Creator OS' },
     context: { en: 'Personal project' },
     tags: [{ en: 'Vibe Coding' }, { en: 'Obsidian' }, { en: 'Claude Code' }, { en: 'Codex' }],
-    summary: { en: "The AI system that runs my Xiaohongshu channel, turned into a product for other creators. Agents do the research, analysis and drafting; the creator makes every call, without having to learn how agents work." },
+    summary: { en: "An Obsidian plugin built from the AI system that runs my Xiaohongshu channel, so any creator can use it. Agents do the research, analysis and drafting; the creator makes every call, without having to learn how agents work." },
     sections: [
       {
         title: { en: 'What it does', zh: '功能' },
@@ -704,13 +725,13 @@ export const nodes: SiteNode[] = [
     id: 'photography', type: 'creative', parent: 'creative', label: { en: 'Photography', zh: '摄影' }, period: '2021 – 2024',
     summary: { en: 'Photos from my travels, grouped by place.', zh: '旅行中拍的照片，按地点分组。' },
     gallery: [
-      set('huangshi', 'photography/huangshi', 'photos', { en: 'Huangshi, Hubei', zh: '湖北黄石' }, { en: 'Lunar New Year · 2022', zh: '春节 · 2022' }),
       set('japan', 'photography/japan', 'photos', { en: 'Japan', zh: '日本' }, { en: '2024' }),
       set('europe', 'photography/europe', 'photos', { en: 'Europe', zh: '欧洲' }, { en: 'Italy · France · Barcelona · 2024', zh: '意大利 · 法国 · 巴塞罗那 · 2024' }), // owner: three places, one series so it isn't scattered
-      set('wuhan', 'photography/wuhan', 'photos', { en: 'Wuhan', zh: '武汉' }, { en: '2021' }),
+      set('arizona', 'photography/arizona', 'photos', { en: 'Arizona', zh: '亚利桑那' }, { en: '2023' }),
       set('chicago', 'photography/chicago', 'photos', { en: 'Chicago', zh: '芝加哥' }, { en: '2021 – 2023' }),
       set('new-york', 'photography/new-york', 'photos', { en: 'New York', zh: '纽约' }, { en: '2022' }),
-      set('arizona', 'photography/arizona', 'photos', { en: 'Arizona', zh: '亚利桑那' }, { en: '2023' }),
+      set('huangshi', 'photography/huangshi', 'photos', { en: 'Huangshi, Hubei', zh: '湖北黄石' }, { en: 'Lunar New Year · 2022', zh: '春节 · 2022' }),
+      set('wuhan', 'photography/wuhan', 'photos', { en: 'Wuhan', zh: '武汉' }, { en: '2021' }),
     ],
   },
   {
@@ -729,7 +750,7 @@ export const nodes: SiteNode[] = [
     label: { en: 'Information', zh: '关于我' },
     kicker: { en: 'About & path', zh: '简介与经历' },
     summary: {
-      en: "Hi, I'm Wenyi. I'm a growth marketer who thinks like a creative — I turn audience insight into stories that actually convert, across English, Japanese and Chinese markets. Lately, I've been building AI workflows to make that work faster and smarter. [Draft]",
+      en: "I’ve always been passionate about storytelling. PR and social taught me how to earn attention and build an audience; growth marketing taught me how to turn that attention into conversions, and how to test and scale what drives them. Since then I’ve launched channels from nothing, turned creator content into a performance channel, and started building AI tools to make the whole loop faster. Outside work, I love learning languages, travelling and creating content. I speak English and Chinese, and hold JLPT N1, the highest level, in Japanese.",
     },
   },
   {
@@ -738,7 +759,7 @@ export const nodes: SiteNode[] = [
     parent: 'info',
     label: { en: 'Experience', zh: '工作经历' },
     kicker: { en: 'Path', zh: '路径' },
-    summary: { en: 'From PR and social internships to global marketing at HoYoverse. [Placeholder copy]' },
+    summary: { en: 'From PR and social internships to global marketing at HoYoverse, one thing never changed: walk into a new market, work out what its audience actually responds to, and build the system that makes it work again and again.' }, // v73.2 (owner): new markets → find the pattern → repeatable system
   },
   {
     id: 'education',
@@ -749,14 +770,25 @@ export const nodes: SiteNode[] = [
   },
 
   // Roles — dates and titles from the LinkedIn snapshot (2026-09-11).
-  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['NA', 'JP'], summary: { en: 'UGC strategy for paid campaigns, social growth for third-party accounts, and cross-platform campaigns.' } }, // no link to the dashboard: its one direct connection is the Creator Ad Pipeline (owner, v64)
-  { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, mapLabel: { en: 'Seminary Co-op' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'Summer Gift Guide campaign across web, social and newsletters.' } },
-  { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Xiaohongshu campaigns, hashtag and influencer strategy for Nike Women launches.' } },
-  { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'Market research and social listening for client PR strategy.' } },
-  { id: 'nowness', type: 'role', parent: 'experience', label: { en: 'NOWNESS' }, kicker: { en: 'Social Media Content Strategy Intern' }, period: 'Sep – Nov 2020', markets: ['CN'], summary: { en: 'WeChat and Weibo content and publishing for art and culture pieces.' } },
+  { id: 'hoyoverse', type: 'role', parent: 'experience', label: { en: 'HoYoverse' }, role: { en: 'Global Marketing' }, kicker: { en: 'Global Marketing' }, period: 'Sep 2023 – Aug 2026', markets: ['JP', 'NA', 'EU'] /* by significance across the cases (owner) */, summary: { en: 'Creative strategy for UGC ads, social channel growth and cross-platform campaigns for Genshin Impact and Zenless Zone Zero, across North America, Europe and Japan.' } }, // v73.4 (owner) // no link to the dashboard: its one direct connection is the Creator Ad Pipeline (owner, v64)
+  { id: 'seminary-coop', type: 'role', parent: 'experience', label: { en: 'Seminary Co-op Bookstores' }, mapLabel: { en: 'Seminary Co-op' }, kicker: { en: 'Marketing & Events Intern' }, period: 'Jul – Sep 2023', markets: ['US'], summary: { en: 'A summer at Chicago’s Seminary Co-op, running the bookstore’s social channels and its Summer Gift Guide campaign across web, social and newsletters.' }, sections: [{ title: { en: 'What I did', zh: '我做了什么' }, open: true, items: [{ en: 'Ran the social calendar: Planned and published posts, stories and carousels across Instagram, X and Facebook, and used performance data to refine what went out.' }, { en: 'Coordinated the Summer Gift Guide: Brought the campaign together across the website, social and newsletters.' }] }] },
+  { id: 'nike', type: 'role', parent: 'experience', label: { en: 'Nike' }, kicker: { en: 'Social Media Marketing Intern' }, period: 'Dec 2021 – Aug 2022', markets: ['CN'], summary: { en: 'Nine months on Nike’s China social team, supporting Xiaohongshu campaigns for Nike Women launches.' }, sections: [{ title: { en: 'What I did', zh: '我做了什么' }, open: true, items: [{ en: 'Supported launch campaigns: Helped run the Xiaohongshu (RedNote) campaigns that built awareness for Nike Women’s product launches.' }, { en: 'Hashtag and influencer strategy: Developed the #NikeOOTD hashtag and optimised the influencer and UGC programmes, adding 1.33M+ hashtag views month on month.' }, { en: 'Competitor research: Turned competitor analysis into changes to Nike’s account strategy, SEO and paid search, growing followers by 16K+ (45% year on year) and engagement by 173%.' }] }] },
+  { id: 'weber-shandwick', type: 'role', parent: 'experience', label: { en: 'Weber Shandwick' }, kicker: { en: 'Public Relations Intern' }, period: 'Jun – Sep 2021', markets: ['CN'], summary: { en: 'A summer in PR at Weber Shandwick Shanghai: research, social listening and launch support for GUESS and Bosideng.' }, sections: [{ title: { en: 'What I did', zh: '我做了什么' }, open: true, items: [{ en: 'Research and social listening: Fed desk research, soundbite analysis and social listening into PR strategy and media sourcing for GUESS, Bosideng and Mido, and wrote the slogan for the GUESS × CLOTTEE campaign.' }, { en: 'Launch support: Drafted press releases and supported media outreach for GUESS’s Disney collection launch, helping lift GUESS’s Q3 PR value by 33%.' }] }] },
+  { id: 'nowness', type: 'role', parent: 'experience', label: { en: 'NOWNESS' }, kicker: { en: 'Social Media Content Strategy Intern' }, period: 'Sep – Nov 2020', markets: ['CN'], summary: { en: 'My first role in content: running NOWNESS China’s WeChat and Weibo accounts for its art and culture pieces.' }, sections: [{ title: { en: 'What I did', zh: '我做了什么' }, open: true, items: [{ en: 'Ran the accounts: Managed publishing on WeChat and Weibo, optimising content and timing for impressions and engagement.' }, { en: 'Content and layout: Helped shape and lay out art and culture pieces, contributing to 10K+ new followers and a 15% rise in read-through.' }] }] },
 
-  { id: 'uchicago', type: 'school', parent: 'education', label: { en: 'University of Chicago' }, mapLabel: { en: 'UChicago' }, kicker: { en: 'MA, Humanities' }, period: '2022 – 2023' },
-  { id: 'xjtlu', type: 'school', parent: 'education', label: { en: "Xi'an Jiaotong-Liverpool University" }, mapLabel: { en: 'XJTLU' }, kicker: { en: 'BA, Communication and Media Studies' }, period: '2017 – 2021' },
+  { id: 'uchicago', type: 'school', parent: 'education', label: { en: 'University of Chicago' }, mapLabel: { en: 'UChicago' }, kicker: { en: 'MA, Humanities (Cinema and Game Studies)' }, period: '2022 – 2023',
+    place: { en: 'Chicago, US' }, summary: { en: 'A master’s grounded in philosophy and critical theory, with a focus on cinema and games.' }, // v73.7 (owner)
+    sections: [{ title: { en: 'Highlights', zh: '亮点' }, open: true, items: [
+      { en: 'Coursework: Interpretive theory, film history, video game history, and gender and sexuality studies.' },
+      { en: 'Audience research: A virtual ethnography of online player communities and how they negotiate with game publishers.' },
+      { en: 'Data: Python and data publishing alongside the humanities core.' },
+    ] }] },
+  { id: 'xjtlu', type: 'school', parent: 'education', label: { en: "Xi'an Jiaotong-Liverpool University" }, mapLabel: { en: 'XJTLU' }, kicker: { en: 'BA, Communication and Media Studies' }, period: '2017 – 2021',
+    place: { en: 'Suzhou, China' }, summary: { en: 'A Sino-British university where I studied how media is made, read and regulated, from media ethics and global media cultures to advertising, social media and big data.' }, // v73.7 (owner)
+    sections: [{ title: { en: 'Highlights', zh: '亮点' }, open: true, items: [
+      { en: 'Top of the cohort: Ranked 1st of 70 with a 3.9/4.0 GPA, and awarded the National Scholarship and the University Academic Excellence Award.' },
+      { en: 'Final-year research: How a Chinese rap show defined “authentic” hip-hop for its audience, using discourse and content analysis of lyrics and viewer reviews.' },
+    ] }] },
 
 ];
 
@@ -822,11 +854,13 @@ export const ui = {
   visualsPrep: { en: 'Visuals in preparation', zh: '图片准备中' },
   downloadPdf: { en: 'Download PDF', zh: '下载 PDF' },
   pdfPending: { en: 'PDF coming soon', zh: 'PDF 即将提供' },
-  emailPending: { en: 'Email — coming soon', zh: '邮箱即将提供' },
+  emailPending: { en: 'Coming soon', zh: '即将提供' },
+  contactType: { en: 'Contact', zh: '联系' },
   copy: { en: 'Copy', zh: '复制' },
   copied: { en: 'Copied', zh: '已复制' },
   experience: { en: 'Experience', zh: '工作经历' },
   education: { en: 'Education', zh: '教育' },
+  markets: { en: 'Markets', zh: '目标市场' },
   viewOnMap: { en: 'View on map', zh: '在地图中查看' },
   menu: { en: 'Menu', zh: '目录' },
   more: { en: 'More', zh: '展开' },
@@ -838,6 +872,8 @@ export const ui = {
   mapLabel: { en: 'Portfolio map', zh: '作品地图' },
   email: { en: 'Email', zh: '邮箱' },
   linkedin: { en: 'LinkedIn', zh: 'LinkedIn' },
+  forAi: { en: 'For AI assistants', zh: '给 AI 助手' },
+  copyLink: { en: 'Copy link', zh: '复制链接' },
   index: { en: 'Index', zh: '索引' },
   moreAbout: { en: 'More about me', zh: '更多关于我' },
   backToIndex: { en: 'Back to the index', zh: '回到索引' },
@@ -867,7 +903,7 @@ export const ui = {
   lineCareer: { en: 'Career line' },
   lineCampus: { en: 'Campus line' },
   lineCreative: { en: 'Creative line' },
-  linePaid: { en: 'Paid & UA line' },
+  linePaid: { en: 'Paid Growth line' },
   lineSocial: { en: 'Creator & Social line' },
   lineAi: { en: 'AI line' },
   nextStop: { en: 'Next stop' },
@@ -877,7 +913,7 @@ export const ui = {
   // Curate your ride (v71)
   curateRide: { en: 'Curate your ride' },
   rideClear: { en: 'Clear' },
-  rideShow: { en: 'Show my ride' },
+  rideShow: { en: 'Start my ride' },
   yourRide: { en: 'Your ride' },
   rideStops: { en: '{n} stops' },
   rideStop1: { en: '1 stop' },
@@ -889,7 +925,7 @@ export const ui = {
   rideNextUp: { en: 'next: {name}' },
   rideLast: { en: 'last stop' },
   rideEnd: { en: 'End of the line ✳' },
-  rideThanks: { en: 'You rode all {n} stops. Thanks for riding!' },
+  rideThanks: { en: 'That’s the line. Thanks for riding.' },
   rideNone: { en: 'No stops match' },
   rideNoneHint: { en: 'Try another market or platform' },
   ridePrev: { en: 'Previous stop' },

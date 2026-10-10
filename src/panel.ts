@@ -1,5 +1,5 @@
 import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, schoolsOrder, site, ui, workOf, type SiteNode } from './content';
-import { esc, isDone, matches, t } from './state';
+import { clearFilters, esc, filtering, isDone, matches, t, toggleFilter, type FilterKind } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
 import { L, contactRows, detailLists, gallerySetList, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
@@ -33,6 +33,33 @@ function details(mark: string, title: string, body: string, open = false, cls = 
   return `<details class="sec${cls ? ` ${cls}` : ''}"${open ? ' open' : ''}${id ? ` data-id="${id}"` : ''}><summary><span class="p-ico" aria-hidden="true">${mark}</span><span class="lab">${title}</span><i aria-hidden="true"></i></summary><div class="sec-body">${body}</div></details>`;
 }
 
+/** v73.8 (owner): keywords in the INDEX intro link to the map — a market sets that filter, "AI tools" opens the AI line. */
+function linked(text: string, links?: Record<string, string>): string {
+  let html = esc(text);
+  for (const [phrase, to] of Object.entries(links ?? {})) {
+    const a = to.startsWith('#') ? `<a class="ix-k" href="${to}">${esc(phrase)}</a>` : `<a class="ix-k" href="#" data-ixf="${to}">${esc(phrase)}</a>`;
+    html = html.replace(esc(phrase), a);
+  }
+  return html;
+}
+// v73.8 (owner): INDEX always brings back the full map — the INDEX bar above a card, and the INDEX heading on the home card,
+// both clear any market, platform or ride and close any open line
+document.addEventListener('click', (e) => {
+  const el = e.target as Element;
+  const bar = el.closest('.ixbar'), head = el.closest('details.ix:not([data-id]) > summary');
+  if (!bar && !head) return;
+  if (head && filtering()) e.preventDefault(); // reset the map instead of folding the card
+  if (filtering()) clearFilters();
+  document.dispatchEvent(new CustomEvent('index-home'));
+});
+document.addEventListener('click', (e) => {
+  const a = (e.target as Element).closest<HTMLElement>('.ix-k[data-ixf]');
+  if (!a) return;
+  e.preventDefault();
+  const [kind, key] = a.dataset.ixf!.split(':');
+  toggleFilter(kind as FilterKind, key);
+});
+
 /** Everything inside a node, as links: grouped by practice for an area, in path order for Experience / Education. */
 function insideList(n: SiteNode): string {
   const kids = childrenOf(n.id);
@@ -65,7 +92,7 @@ export function indexPanel(): string {
     L('index'),
     // v72.10 (owner, option C): her name and title head the INDEX, above the intro
     `<h2 class="p-title ix-name" tabindex="-1">${esc(site.name)}</h2><p class="lab ix-role">${tx(site.tag)}</p>
-     <p class="ix-bio">${highlight(t(site.intro), t(site.introHighlight))}</p><a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
+     ${site.introLines.map((l) => `<p class="ix-bio"><span class="ix-lead">${esc(t(l.lead))}</span> ${linked(l.en, l.links)}</p>`).join('')}<a class="ix-more" href="#/info">${L('moreAbout')} →</a>`,
     true,
     'ix',
   );
@@ -118,10 +145,10 @@ export function nodePanel(n: SiteNode): string {
 
   const secs: string[] = detailLists(n).map((d) => details(d.title === L('results') ? MARK.results : MARK.detail, d.title, d.body, d.defaultOpen ?? true));
 
-  // work done in this role: one flat list, each title with its practice underneath; closed until asked for
+  // work done in this role: one flat list, each title with its practice underneath; open by default (owner, v73.4)
   const work = workOf(n.id);
   if (work.length) {
-    secs.push(details(MARK.work, `${L('workHere')} · ${work.length}`, `<div class="nlist">${work.map((w) => nodeLink(w.id, t(byId.get(w.parent!)!.label))).join('')}</div>`));
+    secs.push(details(MARK.work, `${L('workHere')} · ${work.length}`, `<div class="nlist">${work.map((w) => nodeLink(w.id, t(byId.get(w.parent!)!.label))).join('')}</div>`, true)); // v73.4 (owner): open by default
   }
 
   const conn = new Set<string>();
@@ -146,11 +173,10 @@ export function resumePanel(): string {
 
 export function contactPanel(): string {
   return (
-    head(t(ui.contact), markFor('root')) +
+    head(L('contactType'), `<span class="p-glyph" aria-hidden="true">${MARK.links}</span>`) +
     `<div class="p-body">
-      <h2 class="p-title" tabindex="-1">${L('contact')}</h2>
+      <h2 class="p-title sr-only" tabindex="-1">${L('contact')}</h2>
       ${contactRows()}
-      <div class="cv-actions"><a class="btn" href="#/resume">${L('resume')} →</a></div>
     </div>`
   );
 }

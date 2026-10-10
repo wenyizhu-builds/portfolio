@@ -2,7 +2,7 @@
    Same API as map.ts (MapApi), so main.ts only swaps one call. Everything about the drawing —
    where each station sits, the shape of each line, the result tags, the ride's track — lives in METRO below.
    Colours, sizes and durations come from style.css (:root); words from content.ts. */
-import { ancestors, byId, ui, type SiteNode } from './content';
+import { ancestors, byId, ui, type SiteNode, workOf, rides } from './content';
 import type { MapApi } from './map';
 import { lineMark } from './shapes';
 import { rideSummary } from './blocks';
@@ -38,7 +38,7 @@ const METRO = {
     nowness: [210, 630, 'career', 'left'],
     'weber-shandwick': [270, 570, 'career', 'left'],
     nike: [330, 510, 'career', 'left'],
-    uchicago: [290, 700, 'campus', 'below'], // v72: further along, so the Campus line name sits apart from it
+    uchicago: [410, 490, 'campus', 'right'], // v73.6 (owner): next to Seminary Co-op, so the biography ride only steps back a little
     'seminary-coop': [410, 430, 'career campus', 'left'],
     hoyoverse: [500, 340, 'career paid social', 'left'],
     'ua-creative-strategy': [500, 280, 'paid', 'left'],
@@ -72,7 +72,11 @@ const METRO = {
   transferMin: 34,
   /** A ride runs one way, like a train: down the Paid & UA line (or up the Career line) to HoYoverse,
       out along Creator & Social to Xiaohongshu, then up the AI line towards ✳. Stops are numbered in that order. */
-  route: { paid: [[200, 160], [440, 160], [500, 220]] as Pt[], career: [[140, 700]] as Pt[], tail: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660], [760, 320], [640, 200]] as Pt[] },
+  route: { paid: [[200, 160], [440, 160], [500, 220]] as Pt[], career: [[140, 700]] as Pt[],
+    // v73.6 (owner): the biography ride — up the Career line, a short step down to UChicago and back, a short step up to the
+    // Creator Ad Pipeline and back, then out along Creator & Social and up the AI line
+    me: [[140, 700], [410, 430], [410, 490], [410, 430], [500, 340], [500, 280], [500, 340], [580, 420], [580, 600], [640, 660], [760, 660], [760, 320], [640, 200]] as Pt[],
+    tail: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660], [760, 320], [640, 200]] as Pt[] },
   routeSnap: 12, // a station counts as on the route within this distance (bends are rounded)
   routeStep: 1.5, // sampling step along the route
   /** Stop numbers: small rounded squares beside the station, on the side away from its name. */
@@ -107,7 +111,9 @@ function trackPath(pts: Pt[]): string {
   let d = `M${f(pts[0][0])},${f(pts[0][1])}`;
   for (let i = 1; i < pts.length - 1; i++) {
     const [p, c, n] = [pts[i - 1], pts[i], pts[i + 1]];
-    const l1 = Math.hypot(c[0] - p[0], c[1] - p[1]), l2 = Math.hypot(n[0] - c[0], n[1] - c[1]), r = Math.min(METRO.corner, l1 / 2, l2 / 2);
+    const l1 = Math.hypot(c[0] - p[0], c[1] - p[1]), l2 = Math.hypot(n[0] - c[0], n[1] - c[1]);
+    const back = ((c[0] - p[0]) * (n[0] - c[0]) + (c[1] - p[1]) * (n[1] - c[1])) / (l1 * l2) < -0.99; // v73.6: a turnaround (the biography ride's short step back) keeps its point, so the route reaches the station
+    const r = back ? 0 : Math.min(METRO.corner, l1 / 2, l2 / 2);
     const a = [c[0] - (c[0] - p[0]) / l1 * r, c[1] - (c[1] - p[1]) / l1 * r], b = [c[0] + (n[0] - c[0]) / l2 * r, c[1] + (n[1] - c[1]) / l2 * r];
     d += `L${f(a[0])},${f(a[1])}Q${f(c[0])},${f(c[1])} ${f(b[0])},${f(b[1])}`;
   }
@@ -176,7 +182,11 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   const bar = document.createElement('div');
   bar.className = 'mt-bar';
   desk.appendChild(bar);
+  const note = document.createElement('div'); // v73.6 (owner): the biography ride's note sits above the ride bar, not in the card
+  note.className = 'mt-note'; note.setAttribute('aria-live', 'polite');
+  desk.appendChild(note);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';
+  let armed = false; // v73.6 (owner): the ride bar waits for "Start my ride"; choosing a ride alone doesn't show it
   let order: string[] = [], through: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
   let trainAt: number | null = null, raf = 0, travelMs = 0, arriveT = 0;
 
@@ -204,7 +214,8 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       + `<g transform="translate(${tx},${ty - METRO.topLabel * typeK()})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`; // the ✳ turns on hover, like the ride button (v72.8)
     s += '<g class="mt-xfer"></g>';
     // the ride's own track, in each line's colour, shown through two masks: the whole ride (pale ahead) and the part travelled
-    const copies = keys.filter((k) => k !== 'campus').map((k) => `<path class="mt-track l-${k}" d="${trackPath(METRO.lines[k].track)}"/>`).join('');
+    // v73.6 (owner): the Campus line joins in too (with its hollow core), so the biography ride's step to UChicago lights up like the rest
+    const copies = keys.map((k) => { const d = trackPath(METRO.lines[k].track); return `<path class="mt-track l-${k}" d="${d}"/>${k === 'campus' ? `<path class="mt-track core" d="${d}"/>` : ''}`; }).join('');
     s += `<g class="mt-ride"><defs><mask id="mt-m-all" maskUnits="userSpaceOnUse"><path class="mt-rmask" id="mt-r-all"/></mask><mask id="mt-m-done" maskUnits="userSpaceOnUse"><path class="mt-rmask" id="mt-r-done"/></mask></defs>`
       + `<g class="mt-ahead" mask="url(#mt-m-all)">${copies}</g><g mask="url(#mt-m-done)">${copies}</g></g>`;
     for (const [id, [x, y, lines, pos]] of Object.entries(METRO.stations)) {
@@ -235,7 +246,10 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   /** The stations a ride stops at: a ready-made ride's own list (places included); otherwise only pieces of work. */
   function rideIds(): string[] | null {
     if (!filtering()) return null;
-    return Object.keys(METRO.stations).filter((id) => matches(id) && (!!filters.ride || !isPlace(byId.get(id))));
+    // v73.5 (owner): a market filter also brings in the roles done for that market (the internships), as long as the
+    // role has no cases of its own on the map — HoYoverse is represented by its cases. Schools never join a filter ride.
+    const standsAlone = (id: string) => { const n = byId.get(id); return !!n && n.type === 'role' && !workOf(id).length; };
+    return Object.keys(METRO.stations).filter((id) => matches(id) && (!!filters.ride || !isPlace(byId.get(id)) || standsAlone(id)));
   }
   /** Lay the one-way route under the ride and number its stations by how far along it they sit. */
   function buildRoute(ids: string[]) {
@@ -243,7 +257,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     routeEl = null; order = []; through = []; at = {};
     if (!ids.length) return;
     const fromCareer = ids.some((id) => id !== 'hoyoverse' && METRO.stations[id][2].split(' ').includes('career'));
-    const R = METRO.route, d = trackPath([...(fromCareer ? R.career : R.paid), ...R.tail]);
+    const R = METRO.route, d = trackPath(filters.ride && rides[filters.ride].story ? R.me : [...(fromCareer ? R.career : R.paid), ...R.tail]);
     routeEl = el('path', { d, class: 'mt-route' });
     svg.appendChild(routeEl);
     const len = routeEl.getTotalLength(), samples: [number, number, number][] = [];
@@ -318,10 +332,13 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   }
   function paintBar(dir: number) {
     const riding = filtering();
-    bar.classList.toggle('show', riding);
+    bar.classList.toggle('show', riding && (armed || rideStep >= 0));
     desk.classList.toggle('riding', riding);
-    if (!riding) return;
+    if (!riding) { note.classList.remove('show'); return; }
     const n = order.length, last = rideStep === n - 1, arrived = last && endState === `${rideKey}#${rideStep}`;
+    const story = filters.ride ? rides[filters.ride].notes : undefined, said = story && rideStep >= 0 ? story[order[rideStep]] : undefined; // the last stop keeps its note at Let's talk
+    if (said) note.textContent = t(said);
+    note.classList.toggle('show', !!said && bar.classList.contains('show'));
     bar.classList.toggle('started', rideStep >= 0);
     bar.classList.toggle('empty', !n);
     bar.classList.toggle('ending', last && !arrived);
@@ -338,6 +355,11 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       : arrived ? two(t(ui.rideEnd), fill(t(ui.rideThanks), { n }))
       : two(t(byId.get(order[rideStep])!.label), `${fill(t(ui.rideOf), { i: rideStep + 1, n })} · ${last ? t(ui.rideLast) : fill(t(ui.rideNextUp), { name: t(byId.get(order[rideStep + 1])!.label) })}`), dir);
   }
+  document.addEventListener('ride-start', () => {
+    armed = true;
+    if (order.length && rideStep < 0) bar.querySelector<HTMLButtonElement>('.nx')!.click(); // straight to the first stop
+    else paintBar(1);
+  });
   bar.addEventListener('click', (e) => {
     const act = (e.target as Element).closest<HTMLElement>('[data-ride]')?.dataset.ride;
     if (!act || !order.length) { if (act === 'exit') leaveRide(''); return; }
@@ -406,7 +428,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   function apply() {
     const ids = rideIds(), riding = !!ids;
     const key = riding ? JSON.stringify(filters) : '';
-    if (key !== rideKey) { rideKey = key; rideStep = -1; lastStep = -1; trainAt = null; endState = ''; }
+    if (key !== rideKey) { rideKey = key; rideStep = -1; lastStep = -1; trainAt = null; endState = ''; armed = false; }
     if (riding && builtKey !== key) { buildRoute(ids!); drawNumbers(); builtKey = key; }
     if (!riding && builtKey) { routeEl?.remove(); routeEl = null; order = []; builtKey = ''; svg.querySelectorAll('.mt-no').forEach((e) => e.remove()); }
     if (riding && sel && order.includes(sel) && rideStep >= 0) rideStep = order.indexOf(sel); // a stop clicked on the map

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Creator Workbench</title>
+<title>Creator OS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500&display=swap">
@@ -542,7 +542,7 @@ function projectNote(p){
  let body='';
  if(p.done)body=`<div class="callout">${T('All stages are complete. The results review is saved in this note.','全部阶段已完成。数据复盘保存在这篇笔记里。')}</div>`;
  else if(p.st==='running')body=`<div class="callout"><span class="dot run" style="display:inline-block;margin-right:8px"></span>${esc(p.runner)} ${T('is working on','正在做')} ${esc(stName(s))}. ${T('You will find it in Needs you when it is ready.','完成后会出现在「待我处理」。')}</div><div class="skel"><i style="width:92%"></i><i style="width:78%"></i><i style="width:85%"></i><i style="width:60%"></i></div>`;
- else if(p.st==='blocked'||p.st==='waiting')body=`<div class="callout ${p.st==='blocked'?'red':''}">${p.st==='blocked'?T('Claude reached its usage limit while writing the draft. It resets at 18:00. The workbench never switches to a paid API on its own.','Claude 写初稿时额度用完，18:00 重置。工作台不会自动切到付费 API。'):T('Waiting for Claude to reset at 18:00. It will pick up from the approved direction.','等待 Claude 18:00 重置，之后从已通过的方向继续。')}</div>`;
+ else if(p.st==='blocked'||p.st==='waiting')body=`<div class="callout ${p.st==='blocked'?'red':''}">${p.st==='blocked'?T('Claude reached its usage limit while writing the draft. It resets at 18:00. Creator OS never switches to a paid API on its own.','Claude 写初稿时额度用完，18:00 重置。工作台不会自动切到付费 API。'):T('Waiting for Claude to reset at 18:00. It will pick up from the approved direction.','等待 Claude 18:00 重置，之后从已通过的方向继续。')}</div>`;
  else if(k==='direction')body=`<h2>${T('Content contract','内容契约')}</h2><dl class="contract">${c.map(r=>`<dt>${T(r[0],r[1])}</dt><dd>${esc(r[2])}</dd>`).join('')}</dl>`;
  else if(k==='draft'||k==='script')body=`<div class="meta" style="margin-bottom:8px">${T('Draft','初稿')} v${p.ver} · ${T('written by','执行：')} ${esc(p.runner)}${p.edited?` · <span style="color:var(--amber)">${T('edited by you','你改过')}</span>`:''}</div>
   <div class="doc" id="draft" contenteditable="true" spellcheck="false" data-draft="${p.id}">${(DRAFT[p.id]||[]).map(d=>`<span class="pg">${esc(d[1])}</span><p>${esc(d[2])}</p>`).join('')}</div>
@@ -553,7 +553,7 @@ function projectNote(p){
   <div class="field"><label for="upl">${T('Attach files (optional)','上传文件（可选）')}</label><input id="upl" type="file" class="inp" multiple></div>
   <h2>${T('Approved script','已通过的脚本')}</h2>${(DRAFT[p.id]||[]).map(d=>`<div class="note"><span class="mono">${esc(d[1])}</span> ${esc(d[2])}</div>`).join('')}`;
  else if(k==='package')body=`<h2>${T('Captions & cover','字幕与封面')}</h2><div class="note">${T('Cover text','封面文字')}: Plan your week in 40 seconds</div><div class="note">${T('Caption','文案')}: Three prompts, one calm week. Save this for Sunday.</div>`;
- else if(k==='publish')body=`<h2>${T('Log the post','记录发布')}</h2><p class="meta">${T('Publish it yourself on the platform. The workbench never posts for you.','请你自己在平台上发布。工作台不会替你发。')}</p><div class="field"><label for="purl">${T('Post URL','帖子链接')}</label><input id="purl" class="inp" placeholder="https://"></div>`;
+ else if(k==='publish')body=`<h2>${T('Log the post','记录发布')}</h2><p class="meta">${T('Publish it yourself on the platform. Creator OS never posts for you.','请你自己在平台上发布。工作台不会替你发。')}</p><div class="field"><label for="purl">${T('Post URL','帖子链接')}</label><input id="purl" class="inp" placeholder="https://"></div>`;
  else if(k==='retro')body=`<h2>${T('First 7 days','发布后 7 天')}</h2><div class="callout">${T('Saves came in above your last five posts. The cover worked; page 4 had the most drop-off.','收藏高于你最近 5 篇；封面有效，第 4 页流失最多。')}</div>`;
  const done=flowOf(p).slice(0,p.i);
  return `<div class="page"><div class="crumb"><button data-act="go" data-id="production">${T('Production','内容制作')}</button> / <span class="mono">${p.id}.md</span></div>
@@ -588,7 +588,7 @@ function tasks(){
 function settings(){
  const tabs=[['agents',T('Agents','运行环境')],['accounts',T('Accounts','账号')],['tags',T('Fields & tags','字段与标签')],['lang',T('Language','语言')]];
  let b='';
- if(S.setTab==='agents')b=`<p class="meta">${T('The workbench picks an agent for each job. Every task shows which one ran it.','工作台会为每项工作自动分配 Agent，每条任务都会标明由谁执行。')}</p>
+ if(S.setTab==='agents')b=`<p class="meta">${T('Creator OS picks an agent for each job. Every task shows which one ran it.','工作台会为每项工作自动分配 Agent，每条任务都会标明由谁执行。')}</p>
   <div class="det"><span class="dot ${S.quotaClaude?'warn':''}"></span><div class="grow"><div class="t">Claude Code</div><div class="meta">${T('Signed in with your subscription','已用你的订阅登录')} · ${S.quotaClaude?T('Usage limit reached, resets 18:00','额度用完，18:00 重置'):T('Available','可用')}</div></div><span class="meta">${T('Browser research, analysis','浏览器调研、解析')}</span></div>
   <div class="det"><span class="dot"></span><div class="grow"><div class="t">Codex</div><div class="meta">${T('Signed in with your subscription','已用你的订阅登录')} · ${T('Available','可用')}</div></div><span class="meta">${T('Drafts, scripts','初稿、脚本')}</span></div>
   <div class="callout">${T('When an agent runs out of usage or can’t do a job, the task stops and asks you. It never falls back to a paid API.','Agent 额度用完或做不了时，任务会停下来问你，绝不会转到付费 API。')}</div>`;
@@ -598,7 +598,7 @@ function settings(){
   <div class="acts">${btn(T('Calibrate tags','校准标签'),'calibrate','',ok?'pri':'',ok?'':'disabled')}${ok?'':btn(T('Demo: add 2 analyzed sources','演示：再解析 2 条'),'demo-add','','quiet')}</div>
   <h2>${T('Fields','字段')}</h2><div class="rows">${[['content.opening_hook','Opening hook','开场 Hook','enum'],['topic.status','Idea status','选题状态','enum'],['project.stage','Production stage','制作阶段','enum'],['workspace.account','Account','账号','reference']].map(f=>`<div class="row"><div class="grow"><div>${T(f[1],f[2])}</div><div class="meta mono">${f[0]}</div></div><span class="meta mono">${f[3]}</span></div>`).join('')}</div>`;}
  if(S.setTab==='lang')b=`<div class="field"><label>${T('Interface','界面语言')}</label><div class="seg" style="width:max-content"><button data-act="lang" data-id="en" aria-pressed="${S.lang==='en'}">English</button><button data-act="lang" data-id="zh" aria-pressed="${S.lang==='zh'}">中文</button></div></div><p class="meta">${T('Interface language is separate from each source’s language and each account’s writing language. Switching never changes your notes.','界面语言和来源语言、各账号的创作语言相互独立，切换不会改动任何笔记。')}</p>`;
- return `<div class="page"><h1>${T('Settings','设置')}</h1><p class="sub">${T('Creator Workbench plugin','Creator Workbench 插件')}</p>
+ return `<div class="page"><h1>${T('Settings','设置')}</h1><p class="sub">${T('Creator OS plugin','Creator OS 插件')}</p>
  <div class="pills">${tabs.map(t=>`<button data-act="set-tab" data-id="${t[0]}" aria-pressed="${S.setTab===t[0]}">${t[1]}</button>`).join('')}</div>${b}
  <h2>${T('Demo','演示')}</h2><div class="acts">${btn(T('Replay first-run setup','重新走一遍新用户引导'),'start-ob')}${btn(T('Reset demo data','重置演示数据'),'reset','','quiet')}</div></div>`;
 }
@@ -675,14 +675,14 @@ function onboarding(){
  let b='',foot='';
  const nextB=(dis)=>btn(T('Continue','继续'),'ob-next','','pri',dis?'disabled':'');
  const backB=o.step?btn(T('Back','上一步'),'ob-back','','quiet'):btn(T('Skip setup','跳过'),'ob-skip','','quiet');
- if(o.step===0){b=`<h1>${T('Welcome to Creator Workbench','欢迎使用 Creator Workbench')}</h1><p class="sub" style="font-size:15px">${T('Research, ideas and drafts become notes in this vault. Agents do the work; you make every decision.','调研、选题、初稿都会成为这个 Vault 里的笔记。Agent 负责干活，每个决定都由你来做。')}</p>
-  <div class="field"><label>${T('It will create this folder','将创建以下文件夹')}</label><div class="tree">Creator Workbench/
+ if(o.step===0){b=`<h1>${T('Welcome to Creator OS','欢迎使用 Creator OS')}</h1><p class="sub" style="font-size:15px">${T('Research, ideas and drafts become notes in this vault. Agents do the work; you make every decision.','调研、选题、初稿都会成为这个 Vault 里的笔记。Agent 负责干活，每个决定都由你来做。')}</p>
+  <div class="field"><label>${T('It will create this folder','将创建以下文件夹')}</label><div class="tree">Creator OS/
 ├── Research/
 ├── Sources/
 ├── Ideas/
 ├── Production/
 └── Knowledge/</div></div><p class="meta">${T('Everything is plain Markdown with standard properties. If you uninstall the plugin, your notes still work.','全部是普通 Markdown 和标准属性。卸载插件后，笔记依然可以正常使用。')}</p>`;foot=nextB()}
- if(o.step===1){b=`<h1>${T('Connect your agents','连接 Agent')}</h1><p class="sub">${T('The workbench uses the subscriptions you already have. It never uses a paid API unless you add one.','工作台使用你已有的订阅。除非你自己添加，否则不会使用付费 API。')}</p>
+ if(o.step===1){b=`<h1>${T('Connect your agents','连接 Agent')}</h1><p class="sub">${T('Creator OS uses the subscriptions you already have. It never uses a paid API unless you add one.','工作台使用你已有的订阅。除非你自己添加，否则不会使用付费 API。')}</p>
   ${o.checked?`<div class="det"><span class="dot"></span><div class="grow"><div class="t">Claude Code</div><div class="meta">${T('Found · signed in','已找到 · 已登录')}</div></div>${chip('green',T('Ready','就绪'))}</div>
   <div class="det"><span class="dot"></span><div class="grow"><div class="t">Codex</div><div class="meta">${T('Found · signed in','已找到 · 已登录')}</div></div>${chip('green',T('Ready','就绪'))}</div>
   <div class="det"><span class="dot"></span><div class="grow"><div class="t">${T('Research browser','调研浏览器')}</div><div class="meta">${T('Chrome with Claude extension','Chrome + Claude 扩展')}</div></div>${chip('green',T('Ready','就绪'))}</div>
@@ -693,7 +693,7 @@ function onboarding(){
   <div class="field"><label for="ohandle">${T('Account name','账号名称')}</label><input class="inp" id="ohandle" value="${esc(o.handle)}"></div>
   <div class="field"><label for="olang">${T('Writes in','创作语言')}</label><select class="inp" id="olang"><option ${o.wl==='English'?'selected':''}>English</option><option ${o.wl==='中文'?'selected':''}>中文</option></select></div>`;foot=nextB()}
  if(o.step===3){b=`<h1>${T('Pick a starter tag set','选一套起步标签')}</h1><p class="sub">${T('Tags describe how posts open, what they teach and how they are built. You will tune them after about 10 analyzed sources.','标签描述一条内容怎么开场、讲什么、怎么组织。解析约 10 条样本后再校准。')}</p>
-  <div class="opts">${[['ai',T('AI & tech tutorials','AI 与科技教程'),T('Hook type · tutorial type · tool shown','Hook 类型 · 教程类型 · 展示工具')],['life',T('Lifestyle & productivity','生活与效率'),T('Hook type · routine · outcome','Hook 类型 · 习惯 · 结果')],['blank',T('Start blank','从零开始'),T('Only the fields the workbench needs','只保留工作台必需的字段')]].map(t=>`<label class="opt"><input type="radio" name="tpl" data-tpl="${t[0]}" ${o.tpl===t[0]?'checked':''}><span><b style="font-weight:500">${t[1]}</b><br><span class="meta">${t[2]}</span></span></label>`).join('')}</div>`;foot=nextB()}
+  <div class="opts">${[['ai',T('AI & tech tutorials','AI 与科技教程'),T('Hook type · tutorial type · tool shown','Hook 类型 · 教程类型 · 展示工具')],['life',T('Lifestyle & productivity','生活与效率'),T('Hook type · routine · outcome','Hook 类型 · 习惯 · 结果')],['blank',T('Start blank','从零开始'),T('Only the fields Creator OS needs','只保留工作台必需的字段')]].map(t=>`<label class="opt"><input type="radio" name="tpl" data-tpl="${t[0]}" ${o.tpl===t[0]?'checked':''}><span><b style="font-weight:500">${t[1]}</b><br><span class="meta">${t[2]}</span></span></label>`).join('')}</div>`;foot=nextB()}
  if(o.step===4){const logs=[T('Opening Instagram in the research browser','在调研浏览器中打开 Instagram'),T('Searching “','搜索「')+o.kw+T('”','」'),T('Reading the top 12 posts','读取前 12 条高互动内容'),T('Writing the report','撰写报告')];
   b=`<h1>${T('Run your first research','跑第一次调研')}</h1><p class="sub">${T('Type a topic from your niche. Save one sample as an idea to finish setup.','输入你赛道里的一个话题。把 1 条样本存为选题，就完成设置了。')}</p>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><input class="inp" id="okw" style="flex:1;min-width:180px" value="${esc(o.kw)}" ${o.run?'disabled':''}>${btn(T('Run','开始'),'ob-run','','pri',o.run?'disabled':'')}</div>
@@ -718,7 +718,7 @@ function render(){
  app.innerHTML=`
  <div class="titlebar"><div class="lights"><i></i><i></i><i></i></div>
   <div class="tabs">
-   <button class="tab ${!S.note?'on':''}" data-act="tab-bench">${I('bench',14)} Workbench · ${esc(vn)}</button>
+   <button class="tab ${!S.note?'on':''}" data-act="tab-bench">${I('bench',14)} Workspace · ${esc(vn)}</button>
    ${noteTab?`<button class="tab on">${I('file',14)} ${esc(noteTab)}${S.note.type!=='run'?'.md':''}</button>`:''}
   </div>
   <div class="tb-right"><span class="demo-tag">${T('Prototype · sample data','原型 · 示例数据')}</span>
@@ -726,8 +726,8 @@ function render(){
    <div class="seg" role="group" aria-label="Language" style="display:none"><button data-act="lang" data-id="en" aria-pressed="${S.lang==='en'}">EN</button><button data-act="lang" data-id="zh" aria-pressed="${S.lang==='zh'}">中</button></div></div>
  </div>
  <div class="body ${ob?'ob':''} ${S.note?'hasnote':''}">
-  <div class="ribbon">${['folder','search','graph'].map(x=>`<button aria-label="${x}" title="${T('Obsidian core','Obsidian 自带')}">${I(x,17)}</button>`).join('')}<button class="on" data-act="go" data-id="home" aria-label="Workbench">${I('bench',17)}</button></div>
-  ${ob?'':`<aside class="left" aria-label="Workbench">
+  <div class="ribbon">${['folder','search','graph'].map(x=>`<button aria-label="${x}" title="${T('Obsidian core','Obsidian 自带')}">${I(x,17)}</button>`).join('')}<button class="on" data-act="go" data-id="home" aria-label="Creator OS">${I('bench',17)}</button></div>
+  ${ob?'':`<aside class="left" aria-label="Creator OS">
    <div class="left-head"><select class="acct" id="acctsel" aria-label="${T('Account','账号')}"><option value="all">${T('All accounts','全部账号')}</option>${S.accounts.map(a=>`<option value="${a.id}" ${S.acct===a.id?'selected':''}>${esc(a.name)} · ${esc(a.platform)}</option>`).join('')}</select>
    <button class="newbtn" data-act="new">${I('plus',15)} ${T('New','新建')}<kbd>⌘N</kbd></button></div>
    <nav class="nav">${NAV.map(n=>{const ct=n[0]==='home'?c.needs:n[0]==='ideas'?S.ideas.filter(inAcct).filter(i=>i.status==='new').length:n[0]==='production'?S.projects.filter(inAcct).filter(p=>!p.done).length:'';return `<button data-act="go" data-id="${n[0]}" class="${S.view===n[0]&&!S.note?'on':''}">${I(n[1])}${T(n[2],n[3])}${ct!==''?`<span class="ct ${n[0]==='home'&&ct?'hot':''}">${ct}</span>`:''}</button>`}).join('')}

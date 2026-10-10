@@ -1,9 +1,17 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-09 · v72.14（分支 `metro-map`，未合并）· 10-09 收尾，下一会话：文案润色· 主站 v69.10（分支 `flagship-restructure`）未改
+> 最后更新：2026-10-10 · v73（分支 `metro-map`，未合并）· 文案重写 + 传记骑行
 
 ## 新会话先看这里（交接）
+
+### 2026-10-10 文案重写 + 「Me in five minutes」骑行（v73，分支 `metro-map`，未合并）
+- 用词标准：`docs/copy-vocab-spec.md`（JD 原词库 + 10-10 英国在招 JD 核对）。定位 = global growth & creator marketer；读者 = 招聘方 + 用人经理。
+- 已改并写入（content.ts + src/published-copy.json + .copy-editor/archive.json 三处同步；JSON 写入用临时文件 + rename，避免 dev server 读到半个文件）：INDEX 标题「Creative Strategist · Growth Marketing」、三行简介（Creative + data / Global / AI）；六条分组说明（Paid & UA → Paid Growth）；Information 简介；Experience 一句话；全部案例（summary 只讲策略不放数字、标题改：Japan Social Channel Launch、Branded Filter Campaign、Community Giveaway、Xiaohongshu AI Tutorial Channel、Creator Operating System）；四段实习（短 summary + 展开的 What I did）；HoYoverse 市场 JP · NA · EU，角色卡市场显示为「Markets: …」；英式拼写；UGC 只在 Paid Growth 一句、HoYoverse 一句用。
+- 版式小改（她要求）：Results 在 How it worked 之前；AI 卡片标题与案例同为 20px；Work from this role 默认展开；摄影按时间倒序；骑行经过的站 18% 灰；选路线后骑行条要等「Start my ride」才出现，点后直接到第 1 站。
+- 骑行：七条（Me in five minutes / Paid acquisition & creative testing / Creator marketing & campaigns / Social channel growth / New-market launches / AI in marketing / The whole journey）。市场筛选会带出实习站。
+- 「Me in five minutes」：九站 XJTLU → NOWNESS → Nike → UChicago → HoYoverse → Creator Ad Pipeline → Japan → Xiaohongshu → Dashboard；UChicago 站移到 Seminary Co-op 正下方 (410,490)；专用路线 `METRO.route.me`，在 UChicago、Creator Ad Pipeline 各短暂折返（trackPath 遇到折返不倒圆角）；每站一段叙述 `rides.me.notes`，显示在骑行条上方的白色框里（不进卡片），最后一站也保留。叙述文字她已逐条定稿。
+- 还没做：XJTLU / UChicago 卡片补两行介绍；简介三个引导词换字体或加粗（她不要蓝色）；简介关键词可点击触发筛选（先文案后做）；三张 How it worked 图重画（去掉 UA 等旧词、每格 ≤6 词、加 Landing Page 图）；Creator OS 宣传片重渲染（片头仍写 workbench）；/wenyi.md + llms.txt 给 AI 读；Xiaohongshu 付费合作数待她给准数；她在测试站看过后合并进主站。
 
 ### 正在做：地铁图 + Curate your ride（v71，分支 `metro-map`，未合并）
 - 设计全部在 SPEC 顶部「地铁图 v71」一条；用户在原型 Artifact「Metro Ride」（`https://claude.ai/artifact/BzzXJ33DMB9XspFiASjRbm`，源文件云端 `/home/claude/map-options/metro-ride.html`）里逐条确认过。测试站 Artifact `https://claude.ai/artifact/T8YZXJTXM9MhXRnxk2gRJ3`（主预览 K7QJV2… 没动）。

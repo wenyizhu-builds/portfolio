@@ -140,6 +140,7 @@ function renderPanel(keep = false) {
   } else panel.scrollTop = 0;
   if (html) {
     wirePanel(panel, () => go(''), (sec) => { if (route.kind === 'home') map?.setFocus(sec); });
+    document.addEventListener('index-home', () => { if (route.kind === 'home') map?.setFocus(null); }); // v73.8: INDEX = the full map
   }
 
   // media tiles beside the panel
