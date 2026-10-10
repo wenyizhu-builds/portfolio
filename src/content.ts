@@ -132,7 +132,7 @@ export const site = {
   // The phone hero and the share preview use `intro`, the same three lines joined as one paragraph.
   introLines: [
     { lead: { en: 'Creative + data.' }, en: 'I shape creator content and ad creative, test it against performance data, and scale what drives conversion and growth.' },
-    { lead: { en: 'Global.' }, en: 'I’ve run campaigns for audiences in Japan, North America, Europe and China, including three years at HoYoverse, the studio behind Genshin Impact.', links: { 'North America': 'region:na', Europe: 'region:eu', Japan: 'region:jp', China: 'region:cn' } }, // v73.7 (owner): China added; HoYoverse itself was NA/EU/JP, so China sits at career level
+    { lead: { en: 'Global.' }, en: 'I’ve run campaigns for audiences in Japan, North America, Europe and China. Most recently, I spent three years in global marketing at HoYoverse, the studio behind Genshin Impact.', links: { 'North America': 'region:na', Europe: 'region:eu', Japan: 'region:jp', China: 'region:cn' } }, // v73.7 (owner): China added; HoYoverse itself was NA/EU/JP, so China sits at career level
     { lead: { en: 'AI.' }, en: 'I build my own AI tools that turn campaign data into creative decisions.', links: { 'AI tools': '#/ai' } },
   ] as { lead: T; en: string; zh?: string; links?: Record<string, string> }[], // links (v73.8, owner): a phrase → a filter (kind:key) or a page (#/id)
   get intro(): T { return { en: this.introLines.map((l) => `${l.lead.en} ${l.en}`).join(' '), zh: '' }; },

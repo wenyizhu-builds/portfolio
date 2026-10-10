@@ -789,3 +789,4 @@
 - v75.4（10-10）：传记骑行改名「Career highlights」（她：这条只是重点，不是整张地图；"My path so far" 听起来像整张图）。
 - v75.5（10-10）：传记骑行改名「Highlights」（她：包含学校，不能叫 career）。
 - v75.6（10-10）：传记骑行改名「Express route」（她选的：像快车只停关键站）。
+- v75.7（10-10）：INDEX「Global.」一行拆成两句（她：「including three years at HoYoverse」不合逻辑）：I’ve run campaigns for audiences in Japan, North America, Europe and China. Most recently, I spent three years in global marketing at HoYoverse, the studio behind Genshin Impact.
