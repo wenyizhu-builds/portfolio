@@ -117,7 +117,7 @@ export function renderMobile(root: HTMLElement) {
       ${astSvg(AST.phoneHero, 'm-hero-ast')}
       <h1>${esc(site.name)}</h1>
       <p class="p-kicker">${tx(site.tag)}</p>
-      <p class="m-intro">${tx(site.intro)}</p>
+      ${site.introLines.map((l) => `<p class="m-intro"><span class="ix-lead">${esc(t(l.lead))}</span> ${esc(t(l))}</p>`).join('')}
     </div>
     ${menu()}
     ${section('growth-paid')}

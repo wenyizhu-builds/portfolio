@@ -753,7 +753,7 @@ export const nodes: SiteNode[] = [
     parent: 'info',
     label: { en: 'Experience', zh: '工作经历' },
     kicker: { en: 'Path', zh: '路径' },
-    summary: { en: 'From PR and social internships to global marketing at HoYoverse, the job has stayed the same: work out what a new audience responds to, then build a system that delivers it reliably.' }, // v73.2 (owner): new markets → find the pattern → repeatable system
+    summary: { en: 'From PR and social internships to global marketing at HoYoverse, each role raised the stakes: new markets, new channels, and growth systems built from scratch.' }, // v73.2 (owner): new markets → find the pattern → repeatable system
   },
   {
     id: 'education',

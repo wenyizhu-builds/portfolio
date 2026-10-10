@@ -413,6 +413,7 @@ button { font: inherit; color: inherit; }
 .m-hero-ast { animation: spin var(--spin) linear infinite; }
 .m-hero h1 { font-size: 30px; font-weight: 400; letter-spacing: -0.02em; margin: var(--sp-14) 0 var(--sp-4); }
 .m-intro { font-size: var(--fs-15); line-height: 1.6; margin: var(--sp-14) 0 0; color: var(--ink-2); }
+.m-intro + .m-intro { margin-top: var(--sp-8); } /* v75.18: three short lines, spaced like the desktop INDEX */
 .m-menu { background: var(--panel); border: var(--hair) solid var(--line-soft); border-radius: var(--r-10); padding: var(--sp-14) var(--sp-16); margin: var(--sp-8) 0 28px; scroll-margin-top: var(--m-scroll); }
 .m-menu-quick { display: flex; gap: var(--sp-8); margin-bottom: var(--sp-10); }
 .m-menu-item { display: flex; align-items: center; gap: var(--sp-10); padding: 11px 0; border-top: var(--rule); font-size: var(--fs-15); font-weight: 500; text-decoration: none; }
