@@ -280,6 +280,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   /** Numbers beside the stations, popping in one after another. */
   function drawNumbers() {
     svg.querySelectorAll('.mt-no').forEach((e) => e.remove());
+    if (order.length < 2) return; // v75.16: one stop is not a ride, so no stop number
     const K = typeK(), N = Object.fromEntries(Object.entries(METRO.stopNo).map(([k, v]) => [k, k === 'pop' ? v : v * K])) as typeof METRO.stopNo;
     order.forEach((id, i) => {
       const [x, y, , pos] = METRO.stations[id], g = svg.querySelector(`.mt-stn[data-id="${CSS.escape(id)}"]`);
@@ -360,7 +361,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   }
   document.addEventListener('ride-start', () => {
     // v75.15 (owner): one stop is not a ride — open that stop and drop the filters (go first, then clear: L56)
-    if (order.length === 1) { leaveRide(order[0]); return; }
+    if (order.length === 1) { go(order[0]); return; } // v75.16 (owner): keep the choice, so the map stays on that stop and its card opens
     armed = true;
     if (order.length && rideStep < 0) bar.querySelector<HTMLButtonElement>('.nx')!.click(); // straight to the first stop
     else paintBar(1);
@@ -435,6 +436,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const key = riding ? JSON.stringify(filters) : '';
     if (key !== rideKey) { rideKey = key; rideStep = -1; lastStep = -1; trainAt = null; endState = ''; armed = false; }
     if (riding && builtKey !== key) { buildRoute(ids!); drawNumbers(); builtKey = key; }
+    document.dispatchEvent(new CustomEvent('ride-count', { detail: riding ? order.length : -1 })); // the panel's button says what it will do (v75.16)
     if (!riding && builtKey) { routeEl?.remove(); routeEl = null; order = []; builtKey = ''; svg.querySelectorAll('.mt-no').forEach((e) => e.remove()); }
     if (riding && sel && order.includes(sel) && rideStep >= 0) rideStep = order.indexOf(sel); // a stop clicked on the map
     const cur = riding && rideStep >= 0 ? order[rideStep] : null;

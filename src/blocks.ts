@@ -329,6 +329,8 @@ export function wireRide(root: ParentNode) {
     document.dispatchEvent(new CustomEvent('ride-start')); // metro.ts shows the ride bar and goes to the first stop
   };
   root.querySelector<HTMLButtonElement>('[data-ride-clear]')!.onclick = () => { clearFilters(); setOpen(false); };
+  const goBtn = root.querySelector<HTMLButtonElement>('[data-ride-close]')!;
+  document.addEventListener('ride-count', (e) => { goBtn.textContent = L((e as CustomEvent<number>).detail === 1 ? 'rideOpen' : 'rideShow'); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
 }
 /** Phone: two plain drop-downs (target market, platform) — no rides, since there is no map to ride (v72.3). */

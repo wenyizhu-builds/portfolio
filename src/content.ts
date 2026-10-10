@@ -904,6 +904,7 @@ export const ui = {
   curateRide: { en: 'Curate your ride' },
   rideClear: { en: 'Clear' },
   rideShow: { en: 'Start my ride' },
+  rideOpen: { en: 'Take me there' }, // v75.16 (owner): when only one stop matches, there is no ride
   yourRide: { en: 'Your ride' },
   rideStops: { en: '{n} stops' },
   rideStop1: { en: '1 stop' },
