@@ -97,7 +97,8 @@ const cssVar = (name: string) => getComputedStyle(document.documentElement).getP
     words (line height, tags, stop numbers, the gap to a name) grows with them, so names keep their size on screen
     while the drawing itself got smaller. */
 const typeK = () => parseFloat(cssVar('--m-type')) || 1;
-const cssMs = (name: string) => parseFloat(cssVar(name)) || 0;
+/** A CSS time in ms. The build minifies times (2000ms → 2s), so read the unit, not just the number (L61). */
+const cssMs = (name: string) => { const v = cssVar(name), n = parseFloat(v) || 0; return /\ds$/.test(v) ? n * 1000 : n; };
 function wrap(s: string, max = METRO.wrap): string[] {
   const out: string[] = [];
   let cur = '';

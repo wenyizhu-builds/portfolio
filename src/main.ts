@@ -87,7 +87,8 @@ panel.addEventListener('scroll', () => {
 /** Layout sizes and breakpoints live in CSS (:root) — read them here instead of repeating numbers. */
 const cssVar = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 const cssPx = (name: string) => parseFloat(cssVar(name)) || 0;
-const cssMs = (name: string) => parseFloat(cssVar(name)) || 0;
+/** A CSS time in ms. The build minifies times (2000ms → 2s), so read the unit, not just the number (L61). */
+const cssMs = (name: string) => { const v = cssVar(name), n = parseFloat(v) || 0; return /\ds$/.test(v) ? n * 1000 : n; };
 const mq = window.matchMedia(cssVar('--mq-phone'));
 
 const floatingVisual = createFloatingVisual(stage, document.querySelector<HTMLElement>('.side')!, openLightbox);

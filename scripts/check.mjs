@@ -131,6 +131,13 @@ for (const n of nodes) for (const r of finalResults(n)) {
   if (len > RESULT_MAX) fail('result-one-line', `${n.id}: "${r.metric} ${r.en}" is ${len} chars (max ${RESULT_MAX}) — it wraps to two lines`);
 }
 
+/* L61: the build minifies CSS times (2000ms → 2s); a reader that only takes the number gets 2 ms and the animation
+   never plays. Every cssMs() must read the unit. */
+for (const f of readdirSync(src).filter((x) => x.endsWith('.ts'))) {
+  const m = readFileSync(join(src, f), 'utf8').match(/const cssMs = \(name: string\) => parseFloat\(cssVar\(name\)\) \|\| 0;/);
+  if (m) fail('css-time-unit', `${f}: cssMs ignores the unit — "2s" would read as 2 ms`);
+}
+
 /* L33: no game version numbers ("Genshin Impact 5.0", "the 5.0 launch") — readers outside the game don't know them. */
 { const m = copyText.match(/Genshin Impact[’']?s? \d+\.\d|\b\d+\.\d+ (?:launch|update|version)\b|\bV\d+\.\d/);
   if (m) fail('no-game-version', `found "${m[0]}" — say "a major update" instead of a version number`); }
