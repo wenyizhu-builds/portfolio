@@ -225,10 +225,13 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       if (!n) continue;
       s += station(n, x, y, lines, pos);
     }
+    svg.classList.add('fresh'); // v75.21 (owner, bug): a fresh drawing takes its state at once — no fade from "all shown" (L63)
     svg.innerHTML = s;
     builtKey = ''; // the ride's numbers and route are rebuilt on the fresh drawing
     introPaint?.(); // v74.1: a redraw mid-opening (resize, card change) keeps the half-grown map — no flash of the whole map
     apply();
+    void getComputedStyle(svg.querySelector('[data-l]') ?? svg).opacity; // settle the new state before fades come back
+    requestAnimationFrame(() => svg.classList.remove('fresh'));
   }
 
   function station(n: SiteNode, x: number, y: number, lines: string, pos: Pos): string {

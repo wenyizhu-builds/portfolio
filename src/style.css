@@ -667,6 +667,7 @@ body.arranging .stage, body.arranging .side { animation: none; }
 /* ---------- A ride (v71, metro.ts): the ride's track stays in colour, everything else ghosts ---------- */
 .metro.riding [data-l] { opacity: var(--m-ghost) !important; filter: grayscale(1); }
 .metro [data-l] { transition: opacity var(--m-fade) var(--ease), filter var(--m-fade) var(--ease); }
+.metro.fresh [data-l], .metro.fresh text, .metro.fresh .mt-tag { transition: none; } /* v75.21: a redrawn map shows its state at once (L63) */
 .metro.riding .mt-stn.on-ride { opacity: 1 !important; filter: none; }
 .metro.riding .mt-stn.on-route { opacity: var(--m-through) !important; filter: grayscale(1); } /* v73.5 (owner): a station the train passes stays drawn, but grey and quiet, so it isn't mistaken for a stop */
 .metro text, .metro .mt-tag { transition: opacity var(--dur-400); }
