@@ -79,6 +79,7 @@ const METRO = {
     tail: [[500, 340], [580, 420], [580, 600], [640, 660], [760, 660], [760, 320], [640, 200]] as Pt[] },
   routeSnap: 12, // a station counts as on the route within this distance (bends are rounded)
   routeStep: 1.5, // sampling step along the route
+  introReverse: ['ai'] as LineKey[], // v74.1 (owner): in the opening these lines grow from their far end — the AI line climbs from Xiaohongshu and lands on Next stop
   /** Stop numbers: small rounded squares beside the station, on the side away from its name. */
   stopNo: { side: 15, rise: 14, below: 17, w: 14, w2: 18, h: 14, rx: 3, textY: 3.4, pop: 0.045 },
   /** Confetti at the end of the line: the map's own pieces (track dashes, rings, ✳), light and slow. */
@@ -189,6 +190,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   let armed = false; // v73.6 (owner): the ride bar waits for "Start my ride"; choosing a ride alone doesn't show it
   let order: string[] = [], through: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
   let trainAt: number | null = null, raf = 0, travelMs = 0, arriveT = 0;
+  let introPaint: (() => void) | null = null; // set while the opening runs (v74)
 
   function render() {
     svg.setAttribute('aria-label', t(ui.mapLabel));
@@ -205,12 +207,11 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
       const [x, y, a, rot] = METRO.lines[k].label;
       s += `<text data-l="${k}" data-line="${k}" class="mt-lname" x="${x}" y="${y}" text-anchor="${a}"${rot ? ` transform="rotate(${rot} ${x} ${y})"` : ''}>${esc(t(METRO.lines[k].name))}</text>`;
     }
-    // ✳ Next stop
+    // ? Next stop — v74 (owner): a question mark instead of the ✳: what comes next is still open
     const [tx, ty] = METRO.top;
-    const arms = [0, 1, 2, 3].map((i) => { const a = i * Math.PI / 4, X = 10 * Math.cos(a), Y = 10 * Math.sin(a); return `<line x1="${f(-X)}" y1="${f(-Y)}" x2="${f(X)}" y2="${f(Y)}"/>`; }).join('');
     // v71.1 (owner): just "Next stop", on a dotted ring — a station still being built
     const topText = esc(t(ui.nextStop));
-    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})"><g class="mt-arms">${arms}</g></g>`
+    s += `<g class="mt-top" data-l="career ai" role="link" tabindex="0" aria-label="${topText}"><circle class="mt-ring mt-open" cx="${tx}" cy="${ty}" r="${METRO.radius.star}"/><g class="mt-star" transform="translate(${tx},${ty})"><text class="mt-q" text-anchor="middle" dy="0.36em">?</text></g>`
       + `<g transform="translate(${tx},${ty - METRO.topLabel * typeK()})"><text class="mt-halo mt-lbl b" text-anchor="middle">${topText}</text><text class="mt-lbl b" text-anchor="middle">${topText}</text></g></g>`; // the ✳ turns on hover, like the ride button (v72.8)
     s += '<g class="mt-xfer"></g>';
     // the ride's own track, in each line's colour, shown through two masks: the whole ride (pale ahead) and the part travelled
@@ -225,6 +226,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     }
     svg.innerHTML = s;
     builtKey = ''; // the ride's numbers and route are rebuilt on the fresh drawing
+    introPaint?.(); // v74.1: a redraw mid-opening (resize, card change) keeps the half-grown map — no flash of the whole map
     apply();
   }
 
@@ -515,7 +517,67 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     if (g.classList.contains('mt-top')) go('contact'); else onSelect((g as SVGGElement).dataset.id!);
   });
 
+  /* v74 (owner): on arrival the network grows out of the first station in about two seconds — each line draws from
+     where it branches off, and stations, line names and Next stop appear as the track reaches them */
+  function intro() {
+    if (reducedMotion.matches || filtering()) return;
+    const keys = Object.keys(METRO.lines) as LineKey[];
+    const paths = [...svg.querySelectorAll<SVGPathElement>('.mt-track[data-l]')];
+    const len: Record<string, number> = {}, off: Record<string, number> = {}, samp: Record<string, number[][]> = {};
+    try {
+      for (const k of keys) {
+        const p = paths.find((e) => e.dataset.l === k)!;
+        len[k] = p.getTotalLength(); samp[k] = [];
+        for (let s = 0; s <= len[k]; s += METRO.routeStep) { const q = p.getPointAtLength(s); samp[k].push([s, q.x, q.y]); }
+      }
+    } catch { return; } // not laid out (hidden): just show the map
+    /** How far along line k the point sits, or Infinity if the line doesn't pass it. */
+    const rev = (k: string) => METRO.introReverse.includes(k as LineKey);
+    const along = (k: string, x: number, y: number) => {
+      let best = Infinity, s0 = 0;
+      for (const [s, px, py] of samp[k]) { const d = Math.hypot(px - x, py - y); if (d < best) { best = d; s0 = s; } }
+      return best >= METRO.routeSnap ? Infinity : rev(k) ? len[k] - s0 : s0; // distance in the direction the line grows
+    };
+    const [ox, oy] = METRO.lines.career.track[0];
+    for (const k of keys) {
+      const tr = METRO.lines[k].track, [x, y] = rev(k) ? tr[tr.length - 1] : tr[0];
+      off[k] = Math.hypot(x - ox, y - oy) < 1 ? 0 : Math.min(...Object.keys(off).map((j) => off[j] + along(j, x, y)));
+    }
+    const reachAt = (lines: string[], x: number, y: number) => Math.min(...lines.filter((l) => l in off).map((l) => off[l] + along(l, x, y)));
+    const reach: Record<string, number> = {};
+    for (const [id, [x, y, lines]] of Object.entries(METRO.stations)) reach[id] = reachAt(lines.split(' '), x, y);
+    const topAt = reachAt(['ai'], METRO.top[0], METRO.top[1]); // Next stop appears when the AI line lands on it
+    const total = Math.max(...keys.map((k) => off[k] + len[k]));
+    const T = cssMs('--m-intro');
+    let t0 = 0, k = 0, D = 0;
+    /** Draw the opening at its current point; also called by render() so a redraw never shows the whole map early. */
+    const paint = () => {
+      svg.querySelectorAll<SVGPathElement>('.mt-track[data-l]').forEach((p) => {
+        const l = p.dataset.l!, d = Math.max(0, Math.min(len[l], D - off[l]));
+        p.style.strokeDasharray = k < 1 ? `${f(d)} 99999` : '';
+        p.style.strokeDashoffset = k < 1 && rev(l) ? f(d - len[l]) : ''; // a reversed line shows its last d units
+        p.style.visibility = k < 1 && d < 0.5 ? 'hidden' : '';
+      });
+      svg.querySelectorAll<SVGGElement>('.mt-stn').forEach((g) => g.classList.toggle('grown', (reach[g.dataset.id!] ?? total) <= D));
+      svg.querySelectorAll<SVGTextElement>('.mt-lname').forEach((e) => { const l = e.dataset.l!; e.classList.toggle('grown', D >= off[l] + len[l]); });
+      svg.querySelector('.mt-top')?.classList.toggle('grown', (Number.isFinite(topAt) ? topAt : total) <= D);
+    };
+    const frame = (now: number) => {
+      t0 ||= now;
+      k = Math.min(1, (now - t0) / T); D = total * (0.5 - 0.5 * Math.cos(Math.PI * k)); // eases out of the first dot, speeds up, settles at the end
+      paint();
+      if (k >= 1) introPaint = null;
+      if (k < 1) requestAnimationFrame(frame);
+      else setTimeout(() => svg.classList.remove('intro'), cssMs('--dur-600')); // let the last stations finish their pop
+    };
+    svg.classList.add('intro');
+    introPaint = paint;
+    paint(); // v74.1 (owner, bug): hide the map in the same task it is drawn — waiting a frame let the whole map flash first
+    requestAnimationFrame(frame);
+  }
+
   render();
+  intro();
   return {
     setFocus(id) {
       sel = id && METRO.stations[id] ? id : null;

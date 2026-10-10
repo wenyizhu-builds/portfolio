@@ -2,7 +2,7 @@ import { ancestors, byId, childrenOf, featuredOrder, indexSections, rolesOrder, 
 import { clearFilters, esc, filtering, isDone, matches, t, toggleFilter, type FilterKind } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
-import { L, contactRows, detailLists, gallerySetList, highlight, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
+import { L, contactRows, detailLists, gallerySetList, intro, resumeLists, resumePdf, tx, wireCopy } from './blocks';
 
 /* List rows are plain bullets (shapes stay on the category headings, where they match the map). */
 /* Section marks sit in the gutter, left of the text column (as in the reference). */

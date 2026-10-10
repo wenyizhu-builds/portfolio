@@ -73,6 +73,7 @@
   --m-ride-min: 420ms; --m-ride-max: 1100ms; --m-ride-per: 1.6; /* the travelled track grows: base + ms per map unit, capped */
   --m-arrive-max: 800ms; /* the last stop: at most this long before the arrival */
   --m-confetti: 2400ms; /* the confetti's life */
+  --m-intro: 2000ms; /* v74 (owner): the map grows out of the first station on arrival */
   --m-board: 420ms; /* the ride bar's words roll over */
   --m-pop: 450ms; /* stop numbers pop in */
   --fs-nav: 14.5px; /* v72.6 (owner: 10% smaller): Curate your ride, Resume, Let's talk */
@@ -387,8 +388,7 @@ button { font: inherit; color: inherit; }
 .proto { position: absolute; z-index: 2; right: var(--map-inset); bottom: var(--edge-y); margin: 0; font-size: var(--fs-10); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 
 /* intro fade for the whole map */
-.stage { animation: mapIn var(--entrance-map) var(--ease) both; }
-@keyframes mapIn { from { transform: translateX(var(--entrance-shift)); } }
+/* v74 (owner): the map no longer slides in — it grows out of its first station instead (metro.ts intro) */
 .side { animation: sideIn var(--entrance-card) var(--ease) both; }
 @keyframes sideIn { from { opacity: 0; transform: translateY(var(--entrance-rise)); } }
 
@@ -645,8 +645,13 @@ body.arranging .stage, body.arranging .side { animation: none; }
 .mt-star line { stroke: var(--cobalt); stroke-width: 3.6px; stroke-linecap: round; }
 .mt-top { cursor: pointer; outline: none; } /* v72.8: no browser box on click (owner); keyboard focus colours the ring instead */
 .mt-top:focus-visible .mt-ring { stroke: var(--cobalt); }
-.mt-top .mt-arms { transition: transform var(--dur-600) var(--ease); } /* turns about the ✳'s own centre */
-.mt-top:is(:hover, :focus-visible) .mt-arms { transform: rotate(45deg); }
+.mt-q { font-size: 25px; font-weight: 600; fill: var(--cobalt); transform-box: fill-box; transform-origin: center; transition: transform var(--dur-600) var(--ease); } /* v74: Next stop is an open question */
+.mt-top:is(:hover, :focus-visible) .mt-q { transform: rotate(-14deg) scale(1.12); }
+/* v74 (owner): the opening — everything but the growing track waits until the track reaches it */
+.metro.intro .mt-stn, .metro.intro .mt-lname, .metro.intro .mt-top { transition: opacity var(--dur-200) var(--ease); }
+.metro.intro .mt-stn:not(.grown), .metro.intro .mt-lname:not(.grown), .metro.intro .mt-top:not(.grown), .metro.intro .mt-xfer { opacity: 0; }
+.metro.intro .mt-top .mt-ring { transform-box: fill-box; transform-origin: center; }
+.metro.intro .mt-stn.grown .mt-dot, .metro.intro .mt-top.grown .mt-ring { animation: mt-arrive var(--dur-600) cubic-bezier(0.3, 1.5, 0.5, 1); }
 .mt-open { stroke-width: 3px; stroke-dasharray: 0.1 6.3; stroke-linecap: round; } /* Next stop: a dotted ring, still being built (v71.1) */
 .ico-line path { fill: none; stroke-linecap: round; stroke-width: var(--halo); }
 .ico-line path.core { stroke: var(--panel); stroke-width: 2px; }

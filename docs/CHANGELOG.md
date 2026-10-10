@@ -778,3 +778,7 @@
 - v72.13（10-08）：原型条精简为图标 + 「Try the prototype」；`beside()` 加四个斜角、骑行时可盖住路线外的线、可贴近卡片；兜底改为最近的空位。她笔记本尺寸下，有无骑行都紧贴站点，底部只剩骑行条。去掉不用的 `ui.appBarSub`。
 - v72.13（更正，10-08）：撤回精简原型条和新的找位规则（她要原样）；只加一条：骑行时原型条离骑行条太近就上抬（`--fv-ride-gap` 28px），没有空位时放在骑行条上方而不是隐藏。
 - v72.14（10-09）：原型条找不到空位时直接贴在站点旁（`beside(w, h, true)`，可盖住地图），骑行时路线外的线可盖，始终在骑行条上方。
+- v73（10-10）：全站文案重写（global growth & creator marketing，英式拼写，JD 词库，`docs/copy-vocab-spec.md`）；INDEX 三行简介 + 关键词筛选；骑行改为五条，新增传记骑行「My story in five minutes」（专用路线、站点叙述在骑行条上方、UChicago 站移到 (410,490)）；Results 移到 How it worked 前；/wenyi.md + /llms.txt；Creator OS 宣传片重渲染。
+- v73.10–73.13（10-10）：Let's talk 卡片重做：头部 CONTACT、行样式同案例分区、邮箱上线、去掉 Resume 行、复制改右侧图标；右侧图标（← × + –）统一 `--icon-r` 对齐，INDEX 条预留滚动条宽度。
+- v74（10-10）：地图开场：线路从 XJTLU 长出（2 秒，`--m-intro`），站点随线路出现；去掉地图滑入；Next stop 改问号。
+- v74.1（10-10）：修复开场闪出整张图（同一任务内先隐藏；重绘时保持开场进度）；AI 线从 Xiaohongshu 往上长、落在 Next stop（`METRO.introReverse`）。

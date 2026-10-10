@@ -1,49 +1,30 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v73（分支 `metro-map`，未合并）· 文案重写 + 传记骑行
+> 最后更新：2026-10-10 · v74.1（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
-### 2026-10-10 文案重写 + 「Me in five minutes」骑行（v73，分支 `metro-map`，未合并）
-- 用词标准：`docs/copy-vocab-spec.md`（JD 原词库 + 10-10 英国在招 JD 核对）。定位 = global growth & creator marketer；读者 = 招聘方 + 用人经理。
-- 已改并写入（content.ts + src/published-copy.json + .copy-editor/archive.json 三处同步；JSON 写入用临时文件 + rename，避免 dev server 读到半个文件）：INDEX 标题「Creative Strategist · Growth Marketing」、三行简介（Creative + data / Global / AI）；六条分组说明（Paid & UA → Paid Growth）；Information 简介；Experience 一句话；全部案例（summary 只讲策略不放数字、标题改：Japan Social Channel Launch、Branded Filter Campaign、Community Giveaway、Xiaohongshu AI Tutorial Channel、Creator Operating System）；四段实习（短 summary + 展开的 What I did）；HoYoverse 市场 JP · NA · EU，角色卡市场显示为「Markets: …」；英式拼写；UGC 只在 Paid Growth 一句、HoYoverse 一句用。
-- 版式小改（她要求）：Results 在 How it worked 之前；AI 卡片标题与案例同为 20px；Work from this role 默认展开；摄影按时间倒序；骑行经过的站 18% 灰；选路线后骑行条要等「Start my ride」才出现，点后直接到第 1 站。
-- 骑行：七条（Me in five minutes / Paid acquisition & creative testing / Creator marketing & campaigns / Social channel growth / New-market launches / AI in marketing / The whole journey）。市场筛选会带出实习站。
-- 「Me in five minutes」：九站 XJTLU → NOWNESS → Nike → UChicago → HoYoverse → Creator Ad Pipeline → Japan → Xiaohongshu → Dashboard；UChicago 站移到 Seminary Co-op 正下方 (410,490)；专用路线 `METRO.route.me`，在 UChicago、Creator Ad Pipeline 各短暂折返（trackPath 遇到折返不倒圆角）；每站一段叙述 `rides.me.notes`，显示在骑行条上方的白色框里（不进卡片），最后一站也保留。叙述文字她已逐条定稿。
-- 还没做：XJTLU / UChicago 卡片补两行介绍；简介三个引导词换字体或加粗（她不要蓝色）；简介关键词可点击触发筛选（先文案后做）；三张 How it worked 图重画（去掉 UA 等旧词、每格 ≤6 词、加 Landing Page 图）；Creator OS 宣传片重渲染（片头仍写 workbench）；/wenyi.md + llms.txt 给 AI 读；Xiaohongshu 付费合作数待她给准数；她在测试站看过后合并进主站。
+### 2026-10-10 收尾：v73 文案重写 + v74 地图开场（分支 `metro-map`）
+- 她说「差不多可以了」。本轮已完成：全站文案重写（用词标准 `docs/copy-vocab-spec.md`）；骑行重组为五条，其中「My story in five minutes」是传记骑行（专用路线 `METRO.route.me`，每站叙述在骑行条上方）；INDEX 简介三行 + 关键词可点（市场 → 筛选，AI tools → AI 线），点 INDEX 回到全图；XJTLU / UChicago 卡片；Information 简介；/wenyi.md + /llms.txt（`dev/readable.ts`）；Creator OS 宣传片重渲染。
+- Let's talk 卡片：头部只写 CONTACT（不再重复 Let's talk 标题，标题留给读屏）；每行和案例卡片的分区一样（虚线、↳、黑色小号大写标签，值在下面）；复制 = 右侧图标（方案 A），点后蓝色对勾；邮箱 wenyi.mktg@gmail.com；Resume 不放进 Let's talk。
+- 右侧图标对齐：← × + – 都放在同宽的 `--icon-r` 盒子里、贴右边；INDEX 条也预留滚动条宽度，和卡片右边对齐。
+- 地图开场（v74）：首次进入时，线路从 XJTLU 一点长出来，2 秒（`--m-intro`）；站点、名字在线路到达时出现；AI 线从 Xiaohongshu 往上长、最后落在 Next stop（`METRO.introReverse`）。原来的从右滑入已去掉。Next stop 中间改成蓝色问号（悬停微倾）。
+- v74.1 修复闪屏：开场先等一帧才隐藏 → 第一帧整张图露出来；中途重绘也会露出整张图（L57）。
+- 推送方式：她电脑上的 git 无法登录 GitHub；做法是在电脑上 `git bundle` → 云端仓库 fetch → 云端 push，再 `git update-ref` 同步电脑上的 origin/metro-map（L58）。
 
-### 正在做：地铁图 + Curate your ride（v71，分支 `metro-map`，未合并）
-- 设计全部在 SPEC 顶部「地铁图 v71」一条；用户在原型 Artifact「Metro Ride」（`https://claude.ai/artifact/BzzXJ33DMB9XspFiASjRbm`，源文件云端 `/home/claude/map-options/metro-ride.html`）里逐条确认过。测试站 Artifact `https://claude.ai/artifact/T8YZXJTXM9MhXRnxk2gRJ3`（主预览 K7QJV2… 没动）。
-- 用户定下的（不要再改回去）：线条 Medium；「你在哪里」= 线路生长（不要列车小点、不要闪烁）；Curate your ride 按钮 = 白色、展开成一块白色面板（否决黑色、蓝色、lime、纯文字、描边、阴影）；编号用小圆角方块；骑行中站名统一样式，平时地图保留层级；终点 = 按钮填充暖橙 → Let's talk ↗ + 轻量暖色彩屑；卡片往右、顶部与地图齐平。
-- 用户的视觉偏好（这次会话反复强调）：不要描边、不要阴影；不要同一处混用不同字号 / 粗细 / 颜色（但整张地图可以有层级）；动效要顺、不能像卡住；颜色要暖、不要冷；一个标记只表示一件事（L51）。
-- 还没做：排版工具和 layout-check 不覆盖地铁图；手机版没有地图（只有三个下拉框）；彩屑和到站在 file:// 预览里正常，Dashboard 是终点时地图被视频挡住，彩屑从按钮喷出。
-- 她电脑上的项目文件夹（`portfolio-prototypes/claude`）现在在 `metro-map` 分支（10-08 切换，为了让本地预览显示 v71）；合并后要切回主分支。
-- v71.1：Next stop 只写名字，站圈点状虚线（她也提过可以放问号，未采用，等她看）。
-- v71.2：站名一行 + 地图短名（她选 B；规则：只省略、不改词序）。站名方案对比 Artifact `https://claude.ai/artifact/42RiV7EKRia42UAp65eAKg`。
-- v71.3：浮动图片避开地铁图（L52）。
-- v71.4：卡片和地图都垂直居中；案例图片放在离自己站点最近的空位。卡片列表的重点案例标记待她选（Artifact `https://claude.ai/artifact/P2JGKeYJDMLspmW7D8j2hN`：A 结果标签 / B 分两组 / C ✳ / D lime 高亮）；她不喜欢列表里的双圈大圈。
-- v71.5–71.7：卡片列表最后决定不标重点案例，只留圆点（双圈、转动的 ✳ 都被否决）；地图站名全部加粗；AI 案例改为站点旁的「Try the prototype」条 + 弹窗（视频 + 原型）。`--proto-share/--proto-max/--proto-gap` 和 `.proto-box/.proto-video` 样式已不用，合并前可清理。
-- v72：站名重排（她在 Artifact「Station Name Layouts」`https://claude.ai/artifact/6SRVaieXozNkTj9srSa5ym` 选 A · Calmer，源文件云端 `/home/claude/map-options/names/tpl.html`）：每条线一侧、距圈外沿 11、顶排 45° 斜写、线名沿线竖写、Campus 线名与 UChicago 分开。她说过「不在乎规则，要好看」——以后调站名先出对比页给她看。站名粗体、线名样式她要求保持不变（否决了线名徽章 / 加色条）。
-- v72.1：路线与市场 / 平台筛选互斥（她要求）；市场 + 平台可组合。
-- v72.2：地图最大 0.9 倍，骑行条抬到图例上方（仍在底部，她不要放到顶部）。为什么本地和测试站不一样：地图随窗口放大，测试站窗口小。1280×720 的小屏上地图约 0.72 倍，字偏小；润色文案时可以考虑把地图短名「Gamified Landing Page」缩短，画框就能矮一点。
-- v72.3：手机版筛选只留市场和平台（她：手机没有地图，就不要路线）。
-- v72.4：卡片展开分组 → 地图只亮那条线。
-- v72.5：修复电脑版选路线后条子不出现（L55，v72.3 引入）。
-- v72.6：除卡片外整体小 10%（地图字号不变）。她在 Claude 应用里看测试站约是 90% 显示，Chrome 100% 看着更大——比较大小时以她 Chrome 100% 为准。
-- v72.7：样式写死的数全部变量化，check 会拦重复的数（她要求：所有样式都在 CSS 里定义）。
-- v72.8–72.10：Next stop 去掉点击蓝框、✳ 悬停转动（名字不换）；她的名字最终放 INDEX 卡片顶部（方案 C，名字 + 职位）；修复终点 Let's talk 闪屏（L56）。
-- v72.11：卡片也小 10%（CSS zoom），列上下留白变小。为什么本地总比测试站大：Claude 应用把测试站显示成约 90%；现在本地 100% 就等于她喜欢的大小。
-- v72.12：骑行经过的站不再是灰影（HoYoverse 处的灰点）；骑行条保持现状。
-- v72.13：原型条样式和位置不变，只在骑行时离骑行条太近就上抬；小屏骑行不再隐藏。
-- v72.14：原型条始终贴在自己的站点旁（可以盖住地图）。
-- **下一步（新会话）：一起打磨全站文案。** 她 10-08 收尾时说：内容基本可以了，现在只打磨文案。地图和版式这一轮结束，不再动设计，除非她提。
-  - 先读 CLAUDE.md「内容」一节和 LESSONS L29–L33、L47–L50（地道英文、写给雇主、策略不写任务、不写过程细节、Results ≤45 字符）。
-  - 范围：`src/content.ts` 里的全部英文——首页介绍、INDEX 各线说明（AI Projects 一句话还是 [Placeholder copy]）、每个案例的 summary / What I did / Results、地图短名 `mapLabel` 和结果标签 `mapTag`、界面文字 `ui`（Curate your ride 等）。
-  - 做法建议：一次一个区块，给她「原文 → 改后」对照，她确认再写进去；存疑的词标出来。
-  - 本轮设计改动带出的文案点：卡片变窄后长标题会折行（如「TikTok & Snapchat Filter Campaign」），可考虑更短的标题；地图短名「Gamified Landing Page」斜写最长，缩短（如「Landing Page」）能让小屏地图更大；INDEX 卡片顶部现在有名字 + 职位（`site.tag`），职位措辞可一起定。
-  - 设计这一轮已收尾，不要再改版式，除非她提：地图站名排法（v72）、整体 90%（v72.6、v72.11）、名字在 INDEX（v72.10）、骑行条保持黑色样式、原型条贴站点（v72.14）。
-  - 文案定稿、她在测试站看过后，再合并进主站（flagship-restructure → main），她电脑上的文件夹切回主分支。
+### 下一个会话（最后一轮）：编辑审稿 + PDF 简历
+1. **编辑审稿**：请资深营销专家 + 招聘方（HR）两个角色，读全站当前生效的文案（content.ts 叠加 published-copy.json；用 `.copy-rework/dump.mjs` 导出 effective-copy.txt 来读），找：尴尬 / 自夸 / 幼稚的说法，语法和拼写错误（英式拼写），风格前后不一致（标题大小写、冒号用法、Results 格式、术语如 creator ads vs UGC、CV vs Resume）。先出问题清单（原文 → 建议 → 理由），她确认后再改；改动三处同步（content.ts、published-copy.json、.copy-editor/archive.json，JSON 原子写入）。
+2. **PDF 简历**：做一份和网站文案一致的一页 PDF，放 `public/`，填 `site.resumePdf`；卡片上的 Download PDF 就会亮。英国市场用 CV 还是 Resume 这个词，先问她。
+3. 然后合并进 main、部署（见 CLAUDE.md 交付前第 5–6 步）。
+
+### 还没决定 / 待她给
+- 简介关键词的悬停预览（会闪，先没做）；三张 How it worked 图重画（去掉 UA 等旧词、每格 ≤6 词、加 Landing Page 图）；Creator OS 原型截图 01–08 标签页仍写「Workbench · Home」；宣传片片尾要不要加「An Obsidian plugin」；Xiaohongshu 付费合作数（目前隐藏）。
+- 她电脑上的未跟踪文件：`.copy-rework/`、`_dump.mts`、`src/published-copy.json.bak-before-v73-block1`（工作文件，不进仓库）。
+
+### 她定下的设计偏好（不要改回去）
+- 不要描边、不要阴影；同一处不混用字号 / 粗细 / 颜色；动效要顺；颜色暖；一个标记一个意思（L51）。卡片之间元素要一致：新卡片只用已有组件（她 10-10：「用了别的卡片没有的元素」）。
+- 地图站名排法（v72）、整体 90%（v72.6、v72.11）、名字在 INDEX、骑行条黑色样式、原型条贴站点（v72.14）。
 
 **2026-10-07 交接（v69.2）。用户对上一个会话的文案质量不满意（"写作明显变差"），所以换新会话。先读下面的 L47 和「写作偏好」，再动笔。**
 
