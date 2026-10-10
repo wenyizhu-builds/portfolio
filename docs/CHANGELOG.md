@@ -790,3 +790,4 @@
 - v75.5（10-10）：传记骑行改名「Highlights」（她：包含学校，不能叫 career）。
 - v75.6（10-10）：传记骑行改名「Express route」（她选的：像快车只停关键站）。
 - v75.7（10-10）：INDEX「Global.」一行拆成两句（她：「including three years at HoYoverse」不合逻辑）：I’ve run campaigns for audiences in Japan, North America, Europe and China. Most recently, I spent three years in global marketing at HoYoverse, the studio behind Genshin Impact.
+- v75.8（10-10）：一页英国版 CV 上线到分支：`public/Wenyi_Zhu_CV.pdf`，`site.resumePdf` 已填，CV 卡片的 Download PDF 可用。版式仿她 0403 的 Word 简历（EB Garamond 11.6pt，A4）；每条按 XYZ（结果 + 数字 + 方法）；英国版只留 HoYoverse、自己的频道、Nike；职位写真实头衔 Marketing Specialist, Global Marketing；不放电话（公开网站）。源文件：她电脑 `career/resume-versions/Wenyi_Zhu_CV_source.html`（Chromium 打印成 PDF）。

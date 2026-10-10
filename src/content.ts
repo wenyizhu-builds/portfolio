@@ -138,7 +138,7 @@ export const site = {
   get intro(): T { return { en: this.introLines.map((l) => `${l.lead.en} ${l.en}`).join(' '), zh: '' }; },
   linkedin: 'https://www.linkedin.com/in/wenyi-zhu-mktg/',
   email: 'wenyi.mktg@gmail.com',
-  resumePdf: '', // PLACEHOLDER: put the file in public/ and use a relative path, e.g. 'wenyi-zhu-resume.pdf'
+  resumePdf: 'Wenyi_Zhu_CV.pdf', // v75.8: one-page UK CV (source: career/resume-versions; rebuild from cv.html, XYZ bullets)
   // false = still a prototype: shows the PROTOTYPE label. `npm run check -- --launch` refuses to pass
   // while this is false or any [Placeholder]/[Draft] text, empty email or empty résumé remains.
   launched: false,

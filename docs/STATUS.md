@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v75.7（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-10 · v75.8（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
@@ -21,7 +21,7 @@
 ### v75.1：地图开场闪图已修（见 CHANGELOG / L61）；发布版此前开场、骑行动画时长都失效，已一并修好。
 
 ### 下一步
-1. **PDF CV**：一页，和网站文案一致，放 `public/`，填 `site.resumePdf`（按钮文字 ui.downloadPdf）。
+1. ~~PDF CV~~ 已完成（v75.8）。以后可做中国市场版（Nike、小红书、WeChat 放前面）。
 2. 合并进 main、部署（CLAUDE.md 交付前第 5–6 步；先 `npm run check -- --launch`，需 `site.launched = true`、去掉 PROTOTYPE 标）。
 
 ### 还没决定 / 待她给
