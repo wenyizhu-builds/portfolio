@@ -1,4 +1,5 @@
-import { byId, ui } from './content';
+import { byId, card, ui } from './content';
+import { cardHint, cardHtml, wireCard } from './card';
 import { esc, t } from './state';
 import { pauseVideo, videoHtml, wireVideo } from './video';
 
@@ -105,6 +106,28 @@ export function openFrame(src: string, label: string, note: string, onClose?: ()
   lb.showModal();
   if (demoBox) wireVideo(demoBox);
   lb.querySelector<HTMLButtonElement>('.lb-close')!.focus();
+}
+
+/**
+ * The travel card (v76, owner): "Take my card" at the end of a ride and in the top bar. Same dark overlay,
+ * × and Esc as the pictures; the card can be turned over, and "Save card" downloads both sides in one picture.
+ */
+export function openCard() {
+  if (document.querySelector('.lightbox')) return;
+  const previous = document.activeElement as HTMLElement | null;
+  const lb = document.createElement('dialog');
+  lb.className = 'lightbox is-card';
+  lb.setAttribute('aria-label', t(ui.takeCard));
+  lb.innerHTML = `<button class="p-btn lb-close" aria-label="${esc(t(ui.close))}">×</button>
+    <figure class="lb-fig">${cardHtml()}<figcaption class="tc-actions"><a class="btn btn-primary" href="${esc(card.png)}" download>${esc(t(ui.saveCard))} ↓</a><span class="lb-note">${esc(cardHint())}</span></figcaption></figure>`;
+  const stop = wireCard(lb);
+  const close = () => { stop(); lb.close(); lb.remove(); previous?.focus({ preventScroll: true }); };
+  lb.querySelector<HTMLButtonElement>('.lb-close')!.onclick = close;
+  lb.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+  lb.onclick = (e) => { if (e.target === lb || e.target === lb.querySelector('.lb-fig')) close(); };
+  document.body.append(lb);
+  lb.showModal();
+  lb.querySelector<HTMLElement>('.tc-flip')!.focus({ preventScroll: true });
 }
 
 /** One picture, e.g. a case's "How it worked" diagram. */

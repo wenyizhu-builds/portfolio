@@ -1,9 +1,14 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v75.23（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-11 · v76（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
+
+### 2026-10-11 v76：旅行卡片已做进网站
+- 她在 Artifact「Metro Details Mockups」（claude.ai/artifact/YKxinnuBjNfwE1xRia2dD6）里定稿：不做开场动画；「Take my card」在骑行终点（骑行条右侧滑出）和页头 CV 旁；正面 Night line · Bright blue；背面 Pocket summary 四个数字 + 二维码；可倾斜、翻面、保存。细节见 SPEC 顶部 v76。
+- 「You are here」脉冲（她选的 pulse）还没做进网站。
+- 改了卡片内容（数字、文字、颜色）后要重新出图：`node dev/card/shot.cjs`（需先 build + `npx vite preview --port 4173`），二维码 `node dev/card/qr.cjs`。
 
 ### 2026-10-10 收尾：v73 文案重写 + v74 地图开场（分支 `metro-map`）
 - 她说「差不多可以了」。本轮已完成：全站文案重写（用词标准 `docs/copy-vocab-spec.md`）；骑行重组为五条，其中「My story in five minutes」是传记骑行（专用路线 `METRO.route.me`，每站叙述在骑行条上方）；INDEX 简介三行 + 关键词可点（市场 → 筛选，AI tools → AI 线），点 INDEX 回到全图；XJTLU / UChicago 卡片；Information 简介；/wenyi.md + /llms.txt（`dev/readable.ts`）；Creator OS 宣传片重渲染。
@@ -21,6 +26,7 @@
 ### v75.1：地图开场闪图已修（见 CHANGELOG / L61）；发布版此前开场、骑行动画时长都失效，已一并修好。
 
 ### 下一步
+0. 她试用卡片后的意见；「You are here」脉冲。
 1. ~~PDF CV~~ 已完成（v75.8）。以后可做中国市场版（Nike、小红书、WeChat 放前面）。
 2. 合并进 main、部署（CLAUDE.md 交付前第 5–6 步；先 `npm run check -- --launch`，需 `site.launched = true`、去掉 PROTOTYPE 标）。
 

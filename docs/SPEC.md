@@ -3,6 +3,12 @@
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
 > 最后更新：2026-10-07 · 对应版本 v69.10（地铁图为草稿，待确认）
 
+- **旅行卡片 v76（2026-10-11，她在 Artifact「Metro Details Mockups」里逐条确认）**：
+  - **不做开场动画**：进站直接看到地图。卡片只在有人要时出现：骑行到终点时，骑行条右侧滑出「Take my card ✳」；页头 CV 和 Let's talk 之间一直有「Take my card ↗」；手机菜单里 CV 旁一个按钮。她否决了「刷卡进站」：访客拿着写她名字的卡进站说不通；也不让访客填自己的名字（多一步）。
+  - **打开方式**：走 `lightbox.ts` 的 `openCard()`（同一个深色遮罩、× 和 Esc，L44）。卡片带一次 3D 转入，随鼠标微倾、有光扫过；点一下、拖动或方向键翻面；落地 1.3 秒后若没人碰，自己往背面偷看一下。「Save card」下载一张图（正面在上、背面在下，`public/media/card/Wenyi_Zhu_card.png`，`node dev/card/shot.cjs` 生成）。
+  - **正面 = Night line，配色 Bright blue（N2）**：一条发光的地铁线从 Creative 升到 Data 再到 Growth（Growth 用 Instrument Serif 斜体、柠檬绿，终点柠檬绿圆点脉动）；左上「Growth line」，右上 ✳；底部名字 + 职位。颜色全部由钴蓝 / 白 / 柠檬绿派生（`--tc-*`）。她看过的其他正面（Glow、Holo、Poster、Frosted、Transit、深色 Night）都不用。
+  - **背面 = Pocket summary**：800M+ views / 130K+ followers grown / 190+ creators briefed / 4 · 3 markets · languages（语言一行不换行），右侧二维码（`dev/card/qr.cjs` 生成，网址为上线地址）+「Scan to ride again」，底部邮箱和 LinkedIn。数字在 `content.ts` 的 `card.stats`，算法写在注释里；800M+ 含她参与支持的活动（她 10-11 确认可以）。
+  - 卡片上没有编号（试过「No. 0009」，她看不懂，删掉）。
 - **地铁图 v71：线条变细、站点标记统一、「Curate your ride」（2026-10-08，用户在原型 Artifact「Metro Ride」里逐条确认）**。取代下面 v70 里的地区筛选、站点分级和字体规则。
   - **粗细（用户选 Medium）**：线 8 → 6px，站圈描边 ×0.85、半径 ×0.92；只改 `:root` 的 `--m-*`。
   - **一个标记一个意思（地图、图例、卡片列表一致）**：◎ 双圈 = 重点案例；◯ 大单圈 = 换乘站（XJTLU、Seminary Co-op、HoYoverse、Xiaohongshu AI Channel）；∘ 小圈 = 其他站（其他作品、工作、学校）。名字跟标记走：重点案例和换乘站粗体，其他站常规；全部黑色，不再有灰色小字。工作和学校的名字常显，其他作品悬停或打开线时显示。图例：KEY CASE · INTERCHANGE · OTHER STOP · EDUCATION。用户：标记不能一会儿表示重点、一会儿表示换乘。

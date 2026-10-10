@@ -2,6 +2,7 @@ import { byId, childrenOf, featuredOrder, kindLabel, site, type SiteNode } from 
 import { dropRide, esc, filtering, matches, reducedMotion, t } from './state';
 import { AST, astSvg } from './shapes';
 import { markFor } from './metro';
+import { openCard } from './lightbox';
 import { L, contactRows, detailLists, filterSelects, galleryGrid, intro, resumeLists, resumePdf, summary, tx, wireCopy, wireFilters } from './blocks';
 
 /*
@@ -74,6 +75,7 @@ function menu(): string {
   return `<nav class="m-menu" id="m-menu" aria-label="${L('menu')}">
     <div class="m-menu-quick">
       <a href="#/resume" class="btn">${L('resume')} →</a>
+      <button type="button" class="btn" data-card>${L('takeCard')} ✳</button>
       <a href="#/contact" class="btn">${L('contact')} →</a>
     </div>
     ${work}
@@ -129,6 +131,7 @@ export function renderMobile(root: HTMLElement) {
     <footer class="m-foot"><span>${L('credit')}</span></footer>
     <a href="#m-menu" class="m-fab" data-menu>${L('menu')}</a>
   `;
+  root.querySelector<HTMLButtonElement>('[data-card]')!.onclick = openCard; // v76 (owner)
   root.querySelector<HTMLAnchorElement>('[data-menu]')!.onclick = (e) => {
     e.preventDefault();
     document.getElementById('m-menu')?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });

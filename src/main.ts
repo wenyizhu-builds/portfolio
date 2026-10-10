@@ -8,7 +8,7 @@ import { appIcon } from './shapes';
 import { mobileScrollTo, renderMobile } from './mobile';
 import { contactPanel, indexBar, indexPanel, nodePanel, resumePanel, wirePanel } from './panel';
 import { L, galleryGrid, ridePanel, syncRide, wireFilters, wireRide } from './blocks';
-import { openFrame, openGallery, openLightbox } from './lightbox';
+import { openCard, openFrame, openGallery, openLightbox } from './lightbox';
 import { pauseVideo, wireVideo } from './video';
 import { esc, filtering, go, onChange, parseRoute, reducedMotion, state, t, type Route } from './state';
 
@@ -26,6 +26,7 @@ app.innerHTML = `
       <div id="filters"></div>
       <nav class="top-nav">
         <a href="#/resume" class="top-link"><span data-i="resume"></span> <i aria-hidden="true">↗</i></a>
+        <button type="button" class="top-link" id="take-card"><span data-i="takeCard"></span> <i aria-hidden="true">↗</i></button>
         <a href="#/contact" class="top-link"><span data-i="contact"></span> <i aria-hidden="true">↗</i></a>
       </nav>
     </header>
@@ -92,6 +93,8 @@ const cssMs = (name: string) => { const v = cssVar(name), n = parseFloat(v) || 0
 const mq = window.matchMedia(cssVar('--mq-phone'));
 
 const floatingVisual = createFloatingVisual(stage, document.querySelector<HTMLElement>('.side')!, openLightbox);
+document.getElementById('take-card')!.addEventListener('click', openCard); // v76 (owner): the card is one click away, beside CV
+
 let map: MapApi | null = null;
 let route: Route = parseRoute();
 
@@ -99,6 +102,7 @@ let route: Route = parseRoute();
 function paintChrome() {
   document.querySelector('[data-i="resume"]')!.textContent = t(ui.resume);
   document.querySelector('[data-i="contact"]')!.textContent = t(ui.contact);
+  document.querySelector('[data-i="takeCard"]')!.textContent = t(ui.takeCard);
   // Curate your ride (v71): built once, then kept in step so its open and grow animations run
   const fb = document.getElementById('filters')!;
   if (!fb.querySelector('.ride')) {

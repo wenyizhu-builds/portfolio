@@ -40,10 +40,10 @@ function headFromContent(): Plugin {
         `<meta name="theme-color" content="${escAttr(token('bg'))}" />`,
         `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(icon)}" />`,
         `<link rel="alternate" type="text/markdown" href="wenyi.md" title="${escAttr(site.name)}: plain-text portfolio" />`, // v73.9: for AI agents
-        // the web font is the first family in --sans: change the font in one place (style.css)
+        // the web font is the first family in --sans: change the font in one place (style.css); 600/800 and the serif are for the travel card (v76)
         `<link rel="preconnect" href="https://fonts.googleapis.com" />`,
         `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />`,
-        `<link href="https://fonts.googleapis.com/css2?family=${family('sans')}:wght@400;500&family=${family('hand')}&display=swap" rel="stylesheet" />`,
+        `<link href="https://fonts.googleapis.com/css2?family=${family('sans')}:wght@400;500;600;800&family=${family('hand')}&family=${family('serif')}:ital@1&display=swap" rel="stylesheet" />`,
       ].join('\n    ');
       const noscript = `<noscript><p>${escAttr(desc)} <a href="${escAttr(site.linkedin)}">LinkedIn</a></p></noscript>`;
       return html

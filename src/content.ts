@@ -148,6 +148,23 @@ export const site = {
   } as T,
 };
 
+/* The travel card (v76, owner): handed over at the end of a ride and from the top bar ("Take my card"), never on arrival.
+   Front: the Growth line, Creative → Data → Growth. Back: career totals, worked out from the cases (owner confirmed 10-11). */
+export const card = {
+  line: { en: 'Growth line' } as T,
+  stops: [{ en: 'Creative' }, { en: 'Data' }, { en: 'Growth' }] as T[],
+  backTitle: { en: 'Pocket summary' } as T,
+  stats: [
+    { big: '800M+', label: { en: 'views' }, sub: { en: 'on the campaigns and channels I’ve worked on' } }, // AR filters 600M + TikTok test 80M + Japan 80M + English 35M + X 13M + own 2M
+    { big: '130K+', label: { en: 'followers grown' }, sub: { en: 'across brand and personal channels' } }, // Japan 50K + English 64K + own 16K
+    { big: '190+', label: { en: 'creators briefed' }, sub: { en: 'for campaigns' } }, // AR 70+ + X 56 + giveaway 67
+    { big: '4 · 3', label: { en: 'markets · languages' }, sub: { en: 'JP, NA, EU, CN · EN, 中文, 日本語 (N1)' }, oneLine: true },
+  ] as { big: string; label: T; sub: T; oneLine?: boolean }[],
+  scan: { en: 'Scan to ride again' } as T,
+  qr: 'media/card/qr.svg', // dev/card/qr.cjs, from the site address
+  png: 'media/card/Wenyi_Zhu_card.png', // dev/card/shot.cjs: both sides in one picture, for "Save card"
+};
+
 export const nodes: SiteNode[] = [
   { id: 'root', type: 'root', label: { en: 'Wenyi Zhu', zh: 'Wenyi Zhu' } },
 
@@ -925,6 +942,11 @@ export const ui = {
   rideNoneHint: { en: 'Try another market or platform' },
   ridePrev: { en: 'Previous stop' },
   rideExit: { en: 'End ride' },
+  takeCard: { en: 'Take my card' }, // v76 (owner)
+  saveCard: { en: 'Save card' },
+  cardHint: { en: 'Click or drag the card to turn it over' },
+  cardHintTouch: { en: 'Tap or swipe the card to turn it over' },
+  cardLabel: { en: 'My card. Press Enter or the arrow keys to turn it over.' },
 } satisfies Record<string, T>;
 
 /** The small type line on a card. Experience and Education read as their own kind, not "Practice". */

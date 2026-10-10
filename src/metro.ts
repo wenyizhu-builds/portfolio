@@ -3,6 +3,7 @@
    where each station sits, the shape of each line, the result tags, the ride's track — lives in METRO below.
    Colours, sizes and durations come from style.css (:root); words from content.ts. */
 import { ancestors, byId, ui, type SiteNode, workOf, rides } from './content';
+import { openCard } from './lightbox';
 import type { MapApi } from './map';
 import { lineMark } from './shapes';
 import { rideSummary } from './blocks';
@@ -187,6 +188,11 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   const note = document.createElement('div'); // v73.6 (owner): the biography ride's note sits above the ride bar, not in the card
   note.className = 'mt-note'; note.setAttribute('aria-live', 'polite');
   desk.appendChild(note);
+  const take = document.createElement('div'); // v76 (owner): at the end of a ride, "Take my card" slides out beside the bar
+  take.className = 'mt-take';
+  take.innerHTML = `<button type="button" class="btn">${esc(t(ui.takeCard))} <i aria-hidden="true">✳</i></button>`;
+  take.querySelector('button')!.onclick = openCard;
+  desk.appendChild(take);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';
   let armed = false; // v73.6 (owner): the ride bar waits for "Start my ride"; choosing a ride alone doesn't show it
   let order: string[] = [], through: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
@@ -341,7 +347,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const riding = filtering();
     bar.classList.toggle('show', riding && (armed || rideStep >= 0));
     desk.classList.toggle('riding', riding);
-    if (!riding) { note.classList.remove('show'); return; }
+    if (!riding) { note.classList.remove('show'); take.classList.remove('show'); return; }
     const n = order.length, last = rideStep === n - 1, arrived = last && endState === `${rideKey}#${rideStep}`;
     const story = filters.ride ? rides[filters.ride].notes : undefined, said = story && rideStep >= 0 ? story[order[rideStep]] : undefined; // the last stop keeps its note at Let's talk
     if (said) note.textContent = t(said);
@@ -350,6 +356,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     bar.classList.toggle('empty', !n);
     bar.classList.toggle('ending', last && !arrived);
     bar.classList.toggle('arrived', arrived);
+    take.classList.toggle('show', arrived && bar.classList.contains('show'));
     const pv = bar.querySelector<HTMLButtonElement>('.pv')!, ex = bar.querySelector<HTMLButtonElement>('.ex')!;
     pv.disabled = rideStep <= 0; pv.textContent = '←'; pv.setAttribute('aria-label', t(ui.ridePrev));
     ex.textContent = '×'; ex.setAttribute('aria-label', t(ui.rideExit));
