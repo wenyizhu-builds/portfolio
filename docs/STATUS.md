@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v74.1（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-10 · v75（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
@@ -13,10 +13,14 @@
 - v74.1 修复闪屏：开场先等一帧才隐藏 → 第一帧整张图露出来；中途重绘也会露出整张图（L57）。
 - 推送方式：她电脑上的 git 无法登录 GitHub；做法是在电脑上 `git bundle` → 云端仓库 fetch → 云端 push，再 `git update-ref` 同步电脑上的 origin/metro-map（L58）。
 
-### 下一个会话（最后一轮）：编辑审稿 + PDF 简历
-1. **编辑审稿**：请资深营销专家 + 招聘方（HR）两个角色，读全站当前生效的文案（content.ts 叠加 published-copy.json；用 `.copy-rework/dump.mjs` 导出 effective-copy.txt 来读），找：尴尬 / 自夸 / 幼稚的说法，语法和拼写错误（英式拼写），风格前后不一致（标题大小写、冒号用法、Results 格式、术语如 creator ads vs UGC、CV vs Resume）。先出问题清单（原文 → 建议 → 理由），她确认后再改；改动三处同步（content.ts、published-copy.json、.copy-editor/archive.json，JSON 原子写入）。
-2. **PDF 简历**：做一份和网站文案一致的一页 PDF，放 `public/`，填 `site.resumePdf`；卡片上的 Download PDF 就会亮。英国市场用 CV 还是 Resume 这个词，先问她。
-3. 然后合并进 main、部署（见 CLAUDE.md 交付前第 5–6 步）。
+### v75（10-10）：编辑审稿已完成并上线到分支
+- 两位审稿人（资深营销、英国招聘方）的意见她逐条确认，55 处修改已写进三处（见 CHANGELOG v75）。她定的：用 CV 不用 Resume；市场顺序 Japan → North America → Europe；Paid Growth 保留 "improving spend efficiency"（涉及 CPI、CPA 等多个指标）；允许适度重复（from scratch、brand team）；Xbox 统一 100+；职位行必须一行。
+- HoYoverse 职位：她的合同职位是 Marketing Specialist，网站写 Global Marketing Specialist（部门即 Global Marketing）。
+- 骑行改名「My career in five minutes」（她：原名不够成熟）；九段叙述已重写。站点顺序未调（Creator Ad Pipeline 在 Japan Channel Launch 之前，与时间相反）：路线是地图几何决定的，改顺序要重画 `METRO.route.me`；叙述已去掉 "first"。
+
+### 下一步
+1. **PDF CV**：一页，和网站文案一致，放 `public/`，填 `site.resumePdf`（按钮文字 ui.downloadPdf）。
+2. 合并进 main、部署（CLAUDE.md 交付前第 5–6 步；先 `npm run check -- --launch`，需 `site.launched = true`、去掉 PROTOTYPE 标）。
 
 ### 还没决定 / 待她给
 - 简介关键词的悬停预览（会闪，先没做）；三张 How it worked 图重画（去掉 UA 等旧词、每格 ≤6 词、加 Landing Page 图）；Creator OS 原型截图 01–08 标签页仍写「Workbench · Home」；宣传片片尾要不要加「An Obsidian plugin」；Xiaohongshu 付费合作数（目前隐藏）。

@@ -1,7 +1,7 @@
 {
  "edits": {
   "nodes.xbox-launch.summary.en": {
-   "text": "Paid media for Genshin Impact’s Xbox launch had to drive console players to the landing page. I led the creative strategy across the US, France and Germany: four testable concepts, localised for each market, read with the media strategist to see which won where and scale it.",
+   "text": "Paid media for Genshin Impact’s Xbox launch had to drive console players to the landing page. I led the creative strategy across the US, France and Germany: four testable concepts, localised for each market, then reviewed with the media strategist to scale the winner in each.",
    "ranges": [],
    "blueRanges": []
   },
@@ -21,7 +21,7 @@
    "blueRanges": []
   },
   "nodes.zzz-jp-accounts.summary.en": {
-   "text": "Zenless Zone Zero was new in Japan and needed social channels that reached players beyond its official accounts. I took the first few channels from launch to a nine-channel network: worked out which positions and formats Japanese players responded to, cut what didn’t work, and turned the rest into a system the ZZZ team now runs.",
+   "text": "Zenless Zone Zero was new in Japan and needed social channels that reached players beyond its official accounts. I took the first few channels from launch to a nine-channel network: worked out which positioning and formats Japanese players responded to, cut what didn’t work, and turned the rest into a system I handed over to the Zenless Zone Zero team.",
    "ranges": [],
    "blueRanges": [],
    "boldRanges": []
@@ -60,22 +60,22 @@
    "boldRanges": []
   },
   "nodes.influencer-activation.summary.en": {
-   "text": "For a flagship Genshin Impact character launch on X, I refreshed the creator strategy: a lineup built around the creators core players actually follow, pointed at the official event and its reward codes.",
+   "text": "For a flagship Genshin Impact character launch on X, I refreshed the creator strategy: a lineup built around the creators core players follow, pointed at the official event and its reward codes.",
    "ranges": [],
    "blueRanges": []
   },
   "nodes.genshin-en-accounts.summary.en": {
-   "text": "For Genshin Impact’s eight creator-style English-language channels on TikTok and YouTube, grown organically, I diagnosed why the established ones had stalled, refreshed their content mix, and set the strategy for the new ones from scratch.",
+   "text": "Genshin Impact ran eight creator-style English channels on TikTok and YouTube, grown organically. I diagnosed why the established ones had stalled, refreshed their content mix and shaped the strategy for the new ones.",
    "ranges": [],
    "blueRanges": []
   },
   "nodes.giveaway-campaign.summary.en": {
-   "text": "For a major Genshin Impact update, I led a giveaway hosted by the biggest Genshin fan account on X and seeded by 67 creators across X, TikTok and Instagram.",
+   "text": "For a major Genshin Impact update, I led a giveaway hosted by a leading Genshin Impact fan account on X (1M+ followers) and seeded by 67 creators across X, TikTok and Instagram.",
    "ranges": [],
    "blueRanges": []
   },
   "nodes.interactive-filter.summary.en": {
-   "text": "For Genshin Impact’s Lunar New Year event, I shaped two AR filters for TikTok and Snapchat that were fun and easy for anyone to join in, and briefed 70+ creators to set the trend off in the first week.",
+   "text": "For Genshin Impact’s Lunar New Year event, I shaped two AR filters for TikTok and Snapchat that were fun and easy for anyone to join in, and briefed 70+ creators to seed the trend in launch week.",
    "ranges": [],
    "blueRanges": []
   },
@@ -104,7 +104,7 @@
    ]
   },
   "nodes.ua-creative-strategy.sections.1.items.added-baccf401-aeaa-5d5f-a7b5-e77e21f3780a.en": {
-   "text": "Built the Creative Intelligence Dashboard: Used AI coding tools to build a dashboard that automates creative tagging and performance analysis, surfaces winning patterns and turns them into reusable scripts and playbooks.",
+   "text": "Built the Creative Intelligence Dashboard: Used AI coding tools to automate creative tagging and performance analysis, surface winning patterns and turn them into reusable scripts and playbooks.",
    "ranges": [],
    "blueRanges": [
     [
@@ -156,7 +156,7 @@
    "ranges": []
   },
   "nodes.ua-creative-strategy.results.added-6c0048bd-80b0-5c96-8257-50fedad6ed0b.en": {
-   "text": "brand creative share of paid spend",
+   "text": "brand-team share of paid spend",
    "ranges": [],
    "blueRanges": []
   },
@@ -169,7 +169,7 @@
    "ranges": []
   },
   "nodes.zzz-jp-accounts.sections.0.items.added-80678005-9bf0-55c2-9cb2-78f4c6d258b9.en": {
-   "text": "The brief was to launch Zenless Zone Zero’s Japanese channels and hand them over once they could run on their own. With little precedent for channels like these in Japan, I had to learn the market while testing what worked, then turn scattered experiments into a system another team could run, all on a fixed timeline.",
+   "text": "The brief was to launch Zenless Zone Zero’s Japanese channels and hand them over once they could run on their own. With few creator-style game channels to learn from in Japan, I had to learn the market while testing what worked, then turn scattered experiments into a system another team could run, all on a fixed timeline.",
    "ranges": [],
    "blueRanges": []
   },
@@ -184,12 +184,12 @@
    ]
   },
   "nodes.zzz-jp-accounts.sections.1.items.added-ccbf1c75-2442-54dc-a675-bd1ef41ad142.en": {
-   "text": "Ran biweekly growth reviews: Tracked every channel against its KPIs, diagnosed the ones falling behind and brought winning formats from other niches to stalled channels to restart growth.",
+   "text": "Ran growth reviews: Tracked every channel against its KPIs, diagnosed the ones falling behind and brought winning formats from other niches to stalled channels to restart growth.",
    "ranges": [],
    "blueRanges": [
     [
      0,
-     27
+     18
     ]
    ]
   },
@@ -226,16 +226,18 @@
    "ranges": []
   },
   "nodes.zzz-jp-accounts.results.added-d7196f99-eb77-5506-99e9-9ccde22d89f4.en": {
-   "text": "followers, up 50%",
-   "ranges": []
+   "text": "followers, +50% vs target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.zzz-jp-accounts.results.added-c477572c-2a9c-573b-bb21-e16be9aa0bec.metric": {
    "text": "50%+",
    "ranges": []
   },
   "nodes.zzz-jp-accounts.results.added-c477572c-2a9c-573b-bb21-e16be9aa0bec.en": {
-   "text": "lower cost per view",
-   "ranges": []
+   "text": "lower agency CPM",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.zzz-jp-accounts.results.added-21cb79be-c714-5963-81f9-562823ea9f0d.metric": {
    "text": "9/9",
@@ -254,11 +256,12 @@
    "ranges": []
   },
   "nodes.gip-testing.headline.label.en": {
-   "text": "lower CPM by Round 3",
-   "ranges": []
+   "text": "lower CPM, Round 1 to Round 3",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.gip-testing.sections.0.items.added-926c202d-5065-558f-bebb-db6d2bdfcd9e.en": {
-   "text": "Genshin Impact’s paid acquisition relied mainly on brand creative. TikTok’s UGC incentive programme opened up a new possibility: could it bring in users efficiently as a channel, and could its videos work as ad creative? I needed to design a testing framework to find out.",
+   "text": "Paid acquisition relied mainly on brand-style creative, and creator-led formats were untested at scale. The programme looked efficient, but nobody knew whether its users would stay or whether its videos would hold up as ads.",
    "ranges": [],
    "blueRanges": []
   },
@@ -313,8 +316,9 @@
    "ranges": []
   },
   "nodes.gip-testing.results.added-c2840424-6eae-5b0d-9d4a-e0b7213f8abe.en": {
-   "text": "lower CPM in Round 3 than Round 1",
-   "ranges": []
+   "text": "lower CPM, Round 1 to Round 3",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.xbox-launch.headline.num": {
    "text": "+338%",
@@ -325,7 +329,7 @@
    "ranges": []
   },
   "nodes.xbox-launch.sections.0.items.added-c21aaa2d-96b0-5371-bae0-e4dd8ab292e4.en": {
-   "text": "The launch needed paid media to drive traffic to the Xbox landing page, not just awareness. That meant turning existing brand materials into 100+ localised assets, our team’s largest creative test for a paid brand campaign, with tight coordination across languages, platform specs and approvals.",
+   "text": "The launch needed paid media to drive traffic to the Xbox landing page, not just awareness. That meant turning existing brand materials into 100+ localised assets, the brand team’s largest creative test for a paid brand campaign, with tight coordination across languages, platform specs and approvals.",
    "ranges": [],
    "blueRanges": []
   },
@@ -350,7 +354,7 @@
    ]
   },
   "nodes.xbox-launch.sections.1.items.added-c8ea2aa3-da69-5244-8d85-6fa5b4813c48.en": {
-   "text": "Managed creative production: Wrote briefs covering copy, landing-page links and platform specs for all 144 assets, and kept timelines, reviews and approvals on track.",
+   "text": "Managed creative production: Wrote briefs covering copy, landing-page links and platform specs for all 100+ assets, and kept timelines, reviews and approvals on track.",
    "ranges": [],
    "blueRanges": [
     [
@@ -476,11 +480,12 @@
    "ranges": []
   },
   "nodes.giveaway-campaign.headline.label.en": {
-   "text": "code redemptions, about 4× the goal",
-   "ranges": []
+   "text": "code redemptions, ~4× target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.giveaway-campaign.sections.1.items.added-40d6b701-7c57-5ad2-8466-c4e23ffa7714.en": {
-   "text": "Designed the campaign: Partnered with the fan account (1M+ followers). To enter, players quote-posted the giveaway with their own creative take, and in-game reward codes turned views into a measurable action.",
+   "text": "Designed the campaign: Partnered with the fan account; to enter, players quote-posted the giveaway with their own creative take, and in-game reward codes turned views into a measurable action.",
    "ranges": [],
    "blueRanges": [
     [
@@ -500,7 +505,7 @@
    ]
   },
   "nodes.giveaway-campaign.sections.1.items.added-335e271f-4915-51cf-a087-edd3a1bc7416.en": {
-   "text": "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking. Codes beat the goal, but fewer players entered because quote-posting a creative entry took too much effort. The lesson: fan-account giveaways need one-tap actions, like a repost or a reply.",
+   "text": "Led execution and the recap: Aligned four agencies on briefs, content review, timelines and tracking; codes beat the target, but fewer players entered because a creative quote-post took too much effort, so fan-account giveaways need one-tap actions, like a repost or a reply.",
    "ranges": [],
    "blueRanges": [
     [
@@ -514,16 +519,18 @@
    "ranges": []
   },
   "nodes.giveaway-campaign.results.added-36b376f7-559b-5059-bedf-829c5bb0f2b7.en": {
-   "text": "impressions, 56% above target",
-   "ranges": []
+   "text": "impressions, +56% vs target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.giveaway-campaign.results.added-10a1ae0b-1890-525b-98f8-4207f784a485.metric": {
    "text": "~900K",
    "ranges": []
   },
   "nodes.giveaway-campaign.results.added-10a1ae0b-1890-525b-98f8-4207f784a485.en": {
-   "text": "code redemptions, about 4× the goal",
-   "ranges": []
+   "text": "code redemptions, ~4× target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.giveaway-campaign.results.added-a3a5d2d8-aeff-56f3-ac24-5df6459739a3.metric": {
    "text": "~50%",
@@ -563,22 +570,22 @@
    ]
   },
   "nodes.genshin-en-accounts.sections.1.items.added-b4c09ad1-1cea-56ee-b7ad-aa48e911670e.en": {
-   "text": "Built strategy for the new channels: Set audience, positioning, content pillars and cadence for each, then refined them on early data before scaling.",
+   "text": "Shaped strategy for the new channels: Proposed audience, positioning, content pillars and cadence for each, then refined them on early data before scaling.",
    "ranges": [],
    "blueRanges": [
     [
      0,
-     35
+     36
     ]
    ]
   },
   "nodes.genshin-en-accounts.sections.1.items.added-0ba9f74f-9fef-5f04-95b6-f2001234c68e.en": {
-   "text": "Ran monthly reviews: Tracked KPIs and kept the agency’s output on each channel’s growth goals.",
+   "text": "Ran growth reviews: Tracked KPIs and kept the agency’s output aligned with each channel’s goals.",
    "ranges": [],
    "blueRanges": [
     [
      0,
-     19
+     18
     ]
    ]
   },
@@ -603,16 +610,17 @@
    "ranges": []
   },
   "nodes.genshin-en-accounts.results.added-8d52601a-0f85-5eb0-95f5-0ba9b9237076.en": {
-   "text": "below target CPM",
-   "ranges": []
+   "text": "lower CPM vs target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.interactive-filter.sections.0.items.added-912d2bde-8136-580a-b8a9-9b7f496aa666.en": {
-   "text": "Lantern Rite needed a social moment players could join, and this year the filter challenge was moving beyond TikTok to Snapchat for the first time. The filters had to be fun to use, simple enough for anyone to recreate, and right for two different platforms. We also had only a short window to build momentum and get the trend to take off.",
+   "text": "Lantern Rite needed a social moment players could join, and this time the filter challenge was expanding beyond TikTok to Snapchat for the first time. The filters had to be fun to use, simple enough for anyone to recreate, and right for two different platforms. And the trend had to take off within a short window.",
    "ranges": [],
    "blueRanges": []
   },
   "nodes.interactive-filter.sections.1.items.added-2e5b74ba-b9e0-5ea0-bf03-af9cd673a498.en": {
-   "text": "Shaped the filter concepts: Researched competitor filters and co-developed two gesture-based ideas: releasing a sky lantern for TikTok and Snapchat, and a lion-mask transformation for a new character on TikTok. I wrote the creative briefs and reviewed each iteration with TikTok’s effects team.",
+   "text": "Shaped the filter concepts: Co-developed two gesture-based ideas from competitor research (a sky-lantern release for TikTok and Snapchat, and a lion-mask transformation for a new character on TikTok), then wrote the briefs and reviewed each iteration with TikTok’s effects team.",
    "ranges": [],
    "blueRanges": [
     [
@@ -632,7 +640,7 @@
    ]
   },
   "nodes.interactive-filter.sections.1.items.added-727f8834-d58a-5788-92a2-10aa0c103f52.en": {
-   "text": "Vetted creators and content: Reviewed creator selection and videos for 70+ creators across TikTok and Snapchat, whose posts went live in the first week to kick off the trend.",
+   "text": "Vetted creators and content: Reviewed creator selection and videos for 70+ creators across TikTok and Snapchat.",
    "ranges": [],
    "blueRanges": [
     [
@@ -708,8 +716,9 @@
    "ranges": []
   },
   "nodes.landing-page.results.added-9eee3862-17e7-560b-b79d-605da53d5e1d.en": {
-   "text": "visitors per share, 2× the target",
-   "ranges": []
+   "text": "visitors per share, 2× target",
+   "ranges": [],
+   "blueRanges": []
   },
   "nodes.ai-workbench.label.en": {
    "text": "Creative Intelligence Dashboard",
@@ -741,7 +750,7 @@
    ]
   },
   "nodes.ai-workbench.sections.0.items.2.en": {
-   "text": "Script Studio: Turns the winning formula into new scripts, written natively for each market.",
+   "text": "Script studio: Turns the winning formula into new scripts, written natively for each market.",
    "ranges": [],
    "blueRanges": [
     [
@@ -761,7 +770,7 @@
    ]
   },
   "nodes.ai-workbench.sections.0.items.4.en": {
-   "text": "Knowledge Base: Learns from every note, edit and piece of feedback, so results get sharper over time.",
+   "text": "Knowledge base: Learns from every note, edit and piece of feedback, so results get sharper over time.",
    "ranges": [],
    "blueRanges": [
     [
@@ -777,13 +786,13 @@
    "boldRanges": []
   },
   "nodes.ai-workbench.headline.label.en": {
-   "text": "less time on creative analysis & production",
+   "text": "less time on analysis and production",
    "ranges": [],
    "blueRanges": [],
    "boldRanges": []
   },
   "nodes.ai-workbench.headline.note.en": {
-   "text": "I built it from scratch while running creative strategy for Genshin Impact's creator ads.",
+   "text": "I built it from scratch while running creative strategy for Genshin Impact’s creator ads.",
    "ranges": [],
    "blueRanges": [],
    "boldRanges": []
@@ -809,7 +818,7 @@
    ]
   },
   "nodes.xhs-ai-channel.sections.0.items.2.en": {
-   "text": "Test and scale: Kept testing new formats and topics, cut what didn’t convert, and doubled down on what worked.",
+   "text": "Test and scale: Kept testing new formats and topics, cut what didn’t drive saves and follows, and scaled what did.",
    "ranges": [],
    "blueRanges": [
     [
@@ -829,7 +838,7 @@
    ]
   },
   "nodes.xhs-ai-channel.sections.0.items.4.en": {
-   "text": "Content operations system: Built my own AI system for research, scripts and performance reviews, so I can run the whole channel on my own.",
+   "text": "Content operations system: Built an AI system for research, scripts and performance reviews, so I can run the whole channel single-handed.",
    "ranges": [],
    "blueRanges": [
     [
@@ -839,12 +848,12 @@
    ]
   },
   "nodes.creator-workbench.sections.0.items.0.en": {
-   "text": "Built on a proven workflow: Every module is a workflow I already run for my own channel, from research and viral-post breakdowns to scripts and growth reviews.",
+   "text": "Built on a working system: Every module is a workflow I already run for my own channel, from research and viral-post breakdowns to scripts and growth reviews.",
    "ranges": [],
    "blueRanges": [
     [
      0,
-     26
+     25
     ]
    ]
   },
@@ -859,7 +868,7 @@
    ]
   },
   "nodes.creator-workbench.sections.0.items.2.en": {
-   "text": "Human in the loop: Agents research, analyse and draft, but nothing gets made until the creator picks the idea, and every draft stops for review.",
+   "text": "Human in the loop: Nothing gets made until the creator picks the idea, and every draft stops for review.",
    "ranges": [],
    "blueRanges": [
     [
@@ -886,7 +895,7 @@
   "nodes.xhs-ai-channel.summary.en": {
    "ranges": [],
    "blueRanges": [],
-   "text": "I built a channel from zero on Xiaohongshu (RedNote) and Douyin that shows beginners what they can make with AI tools, and run it like a growth project: find the audience, test what works, scale it, and turn the reach into paid partnerships with China’s leading AI companies."
+   "text": "I built a channel from zero on Xiaohongshu (RedNote) and Douyin that shows beginners what they can make with AI tools, and run it like a growth project: find the audience, test what works, scale it, and turn the reach into paid brand partnerships."
   },
   "nodes.seminary-coop.sections.0.items.0.en": {
    "text": "Ran the social calendar: Planned and published posts, stories and carousels across Instagram, X and Facebook, and used performance data to refine what went out.",
@@ -919,7 +928,7 @@
    ]
   },
   "nodes.nike.sections.0.items.1.en": {
-   "text": "Hashtag and influencer strategy: Developed the #NikeOOTD hashtag and optimised the influencer and UGC programmes, adding 1.33M+ hashtag views month on month.",
+   "text": "Hashtag and influencer strategy: Developed the #NikeOOTD hashtag and optimised the influencer and UGC programmes, growing hashtag views by 1.33M+ month on month.",
    "ranges": [],
    "blueRanges": [
     [
@@ -929,7 +938,7 @@
    ]
   },
   "nodes.nike.sections.0.items.2.en": {
-   "text": "Competitor research: Turned competitor analysis into changes to Nike’s account strategy, SEO and paid search, growing followers by 16K+ (45% year on year) and engagement by 173%.",
+   "text": "Competitor research: Turned competitor analysis into changes to Nike’s account strategy, SEO and paid search, contributing to 16K+ new followers (+45% year on year) and +173% engagement.",
    "ranges": [],
    "blueRanges": [
     [
@@ -949,7 +958,7 @@
    ]
   },
   "nodes.weber-shandwick.sections.0.items.1.en": {
-   "text": "Launch support: Drafted press releases and supported media outreach for GUESS’s Disney collection launch, helping lift GUESS’s Q3 PR value by 33%.",
+   "text": "Launch support: Drafted press releases and supported media outreach for GUESS’s Disney collection launch, contributing to a 33% rise in GUESS’s Q3 PR value.",
    "ranges": [],
    "blueRanges": [
     [
@@ -969,12 +978,12 @@
    ]
   },
   "nodes.nowness.sections.0.items.1.en": {
-   "text": "Content and layout: Helped shape and lay out art and culture pieces, contributing to 10K+ new followers and a 15% rise in read-through.",
+   "text": "Ideas and layout: Pitched story ideas and artists to feature, and helped lay out art and culture pieces, contributing to 10K+ new followers and a 15% rise in read-through.",
    "ranges": [],
    "blueRanges": [
     [
      0,
-     18
+     16
     ]
    ]
   },
