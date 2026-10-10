@@ -515,8 +515,18 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     }
     const line = target.closest<SVGElement>('[data-line]');
     if (line) { onSelect(METRO.lines[line.dataset.line as LineKey].group); return; }
-    onSelect('root');
+    home();
   });
+  // v75.22 (owner): a click on empty space anywhere around the map is the way back to the default view, like INDEX
+  host.addEventListener('click', (e) => { if (e.target === host) home(); });
+  /** Back to the default view: INDEX, the whole map, no market / platform / ride. Not during a ride (it has its own ×),
+      and nothing at all when the default view is already showing, so nothing flickers. */
+  function home() {
+    if (bar.classList.contains('show')) return;
+    const atHome = !location.hash || location.hash === '#/' || location.hash === '#';
+    if (atHome && !filtering() && !open && !sel) return;
+    if (filtering()) leaveRide(''); else go(''); // go first, then clear the choice (L56)
+  }
   svg.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     const g = (e.target as Element).closest('.mt-stn, .mt-top');
