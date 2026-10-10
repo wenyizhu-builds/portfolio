@@ -100,18 +100,8 @@ export type RideKey = 'me' | 'paid' | 'campaigns' | 'social' | 'ai';
 /** Ready-made rides (v73.5, owner): named the way a hiring brief is written, one per job family, plus the biography and the whole line.
     The order on the map comes from the track (metro.ts), not from this list. */
 export const rides: Record<RideKey, { label: T; stops: string[]; story?: boolean; notes?: Record<string, T> }> = {
-  me: { label: { en: 'My career in five minutes' }, story: true, stops: ['xjtlu', 'nowness', 'nike', 'uchicago', 'hoyoverse', 'ua-creative-strategy', 'zzz-jp-accounts', 'xhs-ai-channel', 'ai-workbench'],
-    notes: {
-      'xjtlu': { en: 'I studied communication and media, and finished top of my cohort. The idea I still work from: media shapes what people believe, and what they do next.' },
-      'nowness': { en: 'My first role in content, at an arts and culture platform. Pitching story ideas and the artists to feature taught me how to make a complex idea accessible without diluting it.' },
-      'nike': { en: 'This is where I began to see marketing as a system. Every launch rests on a chain of decisions: audience, message, creators, channels, formats and timing. Momentum on social comes from getting each one right, launch after launch.' },
-      'uchicago': { en: 'A master’s in the humanities at the University of Chicago. My research on online player communities showed me how fans organise, and what they expect from the brands they follow.' },
-      'hoyoverse': { en: 'Three years in global marketing at HoYoverse, across Japan, North America and Europe and the full funnel: integrated campaigns and creator partnerships at the top, creator ads built for conversion and ROI at the bottom.' },
-      'ua-creative-strategy': { en: 'Here I built a growth system for paid acquisition: turning performance data into creative insights, codifying what worked into playbooks, and using AI to make the loop repeatable.' },
-      'zzz-jp-accounts': { en: 'Launching channels in a new market taught me to read an audience from zero: research it, set the metrics that matter, and cut what doesn’t move them.' },
-      'xhs-ai-channel': { en: 'After years of briefing creators, I built my own channel to test my methods from the creator’s side. Growing and monetising it taught me first-hand what makes content perform, from writing hooks to delivering paid partnerships for brands.' },
-      'ai-workbench': { en: 'AI is now central to how I work. Next, I want to apply it where it creates measurable value: faster testing, better creative decisions and growth that ties directly to ROI.' },
-    } }, // v73.6 (owner): the biography ride; runs its own route (metro.ts R.me), one short step back for UChicago and the Creator Ad Pipeline
+  me: { label: { en: 'My career in five minutes' }, story: true, stops: ['xjtlu', 'nowness', 'nike', 'uchicago', 'hoyoverse', 'ua-creative-strategy', 'zzz-jp-accounts', 'xhs-ai-channel', 'ai-workbench'], // v75.2 (owner): no captions on this ride
+  }, // v73.6 (owner): the biography ride; runs its own route (metro.ts R.me), one short step back for UChicago and the Creator Ad Pipeline
   paid: { label: { en: 'Paid acquisition & creative testing' }, stops: ['ua-creative-strategy', 'gip-testing', 'xbox-launch', 'ai-workbench'] },
   campaigns: { label: { en: 'Creator marketing & campaigns' }, stops: ['interactive-filter', 'influencer-activation', 'giveaway-campaign', 'landing-page'] },
   social: { label: { en: 'Social channel growth' }, stops: ['zzz-jp-accounts', 'genshin-en-accounts', 'xhs-ai-channel'] },
