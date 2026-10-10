@@ -100,7 +100,7 @@ export type RideKey = 'me' | 'paid' | 'campaigns' | 'social' | 'ai';
 /** Ready-made rides (v73.5, owner): named the way a hiring brief is written, one per job family, plus the biography and the whole line.
     The order on the map comes from the track (metro.ts), not from this list. */
 export const rides: Record<RideKey, { label: T; stops: string[]; story?: boolean; notes?: Record<string, T> }> = {
-  me: { label: { en: 'My path so far' }, story: true, stops: ['xjtlu', 'nowness', 'nike', 'uchicago', 'hoyoverse', 'ua-creative-strategy', 'zzz-jp-accounts', 'xhs-ai-channel', 'ai-workbench'], // v75.2 (owner): no captions on this ride
+  me: { label: { en: 'Career highlights' }, story: true, stops: ['xjtlu', 'nowness', 'nike', 'uchicago', 'hoyoverse', 'ua-creative-strategy', 'zzz-jp-accounts', 'xhs-ai-channel', 'ai-workbench'], // v75.2 (owner): no captions on this ride
   }, // v73.6 (owner): the biography ride; runs its own route (metro.ts R.me), one short step back for UChicago and the Creator Ad Pipeline
   paid: { label: { en: 'Paid acquisition & creative testing' }, stops: ['ua-creative-strategy', 'gip-testing', 'xbox-launch', 'ai-workbench'] },
   campaigns: { label: { en: 'Creator marketing & campaigns' }, stops: ['interactive-filter', 'influencer-activation', 'giveaway-campaign', 'landing-page'] },
