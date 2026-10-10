@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><title>How it worked diagrams</title>
+<style>
+@font-face { font-family: 'Schibsted Grotesk'; font-weight: 400; src: url(node_modules/@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-400-normal.woff2); }
+@font-face { font-family: 'Schibsted Grotesk'; font-weight: 500; src: url(node_modules/@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-500-normal.woff2); }
+@font-face { font-family: 'Schibsted Grotesk'; font-weight: 600; src: url(node_modules/@fontsource/schibsted-grotesk/files/schibsted-grotesk-latin-600-normal.woff2); }
+:root { --ink: #121212; --ink-2: #4a4a4a; --cobalt: #2c42f6; --accent: #d5fd52; --line: #c9c9c9; }
+body { margin: 0; background: #e9e9e6; font-family: 'Schibsted Grotesk', sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+.dg { width: 600px; background: #fff; box-sizing: border-box; padding: 36px 96px 36px 36px; margin: 20px; position: relative; }
+.steps { list-style: none; margin: 0; padding: 0; position: relative; }
+.st { display: grid; grid-template-columns: 44px 1fr; column-gap: 18px; position: relative; padding-bottom: 26px; }
+.st:last-child { padding-bottom: 0; }
+/* the rail between numbers */
+.st:not(:last-child)::before { content: ''; position: absolute; left: 21px; top: 46px; bottom: 2px; width: 2px; background: var(--ink); }
+.no { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); box-sizing: border-box; display: grid; place-items: center; font-size: 19px; font-weight: 500; background: #fff; position: relative; z-index: 1; }
+.st.key .no { background: var(--accent); }
+.txt { padding-top: 3px; }
+.tt { font-size: 27px; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; }
+.st.key .tt span { background: var(--accent); box-shadow: 0 0 0 4px var(--accent); }
+.ln { font-size: 22px; line-height: 1.3; color: var(--ink-2); margin-top: 4px; }
+/* the loop: a dashed bracket on the right from the last looped step back up */
+.loop-unused { position: absolute; right: -2px; border: 2px dashed var(--cobalt); border-left: none; border-radius: 0 14px 14px 0; width: 22px; }
+.loop::before { content: ''; position: absolute; left: -9px; top: -8px; border: 8px solid transparent; border-right: 10px solid var(--cobalt); border-left: none; }
+.lp-unused { position: absolute; right: 30px; font-size: 18px; color: var(--cobalt); font-weight: 500; text-align: right; background: #fff; padding: 0 4px; }
+.foot { margin-top: 26px; font-size: 20px; color: var(--cobalt); font-weight: 500; }
+</style></head>
+<body>
+<div id="out"></div>
+<script>
+const D = {
+  ua: { steps: [
+    ['Set goals', 'Markets, audiences and target metrics'],
+    ['Form hypotheses', 'Hooks, angles and formats to test'],
+    ['Brief and review', 'Scripts, feedback on every video'],
+    ['Test in market', 'Paid media run by acquisition team'],
+    ['Analyse with AI', 'Dashboard tags ads, surfaces winners', 'key'],
+    ['Scale and refine', 'Back winners, update the playbooks'],
+  ], loop: [1, 5], label: 'Every test cycle' },
+  gip: { steps: [
+    ['Set goals', 'Can it match acquisition CPI?'],
+    ['Design the round', 'Payout model, markets, theme, budget'],
+    ['Run and steer', 'Brief creators, cut off-brief videos'],
+    ['Evaluate the funnel', 'Reach, CPI, user quality, content', 'key'],
+  ], loop: [0, 3], label: 'Three rounds', foot: 'After Round 3: budget moved to creator ads' },
+  zzz: { steps: [
+    ['Map the market', 'Competitors, viral formats, open gaps'],
+    ['Position channels', 'One proven niche per channel'],
+    ['Brief and produce', 'Agencies create to my briefs'],
+    ['Review against KPIs', 'Diagnose channels falling behind'],
+    ['Adapt winners', 'Winning formats to stalled channels', 'key'],
+    ['Hand over', 'Playbooks to the game’s own team'],
+  ], loop: [2, 4], label: 'Each review cycle' },
+  lp: { steps: [
+    ['Take the quiz', 'Three questions to cut drop-off'],
+    ['Get a result', 'Personalised and worth sharing'],
+    ['Unlock a draw', 'Finishing earns a reward entry'],
+    ['Invite friends', 'Each friend adds another entry', 'key'],
+    ['Friends arrive', '~4 new visitors per share'],
+  ], loop: [0, 4], label: 'Viral loop' },
+};
+const out = document.getElementById('out');
+for (const [k, d] of Object.entries(D)) {
+  const el = document.createElement('div'); el.className = 'dg'; el.id = 'dg-' + k;
+  el.innerHTML = `<ol class="steps">${d.steps.map(([t, l, c], i) => `<li class="st ${c || ''}"><div class="no">${i + 1}</div><div class="txt"><div class="tt"><span>${t}</span></div><div class="ln">${l}</div></div></li>`).join('')}</ol>${d.foot ? `<div class="foot">${d.foot}</div>` : ''}`;
+  out.appendChild(el);
+}
+// draw the loops once laid out: a dashed bracket in the right margin, from the last looped step back up to the first
+requestAnimationFrame(() => {
+  for (const [k, d] of Object.entries(D)) {
+    const el = document.getElementById('dg-' + k), ol = el.querySelector('.steps'), li = ol.children;
+    const W = el.clientWidth, H = el.clientHeight;
+    const cy = (n) => ol.offsetTop + li[n].offsetTop + 22;
+    const y1 = cy(d.loop[0]), y2 = cy(d.loop[1]), X = W - 40, x0 = W - 78, r = 12;
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('width', W); svg.setAttribute('height', H); svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible';
+    svg.innerHTML = `<path d="M${x0} ${y2} H${X - r} Q${X} ${y2} ${X} ${y2 - r} V${y1 + r} Q${X} ${y1} ${X - r} ${y1} H${x0 + 10}" fill="none" stroke="#2c42f6" stroke-width="2" stroke-dasharray="6 5"/>`
+      + `<path d="M${x0 + 12} ${y1 - 7} L${x0} ${y1} L${x0 + 12} ${y1 + 7} Z" fill="#2c42f6"/>`
+      + `<text x="${X + 14}" y="${(y1 + y2) / 2}" transform="rotate(90 ${X + 14} ${(y1 + y2) / 2})" text-anchor="middle" font-family="Schibsted Grotesk" font-size="18" font-weight="500" fill="#2c42f6">${d.label}</text>`;
+    el.appendChild(svg);
+  }
+  document.body.dataset.ready = '1';
+});
+</script>
+</body></html>

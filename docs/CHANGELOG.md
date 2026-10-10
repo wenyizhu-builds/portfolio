@@ -799,3 +799,4 @@
 - v75.14（10-10）：CV Nike 改成和其他经历一样的两行（公司 + 地点 / 职位 + 日期）；11.4pt 一页。
 - v75.15（10-10）：骑行终点文字改为「End of the line ✳ / Thanks for riding.」（去掉 That’s the line）；筛选结果只有一站时，点 Start my ride 直接打开那一站、清掉筛选，不出现骑行条（她：一站不算骑行，别复杂化）。
 - v75.16（10-10）：一站时的处理改掉（她：v75.15 点了像没反应）：面板按钮在只有一站时显示「Take me there」（她：站点不能 open，用地铁说法），点后保留筛选、地图停在那一站、打开卡片，没有骑行条；单站不显示站号「1」。按钮文字由 metro.ts 的 `ride-count` 事件驱动。
+- v75.17（10-10）：How it worked 图全部重画（她：太长太多字）：竖排步骤，每步 2–3 词标题 + 一行 ≤6 词，不写 UA、不写分工（Team 区有）；站内字体 Schibsted Grotesk、站内色（一步柠檬绿 = 关键一步，蓝色虚线 = 循环）；在卡片宽度下不放大也能读。新增 Landing Page 图（病毒循环）。源文件 `dev/diagrams/diagrams.html`，`node dev/diagrams/shot.cjs` 出图（需 `npm i @fontsource/schibsted-grotesk` 到 dev/diagrams）。

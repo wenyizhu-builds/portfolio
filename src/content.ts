@@ -205,7 +205,7 @@ export const nodes: SiteNode[] = [
     ],
     diagram: {
       src: 'media/ua-creative-strategy/ua-system-diagram.png',
-      alt: { en: 'How the pipeline worked: one creative testing loop per game version, supported by the AI Marketing Dashboard' },
+      alt: { en: 'How the pipeline worked: set goals, form hypotheses, brief and review, test in market, analyse with AI, scale and refine; refined every test cycle' },
     },
     related: ['ai-workbench'],
   },
@@ -254,7 +254,7 @@ export const nodes: SiteNode[] = [
     ],
     diagram: {
       src: 'media/gip-testing/gip-rounds-diagram.png',
-      alt: { en: 'How I ran the tests: set goals, design the round, run it, evaluate the full funnel; findings shape the next round' },
+      alt: { en: 'How I ran the tests: set goals, design the round, run and steer, evaluate the funnel; three rounds, then budget moved to creator ads' },
     },
   },
   {
@@ -339,6 +339,10 @@ export const nodes: SiteNode[] = [
       { metric: "3x", en: "conversion rate vs benchmark" },
       { metric: "~4", en: "visitors per share, 2x the target" },
     ],
+    diagram: { // v75.17 (owner): the mechanic, as a loop
+      src: 'media/landing-page/lp-loop-diagram.png',
+      alt: { en: 'How the viral loop worked: take the quiz, get a result, unlock a draw, invite friends, friends arrive and take the quiz' },
+    },
     media: [{ src: 'media/landing-page/blaze-to-natlan-banner.jpg',
       thumbnail: 'media/landing-page/blaze-to-natlan-thumb.jpg', floating: true, alt: { en: 'Genshin Impact “Blaze to Natlan” web event banner: take part to win in-game rewards' } }],
     links: [
@@ -405,7 +409,7 @@ export const nodes: SiteNode[] = [
     }],
     diagram: {
       src: 'media/zzz-jp-accounts/zzz-system-diagram.png',
-      alt: { en: 'How the channels launched and grew: map the market, position channels, brief and produce, review, adapt winners, hand over' },
+      alt: { en: 'How the channels launched and grew: map the market, position channels, brief and produce, review against KPIs, adapt winners, hand over' },
     },
   },
   {

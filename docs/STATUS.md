@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-10 · v75.16（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-10 · v75.17（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
@@ -25,7 +25,7 @@
 2. 合并进 main、部署（CLAUDE.md 交付前第 5–6 步；先 `npm run check -- --launch`，需 `site.launched = true`、去掉 PROTOTYPE 标）。
 
 ### 还没决定 / 待她给
-- 简介关键词的悬停预览（会闪，先没做）；三张 How it worked 图重画（去掉 UA 等旧词、每格 ≤6 词、加 Landing Page 图）；Creator OS 原型截图 01–08 标签页仍写「Workbench · Home」；宣传片片尾要不要加「An Obsidian plugin」；Xiaohongshu 付费合作数（目前隐藏）。
+- 简介关键词的悬停预览（会闪，先没做）；Creator OS 原型截图 01–08 标签页仍写「Workbench · Home」；宣传片片尾要不要加「An Obsidian plugin」；Xiaohongshu 付费合作数（目前隐藏）。
 - 她电脑上的未跟踪文件：`.copy-rework/`、`_dump.mts`、`src/published-copy.json.bak-before-v73-block1`（工作文件，不进仓库）。
 
 ### 她定下的设计偏好（不要改回去）
