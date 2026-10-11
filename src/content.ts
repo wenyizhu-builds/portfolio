@@ -136,12 +136,13 @@ export const site = {
     { lead: { en: 'AI.' }, en: 'I build my own AI tools that turn campaign data into creative decisions.', links: { 'AI tools': '#/ai' } },
   ] as { lead: T; en: string; zh?: string; links?: Record<string, string> }[], // links (v73.8, owner): a phrase → a filter (kind:key) or a page (#/id)
   get intro(): T { return { en: this.introLines.map((l) => `${l.lead.en} ${l.en}`).join(' '), zh: '' }; },
+  url: 'https://wenyizhu-builds.github.io/portfolio/', // v77: the public address (GitHub Pages); the share picture and the card's QR code point here
   linkedin: 'https://www.linkedin.com/in/wenyi-zhu-mktg/',
   email: 'wenyi.mktg@gmail.com',
   resumePdf: 'Wenyi_Zhu_CV.pdf', // v75.8: one-page UK CV (source: career/resume-versions; rebuild from cv.html, XYZ bullets)
-  // false = still a prototype: shows the PROTOTYPE label. `npm run check -- --launch` refuses to pass
-  // while this is false or any [Placeholder]/[Draft] text, empty email or empty résumé remains.
-  launched: false,
+  // `npm run check -- --launch` refuses to pass while this is false, or while placeholder or draft marks,
+  // an empty email or an empty CV remain. v77: true, the site is public (owner, 10-11).
+  launched: true,
   // Share / search preview (index.html is filled from these at build time).
   metaDescription: {
     en: 'Wenyi Zhu — creative strategist for paid and creator growth. Case studies from three years of global marketing at HoYoverse, plus AI tools I build.',
@@ -163,6 +164,7 @@ export const card = {
   scan: { en: 'Scan to ride again' } as T,
   qr: 'media/card/qr.svg', // dev/card/qr.cjs, from the site address
   png: 'media/card/Wenyi_Zhu_card.png', // dev/card/shot.cjs: both sides in one picture, for "Save card"
+  share: 'media/card/share.png', // dev/card/shot.cjs: the card's front, 1200 × 630, the preview when the link is shared (LinkedIn, Slack)
 };
 
 export const nodes: SiteNode[] = [

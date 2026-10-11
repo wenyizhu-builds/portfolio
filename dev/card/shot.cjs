@@ -13,10 +13,10 @@ const fonts = [400, 500, 600, 800].map((w) => face('Schibsted Grotesk', w, 'norm
 (async () => {
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || '/opt/pw-browsers/chromium' });
   const p = await b.newPage({ viewport: { width: 1200, height: 900 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
-  await p.goto(process.env.SITE || 'http://localhost:4173/');
+  await p.goto((process.env.SITE || 'http://localhost:4173/') + '#/contact'); // the card opens from Let's talk (v76.8)
   await p.addStyleTag({ content: fonts });
-  await p.waitForSelector('#take-card');
-  await p.click('#take-card');
+  await p.waitForSelector('#panel [data-card]');
+  await p.click('#panel [data-card]');
   await p.waitForSelector('.tc-flip');
   await p.evaluate(async () => {
     // lay both faces out flat, one above the other, on the paper colour
@@ -37,5 +37,16 @@ const fonts = [400, 500, 600, 800].map((w) => face('Schibsted Grotesk', w, 'norm
   const out = path.join(root, 'public/media/card/Wenyi_Zhu_card.png');
   await (await p.$('#card-sheet')).screenshot({ path: out });
   console.log('wrote', path.relative(root, out));
+  // the share picture: the front alone, centred on the paper, 1200 × 630 (what LinkedIn and Slack show for a shared link)
+  await p.setViewportSize({ width: 1200, height: 630 });
+  await p.evaluate(() => {
+    const s = document.getElementById('card-sheet');
+    s.style.cssText = 'position:fixed;inset:0;z-index:99;background:var(--bg);display:grid;place-items:center;width:1200px;height:630px';
+    s.lastElementChild.remove();
+    s.firstElementChild.style.width = '760px';
+  });
+  const share = path.join(root, 'public/media/card/share.png');
+  await p.screenshot({ path: share, clip: { x: 0, y: 0, width: 1200, height: 630 }, scale: 'css' });
+  console.log('wrote', path.relative(root, share));
   await b.close();
 })();

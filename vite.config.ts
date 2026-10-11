@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { defineConfig, type Plugin } from 'vite';
 import { copyStore } from './dev/copy-store';
 import { llmsTxt, wenyiMd } from './dev/readable';
-import { site } from './src/content';
+import { card, site } from './src/content';
 import { astIcon } from './src/shapes';
 
 /*
@@ -36,7 +36,12 @@ function headFromContent(): Plugin {
         `<meta property="og:type" content="website" />`,
         `<meta property="og:title" content="${escAttr(title)}" />`,
         `<meta property="og:description" content="${escAttr(desc)}" />`,
-        `<meta name="twitter:card" content="summary" />`,
+        `<meta property="og:url" content="${escAttr(site.url)}" />`,
+        `<meta property="og:image" content="${escAttr(site.url + card.share)}" />`, // v77: the card's front, so a shared link shows a picture
+        `<meta property="og:image:width" content="1200" />`,
+        `<meta property="og:image:height" content="630" />`,
+        `<meta name="twitter:card" content="summary_large_image" />`,
+        `<link rel="canonical" href="${escAttr(site.url)}" />`,
         `<meta name="theme-color" content="${escAttr(token('bg'))}" />`,
         `<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(icon)}" />`,
         `<link rel="alternate" type="text/markdown" href="wenyi.md" title="${escAttr(site.name)}: plain-text portfolio" />`, // v73.9: for AI agents

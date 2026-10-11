@@ -813,3 +813,4 @@
 - v76.7（10-11）：骑行条到站时不再加宽（她）；Let's talk 按钮变窄让出 Take my card 的位置，文字都不截断。
 - v76.8（10-11）：骑行条里的 Take my card 去掉（她）；卡片只从 Let's talk 的 My card 一行打开。小卡片图标及相关样式一并删除。
 - v76.9（10-11）：Let's talk 里「Take my card」显示成灰色系统按钮（她）：v76.8 删小卡片样式时连带删了 `.ct-link`。已恢复，和其他行的链接一致（字号、颜色、下划线逐项比对相同）。`check` 新增 `class-has-style`：模板里写的 class 在 style.css 里必须有规则（纯脚本钩子列在白名单）。
+- v77-pre（10-11）：上线准备。`site.launched = true`，`npm run check -- --launch` 通过；全站 31 个页面逐个打开：无坏图、无 404、无报错，外链 8 个可打开。新增分享预览图（卡片正面 1200×630，`media/card/share.png`，`og:image` + `summary_large_image` + canonical，地址在 `site.url`）。`dev/card/shot.cjs` 改为从 Let's talk 打开卡片。未合并 main：main 与 metro-map 没有共同历史（main 是旧原型），上线时需要用 metro-map 替换 main（先备份旧 main）。
