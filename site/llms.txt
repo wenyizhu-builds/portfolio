@@ -1,0 +1,10 @@
+# Wenyi Zhu
+
+> Wenyi Zhu — creative strategist for paid and creator growth. Case studies from three years of global marketing at HoYoverse, plus AI tools I build.
+
+This site is an interactive portfolio drawn as a metro map. The full content is available as plain text:
+
+## Portfolio
+
+- [Portfolio in plain text](wenyi.md): bio, every case study with results, experience, education and languages
+- [LinkedIn](https://www.linkedin.com/in/wenyi-zhu-mktg/)

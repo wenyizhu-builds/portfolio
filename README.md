@@ -1,38 +1,25 @@
-# Wenyi Zhu — portfolio (Claude prototype)
+# Wenyi Zhu
 
-Status: **design final · content in progress**. Progress: `docs/STATUS.md` · Design: `docs/SPEC.md` · History: `docs/CHANGELOG.md` · Mistakes → rules: `docs/LESSONS.md` · Rules for Claude: `CLAUDE.md`.
+**Creative Strategist · Paid & Creator Growth**
 
-## Look at it
+**[wenyizhu-builds.github.io/portfolio](https://wenyizhu-builds.github.io/portfolio/)**
 
-- Easiest: double-click **`preview.html`** — the whole site in one file, opens in any browser, no install.
-- Live-editing version (needs Node.js): `npm install`, then `npm run dev`, and open the address it prints.
+I shape creator content and ad creative, test it against performance data, and scale what drives growth. Most recently, I spent three years in global marketing at HoYoverse, the studio behind Genshin Impact, working across Japan, North America and Europe.
 
-## Where to change things
+My portfolio is a metro map: each line is an area of my work, and each station is a case study.
 
-| What | File |
-|---|---|
-| All text, cases, links, placeholders (EN / 中文) | `src/content.ts` |
-| Colours, fonts, layout sizes | `src/style.css` (top `:root` block only) |
-| Map layout & camera tuning | config objects at the top of `src/map.ts` |
-| Shapes | `src/shapes.ts` |
-| Content blocks shared by desktop card and phone page | `src/blocks.ts` |
-| Right-hand card layout | `src/panel.ts` |
-| Phone layout (one page) | `src/mobile.ts` |
-| Page title, share preview, favicon | generated in `vite.config.ts` — don't edit `index.html` |
+## What's inside
 
-Placeholders still open: public email and résumé PDF (`site` in `src/content.ts`), images (`media` on each case), AI projects, Creative Work pieces.
+- **Paid Growth.** A creator ad pipeline for user acquisition (~3.7× projected LTV), a three-round TikTok UGC test (80M+ views) and the Xbox launch campaign (+338% CTR).
+- **Creator & Social.** Zenless Zone Zero's Japanese channels (80M+ organic views), a branded filter campaign on TikTok and Snapchat (600M+ views) and creator campaigns on X.
+- **AI Projects.** AI tools I built: a Creative Intelligence Dashboard (40% less time on analysis and production) and a creator workbench.
+- **Creative Work.** Photography and design.
+- **Experience and Education.** HoYoverse, Nike, Weber Shandwick, NOWNESS and Seminary Co-op; the University of Chicago and XJTLU.
 
-## Publish on GitHub Pages
+## Get in touch
 
-1. Create a new GitHub repository and upload the contents of this folder (not `node_modules` / `dist`).
-2. In the repository: Settings → Pages → Source: **GitHub Actions**.
-3. Put `github-pages-deploy.yml` at `.github/workflows/deploy.yml` in the repository (GitHub's web editor: Add file → Create new file, paste it). From then on, every push to `main` builds and publishes automatically.
+- Email: [wenyi.mktg@gmail.com](mailto:wenyi.mktg@gmail.com)
+- LinkedIn: [linkedin.com/in/wenyi-zhu-mktg](https://www.linkedin.com/in/wenyi-zhu-mktg/)
+- CV: [Wenyi_Zhu_CV.pdf](https://wenyizhu-builds.github.io/portfolio/Wenyi_Zhu_CV.pdf)
 
-Links to a node look like `…/#/ua-creative-strategy`, which works on GitHub Pages.
-
-## Build commands
-
-- `npm run check` → guardrails (hard-coded colours/sizes, breakpoints, dead strings, content links); runs automatically before every build
-- `npm run check -- --launch` → go-live gate (no placeholders, email + résumé set, `site.launched: true`)
-- `npm run build` → static site in `dist/`
-- `npm run build:file` → also regenerates `preview.html`
+Designed and vibe coded by me with Claude Code.
