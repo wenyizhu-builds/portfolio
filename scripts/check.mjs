@@ -79,6 +79,16 @@ for (const f of ['main.ts', 'panel.ts', 'mobile.ts', 'blocks.ts', 'floating-visu
   });
 }
 
+/* 3a. Every class written in a template has a style (L66: a rule deleted with a neighbouring block left a button unstyled).
+   Classes that are only hooks for scripts or plain wrappers are listed here on purpose. */
+const hookClasses = new Set(['result-copy', 'g-title', 'copy-controls', 'panel-inner']);
+for (const [f, src] of Object.entries(ts)) {
+  for (const m of src.matchAll(/class=\\?"([^"$]+)\\?"/g)) for (const c of m[1].split(/\s+/)) {
+    if (!c || !/^[a-z][\w-]*$/.test(c) || hookClasses.has(c)) continue;
+    if (!new RegExp(`\\.${c}(?![\\w-])`).test(css)) fail('class-has-style', `${f}: class "${c}" has no rule in style.css`);
+  }
+}
+
 /* 3b. One decision point for shapes (L17): views draw a node with iconFor()/shapeFor(), never icon(n.type). */
 for (const f of ['panel.ts', 'mobile.ts', 'main.ts', 'map.ts', 'blocks.ts']) {
   if (ts[f] && /icon\(\s*n\.type/.test(ts[f])) fail('shape-from-kindOf', `${f} draws a node with icon(n.type) — use iconFor(n)`);
