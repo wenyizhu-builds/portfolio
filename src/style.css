@@ -150,6 +150,7 @@
   --tc-blur: 6px; --tc-veil: color-mix(in srgb, var(--bg) 45%, transparent); /* the page behind the open card stays visible, softened (v76.3, owner: no dark screen) */
   --tc-shade: color-mix(in srgb, var(--cobalt) 32%, transparent); /* the card's soft blue shadow on the page */
   --tc-nudge: 700ms; /* "Take my card" nudges once when it appears (v76.1) */
+  --bar-take: 136px; /* the ride bar's Take my card button (v76.6) */
   --mini-w: 22px; --mini-h: 15px; /* the little card in every "Take my card" */
 }
 
@@ -774,25 +775,24 @@ body.arranging .stage, body.arranging .side { animation: none; }
 
 /* the ride bar: bottom left, one fixed size; only its words change */
 .mt-bar { position: absolute; z-index: 5; left: var(--map-inset); bottom: var(--bottom-h); /* raised above the legend (v72.2) */ width: var(--bar-w); height: var(--bar-h); display: flex; align-items: center; gap: var(--sp-8); padding: 0 var(--sp-7); border-radius: calc(var(--bar-h) / 2);
-  background: var(--ink); color: var(--on-ink); font-size: var(--fs-ride); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity var(--dur-300), transform var(--dur-450) var(--ease); }
+  background: var(--ink); color: var(--on-ink); font-size: var(--fs-ride); opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity var(--dur-300), transform var(--dur-450) var(--ease), width var(--dur-450) var(--ease); }
 .mt-bar.show { opacity: 1; transform: none; pointer-events: auto; }
+/* v76.6 (owner): at the end of a ride, "Take my card" opens right beside Let's talk; the bar grows by its width */
+.mt-bar.arrived { width: calc(var(--bar-w) + var(--bar-take) + var(--sp-8)); }
+.mt-bar .tk { width: 0; margin-left: calc(-1 * var(--sp-8)); overflow: hidden; opacity: 0; visibility: hidden; gap: var(--sp-8); display: flex; align-items: center; justify-content: center; white-space: nowrap; background: var(--cobalt); color: var(--on-ink); transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-300), visibility 0s var(--dur-450); }
+.mt-bar.arrived .tk { width: var(--bar-take); margin-left: 0; opacity: 1; visibility: visible; transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-300) var(--dur-200), visibility 0s; }
+.mt-bar .tk:hover { background: var(--cobalt-hover); }
+.mt-bar.arrived .tk .tc-mini { animation: mini-wave var(--tc-nudge) var(--ease) var(--dur-700) 2 both; }
+@keyframes mini-wave { 0%, 100% { transform: none; } 40% { transform: rotate(-14deg) translateY(calc(-1 * var(--sp-2))); } 70% { transform: rotate(8deg); } }
 /* v73.6 (owner): the biography ride's note — above the ride bar, the same width, only on that ride */
 .mt-note { position: absolute; z-index: 5; left: var(--map-inset); bottom: calc(var(--bottom-h) + var(--bar-h) + var(--sp-10)); width: var(--bar-w); box-sizing: border-box; padding: var(--sp-14) var(--sp-16); border-radius: var(--r-16); background: var(--panel); color: var(--ink); font-size: var(--fs-ride); line-height: 1.5; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity var(--dur-300), transform var(--dur-450) var(--ease); }
 .mt-note.show { opacity: 1; transform: none; }
 /* v76 (owner): "Take my card" slides out from behind the ride bar's right end once the ride has arrived */
-.mt-take { position: absolute; z-index: 4; left: calc(var(--map-inset) + var(--bar-w) + var(--sp-10)); bottom: var(--bottom-h); height: var(--bar-h); display: flex; align-items: center; opacity: 0; transform: translateX(calc(-1 * var(--sp-30))); pointer-events: none; transition: opacity var(--dur-300), transform var(--dur-450) var(--ease); }
-.mt-take.show { opacity: 1; transform: none; pointer-events: auto; transition-delay: var(--dur-600); }
-/* v76.1 (owner: "I can't even see it"): a cobalt pill as tall as the ride bar, with a little card in it; it springs out, then the card waves once */
-.mt-take .btn { height: var(--bar-h); padding: 0 var(--sp-20) 0 var(--sp-16); gap: var(--sp-10); font-size: var(--fs-text); }
-.mt-take.show .btn { animation: take-nudge var(--tc-nudge) var(--ease) calc(var(--dur-600) + var(--dur-450)) 1 both; }
-.mt-take.show .tc-mini { animation: mini-wave var(--tc-nudge) var(--ease) calc(var(--dur-600) + var(--dur-700)) 2 both; }
-@keyframes take-nudge { 0%, 100% { transform: none; } 30% { transform: translateX(var(--sp-6)) scale(1.04); } 60% { transform: translateX(calc(-1 * var(--sp-2))); } }
-@keyframes mini-wave { 0%, 100% { transform: none; } 40% { transform: rotate(-14deg) translateY(calc(-1 * var(--sp-2))); } 70% { transform: rotate(8deg); } }
 /* the little card: the travel card in miniature, for every "Take my card" */
 .tc-mini { position: relative; flex: none; width: var(--mini-w); height: var(--mini-h); border-radius: var(--r-3); background: radial-gradient(130% 110% at 85% 0%, var(--tc-hi), var(--cobalt)); box-shadow: 0 0 0 var(--focus-w) var(--on-ink); }
 .tc-mini i { position: absolute; right: var(--sp-4); top: var(--sp-4); width: var(--sp-4); height: var(--sp-4); border-radius: 50%; background: var(--accent); }
 .ct-link { border: 0; background: none; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; } /* v76.2: opens the card; looks like the other rows' links */
-@media (prefers-reduced-motion: reduce) { .mt-take.show .btn, .mt-take.show .tc-mini { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .mt-bar.arrived .tk .tc-mini { animation: none; } }
 .mt-bar button { font: inherit; border: 0; cursor: pointer; flex: none; height: var(--bar-btn); border-radius: calc(var(--bar-btn) / 2); display: grid; place-items: center; padding: 0; color: inherit; }
 .mt-bar .pv { width: var(--bar-btn); overflow: hidden; background: color-mix(in srgb, var(--on-ink) 14%, transparent); transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-300), visibility 0s; }
 .mt-bar:not(.started) .pv { width: 0; margin-right: -8px; opacity: 0; visibility: hidden; transition: width var(--dur-450) var(--ease), margin var(--dur-450) var(--ease), opacity var(--dur-200), visibility 0s var(--dur-450); }

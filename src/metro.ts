@@ -188,11 +188,6 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   const note = document.createElement('div'); // v73.6 (owner): the biography ride's note sits above the ride bar, not in the card
   note.className = 'mt-note'; note.setAttribute('aria-live', 'polite');
   desk.appendChild(note);
-  const take = document.createElement('div'); // v76 (owner): at the end of a ride, "Take my card" slides out beside the bar
-  take.className = 'mt-take';
-  take.innerHTML = `<button type="button" class="btn btn-primary"><span class="tc-mini" aria-hidden="true"><i></i></span>${esc(t(ui.takeCard))}</button>`;
-  take.querySelector('button')!.onclick = openCard;
-  desk.appendChild(take);
   let rideKey = '', rideStep = -1, lastStep = -1, endState = '';
   let armed = false; // v73.6 (owner): the ride bar waits for "Start my ride"; choosing a ride alone doesn't show it
   let order: string[] = [], through: string[] = [], at: Record<string, number> = {}, routeEl: SVGPathElement | null = null, builtKey = '';
@@ -318,7 +313,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   }
 
   /* ---------- the ride bar: one fixed-size bar; only its words change ---------- */
-  bar.innerHTML = `<button type="button" class="pv" data-ride="prev"></button><button type="button" class="nx" data-ride="go"><span></span></button><div class="board" aria-live="polite"></div><button type="button" class="ex" data-ride="exit"></button>`;
+  bar.innerHTML = `<button type="button" class="pv" data-ride="prev"></button><button type="button" class="nx" data-ride="go"><span></span></button><button type="button" class="tk" data-ride="card" tabindex="-1"><span class="tc-mini" aria-hidden="true"><i></i></span><span>${esc(t(ui.takeCard))}</span></button><div class="board" aria-live="polite"></div><button type="button" class="ex" data-ride="exit"></button>`;
   const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
   /** Swap a block of text like a departures board: the old row slides out, the new one in (backwards when going back). */
   function swapRow(html: string, dir: number) {
@@ -347,7 +342,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     const riding = filtering();
     bar.classList.toggle('show', riding && (armed || rideStep >= 0));
     desk.classList.toggle('riding', riding);
-    if (!riding) { note.classList.remove('show'); take.classList.remove('show'); return; }
+    if (!riding) { note.classList.remove('show'); return; }
     const n = order.length, last = rideStep === n - 1, arrived = last && endState === `${rideKey}#${rideStep}`;
     const story = filters.ride ? rides[filters.ride].notes : undefined, said = story && rideStep >= 0 ? story[order[rideStep]] : undefined; // the last stop keeps its note at Let's talk
     if (said) note.textContent = t(said);
@@ -356,7 +351,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     bar.classList.toggle('empty', !n);
     bar.classList.toggle('ending', last && !arrived);
     bar.classList.toggle('arrived', arrived);
-    take.classList.toggle('show', arrived && bar.classList.contains('show'));
+    bar.querySelector<HTMLButtonElement>('.tk')!.tabIndex = arrived ? 0 : -1;
     const pv = bar.querySelector<HTMLButtonElement>('.pv')!, ex = bar.querySelector<HTMLButtonElement>('.ex')!;
     pv.disabled = rideStep <= 0; pv.textContent = '←'; pv.setAttribute('aria-label', t(ui.ridePrev));
     ex.textContent = '×'; ex.setAttribute('aria-label', t(ui.rideExit));
@@ -378,6 +373,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   });
   bar.addEventListener('click', (e) => {
     const act = (e.target as Element).closest<HTMLElement>('[data-ride]')?.dataset.ride;
+    if (act === 'card') { openCard(); return; } // v76.6 (owner): Take my card sits right next to Let's talk at the end of a ride
     if (!act || !order.length) { if (act === 'exit') leaveRide(''); return; }
     if (act === 'exit') { leaveRide(''); return; }
     if (act === 'go' && bar.classList.contains('arrived')) { leaveRide('contact'); return; } // the last stop's button is Let's talk
