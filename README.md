@@ -6,7 +6,7 @@
 
 I shape creator content and ad creative, test it against performance data, and scale what drives growth. Most recently, I spent three years in global marketing at HoYoverse, the studio behind Genshin Impact, working across Japan, North America and Europe.
 
-**Welcome aboard!** This is your conductor speaking. My portfolio runs as a metro map, because my career never ran in a straight line: it branched into new markets, changed lines between brand, paid and social, and kept meeting at interchanges I didn't see coming. Each line is an area of my work, each station is a case study, and the map shows how one stop led to the next. Hop on anywhere, ride the whole network, or curate your own ride by market or platform. Next stop: whichever one you click.
+**Welcome aboard!** This is your conductor speaking. Find a seat, pick any line and enjoy the ride. Every stop is a story from my work.
 
 ## What's inside
 
