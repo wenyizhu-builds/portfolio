@@ -10,7 +10,7 @@
   - **背面 = Pocket summary**：800M+ views / 130K+ followers grown / 190+ creators briefed / 4 · 3 markets · languages（语言一行不换行），右侧二维码（`dev/card/qr.cjs` 生成，网址为上线地址）+「Scan to ride again」，底部邮箱和 LinkedIn。数字在 `content.ts` 的 `card.stats`，算法写在注释里；800M+ 含她参与支持的活动（她 10-11 确认可以）。
   - 卡片上没有编号（试过「No. 0009」，她看不懂，删掉）。
   - **v76.1–76.4（10-11，她试用后）**：
-    - 入口改为 Let's talk 卡片里单独一行「MY CARD · Take my card ↗」（右侧下载图标 = 直接保存图片）；页头和手机菜单里的「Take my card」去掉（她：不重要，不要放页头）。骑行终点的「Take my card」在骑行条里、紧挨 Let's talk（v76.6，她）：钴蓝按钮 + 小卡片图标，到站时骑行条加宽 `--bar-take` 让出位置，小卡片摆两下；其他时候隐藏。
+    - 入口改为 Let's talk 卡片里单独一行「MY CARD · Take my card ↗」（右侧下载图标 = 直接保存图片）；页头和手机菜单里的「Take my card」去掉（她：不重要，不要放页头）。骑行终点的「Take my card」在骑行条里、紧挨 Let's talk（v76.6，她）：钴蓝按钮 + 小卡片图标，到站时骑行条宽度不变，Let's talk 变窄（`--bar-go-end`）让出位置（v76.7，她：不要把条拉长），小卡片摆两下；其他时候隐藏。
     - 打开时不要黑底（她）：卡片直接浮在当前页面上，页面淡化 + 轻微模糊（`--tc-veil`、`--tc-blur`）；× 在卡片右上角上方。
     - 拖动（她：几乎拖不动）：整个遮罩任何地方都能拖，卡片紧跟手指；拖过 45°（`--tc-turn`）或轻甩就翻面；拖完松手不会关闭。
     - INDEX 不放这四个数字（v76.4 试过，v76.5 她要求去掉）；数字只在卡片背面。
