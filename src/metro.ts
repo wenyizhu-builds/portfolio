@@ -3,7 +3,6 @@
    where each station sits, the shape of each line, the result tags, the ride's track — lives in METRO below.
    Colours, sizes and durations come from style.css (:root); words from content.ts. */
 import { ancestors, byId, ui, type SiteNode, workOf, rides } from './content';
-import { openCard } from './lightbox';
 import type { MapApi } from './map';
 import { lineMark } from './shapes';
 import { rideSummary } from './blocks';
@@ -313,7 +312,7 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   }
 
   /* ---------- the ride bar: one fixed-size bar; only its words change ---------- */
-  bar.innerHTML = `<button type="button" class="pv" data-ride="prev"></button><button type="button" class="nx" data-ride="go"><span></span></button><button type="button" class="tk" data-ride="card" tabindex="-1"><span class="tc-mini" aria-hidden="true"><i></i></span><span>${esc(t(ui.takeCard))}</span></button><div class="board" aria-live="polite"></div><button type="button" class="ex" data-ride="exit"></button>`;
+  bar.innerHTML = `<button type="button" class="pv" data-ride="prev"></button><button type="button" class="nx" data-ride="go"><span></span></button><div class="board" aria-live="polite"></div><button type="button" class="ex" data-ride="exit"></button>`;
   const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k] ?? ''));
   /** Swap a block of text like a departures board: the old row slides out, the new one in (backwards when going back). */
   function swapRow(html: string, dir: number) {
@@ -351,7 +350,6 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
     bar.classList.toggle('empty', !n);
     bar.classList.toggle('ending', last && !arrived);
     bar.classList.toggle('arrived', arrived);
-    bar.querySelector<HTMLButtonElement>('.tk')!.tabIndex = arrived ? 0 : -1;
     const pv = bar.querySelector<HTMLButtonElement>('.pv')!, ex = bar.querySelector<HTMLButtonElement>('.ex')!;
     pv.disabled = rideStep <= 0; pv.textContent = '←'; pv.setAttribute('aria-label', t(ui.ridePrev));
     ex.textContent = '×'; ex.setAttribute('aria-label', t(ui.rideExit));
@@ -373,7 +371,6 @@ export function createMetro(host: HTMLElement, onSelect: (id: string) => void): 
   });
   bar.addEventListener('click', (e) => {
     const act = (e.target as Element).closest<HTMLElement>('[data-ride]')?.dataset.ride;
-    if (act === 'card') { openCard(); return; } // v76.6 (owner): Take my card sits right next to Let's talk at the end of a ride
     if (!act || !order.length) { if (act === 'exit') leaveRide(''); return; }
     if (act === 'exit') { leaveRide(''); return; }
     if (act === 'go' && bar.classList.contains('arrived')) { leaveRide('contact'); return; } // the last stop's button is Let's talk

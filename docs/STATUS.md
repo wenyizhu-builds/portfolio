@@ -1,13 +1,13 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-11 · v76.7（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-11 · v76.8（分支 `metro-map`，已推到 GitHub，未合并进 main）
 
 ## 新会话先看这里（交接）
 
 ### 2026-10-11 v76：旅行卡片已做进网站
 - 她在 Artifact「Metro Details Mockups」（claude.ai/artifact/YKxinnuBjNfwE1xRia2dD6）里定稿：不做开场动画；「Take my card」在骑行终点（骑行条右侧滑出）和页头 CV 旁；正面 Night line · Bright blue；背面 Pocket summary 四个数字 + 二维码；可倾斜、翻面、保存。细节见 SPEC 顶部 v76。
-- v76.1–76.4：入口移到 Let's talk 的 My card 行；卡片浮在页面上；拖动重做；INDEX 加过四个数字，v76.5 她要求去掉，简介保持原样。v76.6–76.7：骑行终点的 Take my card 在骑行条里、紧挨 Let's talk，骑行条宽度不变。
+- v76.1–76.4：入口移到 Let's talk 的 My card 行；卡片浮在页面上；拖动重做；INDEX 加过四个数字，v76.5 她要求去掉，简介保持原样。v76.8：卡片入口只剩 Let's talk 里的 My card 一行（骑行条、页头、手机菜单都不放）。
 - 「You are here」脉冲（她选的 pulse）还没做进网站。
 - 改了卡片内容（数字、文字、颜色）后要重新出图：`node dev/card/shot.cjs`（需先 build + `npx vite preview --port 4173`），二维码 `node dev/card/qr.cjs`。
 

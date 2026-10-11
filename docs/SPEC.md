@@ -4,13 +4,13 @@
 > 最后更新：2026-10-07 · 对应版本 v69.10（地铁图为草稿，待确认）
 
 - **旅行卡片 v76（2026-10-11，她在 Artifact「Metro Details Mockups」里逐条确认）**：
-  - **不做开场动画**：进站直接看到地图。卡片只在有人要时出现：骑行到终点时，骑行条右侧滑出「Take my card ✳」；页头 CV 和 Let's talk 之间一直有「Take my card ↗」；手机菜单里 CV 旁一个按钮。她否决了「刷卡进站」：访客拿着写她名字的卡进站说不通；也不让访客填自己的名字（多一步）。
+  - **不做开场动画**：进站直接看到地图。卡片只在有人要时出现：（入口后来改为只在 Let's talk 卡片的 My card 一行，见 v76.1–76.8。）她否决了「刷卡进站」：访客拿着写她名字的卡进站说不通；也不让访客填自己的名字（多一步）。
   - **打开方式**：走 `lightbox.ts` 的 `openCard()`（同一个深色遮罩、× 和 Esc，L44）。卡片带一次 3D 转入，随鼠标微倾、有光扫过；点一下、拖动或方向键翻面；落地 1.3 秒后若没人碰，自己往背面偷看一下。「Save card」下载一张图（正面在上、背面在下，`public/media/card/Wenyi_Zhu_card.png`，`node dev/card/shot.cjs` 生成）。
   - **正面 = Night line，配色 Bright blue（N2）**：一条发光的地铁线从 Creative 升到 Data 再到 Growth（Growth 用 Instrument Serif 斜体、柠檬绿，终点柠檬绿圆点脉动）；左上「Growth line」，右上 ✳；底部名字 + 职位。颜色全部由钴蓝 / 白 / 柠檬绿派生（`--tc-*`）。她看过的其他正面（Glow、Holo、Poster、Frosted、Transit、深色 Night）都不用。
   - **背面 = Pocket summary**：800M+ views / 130K+ followers grown / 190+ creators briefed / 4 · 3 markets · languages（语言一行不换行），右侧二维码（`dev/card/qr.cjs` 生成，网址为上线地址）+「Scan to ride again」，底部邮箱和 LinkedIn。数字在 `content.ts` 的 `card.stats`，算法写在注释里；800M+ 含她参与支持的活动（她 10-11 确认可以）。
   - 卡片上没有编号（试过「No. 0009」，她看不懂，删掉）。
   - **v76.1–76.4（10-11，她试用后）**：
-    - 入口改为 Let's talk 卡片里单独一行「MY CARD · Take my card ↗」（右侧下载图标 = 直接保存图片）；页头和手机菜单里的「Take my card」去掉（她：不重要，不要放页头）。骑行终点的「Take my card」在骑行条里、紧挨 Let's talk（v76.6，她）：钴蓝按钮 + 小卡片图标，到站时骑行条宽度不变，Let's talk 变窄（`--bar-go-end`）让出位置（v76.7，她：不要把条拉长），小卡片摆两下；其他时候隐藏。
+    - 入口改为 Let's talk 卡片里单独一行「MY CARD · Take my card ↗」（右侧下载图标 = 直接保存图片）；页头和手机菜单里的「Take my card」去掉（她：不重要，不要放页头）。骑行终点不放 Take my card（v76.8，她：去掉；骑行条恢复原样，终点的 Let's talk 打开的卡片里有 My card 一行）。
     - 打开时不要黑底（她）：卡片直接浮在当前页面上，页面淡化 + 轻微模糊（`--tc-veil`、`--tc-blur`）；× 在卡片右上角上方。
     - 拖动（她：几乎拖不动）：整个遮罩任何地方都能拖，卡片紧跟手指；拖过 45°（`--tc-turn`）或轻甩就翻面；拖完松手不会关闭。
     - INDEX 不放这四个数字（v76.4 试过，v76.5 她要求去掉）；数字只在卡片背面。
