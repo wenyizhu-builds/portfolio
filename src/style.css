@@ -296,10 +296,6 @@ button { font: inherit; color: inherit; }
 .ix-k:hover, .ix-k:focus-visible { text-decoration-style: solid; text-decoration-color: var(--ink); }
 .panel .ix-name { font-size: var(--fs-case-title); letter-spacing: -0.01em; } /* the same size as a case title: no new size in the card */
 .ix-role { color: var(--muted); margin: var(--sp-2) 0 var(--sp-12); }
-/* v76.4 (owner): the four career numbers, two by two, in the case-figure style (cobalt number, grey words) */
-.ix-figs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-10) var(--sp-16); margin: 0 0 var(--sp-16); padding: var(--sp-12) 0; border-top: var(--rule-card); border-bottom: var(--rule-card); }
-.ix-figs .p-fig { margin: 0; display: grid; }
-.ix-figs .p-fig span { font-size: var(--fs-label); letter-spacing: var(--track-label); text-transform: uppercase; color: var(--muted); }
 /* key figures: a clean 2×2 grid, spacing only — no rules */
 .ix-more { display: inline-block; margin: 0 0 var(--sp-14); text-underline-offset: var(--ul-off); }
 /* ---- card: the whole system lives in these rules ---- */

@@ -81,11 +81,6 @@ function figure(n: SiteNode): string {
   return n.headline ? `<p class="p-fig"><b>${highlight(n.headline.num, n.headline.highlight || '')}</b> <span>${tx(n.headline.label)}</span>${n.headline.note ? `<span class="p-fig-note">${tx(n.headline.note)}</span>` : ''}</p>` : '';
 }
 
-/** v76.4 (owner): the card's four career numbers, also at the top of the INDEX and the phone page (one list: content.ts card.stats). */
-export function keyFigures(): string {
-  return `<div class="ix-figs">${card.stats.map((s) => `<p class="p-fig"><b>${esc(s.big)}</b><span>${esc(t(s.label))}</span></p>`).join('')}</div>`;
-}
-
 export function summary(n: SiteNode): string {
   if (n.status) return `<p class="p-sum muted">${L('prepBody')}</p>`;
   // A group's line only describes what is inside it: grey, like the INDEX (same class, one rule).

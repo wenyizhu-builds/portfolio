@@ -808,3 +808,4 @@
 - v75.23（10-10）：右下角「Prototype · placeholder copy」换成「Designed and vibe coded by me with Claude Code」（`ui.credit`，上线前后都显示；手机页脚同）。左下角图例不变。
 - v76（10-11）：旅行卡片（她在 Metro Details Mockups 里定）。不做开场；骑行终点滑出「Take my card ✳」、页头 CV 旁「Take my card ↗」、手机菜单按钮 → `openCard()`（lightbox 同一遮罩）。正面 Night line · Bright blue，背面 Pocket summary 四个数字 + 二维码；倾斜、光、点击 / 拖动 / 方向键翻面、一次偷看；Save card 下载双面图。新文件 `src/card.ts`、`dev/card/qr.cjs`、`dev/card/shot.cjs`；字体加载 600/800 和 Instrument Serif 斜体（只给卡片）。devDependencies：qrcode-generator、@fontsource/schibsted-grotesk、@fontsource/instrument-serif（出图用）。
 - v76.1–76.4（10-11）：卡片拖动重做（遮罩任意处可拖、45° 翻面、拖完不关）；Take my card 从页头和手机菜单移到 Let's talk 的「My card」一行（带下载图标）；骑行终点按钮加粗成钴蓝 + 小卡片；卡片浮在页面上（无黑底，页面淡化模糊）；INDEX 与手机首页加四个关键数字。待她确认：INDEX 简介缩短（加数字后笔记本上 INDEX 多出约 24px）。
+- v76.5（10-11）：去掉 INDEX 和手机首页的四个关键数字（她）；简介不改。
