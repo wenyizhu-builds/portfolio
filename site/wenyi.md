@@ -75,8 +75,6 @@ Paid media for Genshin Impact’s Xbox launch had to drive console players to th
 Results:
 - +338% CTR vs benchmark
 - 66% lower CPC vs benchmark
-- 120M+ impressions
-- ~700K landing-page clicks
 
 The Challenge:
 - The launch needed paid media to drive traffic to the Xbox landing page, not just awareness. That meant turning existing brand materials into 100+ localised assets, the brand team’s largest creative test for a paid brand campaign, with tight coordination across languages, platform specs and approvals.
@@ -95,8 +93,8 @@ Team: Me (creative strategy), 1 media strategist, 2 creative producers and 1 age
 For a major Genshin Impact update, I designed the mechanic that turned the launch landing page into a game: a short personality quiz with a shareable result, and a reward draw that grew with every friend invited, so the page spread itself.
 
 Results:
-- 9.5M+ visitors, ~7× benchmark
-- 1.8M+ players in the draw, +60% vs benchmark
+- ~7× visitors vs benchmark
+- +60% draw entries vs benchmark
 - 3× conversion rate vs benchmark
 - ~4 visitors per share, 2× target
 
@@ -195,7 +193,7 @@ For a major Genshin Impact update, I led a giveaway hosted by a leading Genshin 
 
 Results:
 - 33M+ impressions, +56% vs target
-- ~900K code redemptions, ~4× target
+- ~4× code redemptions vs target
 - ~50% lower CPM vs target
 
 The Challenge:
