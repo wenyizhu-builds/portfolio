@@ -3,6 +3,7 @@
 > **唯一的设计依据。** 改设计 = 直接改这份文件里对应的那一行（并在 `CHANGELOG.md` 记一笔），不要另开新文件。
 > 最后更新：2026-10-07 · 对应版本 v69.10（地铁图为草稿，待确认）
 
+- **上线 v77（2026-10-11）**：网址 https://wenyizhu-builds.github.io/portfolio/（`site.url`），main 分支推送即由 GitHub Actions 发布。每段经历和每所学校都链接官网（域名 ↗；卡片上和 CV 列表里各一处，同一数据 `links`），不链 Wikipedia。分享链接时显示卡片正面（`media/card/share.png`）。
 - **旅行卡片 v76（2026-10-11，她在 Artifact「Metro Details Mockups」里逐条确认）**：
   - **不做开场动画**：进站直接看到地图。卡片只在有人要时出现：（入口后来改为只在 Let's talk 卡片的 My card 一行，见 v76.1–76.8。）她否决了「刷卡进站」：访客拿着写她名字的卡进站说不通；也不让访客填自己的名字（多一步）。
   - **打开方式**：走 `lightbox.ts` 的 `openCard()`（同一个深色遮罩、× 和 Esc，L44）。卡片带一次 3D 转入，随鼠标微倾、有光扫过；点一下、拖动或方向键翻面；落地 1.3 秒后若没人碰，自己往背面偷看一下。「Save card」下载一张图（正面在上、背面在下，`public/media/card/Wenyi_Zhu_card.png`，`node dev/card/shot.cjs` 生成）。

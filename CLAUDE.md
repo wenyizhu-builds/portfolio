@@ -87,7 +87,7 @@
 6. 版本管理（L27）：GitHub `wenyizhu-builds/portfolio` 是唯一的版本源。
    - 在云端工作副本里 `git commit`（写版本号和一句话），然后 `git push`。
    - 同步到你电脑：用 `git bundle` 把新提交带过去，在电脑上的文件夹里 `git pull <bundle> main`，两边提交号保持一致。
-   - 部署配置放在根目录 `github-pages-deploy.yml`，上线时才移到 `.github/workflows/`。
+   - 已上线（v77）：推送 main 即由 `.github/workflows/deploy.yml` 发布到 https://wenyizhu-builds.github.io/portfolio/ ；推送后打开网址确认。
 7. 更新文档：
    - 覆盖 `docs/STATUS.md`
    - 在 `docs/CHANGELOG.md` 追加一条

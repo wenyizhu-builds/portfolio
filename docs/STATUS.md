@@ -1,7 +1,7 @@
 # STATUS — 现在做到哪了
 
 > **每次工作结束时覆盖更新这一份**，不另写 handoff。历史进度看 `CHANGELOG.md`。
-> 最后更新：2026-10-11 · v77-pre（分支 `metro-map`，已推到 GitHub，未合并进 main）
+> 最后更新：2026-10-11 · v77（已上线：https://wenyizhu-builds.github.io/portfolio/ ；工作分支 main，metro-map 保留同一提交）
 
 ## 新会话先看这里（交接）
 
@@ -27,7 +27,7 @@
 ### v75.1：地图开场闪图已修（见 CHANGELOG / L61）；发布版此前开场、骑行动画时长都失效，已一并修好。
 
 ### 下一步
-- **上线（她 10-11 说可以发布）**：检查已过（见 CHANGELOG v77-pre）。剩下：① 她决定公司是否加官网链接（她 10-11 提出）；② 旧 main 备份为 `archive/old-main`，metro-map 替换 main；③ `github-pages-deploy.yml` 移到 `.github/workflows/`；④ 仓库 Settings → Pages → Source 选 GitHub Actions；⑤ 打开 https://wenyizhu-builds.github.io/portfolio/ 验证。注意：仓库是公开的，docs/ 里的工作笔记也公开可见。
+- **v77 已上线**：main = 网站，推送 main 即自动发布（.github/workflows/deploy.yml）。旧 main 备份在 `archive/old-main`。以后改动直接在 main 上做；她电脑上的仓库也切到 main。注意：仓库是公开的，docs/ 里的工作笔记也公开可见。
 0. 她试用卡片后的意见；「You are here」脉冲。
 1. ~~PDF CV~~ 已完成（v75.8）。以后可做中国市场版（Nike、小红书、WeChat 放前面）。
 2. 合并进 main、部署（CLAUDE.md 交付前第 5–6 步；先 `npm run check -- --launch`，需 `site.launched = true`、去掉 PROTOTYPE 标）。

@@ -218,6 +218,8 @@ export function resumePdf(): string {
     : `<span class="btn btn-disabled" aria-disabled="true">${L('downloadPdf')} · ${L('pdfPending')}</span>`;
 }
 
+/** v77 (owner): a role's or school's official site, so the CV list (and the phone, which has no role cards) says what the place is. */
+const siteLink = (n: SiteNode) => n.links?.length ? `<a class="cv-map" href="${esc(n.links[0].href)}" target="_blank" rel="noopener">${tx(n.links[0].label)} ↗</a>` : '';
 export function resumeLists(withMapLinks: boolean): string {
   const roles = rolesOrder
     .map((id) => byId.get(id)!)
@@ -227,14 +229,14 @@ export function resumeLists(withMapLinks: boolean): string {
         ? `<a class="cv-map" href="#/${r.id}">${n ? `${L('viewWork')} (${n})` : L('viewOnMap')} →</a>`
         : '';
       return `<li class="cv-item"><div class="cv-when">${esc(r.period || '')}</div>
-        <div class="cv-what"><strong>${tx(r.label)}</strong><span>${tx(r.kicker)}</span><p>${tx(r.summary)}</p>${link}</div></li>`;
+        <div class="cv-what"><strong>${tx(r.label)}</strong><span>${tx(r.kicker)}</span><p>${tx(r.summary)}</p>${[link, siteLink(r)].filter(Boolean).join(' · ')}</div></li>`;
     })
     .join('');
   const schools = schoolsOrder
     .map((id) => byId.get(id)!)
     .map(
       (s) => `<li class="cv-item"><div class="cv-when">${esc(s.period || '')}</div>
-        <div class="cv-what"><strong>${tx(s.label)}</strong><span>${tx(s.kicker)}</span></div></li>`,
+        <div class="cv-what"><strong>${tx(s.label)}</strong><span>${tx(s.kicker)}</span>${siteLink(s)}</div></li>`,
     )
     .join('');
   return `<h3 class="cv-h">${L('experience')}</h3><ol class="cv">${roles}</ol>
